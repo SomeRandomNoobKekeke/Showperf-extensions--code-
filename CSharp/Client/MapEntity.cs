@@ -1,5 +1,6 @@
 using System;
 using System.Reflection;
+using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Collections.Generic;
 using System.Collections.Immutable;
@@ -17,11 +18,30 @@ namespace ShowPerfExtensions
   public partial class Mod : IAssemblyPlugin
   {
 
+    public static void tryAddTicks(Item item, long ticks)
+    {
+      Dictionary<int, ItemUpdateTicks> dict = item.Submarine == Submarine.MainSub ? window.firstSlice.mainSub : window.firstSlice.otherSubs;
+
+      if (dict.ContainsKey(item.Prefab.Identifier.HashCode))
+      {
+        dict[item.Prefab.Identifier.HashCode] += ticks;
+      }
+      else
+      {
+        dict[item.Prefab.Identifier.HashCode] = new ItemUpdateTicks(
+          item.Prefab.Identifier.Value,
+          ticks
+        );
+      }
+    }
+
     /// <summary>
     /// Call Update() on every object in Entity.list
     /// </summary>
     public static bool MapEntity_UpdateAll_Replace(float deltaTime, Camera cam)
     {
+      if (!DrawItemUpdateTimes) return true;
+
       MapEntity.mapEntityUpdateTick++;
 
       //#if CLIENT
@@ -76,7 +96,11 @@ namespace ShowPerfExtensions
           {
             if (GameMain.LuaCs.Game.UpdatePriorityItems.Contains(item)) { continue; }
             lastUpdatedItem = item;
+
+            sw.Restart();
             item.Update(deltaTime * MapEntity.MapEntityUpdateInterval, cam);
+
+            tryAddTicks(item, sw.ElapsedTicks);
           }
         }
         catch (InvalidOperationException e)
@@ -93,7 +117,12 @@ namespace ShowPerfExtensions
       {
         if (item.Removed) continue;
 
+
+        sw.Restart();
+
         item.Update(deltaTime, cam);
+
+        tryAddTicks(item, sw.ElapsedTicks);
       }
 
       //#if CLIENT
