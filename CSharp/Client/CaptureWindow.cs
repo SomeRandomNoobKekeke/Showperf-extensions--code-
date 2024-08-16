@@ -99,40 +99,58 @@ namespace ShowPerfExtensions
 
     public class CaptureWindow : IDisposable
     {
-      public double captureWindowSectionLength;
-      public double captureWindowLength;
-      public int captureWindowSections;
+      public double frameDuration;
 
-      public bool frozen = false;
+      public int frames;
 
+      private double duration;
+      public double Duration
+      {
+        get { return duration; }
+        set
+        {
+          duration = Math.Max(0.1, value);
+
+          frames = Math.Max(1, (int)Math.Ceiling(duration / frameDuration));
+          Reset();
+        }
+      }
+
+      private int fps;
+      public int FPS
+      {
+        get { return fps; }
+        set
+        {
+          fps = Math.Min(Math.Max(1, value), 60);
+          frameDuration = 1.0 / fps;
+          frames = Math.Max(1, (int)Math.Ceiling(duration / frameDuration));
+          Reset();
+        }
+      }
+
+      public bool accumulate = false;
       public Slice firstSlice;
 
       public Slice totalTicks = new Slice();
       public Queue<Slice> partialSums;
 
 
-      public CaptureWindow(double length = 1, int sections = 10)
+      public CaptureWindow(double duration = 3, int fps = 30)
       {
-        sections = Math.Max(1, sections);
+        this.duration = duration;
+        this.fps = fps;
 
-        captureWindowSectionLength = length / sections;
-        captureWindowSections = sections;
-        captureWindowLength = length;
+        frameDuration = 1.0 / fps;
+        frames = Math.Max(1, (int)Math.Ceiling(duration / frameDuration));
 
-        partialSums = new Queue<Slice>(sections);
-
-        for (int i = 0; i < captureWindowSections - 1; i++)
-        {
-          partialSums.Enqueue(new Slice());
-        }
-
-        firstSlice = new Slice();
-        partialSums.Enqueue(firstSlice);
+        Reset();
       }
+
 
       public void Rotate()
       {
-        if (frozen) return;
+        if (accumulate) return;
 
         Slice lastSlice = partialSums.Dequeue();
 
@@ -144,18 +162,21 @@ namespace ShowPerfExtensions
         partialSums.Enqueue(lastSlice);
       }
 
-      public void Clear()
+      public void Reset()
       {
+        partialSums ??= new Queue<Slice>(frames);
         partialSums.Clear();
         totalTicks.Clear();
 
-        for (int i = 0; i < captureWindowSections - 1; i++)
+        for (int i = 0; i < frames - 1; i++)
         {
           partialSums.Enqueue(new Slice());
         }
 
         firstSlice = new Slice();
         partialSums.Enqueue(firstSlice);
+
+        info($"Reset| fps:{fps} duration:{duration} partialSums.Count: {partialSums.Count}");
       }
 
 

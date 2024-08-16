@@ -1,5 +1,6 @@
 using System;
 using System.Reflection;
+using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Collections.Generic;
 using System.Collections.Immutable;
@@ -27,10 +28,13 @@ namespace ShowPerfExtensions
     public void Initialize()
     {
       harmony = new Harmony("show.perf");
+      if (debug) DrawItemUpdateTimes = true;
+
       addCommands();
 
-      window = new CaptureWindow(length: 1, sections: 10);
+      window = new CaptureWindow(duration: 3, fps: 30);
       view = new WindowView(window);
+
 
       patchAll();
 
