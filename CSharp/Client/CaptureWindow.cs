@@ -157,6 +157,16 @@ namespace ShowPerfExtensions
 
       public void Rotate()
       {
+        if (debug)
+        {
+          log("-----------------------");
+          foreach (var cat in firstSlice.categories.Keys)
+          {
+
+            log($"{cat} {firstSlice[cat].Count}");
+          }
+        }
+
         if (accumulate) return;
 
         Slice lastSlice = partialSums.Dequeue();
@@ -167,8 +177,6 @@ namespace ShowPerfExtensions
         lastSlice.Clear();
         firstSlice = lastSlice;
         partialSums.Enqueue(lastSlice);
-
-        info(partialSums.Count);
       }
 
       public void Reset()
