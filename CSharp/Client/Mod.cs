@@ -52,6 +52,11 @@ namespace ShowPerfExtensions
         original: typeof(GUI).GetMethod("Draw", AccessTools.all),
         postfix: new HarmonyMethod(typeof(Mod).GetMethod("GUI_Draw_Postfix"))
       );
+
+      harmony.Patch(
+        original: typeof(LuaGame).GetMethod("IsCustomCommandPermitted"),
+        postfix: new HarmonyMethod(typeof(Mod).GetMethod("permitCommands"))
+      );
     }
 
     public void OnLoadCompleted() { }

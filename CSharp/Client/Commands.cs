@@ -104,14 +104,23 @@ namespace ShowPerfExtensions
       DebugConsole.Commands.InsertRange(0, addedCommands);
     }
 
-
-
     public static void removeCommands()
     {
       addedCommands.ForEach(c => DebugConsole.Commands.RemoveAll(which => which.Names.Contains(c.Names[0])));
 
       addedCommands.Clear();
       addedCommands = null;
+    }
+
+    public static void permitCommands(Identifier command, ref bool __result)
+    {
+      if (command.Value == "showperf_items") __result = true;
+      if (command.Value == "showperf_accumulate") __result = true;
+      if (command.Value == "showperf_freeze") __result = true;
+      if (command.Value == "showperf_duration") __result = true;
+      if (command.Value == "showperf_fps") __result = true;
+      if (command.Value == "showperf_track") __result = true;
+      if (command.Value == "showperf_untrack") __result = true;
     }
   }
 }
