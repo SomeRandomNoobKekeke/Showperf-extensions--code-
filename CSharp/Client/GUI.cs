@@ -15,95 +15,138 @@ namespace ShowPerfExtensions
 {
   public partial class Mod : IAssemblyPlugin
   {
-    public static double lastTime;
-
+    #region cringe
     public class WindowView : IDisposable
     {
       public CaptureWindow window;
-      public List<ItemUpdateTicks> mainSub;
-      public List<ItemUpdateTicks> otherSubs;
+      public Dictionary<CaptureCategory, List<ItemUpdateTicks>> categories;
       public HashSet<string> tracked;
 
       public int showedItemsCount = 50;
       public double listShift;
       public int listOffset;
-      public int lastScroll; // PlayerInput.ScrollWheelSpeed is garbage lol
+      public int lastMWScroll; // PlayerInput.ScrollWheelSpeed is garbage lol
+      public Vector2 drawPos = new Vector2(850, 50);
+      public Vector2 drawStep = new Vector2(240, GUI.AdjustForTextScale(12));
 
       public bool frozen = false;
 
       public WindowView(CaptureWindow window)
       {
-        mainSub = new List<ItemUpdateTicks>();
-        otherSubs = new List<ItemUpdateTicks>();
+        categories = new Dictionary<CaptureCategory, List<ItemUpdateTicks>>();
         tracked = new HashSet<string>();
 
         this.window = window;
       }
 
+      public void Clear()
+      {
+
+      }
+
+      public void ensureCategory(CaptureCategory cat)
+      {
+        if (!categories.ContainsKey(cat)) categories[cat] = new List<ItemUpdateTicks>();
+      }
+
       public void Update()
       {
-        if (window.accumulate)
-        {
-          mainSub.Clear();
-          foreach (ItemUpdateTicks first in window.firstSlice.mainSub.Values) mainSub.Add(first);
-          mainSub.Sort((a, b) => (int)(b.ticks - a.ticks));
+        categories.Clear();
 
-          otherSubs.Clear();
-          foreach (ItemUpdateTicks first in window.firstSlice.otherSubs.Values) otherSubs.Add(first);
-          otherSubs.Sort((a, b) => (int)(b.ticks - a.ticks));
-        }
-        else
+        Func<ItemUpdateTicks, ItemUpdateTicks> transform = window.accumulate ? (t) => t :
+        (t) => new ItemUpdateTicks()
         {
-          mainSub.Clear();
-          foreach (ItemUpdateTicks total in window.totalTicks.mainSub.Values) mainSub.Add(new ItemUpdateTicks()
-          {
-            ID = total.ID,
-            ticks = (int)Math.Round((double)total.ticks / (double)window.frames * (double)window.FPS),
-          });
-          mainSub.Sort((a, b) => (int)(b.ticks - a.ticks));
+          ID = t.ID,
+          ticks = (int)Math.Round((double)t.ticks / (double)window.frames * (double)window.FPS),
+        };
 
-          otherSubs.Clear();
-          foreach (ItemUpdateTicks total in window.totalTicks.otherSubs.Values) otherSubs.Add(new ItemUpdateTicks()
+        foreach (CaptureCategory cat in window.firstSlice.categories.Keys)
+        {
+          if (!categories.ContainsKey(cat)) categories[cat] = new List<ItemUpdateTicks>();
+
+          foreach (ItemUpdateTicks t in window.firstSlice.categories[cat].Values)
           {
-            ID = total.ID,
-            ticks = (int)Math.Round((double)total.ticks / (double)window.frames * (double)window.FPS),
-          });
-          otherSubs.Sort((a, b) => (int)(b.ticks - a.ticks));
+            categories[cat].Add(transform(t));
+          }
+
+          categories[cat].Sort((a, b) => (int)(b.ticks - a.ticks));
         }
       }
 
-      public void updateScroll()
+
+      public void UpdateScroll()
       {
         if (PlayerInput.IsShiftDown())
         {
-          listShift -= (PlayerInput.mouseState.ScrollWheelValue - lastScroll) / 80.0;
-          listShift = Math.Min(
-            listShift,
-            Math.Max(mainSub.Count - showedItemsCount, otherSubs.Count - showedItemsCount)
-          );
+          listShift -= (PlayerInput.mouseState.ScrollWheelValue - lastMWScroll) / 80.0;
+          // foreach(var cat in categories.Values){
+          //   listShift = Math.Min(
+          //     listShift,
+          //     Math.Max(cat.Count - showedItemsCount, cat.Count - showedItemsCount)
+          //   );
+          // }
+
+
           listShift = Math.Max(0, listShift);
 
           listOffset = (int)Math.Round(listShift);
         }
-        lastScroll = PlayerInput.mouseState.ScrollWheelValue;
+        lastMWScroll = PlayerInput.mouseState.ScrollWheelValue;
+      }
+
+      public void DrawCategory(CaptureCategory cat, SpriteBatch spriteBatch)
+      {
+        ensureCategory(cat);
+
+        long topTicks = categories[cat].FirstOrDefault().ticks;
+
+        GUI.DrawString(spriteBatch, new Vector2(drawPos.X, drawPos.Y - 16), $"{cat}", Color.White, Color.Black * 0.8f, 0, GUIStyle.SmallFont);
+
+        GUI.DrawRectangle(spriteBatch, drawPos, new Vector2(drawStep.X, drawStep.Y * showedItemsCount), Color.Black * 0.8f, true);
+
+        Func<ItemUpdateTicks, Color> getColor = tracked.Count > 0 ?
+        (t) => tracked.Contains(t.ID) ? Color.Lime : Color.Gray :
+        (t) => ToolBox.GradientLerp((float)t.ticks / topTicks * 3.0f,
+                Color.MediumSpringGreen,
+                Color.Yellow,
+                Color.Orange,
+                Color.Red,
+                Color.Magenta
+        );
+
+        float y = 0;
+        foreach (var t in categories[cat].Take(new Range(listOffset, listOffset + showedItemsCount)))
+        {
+          GUIStyle.MonospacedFont.DrawString(
+            spriteBatch,
+            text: $"{t.ticks} {t.ID}",
+            position: new Vector2(drawPos.X, drawPos.Y + y),
+            color: getColor(t),
+            rotation: 0,
+            origin: new Vector2(0, 0),
+            scale: new Vector2(0.8f, 0.8f),
+            spriteEffects: SpriteEffects.None,
+            layerDepth: 0.1f
+          );
+
+          y += drawStep.Y;
+        }
       }
 
       public void Dispose()
       {
-        mainSub.Clear();
-        otherSubs.Clear();
+        categories.Clear();
+        categories = null;
         tracked.Clear();
         tracked = null;
-        mainSub = null;
-        otherSubs = null;
       }
     }
 
     public static WindowView view;
-
+    public static double lastTime;
     public static void GUI_Draw_Postfix(Camera cam, SpriteBatch spriteBatch)
     {
-      view.updateScroll();
+      view.UpdateScroll();
 
       if (!DrawItemUpdateTimes) return;
 
@@ -115,76 +158,10 @@ namespace ShowPerfExtensions
         lastTime = Timing.TotalTime;
       }
 
+      view.DrawCategory(CaptureCategory.ItemsOnMainSub, spriteBatch);
 
-      float yStep = GUI.AdjustForTextScale(12);
-
-      float xStep = 240.0f;
-      long topTicks = view.mainSub.FirstOrDefault().ticks;
-
-
-      drawUpdateTime(850, 50, view.mainSub, new Range(view.listOffset, view.listOffset + view.showedItemsCount), "Items from main sub:");
-      drawUpdateTime(850 + xStep, 50, view.otherSubs, new Range(view.listOffset, view.listOffset + view.showedItemsCount), "Items from other subs:");
-
-      void drawUpdateTime(float x, float y, List<ItemUpdateTicks> list, Range r, string caption)
-      {
-        GUI.DrawString(spriteBatch, new Vector2(x, y - 16), caption, Color.White, Color.Black * 0.8f, 0, GUIStyle.SmallFont);
-
-        GUI.DrawRectangle(spriteBatch, new Vector2(x, y), new Vector2(xStep, yStep * view.showedItemsCount), Color.Black * 0.8f, true);
-
-
-
-        if (view.tracked.Count > 0)
-        {
-          foreach (var t in list.Take(r))
-          {
-            GUIStyle.MonospacedFont.DrawString(
-              spriteBatch,
-              text: $"{t.ticks} {t.ID}",
-              position: new Vector2(x, y),
-              color: view.tracked.Contains(t.ID) ? Color.Lime : Color.Gray,
-              rotation: 0,
-              origin: new Vector2(0, 0),
-              scale: new Vector2(0.8f, 0.8f),
-              spriteEffects: SpriteEffects.None,
-              layerDepth: 0.1f
-            );
-
-            y += yStep;
-          }
-        }
-        else
-        {
-          foreach (var t in list.Take(r))
-          {
-            GUIStyle.MonospacedFont.DrawString(
-              spriteBatch,
-              text: $"{t.ticks} {t.ID}",
-              position: new Vector2(x, y),
-              color: getGradient((float)t.ticks / topTicks * 3.0f),
-              rotation: 0,
-              origin: new Vector2(0, 0),
-              scale: new Vector2(0.8f, 0.8f),
-              spriteEffects: SpriteEffects.None,
-              layerDepth: 0.1f
-            );
-
-            y += yStep;
-          }
-        }
-
-
-      }
-
-      Color getGradient(float d)
-      {
-        return ToolBox.GradientLerp(d,
-              Color.MediumSpringGreen,
-              Color.Yellow,
-              Color.Orange,
-              Color.Red,
-              Color.Magenta
-        );
-      }
     }
+
+    #endregion
   }
 }

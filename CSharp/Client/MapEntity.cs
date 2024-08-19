@@ -20,19 +20,11 @@ namespace ShowPerfExtensions
 
     public static void tryAddTicks(Item item, long ticks)
     {
-      Dictionary<int, ItemUpdateTicks> dict = item.Submarine == Submarine.MainSub ? window.firstSlice.mainSub : window.firstSlice.otherSubs;
-
-      if (dict.ContainsKey(item.Prefab.Identifier.HashCode))
-      {
-        dict[item.Prefab.Identifier.HashCode] += ticks;
-      }
-      else
-      {
-        dict[item.Prefab.Identifier.HashCode] = new ItemUpdateTicks(
-          item.Prefab.Identifier.Value,
-          ticks
-        );
-      }
+      window.tryAddTicks(
+        item.Prefab.Identifier,
+        item.Submarine == Submarine.MainSub ? CaptureCategory.ItemsOnMainSub : CaptureCategory.ItemsOnOtherSubs,
+        ticks
+      );
     }
 
     /// <summary>
@@ -41,6 +33,8 @@ namespace ShowPerfExtensions
     public static bool MapEntity_UpdateAll_Replace(float deltaTime, Camera cam)
     {
       if (!DrawItemUpdateTimes) return true;
+      window.ensureCategory(CaptureCategory.ItemsOnMainSub);
+      window.ensureCategory(CaptureCategory.ItemsOnOtherSubs);
 
       MapEntity.mapEntityUpdateTick++;
 

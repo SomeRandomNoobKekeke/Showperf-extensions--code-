@@ -18,7 +18,7 @@ namespace ShowPerfExtensions
 
     public Harmony harmony;
 
-    public static bool debug = false;
+    public static bool debug = true;
 
     public static bool DrawItemUpdateTimes = false;
 

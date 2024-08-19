@@ -16,7 +16,7 @@ namespace ShowPerfExtensions
   {
     #region Bruh
     #endregion
-    enum CaptureCategory
+    public enum CaptureCategory
     {
       ItemsOnMainSub,
       ItemsOnOtherSubs,
@@ -69,33 +69,37 @@ namespace ShowPerfExtensions
         categories.Clear();
       }
 
+      public Dictionary<int, ItemUpdateTicks> this[CaptureCategory cat]
+      {
+        get => categories[cat];
+        set => categories[cat] = value;
+      }
+
       public void Add(Slice s)
       {
-        foreach (int key in s.mainSub.Keys)
+        foreach (CaptureCategory cat in s.categories.Keys)
         {
-          if (!mainSub.ContainsKey(key)) mainSub[key] = s.mainSub[key];
-          else mainSub[key] += s.mainSub[key];
-        }
+          if (!categories.ContainsKey(cat)) categories[cat] = new Dictionary<int, ItemUpdateTicks>();
 
-        foreach (int key in s.otherSubs.Keys)
-        {
-          if (!otherSubs.ContainsKey(key)) otherSubs[key] = s.otherSubs[key];
-          else otherSubs[key] += s.otherSubs[key];
+          foreach (int id in s.categories[cat].Keys)
+          {
+            if (!categories[cat].ContainsKey(id)) categories[cat][id] = s.categories[cat][id];
+            else categories[cat][id] += s.categories[cat][id];
+          }
         }
       }
 
       public void Substract(Slice s)
       {
-        foreach (int key in s.mainSub.Keys)
+        foreach (CaptureCategory cat in s.categories.Keys)
         {
-          if (!mainSub.ContainsKey(key)) mainSub[key] = -s.mainSub[key];
-          else mainSub[key] -= s.mainSub[key];
-        }
+          if (!categories.ContainsKey(cat)) categories[cat] = new Dictionary<int, ItemUpdateTicks>();
 
-        foreach (int key in s.otherSubs.Keys)
-        {
-          if (!otherSubs.ContainsKey(key)) otherSubs[key] = -s.otherSubs[key];
-          else otherSubs[key] -= s.otherSubs[key];
+          foreach (int id in s.categories[cat].Keys)
+          {
+            if (!categories[cat].ContainsKey(id)) categories[cat][id] = -s.categories[cat][id];
+            else categories[cat][id] -= s.categories[cat][id];
+          }
         }
       }
     }
@@ -163,6 +167,8 @@ namespace ShowPerfExtensions
         lastSlice.Clear();
         firstSlice = lastSlice;
         partialSums.Enqueue(lastSlice);
+
+        info(partialSums.Count);
       }
 
       public void Reset()
@@ -180,6 +186,30 @@ namespace ShowPerfExtensions
         partialSums.Enqueue(firstSlice);
 
         info($"Reset| fps:{fps} duration:{duration} partialSums.Count: {partialSums.Count}");
+      }
+
+      public void ensureCategory(CaptureCategory cat)
+      {
+        if (!firstSlice.categories.ContainsKey(cat)) firstSlice[cat] = new Dictionary<int, ItemUpdateTicks>();
+      }
+
+      public void tryAddTicks(Identifier id, CaptureCategory cat, long ticks)
+      {
+        try
+        {
+          if (firstSlice[cat].ContainsKey(id.HashCode))
+          {
+            firstSlice[cat][id.HashCode] += ticks;
+          }
+          else
+          {
+            firstSlice[cat][id.HashCode] = new ItemUpdateTicks(id.Value, ticks);
+          }
+        }
+        catch (KeyNotFoundException)
+        {
+          ensureCategory(cat);
+        }
       }
 
 
