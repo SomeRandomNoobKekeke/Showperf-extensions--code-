@@ -16,11 +16,18 @@ namespace ShowPerfExtensions
   public partial class Mod : IAssemblyPlugin
   {
 
+    public enum ShowperfCategories
+    {
+      none,
+      items
+    }
+
+
     public Harmony harmony;
 
-    public static bool debug = true;
+    public static bool debug = false;
 
-    public static bool DrawItemUpdateTimes = false;
+    public static ShowperfCategories activeCategory = ShowperfCategories.none;
 
     public static CaptureWindow window;
 
@@ -28,13 +35,12 @@ namespace ShowPerfExtensions
     public void Initialize()
     {
       harmony = new Harmony("show.perf");
-      if (debug) DrawItemUpdateTimes = true;
+      if (debug) activeCategory = ShowperfCategories.items;
 
       addCommands();
 
       window = new CaptureWindow(duration: 3, fps: 30);
       view = new WindowView(window);
-
 
       patchAll();
 

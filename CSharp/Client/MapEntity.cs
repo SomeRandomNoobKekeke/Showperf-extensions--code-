@@ -32,7 +32,7 @@ namespace ShowPerfExtensions
     /// </summary>
     public static bool MapEntity_UpdateAll_Replace(float deltaTime, Camera cam)
     {
-      if (!DrawItemUpdateTimes) return true;
+      if (activeCategory != ShowperfCategories.items) return true;
       window.ensureCategory(CaptureCategory.ItemsOnMainSub);
       window.ensureCategory(CaptureCategory.ItemsOnOtherSubs);
 

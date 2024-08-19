@@ -26,8 +26,8 @@ namespace ShowPerfExtensions
       public double listShift;
       public int listOffset;
       public int lastMWScroll; // PlayerInput.ScrollWheelSpeed is garbage lol
-      public Vector2 drawPos = new Vector2(850, 50);
-      public Vector2 drawStep = new Vector2(240, GUI.AdjustForTextScale(12));
+
+      public Vector2 stringSize = new Vector2(240, GUI.AdjustForTextScale(12));
 
       public bool frozen = false;
 
@@ -53,18 +53,19 @@ namespace ShowPerfExtensions
       {
         categories.Clear();
 
-        Func<ItemUpdateTicks, ItemUpdateTicks> transform = window.accumulate ? (t) => t :
+        Func<ItemUpdateTicks, ItemUpdateTicks> transform = window.Accumulate ?
+        (t) => t :
         (t) => new ItemUpdateTicks()
         {
           ID = t.ID,
           ticks = (int)Math.Round((double)t.ticks / (double)window.frames * (double)window.FPS),
         };
 
-        foreach (CaptureCategory cat in window.firstSlice.categories.Keys)
+        foreach (CaptureCategory cat in window.totalTicks.categories.Keys)
         {
-          if (!categories.ContainsKey(cat)) categories[cat] = new List<ItemUpdateTicks>();
+          ensureCategory(cat);
 
-          foreach (ItemUpdateTicks t in window.firstSlice.categories[cat].Values)
+          foreach (ItemUpdateTicks t in window.totalTicks[cat].Values)
           {
             categories[cat].Add(transform(t));
           }
@@ -79,14 +80,14 @@ namespace ShowPerfExtensions
         if (PlayerInput.IsShiftDown())
         {
           listShift -= (PlayerInput.mouseState.ScrollWheelValue - lastMWScroll) / 80.0;
-          // foreach(var cat in categories.Values){
-          //   listShift = Math.Min(
-          //     listShift,
-          //     Math.Max(cat.Count - showedItemsCount, cat.Count - showedItemsCount)
-          //   );
-          // }
 
+          int maxLength = 0;
+          foreach (var cat in categories.Values)
+          {
+            maxLength = Math.Max(maxLength, cat.Count);
+          }
 
+          listShift = Math.Min(listShift, maxLength - showedItemsCount);
           listShift = Math.Max(0, listShift);
 
           listOffset = (int)Math.Round(listShift);
@@ -94,19 +95,19 @@ namespace ShowPerfExtensions
         lastMWScroll = PlayerInput.mouseState.ScrollWheelValue;
       }
 
-      public void DrawCategory(CaptureCategory cat, SpriteBatch spriteBatch)
+      public void DrawCategory(SpriteBatch spriteBatch, CaptureCategory cat, Vector2 pos, long topTicks = -1, string caption = "")
       {
-        ensureCategory(cat);
+        if (topTicks == -1) topTicks = categories[cat].FirstOrDefault().ticks;
 
-        long topTicks = categories[cat].FirstOrDefault().ticks;
+        if (caption == "") caption = $"{cat}";
 
-        GUI.DrawString(spriteBatch, new Vector2(drawPos.X, drawPos.Y - 16), $"{cat}", Color.White, Color.Black * 0.8f, 0, GUIStyle.SmallFont);
+        GUI.DrawString(spriteBatch, new Vector2(pos.X, pos.Y - 16), caption, Color.White, Color.Black * 0.8f, 0, GUIStyle.SmallFont);
 
-        GUI.DrawRectangle(spriteBatch, drawPos, new Vector2(drawStep.X, drawStep.Y * showedItemsCount), Color.Black * 0.8f, true);
+        GUI.DrawRectangle(spriteBatch, pos, new Vector2(stringSize.X, stringSize.Y * showedItemsCount), Color.Black * 0.8f, true);
 
         Func<ItemUpdateTicks, Color> getColor = tracked.Count > 0 ?
         (t) => tracked.Contains(t.ID) ? Color.Lime : Color.Gray :
-        (t) => ToolBox.GradientLerp((float)t.ticks / topTicks * 3.0f,
+        (t) => ToolBox.GradientLerp((float)t.ticks / topTicks * 2.0f,
                 Color.MediumSpringGreen,
                 Color.Yellow,
                 Color.Orange,
@@ -120,7 +121,7 @@ namespace ShowPerfExtensions
           GUIStyle.MonospacedFont.DrawString(
             spriteBatch,
             text: $"{t.ticks} {t.ID}",
-            position: new Vector2(drawPos.X, drawPos.Y + y),
+            position: new Vector2(pos.X, pos.Y + y),
             color: getColor(t),
             rotation: 0,
             origin: new Vector2(0, 0),
@@ -129,7 +130,7 @@ namespace ShowPerfExtensions
             layerDepth: 0.1f
           );
 
-          y += drawStep.Y;
+          y += stringSize.Y;
         }
       }
 
@@ -148,18 +149,26 @@ namespace ShowPerfExtensions
     {
       view.UpdateScroll();
 
-      if (!DrawItemUpdateTimes) return;
-
-      if (!view.frozen && Timing.TotalTime - lastTime > window.frameDuration)
+      if (activeCategory != ShowperfCategories.none)
       {
-        view.Update();
+        if (!view.frozen && Timing.TotalTime - lastTime > window.frameDuration)
+        {
+          view.Update();
 
-        window.Rotate();
-        lastTime = Timing.TotalTime;
+          window.Rotate();
+          lastTime = Timing.TotalTime;
+        }
       }
 
-      view.DrawCategory(CaptureCategory.ItemsOnMainSub, spriteBatch);
+      if (activeCategory == ShowperfCategories.items)
+      {
+        view.ensureCategory(CaptureCategory.ItemsOnMainSub);
+        view.ensureCategory(CaptureCategory.ItemsOnOtherSubs);
 
+        view.DrawCategory(spriteBatch, CaptureCategory.ItemsOnMainSub, new Vector2(850, 50), view.categories[CaptureCategory.ItemsOnMainSub].FirstOrDefault().ticks, "Items from main sub:");
+
+        view.DrawCategory(spriteBatch, CaptureCategory.ItemsOnOtherSubs, new Vector2(850 + view.stringSize.X, 50), view.categories[CaptureCategory.ItemsOnMainSub].FirstOrDefault().ticks, "Items from other subs:");
+      }
     }
 
     #endregion

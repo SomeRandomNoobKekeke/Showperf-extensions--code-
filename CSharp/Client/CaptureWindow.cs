@@ -9,7 +9,7 @@ using Barotrauma;
 using HarmonyLib;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
-
+using System.Text;
 namespace ShowPerfExtensions
 {
   public partial class Mod : IAssemblyPlugin
@@ -137,6 +137,15 @@ namespace ShowPerfExtensions
       }
 
       public bool accumulate = false;
+      public bool Accumulate
+      {
+        get => accumulate;
+        set
+        {
+          accumulate = value;
+          Reset();
+        }
+      }
       public Slice firstSlice;
 
       public Slice totalTicks = new Slice();
@@ -157,26 +166,22 @@ namespace ShowPerfExtensions
 
       public void Rotate()
       {
-        if (debug)
+        if (Accumulate)
         {
-          log("-----------------------");
-          foreach (var cat in firstSlice.categories.Keys)
-          {
-
-            log($"{cat} {firstSlice[cat].Count}");
-          }
+          totalTicks.Add(firstSlice);
+          firstSlice.Clear();
         }
+        else
+        {
+          Slice lastSlice = partialSums.Dequeue();
 
-        if (accumulate) return;
+          totalTicks.Add(firstSlice);
+          totalTicks.Substract(lastSlice);
 
-        Slice lastSlice = partialSums.Dequeue();
-
-        totalTicks.Add(firstSlice);
-        totalTicks.Substract(lastSlice);
-
-        lastSlice.Clear();
-        firstSlice = lastSlice;
-        partialSums.Enqueue(lastSlice);
+          lastSlice.Clear();
+          firstSlice = lastSlice;
+          partialSums.Enqueue(lastSlice);
+        }
       }
 
       public void Reset()
@@ -214,9 +219,32 @@ namespace ShowPerfExtensions
             firstSlice[cat][id.HashCode] = new ItemUpdateTicks(id.Value, ticks);
           }
         }
-        catch (KeyNotFoundException)
+        catch (KeyNotFoundException e)
         {
           ensureCategory(cat);
+          err(e.Message);
+        }
+      }
+
+      public void debugCapacity()
+      {
+        if (debug)
+        {
+          StringBuilder sb = new StringBuilder();
+          string s = "";
+          foreach (Slice slice in partialSums)
+          {
+
+            int sum = 0;
+            foreach (var cat in slice.categories)
+            {
+              sum += cat.Value.Count;
+            }
+
+            sb.Append($"{sum}|");
+          }
+
+          log(sb.ToString());
         }
       }
 
