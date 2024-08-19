@@ -16,6 +16,12 @@ namespace ShowPerfExtensions
   {
     #region Bruh
     #endregion
+    enum CaptureCategory
+    {
+      ItemsOnMainSub,
+      ItemsOnOtherSubs,
+    }
+
     public struct ItemUpdateTicks
     {
       public string ID;
@@ -51,19 +57,16 @@ namespace ShowPerfExtensions
 
     public class Slice
     {
-      public Dictionary<int, ItemUpdateTicks> mainSub;
-      public Dictionary<int, ItemUpdateTicks> otherSubs;
+      public Dictionary<CaptureCategory, Dictionary<int, ItemUpdateTicks>> categories;
 
       public Slice()
       {
-        mainSub = new Dictionary<int, ItemUpdateTicks>();
-        otherSubs = new Dictionary<int, ItemUpdateTicks>();
+        categories = new Dictionary<CaptureCategory, Dictionary<int, ItemUpdateTicks>>();
       }
 
       public void Clear()
       {
-        mainSub.Clear();
-        otherSubs.Clear();
+        categories.Clear();
       }
 
       public void Add(Slice s)
