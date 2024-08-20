@@ -21,6 +21,7 @@ namespace ShowPerfExtensions
       ItemsOnMainSub,
       ItemsOnOtherSubs,
       Characters,
+      ItemsDrawing,
     }
 
     public struct ItemUpdateTicks

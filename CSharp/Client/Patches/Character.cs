@@ -19,7 +19,7 @@ namespace ShowPerfExtensions
   {
     public static bool Character_UpdateAll_Replace(float deltaTime, Camera cam)
     {
-      if (activeCategory != ShowperfCategories.characters) return true;
+      if (activeCategory != ShowperfCategories.Characters) return true;
       window.ensureCategory(CaptureCategory.Characters);
 
       var sw = new System.Diagnostics.Stopwatch();

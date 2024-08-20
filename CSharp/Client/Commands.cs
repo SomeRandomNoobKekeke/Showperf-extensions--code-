@@ -44,10 +44,10 @@ namespace ShowPerfExtensions
 
         if (Enum.TryParse<ShowperfCategories>(args[0], out ShowperfCategories c))
         {
-          activeCategory = activeCategory == c ? ShowperfCategories.none : c;
+          activeCategory = activeCategory == c ? ShowperfCategories.None : c;
         }
 
-        if (activeCategory != ShowperfCategories.none) window.Reset();
+        if (activeCategory != ShowperfCategories.None) window.Reset();
       }, () => new string[][] { Enum.GetValues<ShowperfCategories>().Select(c => $"{c}").ToArray() }));
 
 

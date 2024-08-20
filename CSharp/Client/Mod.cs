@@ -11,6 +11,8 @@ using HarmonyLib;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 
+using System.IO;
+
 namespace ShowPerfExtensions
 {
   public partial class Mod : IAssemblyPlugin
@@ -18,25 +20,38 @@ namespace ShowPerfExtensions
 
     public enum ShowperfCategories
     {
-      none,
-      items,
-      characters,
+      None,
+      ItemsUpdate,
+      Characters,
+      ItemsDrawing,
     }
 
 
     public Harmony harmony;
 
-    public static bool debug = true;
+    public static string ModName = "Deeper Showperf";
+    public static string ModDir = "";
+    public static bool debug = false;
 
-    public static ShowperfCategories activeCategory = ShowperfCategories.none;
+    public static ShowperfCategories activeCategory = ShowperfCategories.None;
 
     public static CaptureWindow window;
 
 
     public void Initialize()
     {
-      harmony = new Harmony("show.perf");
-      if (debug) activeCategory = ShowperfCategories.characters;
+      harmony = new Harmony("showperf");
+
+      findModFolder();
+      if (ModDir.Contains("LocalMods"))
+      {
+        debug = true;
+        info($"found {ModName} in LocalMods, debug: {debug}");
+      }
+
+      if (debug) activeCategory = ShowperfCategories.ItemsDrawing;
+
+
 
       addCommands();
 
@@ -60,6 +75,22 @@ namespace ShowPerfExtensions
       harmony.Patch(
         original: typeof(Character).GetMethod("UpdateAll", AccessTools.all),
         prefix: new HarmonyMethod(typeof(Mod).GetMethod("Character_UpdateAll_Replace"))
+      );
+
+      harmony.Patch(
+        original: typeof(Submarine).GetMethod("DrawFront", AccessTools.all),
+        prefix: new HarmonyMethod(typeof(Mod).GetMethod("Submarine_DrawFront_Replace"))
+      );
+
+      harmony.Patch(
+        original: typeof(Submarine).GetMethod("DrawBack", AccessTools.all),
+        prefix: new HarmonyMethod(typeof(Mod).GetMethod("Submarine_DrawBack_Replace"))
+      );
+
+
+      harmony.Patch(
+        original: typeof(Camera).GetMethod("MoveCamera", AccessTools.all),
+        prefix: new HarmonyMethod(typeof(Mod).GetMethod("Camera_MoveCamera_Prefix"))
       );
 
       harmony.Patch(
@@ -88,6 +119,23 @@ namespace ShowPerfExtensions
       view = null;
 
       removeCommands();
+    }
+
+    public void findModFolder()
+    {
+      bool found = false;
+
+      foreach (ContentPackage p in ContentPackageManager.EnabledPackages.All)
+      {
+        if (p.Name.Contains(ModName))
+        {
+          found = true;
+          ModDir = Path.GetFullPath(p.Dir);
+          break;
+        }
+      }
+
+      if (!found) err($"Couldn't find {ModName} mod folder");
     }
   }
 }

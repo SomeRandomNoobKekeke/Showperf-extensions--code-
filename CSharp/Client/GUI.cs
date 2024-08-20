@@ -91,7 +91,7 @@ namespace ShowPerfExtensions
 
       public void UpdateScroll()
       {
-        if (PlayerInput.IsShiftDown())
+        if (PlayerInput.IsShiftDown() && PlayerInput.IsAltDown())
         {
           listShift -= (PlayerInput.mouseState.ScrollWheelValue - lastMWScroll) / 80.0;
 
@@ -170,7 +170,7 @@ namespace ShowPerfExtensions
     {
       view.UpdateScroll();
 
-      if (activeCategory != ShowperfCategories.none)
+      if (activeCategory != ShowperfCategories.None)
       {
         if (!view.frozen && Timing.TotalTime - lastTime > window.frameDuration)
         {
@@ -181,7 +181,7 @@ namespace ShowPerfExtensions
         }
       }
 
-      if (activeCategory == ShowperfCategories.items)
+      if (activeCategory == ShowperfCategories.ItemsUpdate)
       {
         view.ensureCategory(CaptureCategory.ItemsOnMainSub);
         view.ensureCategory(CaptureCategory.ItemsOnOtherSubs);
@@ -192,10 +192,16 @@ namespace ShowPerfExtensions
         view.DrawCategory(spriteBatch, CaptureCategory.ItemsOnOtherSubs, new Vector2(850 + view.defaultStringWidth, 50), "Items from other subs:", topTicks);
       }
 
-      if (activeCategory == ShowperfCategories.characters)
+      if (activeCategory == ShowperfCategories.Characters)
       {
         view.ensureCategory(CaptureCategory.Characters);
         view.DrawCategory(spriteBatch, CaptureCategory.Characters, new Vector2(850, 50), "Characters:", size: new Vector2(480, 600));
+      }
+
+      if (activeCategory == ShowperfCategories.ItemsDrawing)
+      {
+        view.ensureCategory(CaptureCategory.ItemsDrawing);
+        view.DrawCategory(spriteBatch, CaptureCategory.ItemsDrawing, new Vector2(850, 50), "Items drawing:", size: new Vector2(480, 600));
       }
     }
 
