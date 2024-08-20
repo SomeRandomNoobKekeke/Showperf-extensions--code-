@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Collections.Generic;
@@ -32,6 +33,8 @@ namespace ShowPerfExtensions
       public float stringHeight = GUI.AdjustForTextScale(12);
 
       public bool frozen = false;
+
+      public bool showInMs = true;
 
       public WindowView(CaptureWindow window)
       {
@@ -136,12 +139,16 @@ namespace ShowPerfExtensions
         (t) => tracked.Contains(t.ID) ? getGradient((float)t.ticks / topTicks) : Color.DarkSlateGray :
         (t) => getGradient((float)t.ticks / topTicks);
 
+        Func<long, string> converToUnits = showInMs ?
+        (t) => String.Format("{0:0.0000000}", (double)t / Stopwatch.Frequency) :
+        (t) => String.Format("{0:000000}", t);
+
         float y = 0;
         foreach (var t in categories[cat].Take(new Range(listOffset, listOffset + showedItemsCount)))
         {
           GUIStyle.MonospacedFont.DrawString(
             spriteBatch,
-            text: $"{t.ticks} {t.ID}",
+            text: $"{converToUnits(t.ticks)} {t.ID}",
             position: new Vector2(pos.X, pos.Y + y),
             color: getColor(t),
             rotation: 0,

@@ -64,7 +64,6 @@ namespace ShowPerfExtensions
       }));
 
 
-
       addedCommands.Add(new DebugConsole.Command("showperf_track", "toggles tracking of some ID", (string[] args) =>
       {
         if (args.Length > 0)
@@ -107,6 +106,12 @@ namespace ShowPerfExtensions
         }
 
         log($"window.Duration: {window.Duration}");
+      }));
+
+      addedCommands.Add(new DebugConsole.Command("showperf_format", "toggles between ticks and ms", (string[] args) =>
+      {
+        view.showInMs = !view.showInMs;
+        log($"view.showInMs: {view.showInMs}");
       }));
 
       addedCommands.Add(new DebugConsole.Command("showperf_fps", "", (string[] args) =>
