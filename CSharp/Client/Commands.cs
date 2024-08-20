@@ -80,18 +80,19 @@ namespace ShowPerfExtensions
             else log($"{args[0]} not found :(");
           }
         }
-      }));
+      }, () => new string[][] { view.getAllIds() }));
 
       addedCommands.Add(new DebugConsole.Command("showperf_untrack", "", (string[] args) =>
       {
+        if (args.Length == 0 || args[0] == "all")
+        {
+          view.tracked.Clear();
+          log("untracked all");
+          return;
+        }
+
         if (args.Length > 0)
         {
-          if (args[0] == "all")
-          {
-            view.tracked.Clear();
-            return;
-          }
-
           if (view.tracked.Remove(args[0])) log($"{args[0]} untracked");
           else log($"{args[0]} not found :(");
 
@@ -117,6 +118,39 @@ namespace ShowPerfExtensions
 
         log($"window.fps: {window.FPS}");
       }));
+
+      addedCommands.Add(new DebugConsole.Command("showperf_exposure", "showperf_exposure size [graph]", (string[] args) =>
+      {
+        bool draw = true;
+        bool update = true;
+
+        if (args.Length > 1)
+        {
+          if (args[1] == "DrawTimeGraph") update = false;
+          if (args[1] == "UpdateTimeGraph") draw = false;
+        }
+
+        if (args.Length > 0 && int.TryParse(args[0], out int ticks))
+        {
+          ticks = Math.Clamp(ticks, 10, 100000);
+
+          if (draw) GameMain.PerformanceCounter.DrawTimeGraph = new Graph(ticks);
+          if (update) GameMain.PerformanceCounter.UpdateTimeGraph = new Graph(ticks);
+        }
+
+        log($"GameMain.PerformanceCounter.DrawTimeGraph.values.Length: {GameMain.PerformanceCounter.DrawTimeGraph.values.Length}");
+        log($"GameMain.PerformanceCounter.UpdateTimeGraph.values.Length: {GameMain.PerformanceCounter.UpdateTimeGraph.values.Length}");
+      }, () => new string[][] { new string[0], new string[] { "DrawTimeGraph", "UpdateTimeGraph" } }));
+
+
+      addedCommands.Add(new DebugConsole.Command("printcolors", "", (string[] args) =>
+      {
+        foreach (PropertyInfo prop in typeof(Color).GetProperties(BindingFlags.Static | BindingFlags.Public))
+        {
+          log(prop, (Color)prop.GetValue(null));
+        }
+      }));
+
 
       DebugConsole.Commands.InsertRange(0, addedCommands);
     }

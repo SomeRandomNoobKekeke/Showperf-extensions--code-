@@ -20,6 +20,7 @@ namespace ShowPerfExtensions
     {
       ItemsOnMainSub,
       ItemsOnOtherSubs,
+      Characters,
     }
 
     public struct ItemUpdateTicks
@@ -222,6 +223,34 @@ namespace ShowPerfExtensions
         catch (KeyNotFoundException e)
         {
           ensureCategory(cat);
+          err(e.Message);
+        }
+        catch (Exception e)
+        {
+          err(e.Message);
+        }
+      }
+
+      public void tryAddTicks(int id, string name, CaptureCategory cat, long ticks)
+      {
+        try
+        {
+          if (firstSlice[cat].ContainsKey(id))
+          {
+            firstSlice[cat][id] += ticks;
+          }
+          else
+          {
+            firstSlice[cat][id] = new ItemUpdateTicks(name, ticks);
+          }
+        }
+        catch (KeyNotFoundException e)
+        {
+          ensureCategory(cat);
+          err(e.Message);
+        }
+        catch (Exception e)
+        {
           err(e.Message);
         }
       }

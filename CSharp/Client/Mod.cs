@@ -19,13 +19,14 @@ namespace ShowPerfExtensions
     public enum ShowperfCategories
     {
       none,
-      items
+      items,
+      characters,
     }
 
 
     public Harmony harmony;
 
-    public static bool debug = false;
+    public static bool debug = true;
 
     public static ShowperfCategories activeCategory = ShowperfCategories.none;
 
@@ -35,12 +36,14 @@ namespace ShowPerfExtensions
     public void Initialize()
     {
       harmony = new Harmony("show.perf");
-      if (debug) activeCategory = ShowperfCategories.items;
+      if (debug) activeCategory = ShowperfCategories.characters;
 
       addCommands();
 
       window = new CaptureWindow(duration: 3, fps: 30);
       view = new WindowView(window);
+
+      GameMain.PerformanceCounter.DrawTimeGraph = new Graph(1000);
 
       patchAll();
 
@@ -52,6 +55,11 @@ namespace ShowPerfExtensions
       harmony.Patch(
         original: typeof(MapEntity).GetMethod("UpdateAll", AccessTools.all),
         prefix: new HarmonyMethod(typeof(Mod).GetMethod("MapEntity_UpdateAll_Replace"))
+      );
+
+      harmony.Patch(
+        original: typeof(Character).GetMethod("UpdateAll", AccessTools.all),
+        prefix: new HarmonyMethod(typeof(Mod).GetMethod("Character_UpdateAll_Replace"))
       );
 
       harmony.Patch(

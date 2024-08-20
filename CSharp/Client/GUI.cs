@@ -22,12 +22,14 @@ namespace ShowPerfExtensions
       public Dictionary<CaptureCategory, List<ItemUpdateTicks>> categories;
       public HashSet<string> tracked;
 
+      //TODO this should be per category 
       public int showedItemsCount = 50;
       public double listShift;
       public int listOffset;
       public int lastMWScroll; // PlayerInput.ScrollWheelSpeed is garbage lol
 
-      public Vector2 stringSize = new Vector2(240, GUI.AdjustForTextScale(12));
+      public float defaultStringWidth = 240f;
+      public float stringHeight = GUI.AdjustForTextScale(12);
 
       public bool frozen = false;
 
@@ -42,6 +44,18 @@ namespace ShowPerfExtensions
       public void Clear()
       {
 
+      }
+
+      // this is for showperf_track hints
+      public string[] getAllIds()
+      {
+        List<string> all = new List<string>();
+        foreach (CaptureCategory cat in categories.Keys)
+        {
+          all.AddRange(categories[cat].Select(t => t.ID));
+        }
+
+        return all.ToArray();
       }
 
       public void ensureCategory(CaptureCategory cat)
@@ -95,25 +109,32 @@ namespace ShowPerfExtensions
         lastMWScroll = PlayerInput.mouseState.ScrollWheelValue;
       }
 
-      public void DrawCategory(SpriteBatch spriteBatch, CaptureCategory cat, Vector2 pos, long topTicks = -1, string caption = "")
+      public void DrawCategory(SpriteBatch spriteBatch, CaptureCategory cat, Vector2 pos, string caption = "", long topTicks = -1, Vector2? size = null)
       {
         if (topTicks == -1) topTicks = categories[cat].FirstOrDefault().ticks;
-
         if (caption == "") caption = $"{cat}";
+
+        Vector2 realSize = size ?? new Vector2(defaultStringWidth, stringHeight * showedItemsCount);
 
         GUI.DrawString(spriteBatch, new Vector2(pos.X, pos.Y - 16), caption, Color.White, Color.Black * 0.8f, 0, GUIStyle.SmallFont);
 
-        GUI.DrawRectangle(spriteBatch, pos, new Vector2(stringSize.X, stringSize.Y * showedItemsCount), Color.Black * 0.8f, true);
+        GUI.DrawRectangle(spriteBatch, pos, realSize, Color.Black * 0.8f, true);
 
-        Func<ItemUpdateTicks, Color> getColor = tracked.Count > 0 ?
-        (t) => tracked.Contains(t.ID) ? Color.Lime : Color.Gray :
-        (t) => ToolBox.GradientLerp((float)t.ticks / topTicks * 2.0f,
+        Color getGradient(float f)
+        {
+          return ToolBox.GradientLerp(f,
                 Color.MediumSpringGreen,
                 Color.Yellow,
                 Color.Orange,
                 Color.Red,
+                Color.Magenta,
                 Color.Magenta
-        );
+          );
+        }
+
+        Func<ItemUpdateTicks, Color> getColor = tracked.Count > 0 ?
+        (t) => tracked.Contains(t.ID) ? getGradient((float)t.ticks / topTicks) : Color.DarkSlateGray :
+        (t) => getGradient((float)t.ticks / topTicks);
 
         float y = 0;
         foreach (var t in categories[cat].Take(new Range(listOffset, listOffset + showedItemsCount)))
@@ -130,7 +151,7 @@ namespace ShowPerfExtensions
             layerDepth: 0.1f
           );
 
-          y += stringSize.Y;
+          y += stringHeight;
         }
       }
 
@@ -165,9 +186,16 @@ namespace ShowPerfExtensions
         view.ensureCategory(CaptureCategory.ItemsOnMainSub);
         view.ensureCategory(CaptureCategory.ItemsOnOtherSubs);
 
-        view.DrawCategory(spriteBatch, CaptureCategory.ItemsOnMainSub, new Vector2(850, 50), view.categories[CaptureCategory.ItemsOnMainSub].FirstOrDefault().ticks, "Items from main sub:");
+        long topTicks = view.categories[CaptureCategory.ItemsOnMainSub].FirstOrDefault().ticks;
 
-        view.DrawCategory(spriteBatch, CaptureCategory.ItemsOnOtherSubs, new Vector2(850 + view.stringSize.X, 50), view.categories[CaptureCategory.ItemsOnMainSub].FirstOrDefault().ticks, "Items from other subs:");
+        view.DrawCategory(spriteBatch, CaptureCategory.ItemsOnMainSub, new Vector2(850, 50), "Items from main sub:", topTicks);
+        view.DrawCategory(spriteBatch, CaptureCategory.ItemsOnOtherSubs, new Vector2(850 + view.defaultStringWidth, 50), "Items from other subs:", topTicks);
+      }
+
+      if (activeCategory == ShowperfCategories.characters)
+      {
+        view.ensureCategory(CaptureCategory.Characters);
+        view.DrawCategory(spriteBatch, CaptureCategory.Characters, new Vector2(850, 50), "Characters:", size: new Vector2(480, 600));
       }
     }
 
