@@ -54,7 +54,7 @@ namespace ShowPerfExtensions
       public string UnitsName { get => showInMs ? "ms" : "ticks"; }
 
       public string converToUnits(long t) => showInMs ?
-      String.Format("{0:0.000000}", (double)t * 10 / Stopwatch.Frequency) :
+      String.Format("{0:0.000000}", (double)t * TicksToMs) :
       String.Format("{0:000000}", t);
 
       // this is for showperf_track hints

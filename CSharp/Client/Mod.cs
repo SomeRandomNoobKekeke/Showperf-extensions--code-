@@ -38,6 +38,8 @@ namespace ShowPerfExtensions
 
     public static CaptureWindow window;
 
+    public static double TicksToMs = 1000.0 / 100.0 / Stopwatch.Frequency;
+
 
     public void Initialize()
     {
@@ -52,7 +54,7 @@ namespace ShowPerfExtensions
 
       if (debug) activeCategory = ShowperfCategories.ItemsDrawing;
 
-
+      log(TicksToMs);
 
       addCommands();
 
