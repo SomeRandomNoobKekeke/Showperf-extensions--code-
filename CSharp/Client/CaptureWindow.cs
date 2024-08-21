@@ -22,6 +22,8 @@ namespace ShowPerfExtensions
       ItemsOnOtherSubs,
       Characters,
       ItemsDrawing,
+      LevelObjectsDrawing,
+      OtherLevelStuff,
     }
 
     public struct ItemUpdateTicks
@@ -208,29 +210,10 @@ namespace ShowPerfExtensions
         if (!firstSlice.categories.ContainsKey(cat)) firstSlice[cat] = new Dictionary<int, ItemUpdateTicks>();
       }
 
-      public void tryAddTicks(Identifier id, CaptureCategory cat, long ticks)
-      {
-        try
-        {
-          if (firstSlice[cat].ContainsKey(id.HashCode))
-          {
-            firstSlice[cat][id.HashCode] += ticks;
-          }
-          else
-          {
-            firstSlice[cat][id.HashCode] = new ItemUpdateTicks(id.Value, ticks);
-          }
-        }
-        catch (KeyNotFoundException e)
-        {
-          ensureCategory(cat);
-          err(e.Message);
-        }
-        catch (Exception e)
-        {
-          err(e.Message);
-        }
-      }
+      public void tryAddTicks(Identifier id, CaptureCategory cat, long ticks) => tryAddTicks(id.HashCode, id.Value, cat, ticks);
+
+      public void tryAddTicks(string id, CaptureCategory cat, long ticks) => tryAddTicks(id.GetHashCode(), id, cat, ticks);
+
 
       public void tryAddTicks(int id, string name, CaptureCategory cat, long ticks)
       {

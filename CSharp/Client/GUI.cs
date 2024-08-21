@@ -152,25 +152,6 @@ namespace ShowPerfExtensions
         if (caption == "") caption = $"{cat}";
         caption += $" (in {UnitsName}):";
 
-        Vector2 realSize = size ?? new Vector2(defaultStringWidth, stringHeight * showedItemsCount);
-
-        GUI.DrawRectangle(spriteBatch, pos - new Vector2(0, 16), new Vector2(realSize.X, 16), Color.Black * 0.8f, true);
-        GUI.DrawRectangle(spriteBatch, pos, realSize, Color.Black * 0.8f, true);
-
-        GUI.DrawString(spriteBatch, new Vector2(pos.X, pos.Y - 32), caption, Color.White, Color.Black * 0.8f, 0, GUIStyle.SmallFont);
-
-        GUIStyle.MonospacedFont.DrawString(
-            spriteBatch,
-            text: $"sum:{converToUnits(categories[cat].sum)}{UnitsName}",
-            position: new Vector2(pos.X, pos.Y - 16),
-            color: Color.White,
-            rotation: 0,
-            origin: new Vector2(0, 0),
-            scale: new Vector2(0.8f, 0.8f),
-            spriteEffects: SpriteEffects.None,
-            layerDepth: 0.1f
-          );
-
         Color getGradient(float f)
         {
           return ToolBox.GradientLerp(f,
@@ -182,6 +163,27 @@ namespace ShowPerfExtensions
                 Color.Magenta
           );
         }
+
+        Vector2 realSize = size ?? new Vector2(defaultStringWidth, stringHeight * showedItemsCount);
+
+        GUI.DrawRectangle(spriteBatch, pos - new Vector2(0, 16), new Vector2(realSize.X, 16), Color.Black * 0.8f, true);
+        GUI.DrawRectangle(spriteBatch, pos, realSize, Color.Black * 0.8f, true);
+
+        GUI.DrawString(spriteBatch, new Vector2(pos.X, pos.Y - 32), caption, Color.White, Color.Black * 0.8f, 0, GUIStyle.SmallFont);
+
+        GUIStyle.MonospacedFont.DrawString(
+            spriteBatch,
+            text: $"sum:{converToUnits(categories[cat].sum)}{UnitsName}",
+            position: new Vector2(pos.X, pos.Y - 16),
+            color: getGradient((float)categories[cat].sum / 1500000f),
+            rotation: 0,
+            origin: new Vector2(0, 0),
+            scale: new Vector2(0.8f, 0.8f),
+            spriteEffects: SpriteEffects.None,
+            layerDepth: 0.1f
+          );
+
+
 
         Func<ItemUpdateTicks, Color> getColor = tracked.Count > 0 ?
         (t) => tracked.Contains(t.ID) ? getGradient((float)t.ticks / topTicks) : Color.DarkSlateGray :
@@ -253,6 +255,19 @@ namespace ShowPerfExtensions
       {
         view.ensureCategory(CaptureCategory.ItemsDrawing);
         view.DrawCategory(spriteBatch, CaptureCategory.ItemsDrawing, new Vector2(830, 50), "Items drawing", size: new Vector2(view.defaultStringWidth * 2, 600));
+      }
+
+      if (activeCategory == ShowperfCategories.LevelObjectsDrawing)
+      {
+        view.ensureCategory(CaptureCategory.LevelObjectsDrawing);
+        view.ensureCategory(CaptureCategory.OtherLevelStuff);
+
+        long topTicks = view.categories[CaptureCategory.LevelObjectsDrawing].values.FirstOrDefault().ticks;
+
+        view.DrawCategory(spriteBatch, CaptureCategory.LevelObjectsDrawing, new Vector2(830, 50), "Level objects drawing", topTicks);
+        view.DrawCategory(spriteBatch, CaptureCategory.OtherLevelStuff, new Vector2(830 + view.defaultStringWidth, 50), "Other level stuff", topTicks);
+
+
       }
     }
 
