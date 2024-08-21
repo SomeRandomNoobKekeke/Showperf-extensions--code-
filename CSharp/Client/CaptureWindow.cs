@@ -29,9 +29,9 @@ namespace ShowPerfExtensions
     public struct ItemUpdateTicks
     {
       public string ID;
-      public long ticks;
+      public double ticks;
 
-      public ItemUpdateTicks(string ID, long ticks)
+      public ItemUpdateTicks(string ID, double ticks)
       {
         this.ID = ID;
         this.ticks = ticks;
@@ -41,7 +41,7 @@ namespace ShowPerfExtensions
       {
         return new ItemUpdateTicks(a.ID, a.ticks + b.ticks);
       }
-      public static ItemUpdateTicks operator +(ItemUpdateTicks a, long ticks)
+      public static ItemUpdateTicks operator +(ItemUpdateTicks a, double ticks)
       {
         return new ItemUpdateTicks(a.ID, a.ticks + ticks);
       }
@@ -54,6 +54,16 @@ namespace ShowPerfExtensions
       public static ItemUpdateTicks operator -(ItemUpdateTicks a)
       {
         return new ItemUpdateTicks(a.ID, -a.ticks);
+      }
+
+      public static ItemUpdateTicks operator *(ItemUpdateTicks a, double mult)
+      {
+        return new ItemUpdateTicks(a.ID, a.ticks * mult);
+      }
+
+      public static ItemUpdateTicks operator /(ItemUpdateTicks a, double div)
+      {
+        return new ItemUpdateTicks(a.ID, a.ticks / div);
       }
     }
 
@@ -113,7 +123,17 @@ namespace ShowPerfExtensions
       public double frameDuration;
 
       public int frames;
-
+      public int Frames
+      {
+        get { return frames; }
+        set
+        {
+          frames = Math.Max(1, value);
+          fps = frames / duration;
+          frameDuration = duration / frames;
+          Reset();
+        }
+      }
       private double duration;
       public double Duration
       {
@@ -121,14 +141,13 @@ namespace ShowPerfExtensions
         set
         {
           duration = Math.Max(0.1, value);
-
           frames = Math.Max(1, (int)Math.Ceiling(duration / frameDuration));
           Reset();
         }
       }
 
-      private int fps;
-      public int FPS
+      private double fps;
+      public double FPS
       {
         get { return fps; }
         set
@@ -139,6 +158,8 @@ namespace ShowPerfExtensions
           Reset();
         }
       }
+
+
 
       public bool accumulate = false;
       public bool Accumulate
@@ -177,15 +198,27 @@ namespace ShowPerfExtensions
         }
         else
         {
-          Slice lastSlice = partialSums.Dequeue();
+          if (Frames == 1)
+          {
+            totalTicks.Clear();
+            totalTicks.Add(firstSlice);
+            firstSlice.Clear();
 
-          totalTicks.Add(firstSlice);
-          totalTicks.Substract(lastSlice);
+          }
+          else
+          {
+            Slice lastSlice = partialSums.Dequeue();
 
-          lastSlice.Clear();
-          firstSlice = lastSlice;
-          partialSums.Enqueue(lastSlice);
+            totalTicks.Add(firstSlice);
+            totalTicks.Substract(lastSlice);
+
+            lastSlice.Clear();
+            firstSlice = lastSlice;
+            partialSums.Enqueue(lastSlice);
+          }
         }
+
+        //debugCapacity();
       }
 
       public void Reset()
@@ -210,12 +243,12 @@ namespace ShowPerfExtensions
         if (!firstSlice.categories.ContainsKey(cat)) firstSlice[cat] = new Dictionary<int, ItemUpdateTicks>();
       }
 
-      public void tryAddTicks(Identifier id, CaptureCategory cat, long ticks) => tryAddTicks(id.HashCode, id.Value, cat, ticks);
+      public void tryAddTicks(Identifier id, CaptureCategory cat, double ticks) => tryAddTicks(id.HashCode, id.Value, cat, ticks);
 
-      public void tryAddTicks(string id, CaptureCategory cat, long ticks) => tryAddTicks(id.GetHashCode(), id, cat, ticks);
+      public void tryAddTicks(string id, CaptureCategory cat, double ticks) => tryAddTicks(id.GetHashCode(), id, cat, ticks);
 
 
-      public void tryAddTicks(int id, string name, CaptureCategory cat, long ticks)
+      public void tryAddTicks(int id, string name, CaptureCategory cat, double ticks)
       {
         try
         {

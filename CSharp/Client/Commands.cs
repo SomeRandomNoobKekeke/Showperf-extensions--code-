@@ -108,7 +108,7 @@ namespace ShowPerfExtensions
         log($"window.Duration: {window.Duration}");
       }));
 
-      addedCommands.Add(new DebugConsole.Command("showperf_format", "toggles between ticks and ms", (string[] args) =>
+      addedCommands.Add(new DebugConsole.Command("showperf_units", "toggles between ticks and ms", (string[] args) =>
       {
         view.showInMs = !view.showInMs;
         log($"view.showInMs: {view.showInMs}");
@@ -122,6 +122,16 @@ namespace ShowPerfExtensions
         }
 
         log($"window.fps: {window.FPS}");
+      }));
+
+      addedCommands.Add(new DebugConsole.Command("showperf_frames", "", (string[] args) =>
+      {
+        if (args.Length > 0 && int.TryParse(args[0], out int frames))
+        {
+          window.Frames = frames;
+        }
+
+        log($"window.Frames: {window.Frames}");
       }));
 
       addedCommands.Add(new DebugConsole.Command("showperf_exposure", "showperf_exposure size [graph]", (string[] args) =>

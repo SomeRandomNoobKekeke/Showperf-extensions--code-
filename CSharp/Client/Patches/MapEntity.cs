@@ -79,6 +79,8 @@ namespace ShowPerfExtensions
       sw.Restart();
       //#endif
 
+      var sw2 = new System.Diagnostics.Stopwatch();
+
       Item.UpdatePendingConditionUpdates(deltaTime);
       if (MapEntity.mapEntityUpdateTick % MapEntity.MapEntityUpdateInterval == 0)
       {
@@ -91,10 +93,10 @@ namespace ShowPerfExtensions
             if (GameMain.LuaCs.Game.UpdatePriorityItems.Contains(item)) { continue; }
             lastUpdatedItem = item;
 
-            sw.Restart();
+            sw2.Restart();
             item.Update(deltaTime * MapEntity.MapEntityUpdateInterval, cam);
 
-            tryAddTicks(item, sw.ElapsedTicks);
+            tryAddTicks(item, sw2.ElapsedTicks);
           }
         }
         catch (InvalidOperationException e)
@@ -112,12 +114,13 @@ namespace ShowPerfExtensions
         if (item.Removed) continue;
 
 
-        sw.Restart();
+        sw2.Restart();
 
         item.Update(deltaTime, cam);
 
-        tryAddTicks(item, sw.ElapsedTicks);
+        tryAddTicks(item, sw2.ElapsedTicks);
       }
+      sw2.Stop();
 
       //#if CLIENT
       sw.Stop();
