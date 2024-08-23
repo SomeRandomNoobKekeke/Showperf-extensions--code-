@@ -20,6 +20,9 @@ namespace ShowPerfExtensions
   {
     public static bool Item_Update_Replace(float deltaTime, Camera cam, Item __instance)
     {
+      if (activeCategory != ShowperfCategories.ItemComponents) return true;
+      window.ensureCategory(CaptureCategory.ItemComponents);
+
       Item _ = __instance;
 
       if (!_.isActive || _.IsLayerHidden) { return false; }
@@ -53,8 +56,11 @@ namespace ShowPerfExtensions
       _.ApplyStatusEffects(ActionType.Always, deltaTime, character: (_.parentInventory as CharacterInventory)?.Owner as Character);
       _.ApplyStatusEffects(containedEffectType, deltaTime, character: (_.parentInventory as CharacterInventory)?.Owner as Character);
 
+
+      var sw = new System.Diagnostics.Stopwatch();
       for (int i = 0; i < _.updateableComponents.Count; i++)
       {
+        sw.Restart();
         ItemComponent ic = _.updateableComponents[i];
 
         bool isParentInActive = ic.InheritParentIsActive && ic.Parent is { IsActive: false };
@@ -121,7 +127,11 @@ namespace ShowPerfExtensions
             // #endif
           }
         }
+
+        window.tryAddTicks(ic.Name, CaptureCategory.ItemComponents, sw.ElapsedTicks);
       }
+
+      sw.Stop();
 
       if (_.Removed) { return false; }
 

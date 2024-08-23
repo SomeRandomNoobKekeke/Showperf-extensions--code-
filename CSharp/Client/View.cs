@@ -242,6 +242,12 @@ namespace ShowPerfExtensions
         view.DrawCategory(spriteBatch, CaptureCategory.LevelObjectsDrawing, new Vector2(830, 50), "Level objects drawing", topTicks);
         view.DrawCategory(spriteBatch, CaptureCategory.OtherLevelStuff, new Vector2(830 + view.defaultStringWidth, 50), "Other level stuff", topTicks);
       }
+
+      if (activeCategory == ShowperfCategories.ItemComponents)
+      {
+        view.ensureCategory(CaptureCategory.ItemComponents);
+        view.DrawCategory(spriteBatch, CaptureCategory.ItemComponents, new Vector2(830, 50), "Item components", size: new Vector2(view.defaultStringWidth * 2, 600));
+      }
     }
 
     #endregion

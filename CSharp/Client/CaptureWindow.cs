@@ -24,6 +24,7 @@ namespace ShowPerfExtensions
       ItemsDrawing,
       LevelObjectsDrawing,
       OtherLevelStuff,
+      ItemComponents,
     }
 
     public struct ItemUpdateTicks

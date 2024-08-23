@@ -25,12 +25,13 @@ namespace ShowPerfExtensions
       Characters,
       ItemsDrawing,
       LevelObjectsDrawing,
+      ItemComponents,
     }
 
 
     public Harmony harmony;
 
-    public static string ModName = "Deeper Showperf";
+    public static string ModName = "Showperf extensions";
     public static string ModDir = "";
     public static bool debug = false;
 
@@ -52,7 +53,7 @@ namespace ShowPerfExtensions
         info($"found {ModName} in LocalMods, debug: {debug}");
       }
 
-      if (debug) activeCategory = ShowperfCategories.ItemsDrawing;
+      if (debug) activeCategory = ShowperfCategories.ItemComponents;
 
       addCommands();
 
@@ -96,6 +97,11 @@ namespace ShowPerfExtensions
       harmony.Patch(
         original: typeof(LevelRenderer).GetMethod("DrawBackground", AccessTools.all),
         prefix: new HarmonyMethod(typeof(Mod).GetMethod("LevelRenderer_DrawBackground_Replace"))
+      );
+
+      harmony.Patch(
+        original: typeof(Item).GetMethod("Update", AccessTools.all),
+        prefix: new HarmonyMethod(typeof(Mod).GetMethod("Item_Update_Replace"))
       );
 
 
