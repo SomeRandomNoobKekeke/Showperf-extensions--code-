@@ -25,6 +25,9 @@ namespace ShowPerfExtensions
 
       Item _ = __instance;
 
+      var sw = new System.Diagnostics.Stopwatch();
+
+
       if (!_.isActive || _.IsLayerHidden) { return false; }
 
       if (_.impactQueue != null)
@@ -46,10 +49,13 @@ namespace ShowPerfExtensions
         }
       }
 
+      sw.Restart();
       if (_.aiTarget != null && _.aiTarget.NeedsUpdate)
       {
         _.aiTarget.Update(deltaTime);
       }
+      window.tryAddTicks("AITargets", CaptureCategory.ItemComponents, sw.ElapsedTicks);
+
 
       var containedEffectType = _.parentInventory == null ? ActionType.OnNotContained : ActionType.OnContained;
 
@@ -57,7 +63,7 @@ namespace ShowPerfExtensions
       _.ApplyStatusEffects(containedEffectType, deltaTime, character: (_.parentInventory as CharacterInventory)?.Owner as Character);
 
 
-      var sw = new System.Diagnostics.Stopwatch();
+
       for (int i = 0; i < _.updateableComponents.Count; i++)
       {
         sw.Restart();
@@ -128,7 +134,7 @@ namespace ShowPerfExtensions
           }
         }
 
-        window.tryAddTicks(ic.Name, CaptureCategory.ItemComponents, sw.ElapsedTicks);
+        window.tryAddTicks($"{_.Prefab.Identifier.Value}.{ic.Name}", CaptureCategory.ItemComponents, sw.ElapsedTicks);
       }
 
       sw.Stop();
