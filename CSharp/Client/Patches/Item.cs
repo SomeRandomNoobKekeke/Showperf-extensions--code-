@@ -54,7 +54,7 @@ namespace ShowPerfExtensions
       {
         _.aiTarget.Update(deltaTime);
       }
-      window.tryAddTicks("AITargets", CaptureCategory.ItemComponents, sw.ElapsedTicks);
+      window.tryAddTicks($"{_.Prefab.Identifier.Value}.AITarget", CaptureCategory.ItemComponents, sw.ElapsedTicks);
 
 
       var containedEffectType = _.parentInventory == null ? ActionType.OnNotContained : ActionType.OnContained;
