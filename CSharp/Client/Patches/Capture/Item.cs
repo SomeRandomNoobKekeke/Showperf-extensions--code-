@@ -20,8 +20,8 @@ namespace ShowPerfExtensions
   {
     public static bool Item_Update_Replace(float deltaTime, Camera cam, Item __instance)
     {
-      if (activeCategory != ShowperfCategories.ItemComponents) return true;
-      window.ensureCategory(CaptureCategory.ItemComponents);
+      if (ActiveCategory != ShowperfCategory.ItemComponents) return true;
+      Window.ensureCategory(CaptureCategory.ItemComponents);
 
       Item _ = __instance;
 
@@ -54,8 +54,19 @@ namespace ShowPerfExtensions
       {
         _.aiTarget.Update(deltaTime);
       }
-      window.tryAddTicks($"{_.Prefab.Identifier.Value}.AITarget", CaptureCategory.ItemComponents, sw.ElapsedTicks);
+      long ticks = sw.ElapsedTicks;
 
+      if (CaptureFrom.Count == 0 || (_.Submarine != null && CaptureFrom.Contains(_.Submarine.Info.Type)))
+      {
+        if (CaptureById)
+        {
+          Window.tryAddTicks(_.ID, $"{String.Format("{0:0000}", _.ID)}|{_.Prefab.Identifier.Value}.AITarget", CaptureCategory.ItemComponents, ticks);
+        }
+        else
+        {
+          Window.tryAddTicks($"{_.Prefab.Identifier.Value}.AITarget", CaptureCategory.ItemComponents, ticks);
+        }
+      }
 
       var containedEffectType = _.parentInventory == null ? ActionType.OnNotContained : ActionType.OnContained;
 
@@ -134,7 +145,18 @@ namespace ShowPerfExtensions
           }
         }
 
-        window.tryAddTicks($"{_.Prefab.Identifier.Value}.{ic.Name}", CaptureCategory.ItemComponents, sw.ElapsedTicks);
+        ticks = sw.ElapsedTicks;
+        if (CaptureFrom.Count == 0 || (_.Submarine != null && CaptureFrom.Contains(_.Submarine.Info.Type)))
+        {
+          if (CaptureById)
+          {
+            Window.tryAddTicks(_.ID, $"{String.Format("{0:0000}", _.ID)}|{_.Prefab.Identifier.Value}.{ic.Name}", CaptureCategory.ItemComponents, ticks);
+          }
+          else
+          {
+            Window.tryAddTicks($"{_.Prefab.Identifier.Value}.{ic.Name}", CaptureCategory.ItemComponents, ticks);
+          }
+        }
       }
 
       sw.Stop();

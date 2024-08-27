@@ -19,8 +19,8 @@ namespace ShowPerfExtensions
   {
     public static bool LevelRenderer_DrawBackground_Replace(LevelRenderer __instance, SpriteBatch spriteBatch, Camera cam, LevelObjectManager backgroundSpriteManager = null, BackgroundCreatureManager backgroundCreatureManager = null)
     {
-      if (activeCategory != ShowperfCategories.LevelObjectsDrawing) return true;
-      window.ensureCategory(CaptureCategory.OtherLevelStuff);
+      if (ActiveCategory != ShowperfCategory.LevelObjectsDrawing) return true;
+      Window.ensureCategory(CaptureCategory.OtherLevelStuff);
 
       var sw = new System.Diagnostics.Stopwatch();
 
@@ -60,7 +60,7 @@ namespace ShowPerfExtensions
       }
 
       spriteBatch.End();
-      window.tryAddTicks("BackgroundTopSprite", CaptureCategory.OtherLevelStuff, sw.ElapsedTicks);
+      Window.tryAddTicks("BackgroundTopSprite", CaptureCategory.OtherLevelStuff, sw.ElapsedTicks);
 
 
       spriteBatch.Begin(SpriteSortMode.Deferred,
@@ -76,7 +76,7 @@ namespace ShowPerfExtensions
       {
         backgroundCreatureManager?.Draw(spriteBatch, cam);
       }
-      window.tryAddTicks("BackgroundCreatures", CaptureCategory.OtherLevelStuff, sw.ElapsedTicks);
+      Window.tryAddTicks("BackgroundCreatures", CaptureCategory.OtherLevelStuff, sw.ElapsedTicks);
 
       sw.Restart();
       if (_.level.GenerationParams.WaterParticles != null && cam.Zoom > 0.05f)
@@ -116,11 +116,11 @@ namespace ShowPerfExtensions
         }
       }
       spriteBatch.End();
-      window.tryAddTicks("WaterParticles", CaptureCategory.OtherLevelStuff, sw.ElapsedTicks);
+      Window.tryAddTicks("WaterParticles", CaptureCategory.OtherLevelStuff, sw.ElapsedTicks);
 
       sw.Restart();
       _.RenderWalls(GameMain.Instance.GraphicsDevice, cam);
-      window.tryAddTicks("RenderWalls", CaptureCategory.OtherLevelStuff, sw.ElapsedTicks);
+      Window.tryAddTicks("RenderWalls", CaptureCategory.OtherLevelStuff, sw.ElapsedTicks);
 
       spriteBatch.Begin(SpriteSortMode.Deferred,
           BlendState.NonPremultiplied,

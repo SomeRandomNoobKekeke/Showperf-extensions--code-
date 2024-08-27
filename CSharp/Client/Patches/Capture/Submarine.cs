@@ -20,8 +20,8 @@ namespace ShowPerfExtensions
   {
     public static bool Submarine_DrawFront_Replace(SpriteBatch spriteBatch, bool editing = false, Predicate<MapEntity> predicate = null)
     {
-      if (activeCategory != ShowperfCategories.ItemsDrawing) return true;
-      window.ensureCategory(CaptureCategory.ItemsDrawing);
+      if (ActiveCategory != ShowperfCategory.ItemsDrawing) return true;
+      Window.ensureCategory(CaptureCategory.ItemsDrawing);
 
 
       var entitiesToRender = !editing && Submarine.visibleEntities != null ? Submarine.visibleEntities : MapEntity.MapEntityList;
@@ -42,11 +42,11 @@ namespace ShowPerfExtensions
 
         if (e.Prefab != null)
         {
-          window.tryAddTicks(e.Prefab.Identifier, CaptureCategory.ItemsDrawing, sw.ElapsedTicks);
+          Window.tryAddTicks(e.Prefab.Identifier, CaptureCategory.ItemsDrawing, sw.ElapsedTicks);
         }
         else
         {
-          window.tryAddTicks((int)e.ID, $"{e.ID}|{e.Name}", CaptureCategory.ItemsDrawing, sw.ElapsedTicks);
+          Window.tryAddTicks((int)e.ID, $"{e.ID}|{e.Name}", CaptureCategory.ItemsDrawing, sw.ElapsedTicks);
         }
       }
 
@@ -85,8 +85,8 @@ namespace ShowPerfExtensions
 
     public static bool Submarine_DrawBack_Replace(SpriteBatch spriteBatch, bool editing = false, Predicate<MapEntity> predicate = null)
     {
-      if (activeCategory != ShowperfCategories.ItemsDrawing) return true;
-      window.ensureCategory(CaptureCategory.ItemsDrawing);
+      if (ActiveCategory != ShowperfCategory.ItemsDrawing) return true;
+      Window.ensureCategory(CaptureCategory.ItemsDrawing);
 
       var entitiesToRender = !editing && Submarine.visibleEntities != null ? Submarine.visibleEntities : MapEntity.MapEntityList;
 
@@ -106,11 +106,11 @@ namespace ShowPerfExtensions
 
         if (e.Prefab != null)
         {
-          window.tryAddTicks(e.Prefab.Identifier, CaptureCategory.ItemsDrawing, sw.ElapsedTicks);
+          Window.tryAddTicks(e.Prefab.Identifier, CaptureCategory.ItemsDrawing, sw.ElapsedTicks);
         }
         else
         {
-          window.tryAddTicks((int)e.ID, $"{e.ID}|{e.Name}", CaptureCategory.ItemsDrawing, sw.ElapsedTicks);
+          Window.tryAddTicks((int)e.ID, $"{e.ID}|{e.Name}", CaptureCategory.ItemsDrawing, sw.ElapsedTicks);
         }
       }
 

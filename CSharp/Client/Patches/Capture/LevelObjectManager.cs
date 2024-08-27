@@ -19,8 +19,8 @@ namespace ShowPerfExtensions
   {
     public static bool LevelObjectManager_DrawObjects_Replace(SpriteBatch spriteBatch, Camera cam, List<LevelObject> objectList, LevelObjectManager __instance)
     {
-      if (activeCategory != ShowperfCategories.LevelObjectsDrawing) return true;
-      window.ensureCategory(CaptureCategory.LevelObjectsDrawing);
+      if (ActiveCategory != ShowperfCategory.LevelObjectsDrawing) return true;
+      Window.ensureCategory(CaptureCategory.LevelObjectsDrawing);
 
       LevelObjectManager _ = __instance;
 
@@ -95,12 +95,12 @@ namespace ShowPerfExtensions
         // idk if levelobjects without prefab actually exist
         if (obj.Prefab != null)
         {
-          window.tryAddTicks(obj.Prefab.Identifier, CaptureCategory.LevelObjectsDrawing, sw.ElapsedTicks);
+          Window.tryAddTicks(obj.Prefab.Identifier, CaptureCategory.LevelObjectsDrawing, sw.ElapsedTicks);
         }
         else
         {
           string s = $"{obj}";
-          window.tryAddTicks(s, CaptureCategory.LevelObjectsDrawing, sw.ElapsedTicks);
+          Window.tryAddTicks(s, CaptureCategory.LevelObjectsDrawing, sw.ElapsedTicks);
         }
 
         if (GameMain.DebugDraw)

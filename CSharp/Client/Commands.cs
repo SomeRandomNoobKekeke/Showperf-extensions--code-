@@ -26,15 +26,9 @@ namespace ShowPerfExtensions
       vanillaShowperfCommand = DebugConsole.Commands.Find(c => c.Names.Contains("showperf"));
       DebugConsole.Commands.Remove(vanillaShowperfCommand);
 
-      // addedCommands.Add(new DebugConsole.Command("showperf_dump_items", "", (string[] args) =>
-      // {
-      //   using (StreamWriter writer = new StreamWriter("Showperf_dump_items.txt", false))
-      //   {
 
-      //   }
-      // }));
 
-      addedCommands.Add(new DebugConsole.Command("showperf", "showperf [category]", (string[] args) =>
+      addedCommands.Add(new DebugConsole.Command("showperf|s", "showperf [category]", (string[] args) =>
       {
         if (args.Length == 0)
         {
@@ -42,25 +36,32 @@ namespace ShowPerfExtensions
           return;
         }
 
-        if (Enum.TryParse<ShowperfCategories>(args[0], out ShowperfCategories c))
+        if (args[0].Equals("id", StringComparison.OrdinalIgnoreCase))
         {
-          activeCategory = activeCategory == c ? ShowperfCategories.None : c;
+          CaptureById = !CaptureById;
+          log($"CaptureById: {CaptureById}");
+          return;
         }
 
-        if (activeCategory != ShowperfCategories.None) window.Reset();
-      }, () => new string[][] { Enum.GetValues<ShowperfCategories>().Select(c => $"{c}").ToArray() }));
+
+        if (Enum.TryParse<ShowperfCategory>(args[0], out ShowperfCategory c))
+        {
+          ActiveCategory = ActiveCategory == c ? ShowperfCategory.None : c;
+        }
+
+      }, () => new string[][] { Enum.GetValues<ShowperfCategory>().Select(c => $"{c}").ToArray() }));
 
 
       addedCommands.Add(new DebugConsole.Command("showperf_accumulate", "toggles between average and sum", (string[] args) =>
       {
-        window.Accumulate = !window.Accumulate;
-        log($"window accumulate: {window.Accumulate}");
+        Window.Accumulate = !Window.Accumulate;
+        log($"Window.Accumulate: {Window.Accumulate}");
       }));
 
       addedCommands.Add(new DebugConsole.Command("showperf_freeze", "", (string[] args) =>
       {
-        view.frozen = !view.frozen;
-        log($"view frozen: {view.frozen}");
+        Window.Frozen = !Window.Frozen;
+        log($"Window.Frozen: {Window.Frozen}");
       }));
 
 
@@ -68,70 +69,70 @@ namespace ShowPerfExtensions
       {
         if (args.Length > 0)
         {
-          if (!view.tracked.Contains(args[0]))
+          if (!View.Tracked.Contains(args[0]))
           {
-            if (view.tracked.Add(args[0])) log($"{args[0]} tracked");
+            if (View.Tracked.Add(args[0])) log($"{args[0]} Tracked");
             else log($"{args[0]} not found :(");
           }
           else
           {
-            if (view.tracked.Remove(args[0])) log($"{args[0]} untracked");
+            if (View.Tracked.Remove(args[0])) log($"{args[0]} Untracked");
             else log($"{args[0]} not found :(");
           }
         }
-      }, () => new string[][] { view.getAllIds() }));
+      }, () => new string[][] { View.getAllIds() }));
 
       addedCommands.Add(new DebugConsole.Command("showperf_untrack", "", (string[] args) =>
       {
         if (args.Length == 0 || args[0] == "all")
         {
-          view.tracked.Clear();
+          View.Tracked.Clear();
           log("untracked all");
           return;
         }
 
         if (args.Length > 0)
         {
-          if (view.tracked.Remove(args[0])) log($"{args[0]} untracked");
+          if (View.Tracked.Remove(args[0])) log($"{args[0]} Untracked");
           else log($"{args[0]} not found :(");
 
         }
-      }, () => new string[][] { view.tracked.ToArray().Append("all").ToArray() }));
+      }, () => new string[][] { View.Tracked.ToArray().Append("all").ToArray() }));
 
       addedCommands.Add(new DebugConsole.Command("showperf_duration", "", (string[] args) =>
       {
         if (args.Length > 0 && double.TryParse(args[0], out double d))
         {
-          window.Duration = d;
+          Window.Duration = d;
         }
 
-        log($"window.Duration: {window.Duration}");
+        log($"Window.Duration: {Window.Duration}");
       }));
 
       addedCommands.Add(new DebugConsole.Command("showperf_units", "toggles between ticks and ms", (string[] args) =>
       {
-        view.showInMs = !view.showInMs;
-        log($"view.showInMs: {view.showInMs}");
+        View.ShowInMs = !View.ShowInMs;
+        log($"View.ShowInMs: {View.ShowInMs}");
       }));
 
       addedCommands.Add(new DebugConsole.Command("showperf_fps", "", (string[] args) =>
       {
         if (args.Length > 0 && int.TryParse(args[0], out int fps))
         {
-          window.FPS = fps;
+          Window.FPS = fps;
         }
 
-        log($"window.fps: {window.FPS}");
+        log($"Window.FPS: {Window.FPS}");
       }));
 
       addedCommands.Add(new DebugConsole.Command("showperf_frames", "", (string[] args) =>
       {
         if (args.Length > 0 && int.TryParse(args[0], out int frames))
         {
-          window.Frames = frames;
+          Window.Frames = frames;
         }
 
-        log($"window.Frames: {window.Frames}");
+        log($"Window.Frames: {Window.Frames}");
       }));
 
       addedCommands.Add(new DebugConsole.Command("showperf_exposure", "showperf_exposure size [graph]", (string[] args) =>

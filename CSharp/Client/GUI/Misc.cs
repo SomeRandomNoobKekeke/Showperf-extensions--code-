@@ -16,6 +16,10 @@ namespace ShowPerfExtensions
 {
   public partial class Mod : IAssemblyPlugin
   {
+    public static float DefaultStringWidth = 260f;
+    public static float DefaultStringHeight = GUI.AdjustForTextScale(12);
+    public static float MonospacedFontRealSize = 0.8f;
+
     public static Color ShowperfGradient(double f) => ShowperfGradient((float)f);
 
     public static Color ShowperfGradient(float f)
@@ -28,6 +32,14 @@ namespace ShowPerfExtensions
             Color.Magenta,
             Color.Magenta
       );
+    }
+
+    public static void DrawStringWithScale(SpriteBatch spriteBatch, GUIFont font, string text, Vector2 position, Color color, Vector2 scale)
+    {
+      Vector2 textSize = font.MeasureString(text);
+      GUI.DrawRectangle(spriteBatch, position, textSize, Color.Black * 0.8f, true);
+
+      font.DrawString(spriteBatch, text, position, color, rotation: 0, origin: new Vector2(0, 0), scale, spriteEffects: SpriteEffects.None, layerDepth: 0.1f);
     }
   }
 }

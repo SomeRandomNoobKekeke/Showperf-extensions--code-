@@ -20,7 +20,7 @@ namespace ShowPerfExtensions
 
     public static void tryAddTicks(Item item, long ticks)
     {
-      window.tryAddTicks(
+      Window.tryAddTicks(
         item.Prefab.Identifier,
         item.Submarine == Submarine.MainSub ? CaptureCategory.ItemsOnMainSub : CaptureCategory.ItemsOnOtherSubs,
         ticks
@@ -32,9 +32,9 @@ namespace ShowPerfExtensions
     /// </summary>
     public static bool MapEntity_UpdateAll_Replace(float deltaTime, Camera cam)
     {
-      if (activeCategory != ShowperfCategories.ItemsUpdate) return true;
-      window.ensureCategory(CaptureCategory.ItemsOnMainSub);
-      window.ensureCategory(CaptureCategory.ItemsOnOtherSubs);
+      if (ActiveCategory != ShowperfCategory.ItemsUpdate) return true;
+      Window.ensureCategory(CaptureCategory.ItemsOnMainSub);
+      Window.ensureCategory(CaptureCategory.ItemsOnOtherSubs);
 
       MapEntity.mapEntityUpdateTick++;
 

@@ -19,8 +19,8 @@ namespace ShowPerfExtensions
   {
     public static bool Character_UpdateAll_Replace(float deltaTime, Camera cam)
     {
-      if (activeCategory != ShowperfCategories.Characters) return true;
-      window.ensureCategory(CaptureCategory.Characters);
+      if (ActiveCategory != ShowperfCategory.Characters) return true;
+      Window.ensureCategory(CaptureCategory.Characters);
 
       var sw = new System.Diagnostics.Stopwatch();
 
@@ -95,7 +95,12 @@ namespace ShowPerfExtensions
           string alive = character.IsDead ? "Dead" : "Alive";
           string simplified = character.AnimController.SimplePhysicsEnabled ? "Simplified" : "Simulated";
 
-          window.tryAddTicks((int)character.ID, $"{character.ID}|{character}{info} - {alive}:{enabled}:{simplified}", CaptureCategory.Characters, sw.ElapsedTicks);
+
+
+          if (CaptureFrom.Count == 0 || (character.Submarine != null && CaptureFrom.Contains(character.Submarine.Info.Type)))
+          {
+            Window.tryAddTicks((int)character.ID, $"{character.ID}|{character}{info} - {alive}:{enabled}:{simplified}", CaptureCategory.Characters, sw.ElapsedTicks);
+          }
         }
         catch (Exception e) { err(e); }
       }

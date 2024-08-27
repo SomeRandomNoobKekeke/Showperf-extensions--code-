@@ -17,8 +17,13 @@ namespace ShowPerfExtensions
 {
   public partial class Mod : IAssemblyPlugin
   {
+    public Harmony harmony;
 
-    public enum ShowperfCategories
+    public static string ModName = "Showperf extensions";
+    public static string ModDir = "";
+    public static bool debug = false;
+
+    public enum ShowperfCategory
     {
       None,
       ItemsUpdate,
@@ -28,16 +33,45 @@ namespace ShowPerfExtensions
       ItemComponents,
     }
 
+    public static Dictionary<ShowperfCategory, string> CategoryNames = new Dictionary<ShowperfCategory, string>()
+    {
+      {ShowperfCategory.None, ""},
+      {ShowperfCategory.Characters, "Characters update"},
+      {ShowperfCategory.ItemComponents, "Items components update"},
+      {ShowperfCategory.ItemsDrawing, "Items drawing"},
+      {ShowperfCategory.ItemsUpdate, "Items update"},
+      {ShowperfCategory.LevelObjectsDrawing, "Level objects"},
+    };
 
-    public Harmony harmony;
+    public static ShowperfCategory activeCategory = ShowperfCategory.None;
+    public static ShowperfCategory ActiveCategory
+    {
+      get => activeCategory;
+      set
+      {
+        activeCategory = value;
+        View.SetCategory(value);
+        Window.Reset();
+      }
+    }
+    public static HashSet<SubmarineType> CaptureFrom = new HashSet<SubmarineType>()
+    {
+      SubmarineType.Player,
+    };
 
-    public static string ModName = "Showperf extensions";
-    public static string ModDir = "";
-    public static bool debug = false;
+    public static bool captureById = true;
+    public static bool CaptureById
+    {
+      get => captureById;
+      set
+      {
+        captureById = value;
+        Window.Reset();
+      }
+    }
 
-    public static ShowperfCategories activeCategory = ShowperfCategories.None;
-
-    public static CaptureWindow window;
+    public static CaptureWindow Window;
+    public static WindowView View;
 
     public static double TicksToMs = 1000.0 / Stopwatch.Frequency;
 
@@ -50,21 +84,21 @@ namespace ShowPerfExtensions
       if (ModDir.Contains("LocalMods"))
       {
         debug = true;
-        info($"found {ModName} in LocalMods, debug: {debug}");
+        log($"found {ModName} in LocalMods, debug: {debug}");
       }
-
-      if (debug) activeCategory = ShowperfCategories.ItemComponents;
 
       addCommands();
 
-      window = new CaptureWindow(duration: 3, fps: 30);
-      view = new WindowView(window);
+      Window = new CaptureWindow(duration: 3, fps: 30);
+      View = new WindowView();
 
       GameMain.PerformanceCounter.DrawTimeGraph = new Graph(1000);
 
       patchAll();
 
-      info($"no errors");
+      if (debug) ActiveCategory = ShowperfCategory.ItemComponents;
+
+      info($"{ModName} compiled!");
     }
 
     public void patchAll()
@@ -129,11 +163,11 @@ namespace ShowPerfExtensions
       harmony.UnpatchAll(harmony.Id);
       harmony = null;
 
-      window.Dispose();
-      window = null;
+      Window.Dispose();
+      Window = null;
 
-      view.Dispose();
-      view = null;
+      View.Dispose();
+      View = null;
 
       removeCommands();
     }

@@ -1,3 +1,2 @@
-Refactor GUI
-make it multilayer or add more data to packets somehow
-add per frame view
+Should be more careful with ticks
+add filters to all categories

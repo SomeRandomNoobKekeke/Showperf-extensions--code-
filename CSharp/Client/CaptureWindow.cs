@@ -27,44 +27,49 @@ namespace ShowPerfExtensions
       ItemComponents,
     }
 
-    public struct ItemUpdateTicks
+    public struct UpdateTicks
     {
       public string ID;
-      public double ticks;
+      public double Ticks;
 
-      public ItemUpdateTicks(string ID, double ticks)
+      public UpdateTicks(string id, double ticks)
       {
-        this.ID = ID;
-        this.ticks = ticks;
+        this.ID = id;
+        this.Ticks = ticks;
       }
 
-      public static ItemUpdateTicks operator +(ItemUpdateTicks a, ItemUpdateTicks b)
+      public override string ToString()
       {
-        return new ItemUpdateTicks(a.ID, a.ticks + b.ticks);
-      }
-      public static ItemUpdateTicks operator +(ItemUpdateTicks a, double ticks)
-      {
-        return new ItemUpdateTicks(a.ID, a.ticks + ticks);
+        return $"{View.ConverToUnits(Ticks)} {ID}";
       }
 
-      public static ItemUpdateTicks operator -(ItemUpdateTicks a, ItemUpdateTicks b)
+      public static UpdateTicks operator +(UpdateTicks a, UpdateTicks b)
       {
-        return new ItemUpdateTicks(a.ID, a.ticks - b.ticks);
+        return new UpdateTicks(a.ID, a.Ticks + b.Ticks);
+      }
+      public static UpdateTicks operator +(UpdateTicks a, double ticks)
+      {
+        return new UpdateTicks(a.ID, a.Ticks + ticks);
       }
 
-      public static ItemUpdateTicks operator -(ItemUpdateTicks a)
+      public static UpdateTicks operator -(UpdateTicks a, UpdateTicks b)
       {
-        return new ItemUpdateTicks(a.ID, -a.ticks);
+        return new UpdateTicks(a.ID, a.Ticks - b.Ticks);
       }
 
-      public static ItemUpdateTicks operator *(ItemUpdateTicks a, double mult)
+      public static UpdateTicks operator -(UpdateTicks a)
       {
-        return new ItemUpdateTicks(a.ID, a.ticks * mult);
+        return new UpdateTicks(a.ID, -a.Ticks);
       }
 
-      public static ItemUpdateTicks operator /(ItemUpdateTicks a, double div)
+      public static UpdateTicks operator *(UpdateTicks a, double mult)
       {
-        return new ItemUpdateTicks(a.ID, a.ticks / div);
+        return new UpdateTicks(a.ID, a.Ticks * mult);
+      }
+
+      public static UpdateTicks operator /(UpdateTicks a, double div)
+      {
+        return new UpdateTicks(a.ID, a.Ticks / div);
       }
     }
 
@@ -72,48 +77,48 @@ namespace ShowPerfExtensions
 
     public class Slice
     {
-      public Dictionary<CaptureCategory, Dictionary<int, ItemUpdateTicks>> categories;
+      public Dictionary<CaptureCategory, Dictionary<int, UpdateTicks>> Categories;
 
       public Slice()
       {
-        categories = new Dictionary<CaptureCategory, Dictionary<int, ItemUpdateTicks>>();
+        Categories = new Dictionary<CaptureCategory, Dictionary<int, UpdateTicks>>();
       }
 
       public void Clear()
       {
-        categories.Clear();
+        Categories.Clear();
       }
 
-      public Dictionary<int, ItemUpdateTicks> this[CaptureCategory cat]
+      public Dictionary<int, UpdateTicks> this[CaptureCategory cat]
       {
-        get => categories[cat];
-        set => categories[cat] = value;
+        get => Categories[cat];
+        set => Categories[cat] = value;
       }
 
       public void Add(Slice s)
       {
-        foreach (CaptureCategory cat in s.categories.Keys)
+        foreach (CaptureCategory cat in s.Categories.Keys)
         {
-          if (!categories.ContainsKey(cat)) categories[cat] = new Dictionary<int, ItemUpdateTicks>();
+          if (!Categories.ContainsKey(cat)) Categories[cat] = new Dictionary<int, UpdateTicks>();
 
-          foreach (int id in s.categories[cat].Keys)
+          foreach (int id in s.Categories[cat].Keys)
           {
-            if (!categories[cat].ContainsKey(id)) categories[cat][id] = s.categories[cat][id];
-            else categories[cat][id] += s.categories[cat][id];
+            if (!Categories[cat].ContainsKey(id)) Categories[cat][id] = s.Categories[cat][id];
+            else Categories[cat][id] += s.Categories[cat][id];
           }
         }
       }
 
       public void Substract(Slice s)
       {
-        foreach (CaptureCategory cat in s.categories.Keys)
+        foreach (CaptureCategory cat in s.Categories.Keys)
         {
-          if (!categories.ContainsKey(cat)) categories[cat] = new Dictionary<int, ItemUpdateTicks>();
+          if (!Categories.ContainsKey(cat)) Categories[cat] = new Dictionary<int, UpdateTicks>();
 
-          foreach (int id in s.categories[cat].Keys)
+          foreach (int id in s.Categories[cat].Keys)
           {
-            if (!categories[cat].ContainsKey(id)) categories[cat][id] = -s.categories[cat][id];
-            else categories[cat][id] -= s.categories[cat][id];
+            if (!Categories[cat].ContainsKey(id)) Categories[cat][id] = -s.Categories[cat][id];
+            else Categories[cat][id] -= s.Categories[cat][id];
           }
         }
       }
@@ -121,8 +126,9 @@ namespace ShowPerfExtensions
 
     public class CaptureWindow : IDisposable
     {
-      public double frameDuration;
-
+      public double FrameDuration;
+      public double LastUpdateTime;
+      public bool Frozen = false;
       public int frames;
       public int Frames
       {
@@ -131,7 +137,7 @@ namespace ShowPerfExtensions
         {
           frames = Math.Max(1, value);
           fps = frames / duration;
-          frameDuration = duration / frames;
+          FrameDuration = duration / frames;
           Reset();
         }
       }
@@ -142,7 +148,7 @@ namespace ShowPerfExtensions
         set
         {
           duration = Math.Max(0.1, value);
-          frames = Math.Max(1, (int)Math.Ceiling(duration / frameDuration));
+          frames = Math.Max(1, (int)Math.Ceiling(duration / FrameDuration));
           Reset();
         }
       }
@@ -154,8 +160,8 @@ namespace ShowPerfExtensions
         set
         {
           fps = Math.Min(Math.Max(1, value), 60);
-          frameDuration = 1.0 / fps;
-          frames = Math.Max(1, (int)Math.Ceiling(duration / frameDuration));
+          FrameDuration = 1.0 / fps;
+          frames = Math.Max(1, (int)Math.Ceiling(duration / FrameDuration));
           Reset();
         }
       }
@@ -174,7 +180,8 @@ namespace ShowPerfExtensions
       }
       public Slice firstSlice;
 
-      public Slice totalTicks = new Slice();
+      public Slice TotalTicks = new Slice();
+
       public Queue<Slice> partialSums;
 
 
@@ -183,8 +190,8 @@ namespace ShowPerfExtensions
         this.duration = duration;
         this.fps = fps;
 
-        frameDuration = 1.0 / fps;
-        frames = Math.Max(1, (int)Math.Ceiling(duration / frameDuration));
+        FrameDuration = 1.0 / fps;
+        frames = Math.Max(1, (int)Math.Ceiling(duration / FrameDuration));
 
         Reset();
       }
@@ -194,24 +201,23 @@ namespace ShowPerfExtensions
       {
         if (Accumulate)
         {
-          totalTicks.Add(firstSlice);
+          TotalTicks.Add(firstSlice);
           firstSlice.Clear();
         }
         else
         {
           if (Frames == 1)
           {
-            totalTicks.Clear();
-            totalTicks.Add(firstSlice);
+            TotalTicks.Clear();
+            TotalTicks.Add(firstSlice);
             firstSlice.Clear();
-
           }
           else
           {
             Slice lastSlice = partialSums.Dequeue();
 
-            totalTicks.Add(firstSlice);
-            totalTicks.Substract(lastSlice);
+            TotalTicks.Add(firstSlice);
+            TotalTicks.Substract(lastSlice);
 
             lastSlice.Clear();
             firstSlice = lastSlice;
@@ -222,11 +228,24 @@ namespace ShowPerfExtensions
         //debugCapacity();
       }
 
+      public bool ShouldUpdate => Timing.TotalTime - LastUpdateTime > FrameDuration;
+
+      public void Update()
+      {
+        if (Frozen || GameMain.Instance.Paused) return;
+
+        while (ShouldUpdate)
+        {
+          Rotate();
+          LastUpdateTime += FrameDuration;
+        }
+      }
+
       public void Reset()
       {
         partialSums ??= new Queue<Slice>(frames);
         partialSums.Clear();
-        totalTicks.Clear();
+        TotalTicks.Clear();
 
         for (int i = 0; i < frames - 1; i++)
         {
@@ -241,7 +260,7 @@ namespace ShowPerfExtensions
 
       public void ensureCategory(CaptureCategory cat)
       {
-        if (!firstSlice.categories.ContainsKey(cat)) firstSlice[cat] = new Dictionary<int, ItemUpdateTicks>();
+        if (!firstSlice.Categories.ContainsKey(cat)) firstSlice[cat] = new Dictionary<int, UpdateTicks>();
       }
 
       public void tryAddTicks(Identifier id, CaptureCategory cat, double ticks) => tryAddTicks(id.HashCode, id.Value, cat, ticks);
@@ -259,7 +278,7 @@ namespace ShowPerfExtensions
           }
           else
           {
-            firstSlice[cat][id] = new ItemUpdateTicks(name, ticks);
+            firstSlice[cat][id] = new UpdateTicks(name, ticks);
           }
         }
         catch (KeyNotFoundException e)
@@ -273,6 +292,19 @@ namespace ShowPerfExtensions
         }
       }
 
+      public UpdateTicks GetTotal(CaptureCategory cat, int id)
+      {
+        try
+        {
+          return Accumulate ? TotalTicks[cat][id] : TotalTicks[cat][id] / Frames * FPS;
+        }
+        catch (Exception e)
+        {
+          err(e);
+          return new UpdateTicks("[[not found]]", 0);
+        }
+      }
+
       public void debugCapacity()
       {
         if (debug)
@@ -283,7 +315,7 @@ namespace ShowPerfExtensions
           {
 
             int sum = 0;
-            foreach (var cat in slice.categories)
+            foreach (var cat in slice.Categories)
             {
               sum += cat.Value.Count;
             }
@@ -300,11 +332,11 @@ namespace ShowPerfExtensions
       {
         foreach (var s in partialSums) s.Clear();
         partialSums.Clear();
-        totalTicks.Clear();
+        TotalTicks.Clear();
 
         firstSlice = null;
         partialSums = null;
-        totalTicks = null;
+        TotalTicks = null;
       }
     }
 
