@@ -38,9 +38,9 @@ namespace ShowPerfExtensions
     {
       {ShowperfCategory.None, ""},
       {ShowperfCategory.CharactersUpdate, "Characters update"},
-      {ShowperfCategory.ItemComponentsUpdate, "Items components update"},
-      {ShowperfCategory.MapEntityDrawing, "MapEntitys drawing"},
-      {ShowperfCategory.MapEntitysUpdate, "MapEntitys update"},
+      {ShowperfCategory.ItemComponentsUpdate, "Item components update"},
+      {ShowperfCategory.MapEntityDrawing, "MapEntity drawing"},
+      {ShowperfCategory.MapEntitysUpdate, "MapEntity update"},
       {ShowperfCategory.LevelObjectsDrawing, "Level objects drawing"},
       {ShowperfCategory.LevelMisc, "Other level stuff drawing"},
     };
@@ -54,6 +54,11 @@ namespace ShowPerfExtensions
         activeCategory = value;
         View.SetCategory(value);
         Window.Reset();
+        if (value == ShowperfCategory.None)
+        {
+          CaptureFrom.Clear();
+          captureById = true;
+        }
       }
     }
     public static HashSet<SubmarineType> CaptureFrom = new HashSet<SubmarineType>()
