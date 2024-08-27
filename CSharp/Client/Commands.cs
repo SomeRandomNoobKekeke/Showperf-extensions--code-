@@ -33,6 +33,7 @@ namespace ShowPerfExtensions
         if (args.Length == 0)
         {
           vanillaShowperfCommand.Execute(args);
+          if (!GameMain.ShowPerf) ActiveCategory = ShowperfCategory.None;
           return;
         }
 
@@ -43,13 +44,40 @@ namespace ShowPerfExtensions
           return;
         }
 
+        if (args[0].Equals("allSubs", StringComparison.OrdinalIgnoreCase))
+        {
+          CaptureFrom.Clear();
+          Window.Reset();
+          log($"CaptureFrom: All Subs");
+          return;
+        }
+
+
+
+        if (Enum.TryParse<SubmarineType>(args[0], out SubmarineType sub))
+        {
+          if (CaptureFrom.Contains(sub))
+          {
+            CaptureFrom.Remove(sub);
+          }
+          else
+          {
+            CaptureFrom.Add(sub);
+          }
+          Window.Reset();
+        }
+
 
         if (Enum.TryParse<ShowperfCategory>(args[0], out ShowperfCategory c))
         {
           ActiveCategory = ActiveCategory == c ? ShowperfCategory.None : c;
         }
 
-      }, () => new string[][] { Enum.GetValues<ShowperfCategory>().Select(c => $"{c}").ToArray() }));
+      }, () => new string[][] {
+        Enum.GetValues<ShowperfCategory>().Select(c => $"{c}")
+        .Concat(Enum.GetValues<SubmarineType>().Select(c => $"{c}"))
+        .Append("allSubs").Append("id").ToArray()
+      }));
 
 
       addedCommands.Add(new DebugConsole.Command("showperf_accumulate", "toggles between average and sum", (string[] args) =>

@@ -1,2 +1,1 @@
-Should be more careful with ticks
-add filters to all categories
+improve tracking

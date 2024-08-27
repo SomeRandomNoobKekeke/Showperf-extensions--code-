@@ -20,12 +20,13 @@ namespace ShowPerfExtensions
   {
     public static bool Item_Update_Replace(float deltaTime, Camera cam, Item __instance)
     {
-      if (ActiveCategory != ShowperfCategory.ItemComponents) return true;
+      if (ActiveCategory != ShowperfCategory.ItemComponentsUpdate) return true;
       Window.ensureCategory(CaptureCategory.ItemComponents);
 
       Item _ = __instance;
 
       var sw = new System.Diagnostics.Stopwatch();
+      long ticks;
 
 
       if (!_.isActive || _.IsLayerHidden) { return false; }
@@ -54,13 +55,13 @@ namespace ShowPerfExtensions
       {
         _.aiTarget.Update(deltaTime);
       }
-      long ticks = sw.ElapsedTicks;
 
+      ticks = sw.ElapsedTicks;
       if (CaptureFrom.Count == 0 || (_.Submarine != null && CaptureFrom.Contains(_.Submarine.Info.Type)))
       {
         if (CaptureById)
         {
-          Window.tryAddTicks(_.ID, $"{String.Format("{0:0000}", _.ID)}|{_.Prefab.Identifier.Value}.AITarget", CaptureCategory.ItemComponents, ticks);
+          Window.tryAddTicks($"{_}.AITarget", CaptureCategory.ItemComponents, ticks);
         }
         else
         {
@@ -150,7 +151,7 @@ namespace ShowPerfExtensions
         {
           if (CaptureById)
           {
-            Window.tryAddTicks(_.ID, $"{String.Format("{0:0000}", _.ID)}|{_.Prefab.Identifier.Value}.{ic.Name}", CaptureCategory.ItemComponents, ticks);
+            Window.tryAddTicks($"{_}.{ic.Name}", CaptureCategory.ItemComponents, ticks);
           }
           else
           {

@@ -18,28 +18,21 @@ namespace ShowPerfExtensions
   public partial class Mod : IAssemblyPlugin
   {
 
-    public static void tryAddTicks(Item item, long ticks)
-    {
-      Window.tryAddTicks(
-        item.Prefab.Identifier,
-        item.Submarine == Submarine.MainSub ? CaptureCategory.ItemsOnMainSub : CaptureCategory.ItemsOnOtherSubs,
-        ticks
-      );
-    }
-
     /// <summary>
     /// Call Update() on every object in Entity.list
     /// </summary>
     public static bool MapEntity_UpdateAll_Replace(float deltaTime, Camera cam)
     {
-      if (ActiveCategory != ShowperfCategory.ItemsUpdate) return true;
-      Window.ensureCategory(CaptureCategory.ItemsOnMainSub);
-      Window.ensureCategory(CaptureCategory.ItemsOnOtherSubs);
+      if (ActiveCategory != ShowperfCategory.MapEntitysUpdate) return true;
+      Window.ensureCategory(CaptureCategory.ItemsUpdate);
+
 
       MapEntity.mapEntityUpdateTick++;
 
       //#if CLIENT
       var sw = new System.Diagnostics.Stopwatch();
+      long ticks;
+
       sw.Start();
       //#endif
       if (MapEntity.mapEntityUpdateTick % MapEntity.MapEntityUpdateInterval == 0)
@@ -96,7 +89,19 @@ namespace ShowPerfExtensions
             sw2.Restart();
             item.Update(deltaTime * MapEntity.MapEntityUpdateInterval, cam);
 
-            tryAddTicks(item, sw2.ElapsedTicks);
+
+            ticks = sw2.ElapsedTicks;
+            if (CaptureFrom.Count == 0 || (item.Submarine != null && CaptureFrom.Contains(item.Submarine.Info.Type)))
+            {
+              if (CaptureById)
+              {
+                Window.tryAddTicks($"{item}", CaptureCategory.ItemsUpdate, ticks);
+              }
+              else
+              {
+                Window.tryAddTicks(item.Prefab.Identifier, CaptureCategory.ItemsUpdate, ticks);
+              }
+            }
           }
         }
         catch (InvalidOperationException e)
@@ -118,7 +123,18 @@ namespace ShowPerfExtensions
 
         item.Update(deltaTime, cam);
 
-        tryAddTicks(item, sw2.ElapsedTicks);
+        ticks = sw2.ElapsedTicks;
+        if (CaptureFrom.Count == 0 || (item.Submarine != null && CaptureFrom.Contains(item.Submarine.Info.Type)))
+        {
+          if (CaptureById)
+          {
+            Window.tryAddTicks($"{item}", CaptureCategory.ItemsUpdate, ticks);
+          }
+          else
+          {
+            Window.tryAddTicks(item.Prefab.Identifier, CaptureCategory.ItemsUpdate, ticks);
+          }
+        }
       }
       sw2.Stop();
 

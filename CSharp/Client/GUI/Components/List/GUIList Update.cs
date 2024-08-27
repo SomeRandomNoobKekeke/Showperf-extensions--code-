@@ -36,7 +36,6 @@ namespace ShowPerfExtensions
 
         Values.Sort((a, b) => (int)(b.Ticks - a.Ticks));
 
-
         if (Values.Count < 2 || Values.First().Ticks == 0)
         {
           Linearity = 0;
@@ -44,7 +43,40 @@ namespace ShowPerfExtensions
         }
 
         Linearity = (Values.First().Ticks * Values.Count / 2 - Sum) / Values.First().Ticks / Values.Count;
-        Linearity *= 2; // because naturally it's [0..0.5] and i want it to be [0..1]
+        Linearity = 1.0 - Linearity * 2;
+      }
+
+
+      // -------------- for debug --------------
+      public void fillWithLinearData(int part)
+      {
+        part = Math.Max(0, part);
+
+        for (int i = 99; i > part; i--)
+        {
+          Values.Add(new UpdateTicks($"{i}", i * 1000));
+          Sum += i * 1000;
+        }
+
+        for (int i = part; i >= 0; i--)
+        {
+          Values.Add(new UpdateTicks($"{i}", 0));
+        }
+
+        TopValue = Values.First().Ticks;
+      }
+
+      public void fillWithSpikeData()
+      {
+        Values.Add(new UpdateTicks($"{0}", 100000));
+
+        for (int i = 1; i < 100; i++)
+        {
+          Values.Add(new UpdateTicks($"{i}", 0));
+        }
+
+        TopValue = 100000;
+        Sum = 100000;
       }
     }
   }

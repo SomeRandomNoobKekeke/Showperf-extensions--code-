@@ -26,21 +26,23 @@ namespace ShowPerfExtensions
     public enum ShowperfCategory
     {
       None,
-      ItemsUpdate,
-      Characters,
-      ItemsDrawing,
+      MapEntitysUpdate,
+      CharactersUpdate,
+      MapEntityDrawing,
       LevelObjectsDrawing,
-      ItemComponents,
+      LevelMisc,
+      ItemComponentsUpdate,
     }
 
     public static Dictionary<ShowperfCategory, string> CategoryNames = new Dictionary<ShowperfCategory, string>()
     {
       {ShowperfCategory.None, ""},
-      {ShowperfCategory.Characters, "Characters update"},
-      {ShowperfCategory.ItemComponents, "Items components update"},
-      {ShowperfCategory.ItemsDrawing, "Items drawing"},
-      {ShowperfCategory.ItemsUpdate, "Items update"},
-      {ShowperfCategory.LevelObjectsDrawing, "Level objects"},
+      {ShowperfCategory.CharactersUpdate, "Characters update"},
+      {ShowperfCategory.ItemComponentsUpdate, "Items components update"},
+      {ShowperfCategory.MapEntityDrawing, "MapEntitys drawing"},
+      {ShowperfCategory.MapEntitysUpdate, "MapEntitys update"},
+      {ShowperfCategory.LevelObjectsDrawing, "Level objects drawing"},
+      {ShowperfCategory.LevelMisc, "Other level stuff drawing"},
     };
 
     public static ShowperfCategory activeCategory = ShowperfCategory.None;
@@ -56,7 +58,7 @@ namespace ShowPerfExtensions
     }
     public static HashSet<SubmarineType> CaptureFrom = new HashSet<SubmarineType>()
     {
-      SubmarineType.Player,
+      // SubmarineType.Player,
     };
 
     public static bool captureById = true;
@@ -96,7 +98,7 @@ namespace ShowPerfExtensions
 
       patchAll();
 
-      if (debug) ActiveCategory = ShowperfCategory.ItemComponents;
+      if (debug) ActiveCategory = ShowperfCategory.MapEntitysUpdate;
 
       info($"{ModName} compiled!");
     }

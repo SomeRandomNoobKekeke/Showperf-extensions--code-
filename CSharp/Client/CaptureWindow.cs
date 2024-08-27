@@ -18,8 +18,7 @@ namespace ShowPerfExtensions
     #endregion
     public enum CaptureCategory
     {
-      ItemsOnMainSub,
-      ItemsOnOtherSubs,
+      ItemsUpdate,
       Characters,
       ItemsDrawing,
       LevelObjectsDrawing,

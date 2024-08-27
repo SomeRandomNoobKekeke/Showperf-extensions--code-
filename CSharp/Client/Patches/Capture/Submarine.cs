@@ -20,13 +20,14 @@ namespace ShowPerfExtensions
   {
     public static bool Submarine_DrawFront_Replace(SpriteBatch spriteBatch, bool editing = false, Predicate<MapEntity> predicate = null)
     {
-      if (ActiveCategory != ShowperfCategory.ItemsDrawing) return true;
+      if (ActiveCategory != ShowperfCategory.MapEntityDrawing) return true;
       Window.ensureCategory(CaptureCategory.ItemsDrawing);
 
 
       var entitiesToRender = !editing && Submarine.visibleEntities != null ? Submarine.visibleEntities : MapEntity.MapEntityList;
 
       var sw = new System.Diagnostics.Stopwatch();
+      long ticks;
 
       foreach (MapEntity e in entitiesToRender)
       {
@@ -40,13 +41,17 @@ namespace ShowPerfExtensions
         sw.Restart();
         e.Draw(spriteBatch, editing, false);
 
-        if (e.Prefab != null)
+        ticks = sw.ElapsedTicks;
+        if (CaptureFrom.Count == 0 || (e.Submarine != null && CaptureFrom.Contains(e.Submarine.Info.Type)))
         {
-          Window.tryAddTicks(e.Prefab.Identifier, CaptureCategory.ItemsDrawing, sw.ElapsedTicks);
-        }
-        else
-        {
-          Window.tryAddTicks((int)e.ID, $"{e.ID}|{e.Name}", CaptureCategory.ItemsDrawing, sw.ElapsedTicks);
+          if (CaptureById || e.Prefab == null)
+          {
+            Window.tryAddTicks($"{e.Name} (ID: {e.ID})", CaptureCategory.ItemsDrawing, ticks);
+          }
+          else
+          {
+            Window.tryAddTicks(e.Prefab.Identifier, CaptureCategory.ItemsDrawing, ticks);
+          }
         }
       }
 
@@ -85,12 +90,13 @@ namespace ShowPerfExtensions
 
     public static bool Submarine_DrawBack_Replace(SpriteBatch spriteBatch, bool editing = false, Predicate<MapEntity> predicate = null)
     {
-      if (ActiveCategory != ShowperfCategory.ItemsDrawing) return true;
+      if (ActiveCategory != ShowperfCategory.MapEntityDrawing) return true;
       Window.ensureCategory(CaptureCategory.ItemsDrawing);
 
       var entitiesToRender = !editing && Submarine.visibleEntities != null ? Submarine.visibleEntities : MapEntity.MapEntityList;
 
       var sw = new System.Diagnostics.Stopwatch();
+      long ticks;
 
       foreach (MapEntity e in entitiesToRender)
       {
@@ -104,13 +110,17 @@ namespace ShowPerfExtensions
         sw.Restart();
         e.Draw(spriteBatch, editing, true);
 
-        if (e.Prefab != null)
+        ticks = sw.ElapsedTicks;
+        if (CaptureFrom.Count == 0 || (e.Submarine != null && CaptureFrom.Contains(e.Submarine.Info.Type)))
         {
-          Window.tryAddTicks(e.Prefab.Identifier, CaptureCategory.ItemsDrawing, sw.ElapsedTicks);
-        }
-        else
-        {
-          Window.tryAddTicks((int)e.ID, $"{e.ID}|{e.Name}", CaptureCategory.ItemsDrawing, sw.ElapsedTicks);
+          if (CaptureById || e.Prefab == null)
+          {
+            Window.tryAddTicks($"{e.Name} (ID: {e.ID})", CaptureCategory.ItemsDrawing, ticks);
+          }
+          else
+          {
+            Window.tryAddTicks(e.Prefab.Identifier, CaptureCategory.ItemsDrawing, ticks);
+          }
         }
       }
 

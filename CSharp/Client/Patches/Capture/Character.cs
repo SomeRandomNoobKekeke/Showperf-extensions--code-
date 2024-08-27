@@ -19,10 +19,11 @@ namespace ShowPerfExtensions
   {
     public static bool Character_UpdateAll_Replace(float deltaTime, Camera cam)
     {
-      if (ActiveCategory != ShowperfCategory.Characters) return true;
+      if (ActiveCategory != ShowperfCategory.CharactersUpdate) return true;
       Window.ensureCategory(CaptureCategory.Characters);
 
       var sw = new System.Diagnostics.Stopwatch();
+      long ticks;
 
       if (GameMain.NetworkMember == null || !GameMain.NetworkMember.IsClient)
       {
@@ -96,11 +97,19 @@ namespace ShowPerfExtensions
           string simplified = character.AnimController.SimplePhysicsEnabled ? "Simplified" : "Simulated";
 
 
-
+          ticks = sw.ElapsedTicks;
           if (CaptureFrom.Count == 0 || (character.Submarine != null && CaptureFrom.Contains(character.Submarine.Info.Type)))
           {
-            Window.tryAddTicks((int)character.ID, $"{character.ID}|{character}{info} - {alive}:{enabled}:{simplified}", CaptureCategory.Characters, sw.ElapsedTicks);
+            if (CaptureById)
+            {
+              Window.tryAddTicks((int)character.ID, $"{character.ID}|{character}{info} - {alive}:{enabled}:{simplified}", CaptureCategory.Characters, ticks);
+            }
+            else
+            {
+              Window.tryAddTicks($"{character}", CaptureCategory.Characters, ticks);
+            }
           }
+
         }
         catch (Exception e) { err(e); }
       }

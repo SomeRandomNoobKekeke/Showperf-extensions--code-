@@ -55,6 +55,7 @@ namespace ShowPerfExtensions
       }
 
       var sw = new System.Diagnostics.Stopwatch();
+      long ticks;
 
       foreach (LevelObject obj in objectList)
       {
