@@ -21,9 +21,9 @@ namespace ShowPerfExtensions
       // only one component for now, it could be dict in the future
       public GUIList ListGUIComponent;
 
-      public double FrameDuration = 1.0 / 30.0;
+      //public double FrameDuration = 1.0 / 30.0;
       public double LastUpdateTime;
-      public double FPS { set => FrameDuration = 1.0 / value; }
+      //public double FPS { set => FrameDuration = 1.0 / value; }
 
       public HashSet<string> Tracked;
       public int lastMWScroll;
@@ -48,7 +48,7 @@ namespace ShowPerfExtensions
 
       public void Clear() => ListGUIComponent.Clear();
 
-      public bool ShouldUpdate => Timing.TotalTime - LastUpdateTime > FrameDuration;
+      public bool ShouldUpdate => Timing.TotalTime - LastUpdateTime > Window.FrameDuration;
       public void Update()
       {
         if (Window.Frozen || GameMain.Instance.Paused) return;
