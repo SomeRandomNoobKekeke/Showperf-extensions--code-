@@ -35,7 +35,7 @@ namespace ShowPerfExtensions
         get => showedItemsCount;
         set
         {
-          showedItemsCount = value;
+          showedItemsCount = Math.Max(0, value);
           ShowedRange = new Range(listOffset, listOffset + showedItemsCount);
         }
       }
@@ -45,7 +45,7 @@ namespace ShowPerfExtensions
         get => listOffset;
         set
         {
-          listOffset = value;
+          listOffset = Math.Max(0, value);
           ShowedRange = new Range(listOffset, listOffset + showedItemsCount);
         }
       }
@@ -57,8 +57,7 @@ namespace ShowPerfExtensions
         get => listShift;
         set
         {
-          listShift = value;
-          listShift = Math.Min(Math.Max(0, value), Values.Count - showedItemsCount);
+          listShift = Math.Max(0, Math.Min(value, Values.Count - showedItemsCount));
           ListOffset = (int)Math.Round(listShift);
         }
       }

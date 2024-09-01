@@ -62,13 +62,20 @@ namespace ShowPerfExtensions
 
       public void UpdateScroll()
       {
-        if (PlayerInput.IsShiftDown() && PlayerInput.IsAltDown())
+        try
         {
-          double delta = (PlayerInput.mouseState.ScrollWheelValue - lastMWScroll) / 80.0;
+          if (PlayerInput.IsShiftDown() && PlayerInput.IsAltDown())
+          {
+            double delta = (PlayerInput.mouseState.ScrollWheelValue - lastMWScroll) / 80.0;
 
-          ListGUIComponent.ListShift -= delta;
+            ListGUIComponent.ListShift -= delta;
+          }
+          lastMWScroll = PlayerInput.mouseState.ScrollWheelValue;
         }
-        lastMWScroll = PlayerInput.mouseState.ScrollWheelValue;
+        catch (Exception e)
+        {
+          err(e);
+        }
       }
 
       public void Draw(SpriteBatch spriteBatch) => ListGUIComponent.Draw(spriteBatch);
