@@ -18,12 +18,16 @@ namespace ShowPerfExtensions
     #endregion
     public enum CaptureCategory
     {
-      ItemsUpdate,
       Characters,
       ItemsDrawing,
       LevelObjectsDrawing,
       OtherLevelStuff,
       ItemComponents,
+      HullUpdate,
+      StructureUpdate,
+      ItemUpdate,
+      GapUpdate,
+
     }
 
     public struct UpdateTicks

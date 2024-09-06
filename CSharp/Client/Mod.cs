@@ -26,12 +26,15 @@ namespace ShowPerfExtensions
     public enum ShowperfCategory
     {
       None,
-      MapEntitysUpdate,
       CharactersUpdate,
       MapEntityDrawing,
       LevelObjectsDrawing,
       LevelMisc,
       ItemComponentsUpdate,
+      HullUpdate,
+      StructureUpdate,
+      ItemUpdate,
+      GapUpdate,
     }
 
     public static Dictionary<ShowperfCategory, string> CategoryNames = new Dictionary<ShowperfCategory, string>()
@@ -40,9 +43,12 @@ namespace ShowPerfExtensions
       {ShowperfCategory.CharactersUpdate, "Characters update"},
       {ShowperfCategory.ItemComponentsUpdate, "Item components update"},
       {ShowperfCategory.MapEntityDrawing, "MapEntity drawing"},
-      {ShowperfCategory.MapEntitysUpdate, "MapEntity update"},
       {ShowperfCategory.LevelObjectsDrawing, "Level objects drawing"},
       {ShowperfCategory.LevelMisc, "Other level stuff drawing"},
+      {ShowperfCategory.HullUpdate, "Hull update"},
+      {ShowperfCategory.ItemUpdate, "Item update"},
+      {ShowperfCategory.StructureUpdate, "Structure update"},
+      {ShowperfCategory.GapUpdate, "Gap update"},
     };
 
     public static ShowperfCategory activeCategory = ShowperfCategory.None;
@@ -103,7 +109,7 @@ namespace ShowPerfExtensions
 
       patchAll();
 
-      if (debug) ActiveCategory = ShowperfCategory.MapEntitysUpdate;
+      if (debug) ActiveCategory = ShowperfCategory.ItemUpdate;
 
       info($"{ModName} compiled!");
     }
