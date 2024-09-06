@@ -27,7 +27,7 @@ namespace ShowPerfExtensions
       StructureUpdate,
       ItemUpdate,
       GapUpdate,
-
+      WholeSubmarineUpdate,
     }
 
     public struct UpdateTicks

@@ -35,6 +35,7 @@ namespace ShowPerfExtensions
       StructureUpdate,
       ItemUpdate,
       GapUpdate,
+      WholeSubmarineUpdate,
     }
 
     public static Dictionary<ShowperfCategory, string> CategoryNames = new Dictionary<ShowperfCategory, string>()
@@ -49,6 +50,7 @@ namespace ShowPerfExtensions
       {ShowperfCategory.ItemUpdate, "Item update"},
       {ShowperfCategory.StructureUpdate, "Structure update"},
       {ShowperfCategory.GapUpdate, "Gap update"},
+      {ShowperfCategory.WholeSubmarineUpdate, "Whole submarine update"},
     };
 
     public static ShowperfCategory activeCategory = ShowperfCategory.None;
@@ -63,7 +65,7 @@ namespace ShowPerfExtensions
         if (value == ShowperfCategory.None)
         {
           CaptureFrom.Clear();
-          captureById = true;
+          captureById = false;
         }
       }
     }
@@ -72,7 +74,7 @@ namespace ShowPerfExtensions
       // SubmarineType.Player,
     };
 
-    public static bool captureById = true;
+    public static bool captureById = false;
     public static bool CaptureById
     {
       get => captureById;

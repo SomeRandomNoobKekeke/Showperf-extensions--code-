@@ -24,12 +24,25 @@ namespace ShowPerfExtensions
     public static bool MapEntity_UpdateAll_Replace(float deltaTime, Camera cam)
     {
       if (
-        ActiveCategory != ShowperfCategory.ItemUpdate &&
-        ActiveCategory != ShowperfCategory.HullUpdate &&
-        ActiveCategory != ShowperfCategory.StructureUpdate &&
-        ActiveCategory != ShowperfCategory.GapUpdate
-      ) return true;
+          ActiveCategory == ShowperfCategory.ItemUpdate ||
+          ActiveCategory == ShowperfCategory.HullUpdate ||
+          ActiveCategory == ShowperfCategory.StructureUpdate ||
+          ActiveCategory == ShowperfCategory.GapUpdate
+      )
+      {
+        return Deep_MapEntity_UpdateAll(deltaTime, cam);
+      }
 
+      if (ActiveCategory == ShowperfCategory.WholeSubmarineUpdate)
+      {
+        return PerSub_MapEntity_UpdateAll(deltaTime, cam);
+      }
+
+      return true;
+    }
+
+    public static bool Deep_MapEntity_UpdateAll(float deltaTime, Camera cam)
+    {
       var sw2 = new System.Diagnostics.Stopwatch();
       long ticks;
 
@@ -248,5 +261,129 @@ namespace ShowPerfExtensions
 
       return false;
     }
+
+    public static bool PerSub_MapEntity_UpdateAll(float deltaTime, Camera cam)
+    {
+      Window.ensureCategory(CaptureCategory.WholeSubmarineUpdate);
+      var sw2 = new System.Diagnostics.Stopwatch();
+      long ticks;
+
+      MapEntity.mapEntityUpdateTick++;
+
+      //#if CLIENT
+      var sw = new System.Diagnostics.Stopwatch();
+
+      sw.Start();
+      //#endif
+      if (MapEntity.mapEntityUpdateTick % MapEntity.MapEntityUpdateInterval == 0)
+      {
+
+        foreach (Hull hull in Hull.HullList)
+        {
+          sw2.Restart();
+          hull.Update(deltaTime * MapEntity.MapEntityUpdateInterval, cam);
+          ticks = sw2.ElapsedTicks;
+          Window.tryAddTicks($"{hull.Submarine?.ToString() ?? "Things in open water"}", CaptureCategory.WholeSubmarineUpdate, ticks);
+        }
+
+        //#if CLIENT
+        Hull.UpdateCheats(deltaTime * MapEntity.MapEntityUpdateInterval, cam);
+        //#endif
+
+        foreach (Structure structure in Structure.WallList)
+        {
+          sw2.Restart();
+          structure.Update(deltaTime * MapEntity.MapEntityUpdateInterval, cam);
+          ticks = sw2.ElapsedTicks;
+
+          Window.tryAddTicks($"{structure.Submarine?.ToString() ?? "Things in open water"}", CaptureCategory.WholeSubmarineUpdate, ticks);
+        }
+      }
+
+      //update gaps in random order, because otherwise in rooms with multiple gaps
+      //the water/air will always tend to flow through the first gap in the list,
+      //which may lead to weird behavior like water draining down only through
+      //one gap in a room even if there are several
+
+      foreach (Gap gap in Gap.GapList.OrderBy(g => Rand.Int(int.MaxValue)))
+      {
+        sw2.Restart();
+        gap.Update(deltaTime, cam);
+        ticks = sw2.ElapsedTicks;
+
+        Window.tryAddTicks($"{gap.Submarine?.ToString() ?? "Things in open water"}", CaptureCategory.WholeSubmarineUpdate, ticks);
+      }
+
+
+      if (MapEntity.mapEntityUpdateTick % MapEntity.PoweredUpdateInterval == 0)
+      {
+        Powered.UpdatePower(deltaTime * MapEntity.PoweredUpdateInterval);
+      }
+
+      //#if CLIENT
+      sw.Stop();
+      GameMain.PerformanceCounter.AddElapsedTicks("Update:MapEntity:Misc", sw.ElapsedTicks);
+      sw.Restart();
+      //#endif
+
+      Item.UpdatePendingConditionUpdates(deltaTime);
+      if (MapEntity.mapEntityUpdateTick % MapEntity.MapEntityUpdateInterval == 0)
+      {
+        Item lastUpdatedItem = null;
+
+        try
+        {
+          foreach (Item item in Item.ItemList)
+          {
+            if (GameMain.LuaCs.Game.UpdatePriorityItems.Contains(item)) { continue; }
+            lastUpdatedItem = item;
+
+            sw2.Restart();
+            item.Update(deltaTime * MapEntity.MapEntityUpdateInterval, cam);
+
+            ticks = sw2.ElapsedTicks;
+            Window.tryAddTicks($"{item.Submarine?.ToString() ?? "Things in open water"}", CaptureCategory.WholeSubmarineUpdate, ticks);
+          }
+        }
+        catch (InvalidOperationException e)
+        {
+          GameAnalyticsManager.AddErrorEventOnce(
+              "MapEntity.UpdateAll:ItemUpdateInvalidOperation",
+              GameAnalyticsManager.ErrorSeverity.Critical,
+              $"Error while updating item {lastUpdatedItem?.Name ?? "null"}: {e.Message}");
+          throw new InvalidOperationException($"Error while updating item {lastUpdatedItem?.Name ?? "null"}", innerException: e);
+        }
+      }
+
+      foreach (var item in GameMain.LuaCs.Game.UpdatePriorityItems)
+      {
+        if (item.Removed) continue;
+
+        sw2.Restart();
+
+        item.Update(deltaTime, cam);
+
+        ticks = sw2.ElapsedTicks;
+        Window.tryAddTicks($"{item.Submarine?.ToString() ?? "Things in open water"}", CaptureCategory.WholeSubmarineUpdate, ticks);
+      }
+
+      sw2.Stop();
+
+      //#if CLIENT
+      sw.Stop();
+      GameMain.PerformanceCounter.AddElapsedTicks("Update:MapEntity:Items", sw.ElapsedTicks);
+      sw.Restart();
+      //#endif
+
+      if (MapEntity.mapEntityUpdateTick % MapEntity.MapEntityUpdateInterval == 0)
+      {
+        MapEntity.UpdateAllProjSpecific(deltaTime * MapEntity.MapEntityUpdateInterval);
+
+        MapEntity.Spawner?.Update();
+      }
+
+      return false;
+    }
+
   }
 }
