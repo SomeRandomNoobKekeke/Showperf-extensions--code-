@@ -21,7 +21,9 @@ namespace ShowPerfExtensions
 
     public bool debug = true;
 
+
     public CaptureWindow Window;
+    public CUIShowperf View;
 
     public void Initialize()
     {
@@ -29,7 +31,7 @@ namespace ShowPerfExtensions
 
       Window = new CaptureWindow(duration: 3, fps: 30);
 
-      PatchAll();
+      //PatchAll();
 
       info($"{ModName} Initialized");
     }

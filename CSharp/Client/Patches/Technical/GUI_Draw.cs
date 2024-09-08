@@ -18,13 +18,10 @@ namespace ShowPerfExtensions
   {
     public static void GUI_Draw_Postfix(Camera cam, SpriteBatch spriteBatch)
     {
-      View.UpdateScroll();
-
-      if (ActiveCategory != ShowperfCategory.None)
+      if (!ShowperfCategory.None.IsActive)
       {
-        Window.Update();
-        View.Update();
-        View.Draw(spriteBatch);
+        mod.Window.Update();
+        mod.View.Update();
       }
     }
   }
