@@ -13,7 +13,15 @@ namespace ShowPerfExtensions
   {
     public class CUIShowperf : CUIComponent
     {
+      public CUIShowperf(float w, float h) : base(w, h)
+      {
 
+      }
+
+      public CUIShowperf(float x, float y, float w, float h) : base(x, y, w, h)
+      {
+
+      }
     }
   }
 }

@@ -5,6 +5,7 @@ using System.Linq;
 
 using Barotrauma;
 using HarmonyLib;
+using CrabUI;
 
 using System.Runtime.CompilerServices;
 [assembly: IgnoresAccessChecksTo("Barotrauma")]
@@ -24,14 +25,21 @@ namespace ShowPerfExtensions
 
     public CaptureWindow Window;
     public CUIShowperf View;
+    public CUIMainComponent CUI;
 
     public void Initialize()
     {
       mod = this;
 
       Window = new CaptureWindow(duration: 3, fps: 30);
+      CUI = new CUIMainComponent();
 
-      //PatchAll();
+      View = new CUIShowperf(0.7f, 0.1f, 0.3f, 0.8f);
+
+      CUI.Append(View);
+
+
+      PatchAll();
 
       info($"{ModName} Initialized");
     }

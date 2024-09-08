@@ -13,22 +13,6 @@ namespace CrabUI
   {
     public virtual string Name => "CUIMainComponent";
 
-    public static CUIMainComponent Main;
-    public static void GUI_Draw_Prefix(SpriteBatch spriteBatch)
-    {
-      try
-      {
-        Main?.Step(spriteBatch);
-      }
-      catch (Exception e)
-      {
-        log(e);
-      }
-    }
-
-    // public void AttachToGUICycle(){ }
-
-
     public List<CUIComponent> UpdateQueue = new List<CUIComponent>();
 
     public CUIComponent MouseOn;
@@ -42,7 +26,9 @@ namespace CrabUI
 
     public void Step(SpriteBatch spriteBatch)
     {
-      if (TreeChanged) RebuildUpdateQueue();
+      UpdateRecursive(this);
+
+      if (TreeChanged) { RebuildUpdateQueue(); }
 
       for (int i = 0; i < UpdateQueue.Count; i++)
       {
@@ -118,16 +104,9 @@ namespace CrabUI
 
     public CUIMainComponent()
     {
-      Main = this;
-
       RelativeSize = Vector2.One;
       ApplyRelSize();
       Visible = false;
-    }
-
-    public void Dispose()
-    {
-      Main = null;
     }
   }
 }

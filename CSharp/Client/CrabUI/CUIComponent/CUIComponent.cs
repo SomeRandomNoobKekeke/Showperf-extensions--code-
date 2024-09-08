@@ -115,6 +115,11 @@ namespace CrabUI
       RelativeWidth = w;
       RelativeHeight = h;
     }
+    public CUIComponent(float w, float h) : this()
+    {
+      RelativeWidth = w;
+      RelativeHeight = h;
+    }
 
     public CUIComponent(Vector2 relativePosition, Vector2 relativeSize)
     {

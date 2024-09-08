@@ -12,7 +12,7 @@ namespace ShowPerfExtensions
   {
     public void PatchAll()
     {
-      PatchCapture();
+      //PatchCapture();
       PatchTechnical();
     }
 
@@ -66,10 +66,10 @@ namespace ShowPerfExtensions
         postfix: new HarmonyMethod(typeof(Mod).GetMethod("GUI_Draw_Postfix"))
       );
 
-      harmony.Patch(
-        original: typeof(LuaGame).GetMethod("IsCustomCommandPermitted"),
-        postfix: new HarmonyMethod(typeof(Mod).GetMethod("permitCommands"))
-      );
+      // harmony.Patch(
+      //   original: typeof(LuaGame).GetMethod("IsCustomCommandPermitted"),
+      //   postfix: new HarmonyMethod(typeof(Mod).GetMethod("permitCommands"))
+      // );
     }
 
   }

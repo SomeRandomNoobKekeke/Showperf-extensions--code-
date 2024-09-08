@@ -21,7 +21,8 @@ namespace ShowPerfExtensions
       if (!ShowperfCategory.None.IsActive)
       {
         mod.Window.Update();
-        mod.View.Update();
+        //mod.View.Update();
+        mod.CUI.Step(spriteBatch);
       }
     }
   }
