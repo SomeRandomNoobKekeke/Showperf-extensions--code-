@@ -19,11 +19,18 @@ namespace ShowPerfExtensions
     public static string ModName = "Showperf extensions";
     public static Mod mod;
 
-    public bool debug = false;
+    public bool debug = true;
+
+    public CaptureWindow Window;
 
     public void Initialize()
     {
       mod = this;
+
+      Window = new CaptureWindow(duration: 3, fps: 30);
+
+      PatchAll();
+
       info($"{ModName} Initialized");
     }
 
@@ -32,7 +39,7 @@ namespace ShowPerfExtensions
 
     public void Dispose()
     {
-
+      info($"{ModName} Disposed");
     }
   }
 }

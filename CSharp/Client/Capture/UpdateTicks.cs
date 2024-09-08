@@ -28,7 +28,8 @@ namespace ShowPerfExtensions
 
       public override string ToString()
       {
-        return $"{View.ConverToUnits(Ticks)} {ID}";
+        // return $"{View.ConverToUnits(Ticks)} {ID}";
+        return $"{Ticks} {ID}";
       }
 
       public static UpdateTicks operator +(UpdateTicks a, UpdateTicks b)

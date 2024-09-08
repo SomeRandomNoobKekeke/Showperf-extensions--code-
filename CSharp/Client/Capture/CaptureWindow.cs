@@ -1,5 +1,6 @@
 using System;
 using System.Reflection;
+using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Collections.Generic;
 using System.Collections.Immutable;
@@ -10,12 +11,17 @@ using HarmonyLib;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 
+using System.Text;
+
 namespace ShowPerfExtensions
 {
   public partial class Mod : IAssemblyPlugin
   {
     public class CaptureWindow : IDisposable
     {
+      public Stopwatch stopwatch;
+
+
       public double FrameDuration;
       public double LastUpdateTime;
       public bool Frozen = false;
@@ -85,7 +91,6 @@ namespace ShowPerfExtensions
 
         Reset();
       }
-
 
       public void Rotate()
       {
@@ -197,7 +202,7 @@ namespace ShowPerfExtensions
 
       public void debugCapacity()
       {
-        if (debug)
+        if (mod.debug)
         {
           StringBuilder sb = new StringBuilder();
           string s = "";
@@ -229,7 +234,5 @@ namespace ShowPerfExtensions
         TotalTicks = null;
       }
     }
-
-
   }
 }

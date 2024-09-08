@@ -1,5 +1,6 @@
 using System;
 using System.Reflection;
+using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Collections.Generic;
 using System.Collections.Immutable;
@@ -8,18 +9,17 @@ using System.Linq;
 using Barotrauma;
 using HarmonyLib;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Input;
+
+using Barotrauma.Items.Components;
 
 
 namespace ShowPerfExtensions
 {
   public partial class Mod : IAssemblyPlugin
   {
-    public enum CaptureCategory
+    public static void Camera_MoveCamera_Prefix(float deltaTime, ref bool allowMove, ref bool allowZoom, bool allowInput, bool? followSub)
     {
-      ItemsUpdate, Characters, ItemsDrawing, LevelObjectsDrawing,
-      OtherLevelStuff, ItemComponents,
+      if (PlayerInput.IsShiftDown() && PlayerInput.IsAltDown()) allowZoom = false;
     }
-
   }
 }
