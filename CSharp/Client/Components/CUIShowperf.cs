@@ -30,13 +30,15 @@ namespace ShowPerfExtensions
       {
         if (Categories.ActiveCount != 0)
         {
-          //Window.Update();
+          Window.Update();
+          View.Update();
         }
       }
 
       public CUIShowperf(float x, float y, float w, float h) : base(x, y, w, h)
       {
         View = new CUIView(0, 0, 1, 1);
+        Append(View);
       }
     }
   }
