@@ -14,9 +14,13 @@ namespace CrabUI
   {
     public override void Update()
     {
-      if (!Changed) return;
+      if (OwnLayoutChanged)
+      {
+        Host.UpdateOwnLayout();
+        OwnLayoutChanged = false;
+      }
 
-      Host.UpdateOwnLayout();
+      if (!Changed) return;
 
       foreach (CUIComponent c in Host.Children)
       {

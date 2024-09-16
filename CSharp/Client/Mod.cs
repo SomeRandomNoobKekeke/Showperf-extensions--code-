@@ -36,6 +36,7 @@ namespace ShowPerfExtensions
       Showperf = new CUIShowperf(0.7f, 0.1f, 0.3f, 0.8f);
 
       CUI.Append(Showperf);
+      CUI.OnStep += () => Showperf.Update();
 
 
       PatchAll();

@@ -19,6 +19,8 @@ namespace CrabUI
     public Harmony harmony;
     public long DrawTime;
     public long UpdateTime;
+
+    public event Action OnStep;
     public List<CUIComponent> Flat = new List<CUIComponent>();
 
     public CUIMouse Mouse = new CUIMouse();
@@ -45,7 +47,7 @@ namespace CrabUI
 
     public void Step(SpriteBatch spriteBatch)
     {
-      RunStraigth(c => c.Update()); // virtual update 
+      OnStep?.Invoke();
 
       sw.Restart();
       if (Timing.TotalTime - LastUpdateTiming > UpdateInterval)

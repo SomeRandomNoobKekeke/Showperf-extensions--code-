@@ -19,14 +19,24 @@ namespace ShowPerfExtensions
         // SubmarineType.Player,
       };
 
+      public CUIView View;
+
       public bool ShouldCapture(Entity e)
       {
         return CaptureFrom.Count == 0 || (e.Submarine != null && CaptureFrom.Contains(e.Submarine.Info.Type));
       }
 
+      public void Update()
+      {
+        if (Categories.ActiveCount != 0)
+        {
+          //Window.Update();
+        }
+      }
+
       public CUIShowperf(float x, float y, float w, float h) : base(x, y, w, h)
       {
-
+        View = new CUIView(0, 0, 1, 1);
       }
     }
   }

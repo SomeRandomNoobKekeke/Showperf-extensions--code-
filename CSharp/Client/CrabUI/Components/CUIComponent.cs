@@ -195,8 +195,6 @@ namespace CrabUI
       }
     }
 
-    public virtual void Update() { }
-
     public CUIComponent()
     {
       ID = MaxID++;

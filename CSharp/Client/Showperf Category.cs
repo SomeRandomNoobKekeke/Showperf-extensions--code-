@@ -12,11 +12,7 @@ namespace ShowPerfExtensions
   {
     public class ShowperfCategory
     {
-      private bool isActive = false; public bool IsActive
-      {
-        get => isActive;
-        set => isActive = value;
-      }
+      public bool IsActive;
       public string description;
       public bool byID;
 
@@ -36,6 +32,26 @@ namespace ShowPerfExtensions
       public ShowperfCategory LevelObjectsDrawing = new ShowperfCategory("");
       public ShowperfCategory LevelMisc = new ShowperfCategory("");
       public ShowperfCategory ItemComponentsUpdate = new ShowperfCategory("");
+
+      public void Activate(ShowperfCategory c)
+      {
+        if (!c.IsActive)
+        {
+          c.IsActive = true;
+          ActiveCount++;
+        }
+      }
+
+      public void Deactivate(ShowperfCategory c)
+      {
+        if (c.IsActive)
+        {
+          c.IsActive = false;
+          ActiveCount--;
+        }
+      }
+
+      public int ActiveCount = 0;
 
 
       public ShowperfCategories() { }

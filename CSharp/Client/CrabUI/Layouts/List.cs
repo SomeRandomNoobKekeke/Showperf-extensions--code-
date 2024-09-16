@@ -18,10 +18,13 @@ namespace CrabUI
 
     public override void Update()
     {
+      if (OwnLayoutChanged)
+      {
+        Host.UpdateOwnLayout();
+        OwnLayoutChanged = false;
+      }
+
       if (!Changed) return;
-
-      Host.UpdateOwnLayout();
-
 
       if (Vertical)
       {

@@ -37,17 +37,24 @@ namespace CrabUI
         changed = value;
         if (changed)
         {
+          OwnLayoutChanged = true;
           if (Host.Parent != null) Host.Parent.Layout.PropagateUp();
           foreach (CUIComponent child in Host.Children) child.Layout.PropagateDown();
         }
       }
     }
 
+    public bool OwnLayoutChanged { get; set; }
+
     public virtual void Update()
     {
       if (!Changed) return;
       Changed = false;
-      Host.UpdateOwnLayout();
+      if (OwnLayoutChanged)
+      {
+        Host.UpdateOwnLayout();
+        OwnLayoutChanged = false;
+      }
     }
 
     public CUILayout(CUIComponent host)
