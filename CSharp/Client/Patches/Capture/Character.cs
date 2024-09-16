@@ -19,7 +19,7 @@ namespace ShowPerfExtensions
   {
     public static bool Character_UpdateAll_Replace(float deltaTime, Camera cam)
     {
-      if (ActiveCategory != ShowperfCategory.CharactersUpdate) return true;
+      if (!Showperf.Categories.CharactersUpdate.IsActive) return true;
       Window.ensureCategory(CaptureCategory.Characters);
 
       var sw = new System.Diagnostics.Stopwatch();
@@ -98,9 +98,9 @@ namespace ShowPerfExtensions
 
 
           ticks = sw.ElapsedTicks;
-          if (CaptureFrom.Count == 0 || (character.Submarine != null && CaptureFrom.Contains(character.Submarine.Info.Type)))
+          if (Showperf.ShouldCapture(character))
           {
-            if (CaptureById)
+            if (Showperf.Categories.CharactersUpdate.byID)
             {
               Window.tryAddTicks((int)character.ID, $"{character.ID}|{character}{info} - {alive}:{enabled}:{simplified}", CaptureCategory.Characters, ticks);
             }

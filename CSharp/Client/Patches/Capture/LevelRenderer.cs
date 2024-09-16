@@ -19,7 +19,7 @@ namespace ShowPerfExtensions
   {
     public static bool LevelRenderer_DrawBackground_Replace(LevelRenderer __instance, SpriteBatch spriteBatch, Camera cam, LevelObjectManager backgroundSpriteManager = null, BackgroundCreatureManager backgroundCreatureManager = null)
     {
-      if (ActiveCategory != ShowperfCategory.LevelMisc) return true;
+      if (!Showperf.Categories.LevelMisc.IsActive) return true;
       Window.ensureCategory(CaptureCategory.OtherLevelStuff);
 
       var sw = new System.Diagnostics.Stopwatch();

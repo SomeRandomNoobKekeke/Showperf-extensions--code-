@@ -23,7 +23,7 @@ namespace ShowPerfExtensions
     /// </summary>
     public static bool MapEntity_UpdateAll_Replace(float deltaTime, Camera cam)
     {
-      if (ActiveCategory != ShowperfCategory.MapEntitysUpdate) return true;
+      if (!Showperf.Categories.MapEntitysUpdate.IsActive) return true;
       Window.ensureCategory(CaptureCategory.ItemsUpdate);
 
 
@@ -91,9 +91,9 @@ namespace ShowPerfExtensions
 
 
             ticks = sw2.ElapsedTicks;
-            if (CaptureFrom.Count == 0 || (item.Submarine != null && CaptureFrom.Contains(item.Submarine.Info.Type)))
+            if (Showperf.ShouldCapture(item))
             {
-              if (CaptureById)
+              if (Showperf.Categories.MapEntitysUpdate.byID)
               {
                 Window.tryAddTicks($"{item}", CaptureCategory.ItemsUpdate, ticks);
               }
@@ -124,9 +124,9 @@ namespace ShowPerfExtensions
         item.Update(deltaTime, cam);
 
         ticks = sw2.ElapsedTicks;
-        if (CaptureFrom.Count == 0 || (item.Submarine != null && CaptureFrom.Contains(item.Submarine.Info.Type)))
+        if (Showperf.ShouldCapture(item))
         {
-          if (CaptureById)
+          if (Showperf.Categories.MapEntitysUpdate.byID)
           {
             Window.tryAddTicks($"{item}", CaptureCategory.ItemsUpdate, ticks);
           }

@@ -12,16 +12,7 @@ namespace ShowPerfExtensions
   {
     public class ShowperfCategory
     {
-      public static ShowperfCategory None = new ShowperfCategory("");
-      public static ShowperfCategory MapEntitysUpdate = new ShowperfCategory("");
-      public static ShowperfCategory CharactersUpdate = new ShowperfCategory("");
-      public static ShowperfCategory MapEntityDrawing = new ShowperfCategory("");
-      public static ShowperfCategory LevelObjectsDrawing = new ShowperfCategory("");
-      public static ShowperfCategory LevelMisc = new ShowperfCategory("");
-
-
-
-      public bool isActive = false; public bool IsActive
+      private bool isActive = false; public bool IsActive
       {
         get => isActive;
         set => isActive = value;
@@ -34,6 +25,20 @@ namespace ShowPerfExtensions
         this.description = description;
         this.byID = byID;
       }
+    }
+
+    public class ShowperfCategories
+    {
+      public ShowperfCategory None = new ShowperfCategory("");
+      public ShowperfCategory MapEntitysUpdate = new ShowperfCategory("");
+      public ShowperfCategory CharactersUpdate = new ShowperfCategory("");
+      public ShowperfCategory MapEntityDrawing = new ShowperfCategory("");
+      public ShowperfCategory LevelObjectsDrawing = new ShowperfCategory("");
+      public ShowperfCategory LevelMisc = new ShowperfCategory("");
+      public ShowperfCategory ItemComponentsUpdate = new ShowperfCategory("");
+
+
+      public ShowperfCategories() { }
     }
   }
 }

@@ -1,6 +1,0 @@
-think what should cause which update
-mouse clicks should surface from leaves
-
-crabui should have it's own harmony
-remove public override string Name => "CUIShowperf";
-constructor without pos

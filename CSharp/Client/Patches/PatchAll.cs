@@ -56,16 +56,6 @@ namespace ShowPerfExtensions
 
     public void PatchTechnical()
     {
-      harmony.Patch(
-        original: typeof(Camera).GetMethod("MoveCamera", AccessTools.all),
-        prefix: new HarmonyMethod(typeof(Mod).GetMethod("Camera_MoveCamera_Prefix"))
-      );
-
-      harmony.Patch(
-        original: typeof(GUI).GetMethod("Draw", AccessTools.all),
-        postfix: new HarmonyMethod(typeof(Mod).GetMethod("GUI_Draw_Postfix"))
-      );
-
       // harmony.Patch(
       //   original: typeof(LuaGame).GetMethod("IsCustomCommandPermitted"),
       //   postfix: new HarmonyMethod(typeof(Mod).GetMethod("permitCommands"))

@@ -23,8 +23,8 @@ namespace ShowPerfExtensions
     public bool debug = true;
 
 
-    public CaptureWindow Window;
-    public CUIShowperf View;
+    public static CaptureWindow Window;
+    public static CUIShowperf Showperf;
     public CUIMainComponent CUI;
 
     public void Initialize()
@@ -33,10 +33,9 @@ namespace ShowPerfExtensions
 
       Window = new CaptureWindow(duration: 3, fps: 30);
       CUI = new CUIMainComponent();
+      Showperf = new CUIShowperf(0.7f, 0.1f, 0.3f, 0.8f);
 
-      View = new CUIShowperf(0.7f, 0.1f, 0.3f, 0.8f);
-
-      CUI.Append(View);
+      CUI.Append(Showperf);
 
 
       PatchAll();

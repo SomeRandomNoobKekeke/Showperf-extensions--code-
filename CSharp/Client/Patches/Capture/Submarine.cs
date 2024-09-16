@@ -20,7 +20,7 @@ namespace ShowPerfExtensions
   {
     public static bool Submarine_DrawFront_Replace(SpriteBatch spriteBatch, bool editing = false, Predicate<MapEntity> predicate = null)
     {
-      if (ActiveCategory != ShowperfCategory.MapEntityDrawing) return true;
+      if (!Showperf.Categories.MapEntityDrawing.IsActive) return true;
       Window.ensureCategory(CaptureCategory.ItemsDrawing);
 
 
@@ -42,9 +42,9 @@ namespace ShowPerfExtensions
         e.Draw(spriteBatch, editing, false);
 
         ticks = sw.ElapsedTicks;
-        if (CaptureFrom.Count == 0 || (e.Submarine != null && CaptureFrom.Contains(e.Submarine.Info.Type)))
+        if (Showperf.ShouldCapture(e))
         {
-          if (CaptureById || e.Prefab == null)
+          if (Showperf.Categories.MapEntityDrawing.byID || e.Prefab == null)
           {
             Window.tryAddTicks($"{e.Name} (ID: {e.ID})", CaptureCategory.ItemsDrawing, ticks);
           }
@@ -90,7 +90,7 @@ namespace ShowPerfExtensions
 
     public static bool Submarine_DrawBack_Replace(SpriteBatch spriteBatch, bool editing = false, Predicate<MapEntity> predicate = null)
     {
-      if (ActiveCategory != ShowperfCategory.MapEntityDrawing) return true;
+      if (!Showperf.Categories.MapEntityDrawing.IsActive) return true;
       Window.ensureCategory(CaptureCategory.ItemsDrawing);
 
       var entitiesToRender = !editing && Submarine.visibleEntities != null ? Submarine.visibleEntities : MapEntity.MapEntityList;
@@ -111,9 +111,9 @@ namespace ShowPerfExtensions
         e.Draw(spriteBatch, editing, true);
 
         ticks = sw.ElapsedTicks;
-        if (CaptureFrom.Count == 0 || (e.Submarine != null && CaptureFrom.Contains(e.Submarine.Info.Type)))
+        if (Showperf.ShouldCapture(e))
         {
-          if (CaptureById || e.Prefab == null)
+          if (Showperf.Categories.MapEntityDrawing.byID || e.Prefab == null)
           {
             Window.tryAddTicks($"{e.Name} (ID: {e.ID})", CaptureCategory.ItemsDrawing, ticks);
           }

@@ -19,7 +19,7 @@ namespace ShowPerfExtensions
   {
     public static bool LevelObjectManager_DrawObjects_Replace(SpriteBatch spriteBatch, Camera cam, List<LevelObject> objectList, LevelObjectManager __instance)
     {
-      if (ActiveCategory != ShowperfCategory.LevelObjectsDrawing) return true;
+      if (!Showperf.Categories.LevelObjectsDrawing.IsActive) return true;
       Window.ensureCategory(CaptureCategory.LevelObjectsDrawing);
 
       LevelObjectManager _ = __instance;

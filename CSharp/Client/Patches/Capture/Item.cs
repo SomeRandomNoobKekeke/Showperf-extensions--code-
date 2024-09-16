@@ -20,7 +20,7 @@ namespace ShowPerfExtensions
   {
     public static bool Item_Update_Replace(float deltaTime, Camera cam, Item __instance)
     {
-      if (ActiveCategory != ShowperfCategory.ItemComponentsUpdate) return true;
+      if (!Showperf.Categories.ItemComponentsUpdate.IsActive) return true;
       Window.ensureCategory(CaptureCategory.ItemComponents);
 
       Item _ = __instance;
@@ -57,9 +57,9 @@ namespace ShowPerfExtensions
       }
 
       ticks = sw.ElapsedTicks;
-      if (CaptureFrom.Count == 0 || (_.Submarine != null && CaptureFrom.Contains(_.Submarine.Info.Type)))
+      if (Showperf.ShouldCapture(_))
       {
-        if (CaptureById)
+        if (Showperf.Categories.ItemComponentsUpdate.byID)
         {
           Window.tryAddTicks($"{_}.AITarget", CaptureCategory.ItemComponents, ticks);
         }
@@ -147,9 +147,9 @@ namespace ShowPerfExtensions
         }
 
         ticks = sw.ElapsedTicks;
-        if (CaptureFrom.Count == 0 || (_.Submarine != null && CaptureFrom.Contains(_.Submarine.Info.Type)))
+        if (Showperf.ShouldCapture(_))
         {
-          if (CaptureById)
+          if (Showperf.Categories.ItemComponentsUpdate.byID)
           {
             Window.tryAddTicks($"{_}.{ic.Name}", CaptureCategory.ItemComponents, ticks);
           }
