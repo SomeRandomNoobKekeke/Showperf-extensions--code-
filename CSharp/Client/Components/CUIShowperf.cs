@@ -41,7 +41,15 @@ namespace ShowPerfExtensions
       public CUIShowperf(float x, float y, float w, float h) : base(x, y, w, h)
       {
         Layout = new CUILayoutVerticalList(this);
-        Append(new CUIButton("kokoko"));
+
+
+        CUIButton b = new CUIButton("By ID");
+        b.OnMouseDown += (CUIMouse m) =>
+        {
+          Categories.MapEntityDrawing.byID = !Categories.MapEntityDrawing.byID;
+          Window.Reset();
+        };
+        Append(b);
 
 
         View = new CUIView();

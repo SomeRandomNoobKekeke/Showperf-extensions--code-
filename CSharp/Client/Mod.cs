@@ -39,6 +39,7 @@ namespace ShowPerfExtensions
       CUI.OnStep += () => Showperf.Update();
       //CUI.OnStep += () => log($"{CUI.DrawTime} {CUI.UpdateTime}");
 
+
       PatchAll();
 
       info($"{ModName} Initialized");

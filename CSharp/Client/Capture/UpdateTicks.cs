@@ -26,12 +26,6 @@ namespace ShowPerfExtensions
         this.Ticks = ticks;
       }
 
-      public override string ToString()
-      {
-        // return $"{View.ConverToUnits(Ticks)} {ID}";
-        return $"{Ticks} {ID}";
-      }
-
       public static UpdateTicks operator +(UpdateTicks a, UpdateTicks b)
       {
         return new UpdateTicks(a.ID, a.Ticks + b.Ticks);

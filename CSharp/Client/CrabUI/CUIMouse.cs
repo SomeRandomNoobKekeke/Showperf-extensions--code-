@@ -15,7 +15,7 @@ namespace CrabUI
   public class CUIMouse
   {
     public static double DoubleClickInterval = 0.18;
-    public static float ScrollSpeed = 7.5f;
+    public static float ScrollSpeed = 5f;
 
     private double PrevMouseDownTiming;
     private int PrevScrollWheelValue;
