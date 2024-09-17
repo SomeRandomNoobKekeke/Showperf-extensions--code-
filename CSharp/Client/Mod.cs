@@ -37,7 +37,7 @@ namespace ShowPerfExtensions
 
       CUI.Append(Showperf);
       CUI.OnStep += () => Showperf.Update();
-
+      //CUI.OnStep += () => log($"{CUI.DrawTime} {CUI.UpdateTime}");
 
       PatchAll();
 

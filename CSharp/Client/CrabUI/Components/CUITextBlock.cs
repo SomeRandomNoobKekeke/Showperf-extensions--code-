@@ -11,7 +11,11 @@ namespace CrabUI
 {
   public class CUITextBlock : CUIComponent
   {
-    public string Text { get; set; } = "";
+    private string text = ""; public string Text
+    {
+      get => text;
+      set { text = value; OnPropChanged(); }
+    }
     public bool Wrap { get; set; } = true;
 
     private string WrappedText { get; set; } = "";
@@ -22,6 +26,8 @@ namespace CrabUI
       else WrappedText = Text;
 
       RealTextSize = Font.MeasureString(WrappedText) * TextScale + Padding * 2;
+
+      AbsoluteMin.Size = RealTextSize;
 
       return new Vector2(size.X, Math.Max(size.Y, RealTextSize.Y));
     }

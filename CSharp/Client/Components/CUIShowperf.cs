@@ -13,13 +13,16 @@ namespace ShowPerfExtensions
   {
     public class CUIShowperf : CUIFrame
     {
-      public ShowperfCategories Categories = new ShowperfCategories();
+      public ShowperfCategories Categories;
       public HashSet<SubmarineType> CaptureFrom = new HashSet<SubmarineType>()
       {
         // SubmarineType.Player,
       };
 
+
+
       public CUIView View;
+
 
       public bool ShouldCapture(Entity e)
       {
@@ -37,8 +40,16 @@ namespace ShowPerfExtensions
 
       public CUIShowperf(float x, float y, float w, float h) : base(x, y, w, h)
       {
-        View = new CUIView(0, 0, 1, 1);
+        Layout = new CUILayoutVerticalList(this);
+        Append(new CUIButton("kokoko"));
+
+
+        View = new CUIView();
+        View.FillEmptySpace = true;
         Append(View);
+
+        Categories = new ShowperfCategories();
+        Categories.Activate(Categories.MapEntityDrawing);
       }
     }
   }

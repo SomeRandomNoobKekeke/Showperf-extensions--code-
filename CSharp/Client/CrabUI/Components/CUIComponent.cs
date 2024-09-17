@@ -28,20 +28,23 @@ namespace CrabUI
       set { parent = value; TreeChanged = true; Layout.Changed = true; }
     }
 
+    public virtual CUILayout Layout { get; set; }
+
     private bool treeChanged = true; public bool TreeChanged
     {
       get => treeChanged;
       set { treeChanged = value; if (value && Parent != null) Parent.TreeChanged = true; }
     }
 
-
+    public virtual CUIComponent Append(CUIComponent c) => append(c);
     protected CUIComponent append(CUIComponent c)
     {
       c.Parent = this;
       Children.Add(c);
       return c;
     }
-    public virtual CUIComponent Append(CUIComponent c) => append(c);
+
+    public virtual void RemoveChild(CUIComponent c) => removeChild(c);
     protected void removeChild(CUIComponent c)
     {
       if (!Children.Contains(c)) return;
@@ -49,8 +52,8 @@ namespace CrabUI
       TreeChanged = true;
       Children.Remove(c);
     }
-    public virtual void RemoveChild(CUIComponent c) => removeChild(c);
 
+    public virtual void RemoveAllChildren() => removeAllChildren();
     protected void removeAllChildren()
     {
       foreach (CUIComponent c in Children)
@@ -61,10 +64,7 @@ namespace CrabUI
       TreeChanged = true;
     }
 
-    public virtual void RemoveAllChildren() => removeAllChildren();
 
-
-    public virtual CUILayout Layout { get; set; }
 
 
 
@@ -125,7 +125,6 @@ namespace CrabUI
       }
     }
     protected CUIRect BorderBox;
-
 
     public bool MouseOver { get; set; }
     public bool MousePressed { get; set; }

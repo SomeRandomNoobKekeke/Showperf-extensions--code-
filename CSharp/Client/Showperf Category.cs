@@ -25,7 +25,6 @@ namespace ShowPerfExtensions
 
     public class ShowperfCategories
     {
-      public ShowperfCategory None = new ShowperfCategory("");
       public ShowperfCategory MapEntitysUpdate = new ShowperfCategory("");
       public ShowperfCategory CharactersUpdate = new ShowperfCategory("");
       public ShowperfCategory MapEntityDrawing = new ShowperfCategory("");

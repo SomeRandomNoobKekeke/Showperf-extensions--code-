@@ -46,6 +46,20 @@ namespace CrabUI
       OnScroll += (float s) => Scroll += s;
 
       BackgroundColor = Color.Transparent;
+      // BorderColor = Color.Transparent;
+    }
+
+    public CUIVerticalList() : base()
+    {
+      HideChildrenOutsideFrame = true;
+
+      listLayout = new CUILayoutVerticalList(this);
+      Layout = listLayout;
+
+      OnScroll += (float s) => Scroll += s;
+
+      BackgroundColor = Color.Transparent;
+      // BorderColor = Color.Transparent;
     }
   }
 }

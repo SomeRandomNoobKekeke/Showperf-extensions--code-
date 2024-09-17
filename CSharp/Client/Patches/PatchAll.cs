@@ -12,7 +12,7 @@ namespace ShowPerfExtensions
   {
     public void PatchAll()
     {
-      //PatchCapture();
+      PatchCapture();
       PatchTechnical();
     }
 

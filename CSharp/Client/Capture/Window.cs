@@ -127,13 +127,17 @@ namespace ShowPerfExtensions
 
       public void Update()
       {
-        if (Frozen || GameMain.Instance.Paused) return;
-
-        while (ShouldUpdate)
+        try
         {
-          Rotate();
-          LastUpdateTime += FrameDuration;
+          if (Frozen || GameMain.Instance.Paused) return;
+
+          while (ShouldUpdate)
+          {
+            Rotate();
+            LastUpdateTime += FrameDuration;
+          }
         }
+        catch (Exception e) { err(e); }
       }
 
       public void Reset()
