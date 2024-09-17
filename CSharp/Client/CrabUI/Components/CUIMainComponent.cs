@@ -14,32 +14,27 @@ namespace CrabUI
 {
   public partial class CUIMainComponent : CUIComponent
   {
-    public Stopwatch sw;
-    public static CUIMainComponent main;
-    public Harmony harmony;
     public long DrawTime;
     public long UpdateTime;
-
-    public event Action OnStep;
-    public List<CUIComponent> Flat = new List<CUIComponent>();
-
-    public CUIMouse Mouse = new CUIMouse();
-
-    public CUIComponent MouseOn;
-    public List<CUIComponent> MouseOnList = new List<CUIComponent>();
-    public CUIComponent Grabbed;
-    public Vector2 GrabbedOffset;
-
-    public CUIComponent ResizingComponent;
-
-    public double LastUpdateTiming;
     public double UpdateInterval = 1.0 / 300.0;
+    public event Action OnStep;
 
+    private Stopwatch sw;
+    private static CUIMainComponent main;
+    private Harmony harmony;
+    private List<CUIComponent> Flat = new List<CUIComponent>();
+    private CUIMouse Mouse = new CUIMouse();
+    private CUIComponent MouseOn;
+    private List<CUIComponent> MouseOnList = new List<CUIComponent>();
+    private CUIComponent Grabbed;
+    private Vector2 GrabbedOffset;
+    private CUIComponent ResizingComponent;
+    private double LastUpdateTiming;
 
-    public void RunStraigth(Action<CUIComponent> a) { for (int i = 0; i < Flat.Count; i++) a(Flat[i]); }
-    public void RunReverse(Action<CUIComponent> a) { for (int i = Flat.Count - 1; i >= 0; i--) a(Flat[i]); }
+    private void RunStraigth(Action<CUIComponent> a) { for (int i = 0; i < Flat.Count; i++) a(Flat[i]); }
+    private void RunReverse(Action<CUIComponent> a) { for (int i = Flat.Count - 1; i >= 0; i--) a(Flat[i]); }
 
-    public void FlattenTree()
+    private void FlattenTree()
     {
       Flat.Clear();
       RunRecursiveOn(this, c => Flat.Add(c));
@@ -72,7 +67,9 @@ namespace CrabUI
           if (!Mouse.Held) ResizingComponent = null;
         }
 
+        //RunStraigth(c => c.UpdateStateBeforeLayout());
         RunStraigth(c => c.Layout.Update());
+        //RunStraigth(c => c.UpdateStateAfterLayout());
 
         HandleMouse();
 
@@ -91,7 +88,7 @@ namespace CrabUI
       DrawTime = sw.ElapsedTicks;
     }
 
-    public void HandleMouse()
+    private void HandleMouse()
     {
       void CheckIfContainsMouse(CUIComponent c)
       {
@@ -227,10 +224,38 @@ namespace CrabUI
       }
     }
 
-    public void Load(CUIComponent c)
+    private void patchAll()
+    {
+      harmony.Patch(
+        original: typeof(GUI).GetMethod("Draw", AccessTools.all),
+        prefix: new HarmonyMethod(typeof(CUIMainComponent).GetMethod("CUIStep", AccessTools.all))
+      );
+
+      harmony.Patch(
+        original: typeof(Camera).GetMethod("MoveCamera", AccessTools.all),
+        prefix: new HarmonyMethod(typeof(CUIMainComponent).GetMethod("CUIBlockScroll", AccessTools.all))
+      );
+    }
+
+    private static void CUIStep(SpriteBatch spriteBatch)
+    {
+      try
+      {
+        main.Step(spriteBatch);
+        //‖color:Yellow‖CUI:‖end‖
+      }
+      catch (Exception e) { log($"CUI: {e}", Color.Yellow); }
+    }
+
+    private static void CUIBlockScroll(float deltaTime, ref bool allowMove, ref bool allowZoom, bool allowInput, bool? followSub)
+    {
+      if (GUI.MouseOn == dummyComponent) allowZoom = false;
+    }
+
+    public void Load(Action<CUIMainComponent> initFunc)
     {
       RemoveAllChildren();
-      Append(c);
+      initFunc(this);
     }
 
     public CUIMainComponent() : base()
@@ -248,34 +273,5 @@ namespace CrabUI
         patchAll();
       }
     }
-
-    public void patchAll()
-    {
-      harmony.Patch(
-        original: typeof(GUI).GetMethod("Draw", AccessTools.all),
-        prefix: new HarmonyMethod(typeof(CUIMainComponent).GetMethod("CUIStep"))
-      );
-
-      harmony.Patch(
-        original: typeof(Camera).GetMethod("MoveCamera", AccessTools.all),
-        prefix: new HarmonyMethod(typeof(CUIMainComponent).GetMethod("CUIBlockScroll"))
-      );
-    }
-
-    public static void CUIStep(SpriteBatch spriteBatch)
-    {
-      try
-      {
-        main.Step(spriteBatch);
-        //‖color:Yellow‖CUI:‖end‖
-      }
-      catch (Exception e) { log($"CUI: {e}", Color.Yellow); }
-    }
-
-    public static void CUIBlockScroll(float deltaTime, ref bool allowMove, ref bool allowZoom, bool allowInput, bool? followSub)
-    {
-      if (GUI.MouseOn == dummyComponent) allowZoom = false;
-    }
-
   }
 }

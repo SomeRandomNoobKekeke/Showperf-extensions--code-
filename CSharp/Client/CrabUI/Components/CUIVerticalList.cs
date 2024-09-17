@@ -11,52 +11,41 @@ namespace CrabUI
 {
   public class CUIVerticalList : CUIComponent
   {
-    public CUIComponent Content;
+    public bool Scrollable { get; set; } = true;
 
-    public float scroll; public float Scroll
+    private CUILayoutVerticalList listLayout;
+
+    private float scroll; public float Scroll
     {
       get => scroll;
       set
       {
-        scroll = Math.Min(0, Math.Max(value, Real.Height - Content.Real.Height));
-        Content.Absolute.Top = scroll;
+        scroll = value;
+        ValidateScroll();
       }
     }
 
-
-
-    public void ValidateScroll()
+    private void ValidateScroll()
     {
-      scroll = Math.Min(0, Math.Max(scroll, Real.Height - Content.Real.Height));
-      Content.Absolute.Top = scroll;
+      scroll = Math.Min(0, Math.Max(scroll, Real.Height - listLayout.TotalHeight));
+      ChildrenOffset = new Vector2(0, scroll);
     }
 
-    public override void UpdateOwnLayout()
+    internal override void ChildrenSizeCalculated()
     {
       ValidateScroll();
-      base.UpdateOwnLayout();
     }
-
-    public override CUIComponent Append(CUIComponent c) => Content.Append(c);
-    public override void RemoveChild(CUIComponent c) => Content.RemoveChild(c);
-    public override void RemoveAllChildren() => Content.RemoveAllChildren();
 
     public CUIVerticalList(float x, float y, float w, float h) : base(x, y, w, h)
     {
       HideChildrenOutsideFrame = true;
 
-      Content = new CUIComponent();
-      Content.Relative.Width = 1f;
-      Content.Absolute.Top = 0;
-
-      Content.Layout = new CUILayoutList(Content, vertical: true);
-      append(Content);
+      listLayout = new CUILayoutVerticalList(this);
+      Layout = listLayout;
 
       OnScroll += (float s) => Scroll += s;
 
-      Content.BackgroundColor = Color.Transparent;
       BackgroundColor = Color.Transparent;
-      //Content.Debug = true;
     }
   }
 }

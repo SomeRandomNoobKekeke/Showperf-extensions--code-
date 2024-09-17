@@ -12,14 +12,14 @@ namespace CrabUI
   public class CUIFrame : CUIComponent
   {
 
-    public override void Draw(SpriteBatch spriteBatch)
+    protected override void Draw(SpriteBatch spriteBatch)
     {
       GUI.DrawRectangle(spriteBatch, Real.Position, Real.Size, BackgroundColor, isFilled: true);
     }
 
-    public override void DrawFront(SpriteBatch spriteBatch)
+    protected override void DrawFront(SpriteBatch spriteBatch)
     {
-      GUI.DrawRectangle(spriteBatch, Real.Position, Real.Size, BorderColor);
+      GUI.DrawRectangle(spriteBatch, BorderBox.Position, BorderBox.Size, BorderColor, thickness: BorderThickness);
 
       if (Resizible)
       {
@@ -32,7 +32,6 @@ namespace CrabUI
       HideChildrenOutsideFrame = true;
       Resizible = true;
       Dragable = true;
-      DrawOnTop = true;
     }
   }
 }

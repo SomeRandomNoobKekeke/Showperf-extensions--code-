@@ -14,7 +14,7 @@ namespace CrabUI
 {
   public static class CUITest
   {
-    public static CUIComponent ClickSounds()
+    public static void ClickSounds(CUIMainComponent CUI)
     {
       CUIComponent f = new CUIFrame(0.6f, 0.2f, 0.2f, 0.6f);
       CUIComponent l = f.Append(new CUIVerticalList(0f, 0f, 1f, 1f));
@@ -29,10 +29,10 @@ namespace CrabUI
         b.Relative.Height = 0.1f;
       }
 
-      return f;
+      CUI.Append(f);
     }
 
-    public static CUIComponent FrameInFrame()
+    public static void FrameInFrame(CUIMainComponent CUI)
     {
       CUIFrame outer = new CUIFrame(0.2f, 0.2f, 0.6f, 0.6f);
       CUIFrame inner = new CUIFrame(0.2f, 0.2f, 0.6f, 0.6f);
@@ -41,7 +41,41 @@ namespace CrabUI
       inner.BackgroundColor = Color.Yellow * 0.5f;
       inner.AbsoluteMin.Left = 100f;
 
-      return outer;
+      CUI.Append(outer);
+    }
+
+    public static void FillEmptySpace(CUIMainComponent CUI)
+    {
+      CUIComponent f = new CUIFrame(0.6f, 0.2f, 0.2f, 0.6f);
+
+      CUIComponent l = f.Append(new CUIVerticalList(0f, 0f, 1f, 0.9f));
+      l.BackgroundColor = Color.Blue * 0.25f;
+
+
+      l.Append(new CUIButton($"bebebe"));
+      l.Append(new CUIButton($"bebebe"));
+      l.Append(new CUIButton($"bebebe"));
+      l.Append(new CUIButton($"bebebe"));
+      l.Append(new CUIButton($"bebebe")).Relative.Height = 0.1f;
+
+
+      l.Append(new CUITextBlock("be be be be be be be be be be be be be be be be be be")
+      {
+        TextScale = 1.5f,
+        TextAling = CUITextAling.Center,
+        BackgroundColor = Color.Red * 0.25f,
+        FillEmptySpace = true
+      });
+
+      l.Append(new CUITextBlock("be be be be be be be be be be be be be be be be be be")
+      {
+        TextScale = 1.5f,
+        TextAling = CUITextAling.Center,
+        BackgroundColor = Color.Red * 0.25f,
+        FillEmptySpace = true
+      });
+
+      CUI.Append(f);
     }
   }
 }

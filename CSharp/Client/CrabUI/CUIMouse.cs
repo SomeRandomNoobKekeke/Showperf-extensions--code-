@@ -17,18 +17,17 @@ namespace CrabUI
     public static double DoubleClickInterval = 0.18;
     public static float ScrollSpeed = 7.5f;
 
-    public double PrevMouseDownTiming;
-    public int PrevScrollWheelValue;
+    private double PrevMouseDownTiming;
+    private int PrevScrollWheelValue;
 
-    MouseState CurrentState;
-    MouseState PrevState;
+    public MouseState CurrentState;
+    private MouseState PrevState;
 
     public bool Down;
     public bool DoubleClick;
     public bool Up;
     public bool Held;
     public float Scroll;
-
     public Vector2 Position;
 
     public void Scan()

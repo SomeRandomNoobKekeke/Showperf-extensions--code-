@@ -12,24 +12,25 @@ namespace CrabUI
 {
   public class CUILayout
   {
-    public CUIComponent Host;
+    protected CUIComponent Host;
 
     // TODO rethink
-    public void PropagateUp()
-    {
-      changed = true;
-      if (Host.Parent != null) Host.Parent.Layout.PropagateUp();
-    }
+    // public void PropagateUp()
+    // {
+    //   changed = true;
+    //   if (Host.Parent != null) Host.Parent.Layout.PropagateUp();
+    // }
 
-    public void PropagateDown()
+    private void PropagateDown()
     {
       changed = true;
+      Host.DecorChanged = true;
       foreach (CUIComponent child in Host.Children)
       {
         child.Layout.PropagateDown();
       }
     }
-    public bool changed = true; public bool Changed
+    private bool changed = true; public bool Changed
     {
       get => changed;
       set
@@ -37,24 +38,18 @@ namespace CrabUI
         changed = value;
         if (changed)
         {
-          OwnLayoutChanged = true;
-          if (Host.Parent != null) Host.Parent.Layout.PropagateUp();
+          Host.DecorChanged = true;
+          if (Host.Parent != null) Host.Parent.Layout.changed = true;
           foreach (CUIComponent child in Host.Children) child.Layout.PropagateDown();
         }
       }
     }
 
-    public bool OwnLayoutChanged { get; set; }
-
-    public virtual void Update()
+    internal virtual void Update()
     {
+      if (Host.DecorChanged) Host.UpdatePseudoChildren();
       if (!Changed) return;
       Changed = false;
-      if (OwnLayoutChanged)
-      {
-        Host.UpdateOwnLayout();
-        OwnLayoutChanged = false;
-      }
     }
 
     public CUILayout(CUIComponent host)

@@ -11,67 +11,45 @@ namespace CrabUI
 {
   public class CUITextBlock : CUIComponent
   {
-    public string text = ""; public string Text
+    public string Text { get; set; } = "";
+    public bool Wrap { get; set; } = true;
+
+    private string WrappedText { get; set; } = "";
+
+    internal override Vector2 AmIOkWithThisSize(Vector2 size)
     {
-      get => text;
-      set
-      {
-        text = value;
-        WrapText();
-      }
-    }
+      if (Wrap) WrappedText = Font.WrapText(Text, size.X / TextScale - Padding.X * 2);
+      else WrappedText = Text;
 
-    //TODO rethink
-    public bool TextWrapped = false;
+      RealTextSize = Font.MeasureString(WrappedText) * TextScale + Padding * 2;
 
-    public void WrapText()
-    {
-      float? width = null;
-      if (AbsoluteMax.Width.HasValue) width = AbsoluteMax.Width;
-      if (Absolute.Width.HasValue) width = Absolute.Width;
-
-      if (width.HasValue)
-      {
-        WrappedText = Font.WrapText(Text, width.Value);
-      }
-      else
-      {
-        WrappedText = Text;
-      }
-    }
-
-    public string wrappedText = ""; public string WrappedText
-    {
-      get => wrappedText;
-      set
-      {
-        wrappedText = value;
-        TextRealSize = Font.MeasureString(wrappedText) * TextScale + Padding * 2;
-        AbsoluteMin.Size = TextRealSize;
-      }
+      return new Vector2(size.X, Math.Max(size.Y, RealTextSize.Y));
     }
 
     public CUITextAling TextAling = CUITextAling.Start;
     public Color TextColor { get; set; } = Color.White;
     public GUIFont Font { get; set; } = GUIStyle.SmallFont;
-    public Vector2 TextRealSize;
-    public Vector2 TextDrawPos;
-    public float TextScale { get; set; } = 1f;
-
-    public override void UpdateOwnLayout()
+    private float textScale = 1f; public float TextScale
     {
-      // if (!TextWrapped) WrapText();
+      get => textScale;
+      set { textScale = value; DecorChanged = true; }
+    }
+    private Vector2 RealTextSize;
+    private Vector2 TextDrawPos;
 
+
+    internal override void UpdatePseudoChildren()
+    {
       if (TextAling == CUITextAling.Start) TextDrawPos = Real.Position + Padding;
-      if (TextAling == CUITextAling.Center) TextDrawPos = Real.Position + (Real.Size - TextRealSize) / 2.0f;
-      if (TextAling == CUITextAling.End) TextDrawPos = Real.Position - Padding + (Real.Size - TextRealSize);
+      if (TextAling == CUITextAling.Center) TextDrawPos = Real.Position + (Real.Size - RealTextSize) / 2.0f;
+      if (TextAling == CUITextAling.End) TextDrawPos = Real.Position - Padding + (Real.Size - RealTextSize);
     }
 
-    public override void Draw(SpriteBatch spriteBatch)
+    protected override void Draw(SpriteBatch spriteBatch)
     {
       base.Draw(spriteBatch);
 
-      Font.DrawString(spriteBatch, Text, TextDrawPos, TextColor, rotation: 0, origin: new Vector2(0, 0), TextScale, spriteEffects: SpriteEffects.None, layerDepth: 0.1f);
+      Font.DrawString(spriteBatch, WrappedText, TextDrawPos, TextColor, rotation: 0, origin: new Vector2(0, 0), TextScale, spriteEffects: SpriteEffects.None, layerDepth: 0.1f);
     }
 
     public CUITextBlock(string text = "")

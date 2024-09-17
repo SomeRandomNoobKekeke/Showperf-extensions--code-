@@ -22,27 +22,27 @@ namespace CrabUI
 
     public List<CUIComponent> Children = new List<CUIComponent>();
 
-    public CUIComponent? parent; public CUIComponent? Parent
+    private CUIComponent? parent; public CUIComponent? Parent
     {
       get => parent;
       set { parent = value; TreeChanged = true; Layout.Changed = true; }
     }
 
-    public bool treeChanged = true; public bool TreeChanged
+    private bool treeChanged = true; public bool TreeChanged
     {
       get => treeChanged;
       set { treeChanged = value; if (value && Parent != null) Parent.TreeChanged = true; }
     }
 
 
-    public CUIComponent append(CUIComponent c)
+    protected CUIComponent append(CUIComponent c)
     {
       c.Parent = this;
       Children.Add(c);
       return c;
     }
     public virtual CUIComponent Append(CUIComponent c) => append(c);
-    public void removeChild(CUIComponent c)
+    protected void removeChild(CUIComponent c)
     {
       if (!Children.Contains(c)) return;
       c.Parent = null;
@@ -51,7 +51,7 @@ namespace CrabUI
     }
     public virtual void RemoveChild(CUIComponent c) => removeChild(c);
 
-    public void removeAllChildren()
+    protected void removeAllChildren()
     {
       foreach (CUIComponent c in Children)
       {
@@ -66,18 +66,37 @@ namespace CrabUI
 
     public virtual CUILayout Layout { get; set; }
 
-    public void OnPropChanged()
+
+
+    internal virtual void UpdatePseudoChildren()
+    {
+      //TODO unhardcode
+      ResizeHandle = new CUIRect(Real.Right - 9, Real.Bottom - 9, 9, 9);
+    }
+    // protected virtual void UpdateStateBeforeLayout() { }
+    // protected virtual void UpdateStateAfterLayout() { }
+
+    internal virtual Vector2 AmIOkWithThisSize(Vector2 size) => size;
+    internal virtual void ChildrenSizeCalculated() { }
+
+
+    internal void OnPropChanged()
     {
       Layout.Changed = true;
     }
 
-    public virtual void UpdateOwnLayout()
+    private Vector2 childrenOffset; public Vector2 ChildrenOffset
     {
-      //TODO unhardcode
-      ResizeHandle = new CUIRect(Real.Right - 9, Real.Bottom - 9, 8, 8);
+      get => childrenOffset;
+      set
+      {
+        childrenOffset = value;
+        foreach (CUIComponent child in Children)
+        {
+          child.Layout.Changed = true;
+        }
+      }
     }
-
-
     public CUINullRect Relative;
     public CUINullRect Absolute;
     public CUINullRect AbsoluteMin;
@@ -85,7 +104,27 @@ namespace CrabUI
     public CUINullRect RelativeMin;
     public CUINullRect RelativeMax;
 
-    public CUIRect Real;
+    private bool fillEmptySpace; public bool FillEmptySpace
+    {
+      get => fillEmptySpace;
+      set { fillEmptySpace = value; OnPropChanged(); }
+    }
+
+    private CUIRect real; public virtual CUIRect Real
+    {
+      get => real;
+      set
+      {
+        real = value;
+        BorderBox = new CUIRect(
+          real.Left - BorderThickness,
+          real.Top - BorderThickness,
+          real.Width + BorderThickness * 2,
+          real.Height + BorderThickness * 2
+        );
+      }
+    }
+    protected CUIRect BorderBox;
 
 
     public bool MouseOver { get; set; }
@@ -95,19 +134,19 @@ namespace CrabUI
     public bool PassMouseScroll { get; set; } = true;
 
     // Without wrappers they will throw FieldAccessException
-    public event Action<CUIMouse> OnMouseLeave; public void InvokeOnMouseLeave(CUIMouse m) => OnMouseLeave?.Invoke(m);
-    public event Action<CUIMouse> OnMouseEnter; public void InvokeOnMouseEnter(CUIMouse m) => OnMouseEnter?.Invoke(m);
-    public event Action<CUIMouse> OnMouseDown; public void InvokeOnMouseDown(CUIMouse m) => OnMouseDown?.Invoke(m);
-    public event Action<CUIMouse> OnMouseUp; public void InvokeOnMouseUp(CUIMouse m) => OnMouseUp?.Invoke(m);
-    public event Action<CUIMouse> OnDClick; public void InvokeOnDClick(CUIMouse m) => OnDClick?.Invoke(m);
-    public event Action<float> OnScroll; public void InvokeOnScroll(float scroll) => OnScroll?.Invoke(scroll);
-    public event Action<float, float> OnDrag; public void InvokeOnDrag(float x, float y) => OnDrag?.Invoke(x, y);
+    public event Action<CUIMouse> OnMouseLeave; protected void InvokeOnMouseLeave(CUIMouse m) => OnMouseLeave?.Invoke(m);
+    public event Action<CUIMouse> OnMouseEnter; protected void InvokeOnMouseEnter(CUIMouse m) => OnMouseEnter?.Invoke(m);
+    public event Action<CUIMouse> OnMouseDown; protected void InvokeOnMouseDown(CUIMouse m) => OnMouseDown?.Invoke(m);
+    public event Action<CUIMouse> OnMouseUp; protected void InvokeOnMouseUp(CUIMouse m) => OnMouseUp?.Invoke(m);
+    public event Action<CUIMouse> OnDClick; protected void InvokeOnDClick(CUIMouse m) => OnDClick?.Invoke(m);
+    public event Action<float> OnScroll; protected void InvokeOnScroll(float scroll) => OnScroll?.Invoke(scroll);
+    public event Action<float, float> OnDrag; protected void InvokeOnDrag(float x, float y) => OnDrag?.Invoke(x, y);
 
     public bool Dragable { get; set; }
 
-    public CUIRect DragZone => Parent.Real;
+    private CUIRect DragZone => Parent.Real;
 
-    public void TryDragTo(Vector2 to)
+    protected void TryDragTo(Vector2 to)
     {
       if (Parent == null) return;
 
@@ -127,33 +166,32 @@ namespace CrabUI
     }
 
     public bool Resizible { get; set; }
-    public CUIRect ResizeHandle { get; set; }
+    protected CUIRect ResizeHandle { get; set; }
 
-    public void TryToResize(Vector2 newSize)
+    protected void TryToResize(Vector2 newSize)
     {
-      Absolute.Width = Math.Max(ResizeHandle.Width + 2, newSize.X);
-      Absolute.Height = Math.Max(ResizeHandle.Height + 2, newSize.Y);
+      Absolute.Width = Math.Max(ResizeHandle.Width, newSize.X);
+      Absolute.Height = Math.Max(ResizeHandle.Height, newSize.Y);
     }
 
+
+    internal bool DecorChanged { get; set; }
     public Color BackgroundColor = Color.Black * 0.5f;
     public Color BorderColor = Color.White * 0.5f;
     public float BorderThickness = 1f;
-    public Vector2 padding = new Vector2(2, 2); public Vector2 Padding
+    private Vector2 padding = new Vector2(2, 2); public Vector2 Padding
     {
       get => padding;
-      set { padding = value; OnPropChanged(); }
+      set { padding = value; DecorChanged = true; }
     }
 
 
     public bool Visible { get; set; } = true;
     public bool HideChildrenOutsideFrame { get; set; } = false;
-    public bool DrawOnTop { get; set; }
-    public virtual void Draw(SpriteBatch spriteBatch)
+    protected virtual void Draw(SpriteBatch spriteBatch)
     {
-      //if (!Visible) return;
-
       GUI.DrawRectangle(spriteBatch, Real.Position, Real.Size, BackgroundColor, isFilled: true);
-      GUI.DrawRectangle(spriteBatch, Real.Position, Real.Size, BorderColor);
+      GUI.DrawRectangle(spriteBatch, BorderBox.Position, BorderBox.Size, BorderColor, thickness: BorderThickness);
 
       if (Resizible)
       {
@@ -161,16 +199,15 @@ namespace CrabUI
       }
     }
 
-    public virtual void DrawFront(SpriteBatch spriteBatch) { }
+    protected virtual void DrawFront(SpriteBatch spriteBatch) { }
 
-    public void DrawFrontRecursive(SpriteBatch spriteBatch)
+    protected void DrawFrontRecursive(SpriteBatch spriteBatch)
     {
       if (Visible) DrawFront(spriteBatch);
       Children.ForEach(c => c.DrawFrontRecursive(spriteBatch));
     }
 
-
-    public void DrawRecursive(SpriteBatch spriteBatch)
+    protected void DrawRecursive(SpriteBatch spriteBatch)
     {
       if (Debug) log(this);
 
@@ -221,7 +258,7 @@ namespace CrabUI
       Relative = new CUINullRect(x, y, w, h);
     }
 
-    public static void RunRecursiveOn(CUIComponent component, Action<CUIComponent> action, int depth = 0)
+    protected static void RunRecursiveOn(CUIComponent component, Action<CUIComponent> action, int depth = 0)
     {
       action(component);
       foreach (CUIComponent child in component.Children)

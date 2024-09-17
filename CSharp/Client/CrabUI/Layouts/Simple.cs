@@ -12,13 +12,9 @@ namespace CrabUI
 {
   public class CUILayoutSimple : CUILayout
   {
-    public override void Update()
+    internal override void Update()
     {
-      if (OwnLayoutChanged)
-      {
-        Host.UpdateOwnLayout();
-        OwnLayoutChanged = false;
-      }
+      if (Host.DecorChanged) Host.UpdatePseudoChildren();
 
       if (!Changed) return;
 

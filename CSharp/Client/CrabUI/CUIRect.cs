@@ -48,39 +48,39 @@ namespace CrabUI
   }
   public class CUINullRect
   {
-    public float? left; public float? Left
+    private CUIComponent Host { get; set; }
+
+    private float? left; public float? Left
     {
       get => left;
       set { left = value; Host?.OnPropChanged(); }
     }
-    public float? top; public float? Top
+    private float? top; public float? Top
     {
       get => top;
       set { top = value; Host?.OnPropChanged(); }
     }
 
-    public float? width; public float? Width
+    private float? width; public float? Width
     {
       get => width;
       set { width = value.HasValue ? Math.Max(0f, value.Value) : value; Host?.OnPropChanged(); }
     }
-    public float? height; public float? Height
+    private float? height; public float? Height
     {
       get => height;
       set { height = value.HasValue ? Math.Max(0f, value.Value) : value; Host?.OnPropChanged(); }
     }
 
-    public CUIComponent Host { get; set; }
-
     public Vector2 Size
     {
       get => new Vector2(Width ?? 0, Height ?? 0);
-      set { Width = value.X; Height = value.Y; Host?.OnPropChanged(); }
+      set { width = value.X; height = value.Y; Host?.OnPropChanged(); }
     }
     public Vector2 Position
     {
       get => new Vector2(Left ?? 0, Top ?? 0);
-      set { Left = value.X; Top = value.Y; Host?.OnPropChanged(); }
+      set { left = value.X; top = value.Y; Host?.OnPropChanged(); }
     }
 
     public CUINullRect(CUIComponent host = null)
