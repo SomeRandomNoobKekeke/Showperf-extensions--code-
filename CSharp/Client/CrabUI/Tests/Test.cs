@@ -45,7 +45,7 @@ namespace CrabUI
     }
 
 
-    //FIXME 
+    //FIXME for some reason text position is wrong
     public static void ButtonsOnSimpleLayout(CUIMainComponent CUI)
     {
       CUIComponent f = new CUIFrame(0.6f, 0.2f, 0.2f, 0.6f);

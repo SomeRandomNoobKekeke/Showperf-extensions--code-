@@ -185,12 +185,14 @@ namespace CrabUI
 
     public bool Dragable { get; set; }
 
-    // probably should be a NullRect
-    protected virtual CUIRect DragZone => Parent.Real;
+    //TODO probably should be a NullRect
+    protected virtual CUIRect DragZone => new CUIRect(Vector2.Zero, Parent.Real.Size);
 
+
+    //TODO this probably should be in layout
     protected void TryDragTo(Vector2 to)
     {
-      if (Parent == null) return;
+      //if (Parent == null) return;
 
       float newX = to.X;
       float newY = to.Y;

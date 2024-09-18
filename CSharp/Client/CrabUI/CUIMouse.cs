@@ -22,6 +22,7 @@ namespace CrabUI
 
     public MouseState CurrentState;
     private MouseState PrevState;
+    private Vector2 PrevPosition;
 
     public bool Down;
     public bool DoubleClick;
@@ -29,6 +30,8 @@ namespace CrabUI
     public bool Held;
     public float Scroll;
     public Vector2 Position;
+    public Vector2 PositionDif;
+    public bool Moved;
 
     public void Scan()
     {
@@ -37,7 +40,11 @@ namespace CrabUI
       Down = PrevState.LeftButton == ButtonState.Released && CurrentState.LeftButton == ButtonState.Pressed;
       Up = PrevState.LeftButton == ButtonState.Pressed && CurrentState.LeftButton == ButtonState.Released;
       Held = CurrentState.LeftButton == ButtonState.Pressed;
+
+      PrevPosition = Position;
       Position = new Vector2(CurrentState.Position.X, CurrentState.Position.Y);
+      PositionDif = Position - PrevPosition;
+      Moved = PositionDif != Vector2.Zero;
 
       Scroll = (CurrentState.ScrollWheelValue - PrevScrollWheelValue) / ScrollSpeed;
       PrevScrollWheelValue = CurrentState.ScrollWheelValue;

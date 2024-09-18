@@ -55,13 +55,14 @@ namespace CrabUI
           TreeChanged = false;
         }
 
-        if (Grabbed != null)
+        //TODO why am i sure that grabbed have parent?
+        if (Grabbed != null && Mouse.Moved)
         {
           Grabbed.TryDragTo(Mouse.Position - Grabbed.Parent.Real.Position - GrabbedOffset);
           if (!Mouse.Held) Grabbed = null;
         }
 
-        if (ResizingComponent != null)
+        if (ResizingComponent != null && Mouse.Moved)
         {
           ResizingComponent.TryToResize(Mouse.Position - ResizingComponent.Real.Position);
           if (!Mouse.Held) ResizingComponent = null;

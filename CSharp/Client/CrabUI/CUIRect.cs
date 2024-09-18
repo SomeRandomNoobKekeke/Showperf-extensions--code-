@@ -28,6 +28,11 @@ namespace CrabUI
 
     public Rectangle Box => new Rectangle((int)Left, (int)Top, (int)Width, (int)Height);
 
+    public CUIRect Shift(Vector2 shift)
+    {
+      return new CUIRect(Left + shift.X, Top + shift.Y, Width, Height);
+    }
+
     public bool Contains(float x, float y)
     {
       return Left < x && x < Right && Top < y && y < Bottom;
@@ -38,6 +43,7 @@ namespace CrabUI
       return Left < pos.X && pos.X < Right && Top < pos.Y && pos.Y < Bottom;
     }
 
+    public CUIRect(Vector2 position, Vector2 size) : this(position.X, position.Y, size.X, size.Y) { }
     public CUIRect(float x, float y, float w, float h)
     {
       Left = x;
@@ -45,6 +51,8 @@ namespace CrabUI
       Width = Math.Max(0f, w);
       Height = Math.Max(0f, h);
     }
+
+
 
     public override string ToString() => $"[{Left}, {Top}, {Width}, {Height}]";
   }

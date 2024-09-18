@@ -31,7 +31,7 @@ namespace ShowPerfExtensions
         Absolute.Height = View.Values.Count * StringHeight;
       }
 
-      protected override CUIRect DragZone => new CUIRect(Parent.Real.Left, -1000000, Parent.Real.Width, 2000000);
+      protected override CUIRect DragZone => new CUIRect(0, -1000000, Parent.Real.Width, 2000000);
 
       protected override void Draw(SpriteBatch spriteBatch)
       {
@@ -65,8 +65,8 @@ namespace ShowPerfExtensions
         BackgroundColor = Color.Transparent;
         BorderColor = Color.Transparent;
 
-        // Dragable = true;
-        // OnDrag += (x, y) => View.Scroll = y;
+        Dragable = true;
+        OnDrag += (x, y) => View.Scroll = y;
       }
     }
   }

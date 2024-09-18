@@ -70,6 +70,7 @@ namespace ShowPerfExtensions
         //Append(View);
 
         Menu = new CUIScheme(0, 0, 1, 1);
+        Menu.BackgroundColor = Color.Yellow * 0.5f;
         CUIButton b1 = (CUIButton)Menu.Append(new CUIButton("kokoko"));
         CUIButton b2 = (CUIButton)Menu.Append(new CUIButton("kokoko"));
         CUIButton b3 = (CUIButton)Menu.Append(new CUIButton("kokoko"));
@@ -77,6 +78,8 @@ namespace ShowPerfExtensions
         b1.Absolute.Position = new Vector2(0, 0);
         b2.Absolute.Position = new Vector2(200, 100);
         b3.Absolute.Position = new Vector2(0, 200);
+
+        b2.Dragable = true;
 
         Menu.Connect(b1, b2);
 
