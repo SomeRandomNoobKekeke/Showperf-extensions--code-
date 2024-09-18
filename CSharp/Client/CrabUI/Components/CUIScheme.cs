@@ -11,7 +11,17 @@ namespace CrabUI
 {
   public class CUIScheme : CUIComponent
   {
+    public class CUISchemeLink
+    {
+      public CUIComponent Start;
+      public CUIComponent End;
 
+      public CUISchemeLink(CUIComponent start, CUIComponent end)
+      {
+        Start = start;
+        End = end;
+      }
+    }
 
 
 

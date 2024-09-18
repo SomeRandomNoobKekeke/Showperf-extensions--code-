@@ -48,7 +48,11 @@ namespace CrabUI
   }
   public class CUINullRect
   {
-    private CUIComponent Host { get; set; }
+    public CUIComponent host; public CUIComponent Host
+    {
+      get => host;
+      set { host = value; Host?.OnPropChanged(); }
+    }
 
     private float? left; public float? Left
     {
@@ -96,7 +100,7 @@ namespace CrabUI
       Host = host;
     }
 
-    public CUINullRect(float? x, float? y, float? w, float? h, CUIComponent host)
+    public CUINullRect(float? x, float? y, float? w, float? h, CUIComponent host = null)
     {
       Left = x;
       Top = y;

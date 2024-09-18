@@ -112,12 +112,43 @@ namespace CrabUI
         OnChildrenPropChanged();
       }
     }
-    public CUINullRect Relative;
-    public CUINullRect Absolute;
-    public CUINullRect AbsoluteMin;
-    public CUINullRect AbsoluteMax;
-    public CUINullRect RelativeMin;
-    public CUINullRect RelativeMax;
+
+    private CUINullRect absolute; public CUINullRect Absolute
+    {
+      get => absolute;
+      set { absolute = value; absolute.Host = this; }
+    }
+
+    private CUINullRect absoluteMin; public CUINullRect AbsoluteMin
+    {
+      get => absoluteMin;
+      set { absoluteMin = value; absoluteMin.Host = this; }
+    }
+
+    private CUINullRect absoluteMax; public CUINullRect AbsoluteMax
+    {
+      get => absoluteMax;
+      set { absoluteMax = value; absoluteMax.Host = this; }
+    }
+
+    private CUINullRect relative; public CUINullRect Relative
+    {
+      get => relative;
+      set { relative = value; relative.Host = this; }
+    }
+
+    private CUINullRect relativeMin; public CUINullRect RelativeMin
+    {
+      get => relativeMin;
+      set { relativeMin = value; relativeMin.Host = this; }
+    }
+
+    private CUINullRect relativeMax; public CUINullRect RelativeMax
+    {
+      get => relativeMax;
+      set { relativeMax = value; relativeMax.Host = this; }
+    }
+
 
     private bool fillEmptySpace; public bool FillEmptySpace
     {
@@ -254,13 +285,12 @@ namespace CrabUI
 
       Layout = new CUILayoutSimple(this);
 
-      Absolute = new CUINullRect(this);
-      AbsoluteMax = new CUINullRect(this);
-      AbsoluteMin = new CUINullRect(this);
-
-      Relative = new CUINullRect(this);
-      RelativeMax = new CUINullRect(this);
-      RelativeMin = new CUINullRect(this);
+      Absolute = new CUINullRect();
+      AbsoluteMin = new CUINullRect();
+      AbsoluteMax = new CUINullRect();
+      Relative = new CUINullRect();
+      RelativeMin = new CUINullRect();
+      RelativeMax = new CUINullRect();
 
       // OnMouseUp += (CUIMouse m) => Mod.log($"OnMouseUp {this}");
       // OnMouseDown += (CUIMouse m) => Mod.log($"OnMouseDown {this}");
