@@ -36,7 +36,7 @@ namespace CrabUI
 
     public CUIFrame(float? x, float? y, float? w, float? h) : this()
     {
-      Relative = new CUINullRect(x, y, w, h);
+      Relative.Set(x, y, w, h);
     }
   }
 }

@@ -96,7 +96,7 @@ namespace CrabUI
       Host = host;
     }
 
-    public CUINullRect(float? x, float? y, float? w, float? h, CUIComponent host = null)
+    public CUINullRect(float? x, float? y, float? w, float? h, CUIComponent host)
     {
       Left = x;
       Top = y;

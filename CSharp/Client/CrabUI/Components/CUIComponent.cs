@@ -270,7 +270,7 @@ namespace CrabUI
 
     public CUIComponent(float? x, float? y, float? w, float? h) : this()
     {
-      Relative = new CUINullRect(x, y, w, h);
+      Relative.Set(x, y, w, h);
     }
 
     protected static void RunRecursiveOn(CUIComponent component, Action<CUIComponent> action, int depth = 0)
