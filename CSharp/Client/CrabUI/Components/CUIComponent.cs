@@ -39,18 +39,23 @@ namespace CrabUI
     public virtual CUIComponent Append(CUIComponent c) => append(c);
     protected CUIComponent append(CUIComponent c)
     {
-      c.Parent = this;
-      Children.Add(c);
+      if (c != null)
+      {
+        c.Parent = this;
+        Children.Add(c);
+        InvokeOnChildAdded(c);
+      }
       return c;
     }
 
     public virtual void RemoveChild(CUIComponent c) => removeChild(c);
     protected void removeChild(CUIComponent c)
     {
-      if (!Children.Contains(c)) return;
+      if (c == null || !Children.Contains(c)) return;
       c.Parent = null;
       TreeChanged = true;
       Children.Remove(c);
+      InvokeOnChildRemoved(c);
     }
 
     public virtual void RemoveAllChildren() => removeAllChildren();
@@ -62,7 +67,12 @@ namespace CrabUI
       }
       Children.Clear();
       TreeChanged = true;
+      InvokeOnAllChildrenRemoved();
     }
+
+    public event Action<CUIComponent> OnChildAdded; protected void InvokeOnChildAdded(CUIComponent c) => OnChildAdded?.Invoke(c);
+    public event Action<CUIComponent> OnChildRemoved; protected void InvokeOnChildRemoved(CUIComponent c) => OnChildRemoved?.Invoke(c);
+    public event Action OnAllChildrenRemoved; protected void InvokeOnAllChildrenRemoved() => OnAllChildrenRemoved?.Invoke();
 
 
 

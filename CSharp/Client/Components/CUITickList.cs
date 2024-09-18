@@ -64,9 +64,9 @@ namespace ShowPerfExtensions
         View = view;
         BackgroundColor = Color.Transparent;
         BorderColor = Color.Transparent;
-        Dragable = true;
 
-        OnDrag += (x, y) => View.Scroll = y;
+        // Dragable = true;
+        // OnDrag += (x, y) => View.Scroll = y;
       }
     }
   }

@@ -37,7 +37,7 @@ namespace CrabUI
       ValidateScroll();
     }
 
-    public CUIVerticalList(float? x, float? y, float? w, float? h) : base(x, y, w, h)
+    public CUIVerticalList() : base()
     {
       HideChildrenOutsideFrame = true;
 
@@ -50,17 +50,9 @@ namespace CrabUI
       // BorderColor = Color.Transparent;
     }
 
-    public CUIVerticalList() : base()
+    public CUIVerticalList(float? x, float? y, float? w, float? h) : this()
     {
-      HideChildrenOutsideFrame = true;
-
-      listLayout = new CUILayoutVerticalList(this);
-      Layout = listLayout;
-
-      OnScroll += (float s) => Scroll += s;
-
-      BackgroundColor = Color.Transparent;
-      // BorderColor = Color.Transparent;
+      Relative = new CUINullRect(x, y, w, h);
     }
   }
 }

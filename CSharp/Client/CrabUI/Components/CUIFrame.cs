@@ -27,11 +27,16 @@ namespace CrabUI
       }
     }
 
-    public CUIFrame(float? x, float? y, float? w, float? h) : base(x, y, w, h)
+    public CUIFrame() : base()
     {
       HideChildrenOutsideFrame = true;
       Resizible = true;
       Dragable = true;
+    }
+
+    public CUIFrame(float? x, float? y, float? w, float? h) : this()
+    {
+      Relative = new CUINullRect(x, y, w, h);
     }
   }
 }

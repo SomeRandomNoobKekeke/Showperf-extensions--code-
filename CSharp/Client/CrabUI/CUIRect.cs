@@ -83,6 +83,14 @@ namespace CrabUI
       set { left = value.X; top = value.Y; Host?.OnPropChanged(); }
     }
 
+    public void Set(float? x, float? y, float? w, float? h)
+    {
+      Left = x;
+      Top = y;
+      Width = w;
+      Height = h;
+    }
+
     public CUINullRect(CUIComponent host = null)
     {
       Host = host;

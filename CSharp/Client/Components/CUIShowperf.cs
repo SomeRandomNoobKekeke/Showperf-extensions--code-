@@ -21,8 +21,9 @@ namespace ShowPerfExtensions
       {
         // SubmarineType.Player,
       };
-
+      CUIPages Pages;
       public CUIView View;
+      public CUIComponent Menu;
 
 
       public bool ShouldCapture(Entity e)
@@ -50,15 +51,32 @@ namespace ShowPerfExtensions
         CUIButton b = new CUIButton("By ID");
         b.OnMouseDown += (CUIMouse m) =>
         {
-          Capture.ToggleByID(CName.MapEntityDrawing);
-          Window.Reset();
+          CUIComponent next = null;
+          if (Pages.IsOpened(View)) next = Menu;
+          if (Pages.IsOpened(Menu)) next = View;
+          Pages.Open(next);
+          // Capture.ToggleByID(CName.MapEntityDrawing);
+          // Window.Reset();
         };
         Append(b);
 
+        Pages = new CUIPages();
+        Pages.FillEmptySpace = true;
+        Append(Pages);
 
         View = new CUIView();
-        View.FillEmptySpace = true;
-        Append(View);
+        View.Relative.Set(0, 0, 1, 1);
+
+        //Append(View);
+
+        Menu = new CUIVerticalList(0, 0, 1, 1);
+        Menu.Append(new CUIButton("kokoko"));
+        Menu.Append(new CUIButton("kokoko"));
+        Menu.Append(new CUIButton("kokoko"));
+        Menu.Append(new CUIButton("kokoko"));
+        Menu.Append(new CUIButton("kokoko"));
+
+        Pages.Open(Menu);
 
         Capture = new CaptureManager();
         Capture.Toggle(CName.MapEntityDrawing);
