@@ -85,16 +85,21 @@ namespace CrabUI
       Layout.Changed = true;
     }
 
+    internal void OnChildrenPropChanged()
+    {
+      foreach (CUIComponent child in Children)
+      {
+        child.Layout.Changed = true;
+      }
+    }
+
     private Vector2 childrenOffset; public Vector2 ChildrenOffset
     {
       get => childrenOffset;
       set
       {
         childrenOffset = value;
-        foreach (CUIComponent child in Children)
-        {
-          child.Layout.Changed = true;
-        }
+        OnChildrenPropChanged();
       }
     }
     public CUINullRect Relative;
@@ -143,7 +148,8 @@ namespace CrabUI
 
     public bool Dragable { get; set; }
 
-    private CUIRect DragZone => Parent.Real;
+    // probably should be a NullRect
+    protected virtual CUIRect DragZone => Parent.Real;
 
     protected void TryDragTo(Vector2 to)
     {
@@ -155,8 +161,8 @@ namespace CrabUI
       if (newX + Real.Width > DragZone.Width) newX = DragZone.Width - Real.Width;
       if (newY + Real.Height > DragZone.Height) newY = DragZone.Height - Real.Height;
 
-      if (newX < 0) newX = 0;
-      if (newY < 0) newY = 0;
+      if (newX < DragZone.Left) newX = DragZone.Left;
+      if (newY < DragZone.Top) newY = DragZone.Top;
 
       Absolute.Left = newX;
       Absolute.Top = newY;
@@ -252,7 +258,7 @@ namespace CrabUI
       // OnMouseLeave += (CUIMouse m) => Mod.log($"OnMouseLeave {this}");
     }
 
-    public CUIComponent(float x, float y, float w, float h) : this()
+    public CUIComponent(float? x, float? y, float? w, float? h) : this()
     {
       Relative = new CUINullRect(x, y, w, h);
     }

@@ -4,6 +4,9 @@ using System.Collections.Generic;
 using System.Linq;
 
 using Barotrauma;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework.Graphics;
 using HarmonyLib;
 using CrabUI;
 
@@ -39,6 +42,9 @@ namespace ShowPerfExtensions
       public CUIShowperf(float x, float y, float w, float h) : base(x, y, w, h)
       {
         Layout = new CUILayoutVerticalList(this);
+
+        CUIComponent handle = Append(new CUIComponent(0, 0, 1, null));
+        handle.Absolute.Height = 15;
 
 
         CUIButton b = new CUIButton("By ID");
