@@ -23,7 +23,26 @@ namespace CrabUI
       }
     }
 
+    public List<CUISchemeLink> Connections = new List<CUISchemeLink>();
 
+    public void Connect(CUIComponent start, CUIComponent end)
+    {
+      Connections.Add(new CUISchemeLink(start, end));
+    }
+
+
+    public Color LineColor = Color.White;
+    public float LineWidth = 2f;
+
+    protected override void Draw(SpriteBatch spriteBatch)
+    {
+      base.Draw(spriteBatch);
+
+      foreach (CUISchemeLink link in Connections)
+      {
+        GUI.DrawLine(spriteBatch, link.Start.Real.Center, link.End.Real.Center, LineColor, width: LineWidth);
+      }
+    }
 
     public CUIScheme() : base()
     {

@@ -29,7 +29,7 @@ namespace CrabUI
 
       AbsoluteMin.Size = RealTextSize;
 
-      return new Vector2(size.X, Math.Max(size.Y, RealTextSize.Y));
+      return new Vector2(Math.Max(size.X, RealTextSize.X), Math.Max(size.Y, RealTextSize.Y));
     }
 
     public CUITextAling TextAling = CUITextAling.Start;

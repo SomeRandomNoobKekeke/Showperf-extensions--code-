@@ -44,6 +44,33 @@ namespace CrabUI
       CUI.Append(outer);
     }
 
+
+    //FIXME 
+    public static void ButtonsOnSimpleLayout(CUIMainComponent CUI)
+    {
+      CUIComponent f = new CUIFrame(0.6f, 0.2f, 0.2f, 0.6f);
+
+      CUIComponent b1 = f.Append(new CUIButton("bebebe"));
+      CUIComponent b2 = f.Append(new CUIButton("bebebe"));
+      CUIComponent b3 = f.Append(new CUIButton("bebebe"));
+
+      b1.Absolute.Position = new Vector2(30, 0);
+      b2.Absolute.Position = new Vector2(0, 20);
+      b3.Absolute.Position = new Vector2(30, 40);
+
+      CUIComponent t1 = f.Append(new CUITextBlock("kokoko") { BorderColor = Color.White });
+      CUIComponent t2 = f.Append(new CUITextBlock("kokoko") { BorderColor = Color.White });
+      CUIComponent t3 = f.Append(new CUITextBlock("kokoko") { BorderColor = Color.White });
+
+      t1.Absolute.Position = new Vector2(100, 0);
+      t2.Absolute.Position = new Vector2(80, 20);
+      t3.Absolute.Position = new Vector2(100, 40);
+
+      t1.Debug = true;
+
+      CUI.Append(f);
+    }
+
     public static void FillEmptySpace(CUIMainComponent CUI)
     {
       CUIComponent f = new CUIFrame(0.6f, 0.2f, 0.2f, 0.6f);

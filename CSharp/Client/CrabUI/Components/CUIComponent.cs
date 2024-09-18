@@ -74,10 +74,6 @@ namespace CrabUI
     public event Action<CUIComponent> OnChildRemoved; protected void InvokeOnChildRemoved(CUIComponent c) => OnChildRemoved?.Invoke(c);
     public event Action OnAllChildrenRemoved; protected void InvokeOnAllChildrenRemoved() => OnAllChildrenRemoved?.Invoke();
 
-
-
-
-
     internal virtual void UpdatePseudoChildren()
     {
       //TODO unhardcode
@@ -312,7 +308,7 @@ namespace CrabUI
       }
     }
 
-    public override string ToString() => $"{base.ToString()}:{ID} {Real} A:{Absolute} R:{Relative}";
+    public override string ToString() => $"{base.ToString()}:{ID} {Real} A:{Absolute} R:{Relative} AMin:{AbsoluteMin} RMin:{RelativeMin} AMax:{AbsoluteMax} RMax:{RelativeMax}";
 
     public static void log(object msg, Color? cl = null)
     {

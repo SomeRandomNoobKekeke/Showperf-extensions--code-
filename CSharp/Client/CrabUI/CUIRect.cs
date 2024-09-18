@@ -24,6 +24,8 @@ namespace CrabUI
     public Vector2 Position => new Vector2(Left, Top);
     public Vector2 RightBottom => new Vector2(Right, Bottom);
 
+    public Vector2 Center => new Vector2(Left + Width / 2, Top + Height / 2);
+
     public Rectangle Box => new Rectangle((int)Left, (int)Top, (int)Width, (int)Height);
 
     public bool Contains(float x, float y)

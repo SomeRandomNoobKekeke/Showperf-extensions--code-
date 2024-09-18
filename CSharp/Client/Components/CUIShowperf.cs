@@ -23,7 +23,7 @@ namespace ShowPerfExtensions
       };
       CUIPages Pages;
       public CUIView View;
-      public CUIComponent Menu;
+      public CUIScheme Menu;
 
 
       public bool ShouldCapture(Entity e)
@@ -48,13 +48,13 @@ namespace ShowPerfExtensions
         handle.Absolute.Height = 15;
 
 
-        CUIButton b = new CUIButton("By ID");
+        CUIButton b = new CUIButton("Click");
         b.OnMouseDown += (CUIMouse m) =>
         {
           CUIComponent next = null;
-          if (Pages.IsOpened(View)) next = Menu;
-          if (Pages.IsOpened(Menu)) next = View;
-          Pages.Open(next);
+          if (Pages.IsOpened(View)) { Pages.Open(Menu); return; }
+          if (Pages.IsOpened(Menu)) { Pages.Open(View); return; }
+
           // Capture.ToggleByID(CName.MapEntityDrawing);
           // Window.Reset();
         };
@@ -69,12 +69,17 @@ namespace ShowPerfExtensions
 
         //Append(View);
 
-        Menu = new CUIVerticalList(0, 0, 1, 1);
-        Menu.Append(new CUIButton("kokoko"));
-        Menu.Append(new CUIButton("kokoko"));
-        Menu.Append(new CUIButton("kokoko"));
-        Menu.Append(new CUIButton("kokoko"));
-        Menu.Append(new CUIButton("kokoko"));
+        Menu = new CUIScheme(0, 0, 1, 1);
+        CUIButton b1 = (CUIButton)Menu.Append(new CUIButton("kokoko"));
+        CUIButton b2 = (CUIButton)Menu.Append(new CUIButton("kokoko"));
+        CUIButton b3 = (CUIButton)Menu.Append(new CUIButton("kokoko"));
+
+        b1.Absolute.Position = new Vector2(0, 0);
+        b2.Absolute.Position = new Vector2(200, 100);
+        b3.Absolute.Position = new Vector2(0, 200);
+
+        Menu.Connect(b1, b2);
+
 
         Pages.Open(Menu);
 
