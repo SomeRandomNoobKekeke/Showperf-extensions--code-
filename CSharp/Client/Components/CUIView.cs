@@ -77,7 +77,7 @@ namespace ShowPerfExtensions
         {
           Clear();
 
-          foreach (CaptureCategory cat in Window.TotalTicks.Categories.Keys)
+          foreach (CName cat in Window.TotalTicks.Categories.Keys)
           {
             foreach (int id in Window.TotalTicks[cat].Keys)
             {

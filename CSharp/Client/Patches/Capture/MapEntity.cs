@@ -23,8 +23,8 @@ namespace ShowPerfExtensions
     /// </summary>
     public static bool MapEntity_UpdateAll_Replace(float deltaTime, Camera cam)
     {
-      if (!Showperf.Categories.MapEntitysUpdate.IsActive) return true;
-      Window.ensureCategory(CaptureCategory.ItemsUpdate);
+      if (!Showperf.Capture[CName.MapEntitysUpdate].IsActive) return true;
+      Window.ensureCategory(CName.MapEntitysUpdate);
 
 
       MapEntity.mapEntityUpdateTick++;
@@ -93,13 +93,13 @@ namespace ShowPerfExtensions
             ticks = sw2.ElapsedTicks;
             if (Showperf.ShouldCapture(item))
             {
-              if (Showperf.Categories.MapEntitysUpdate.byID)
+              if (Showperf.Capture[CName.MapEntitysUpdate].ByID)
               {
-                Window.tryAddTicks($"{item}", CaptureCategory.ItemsUpdate, ticks);
+                Window.tryAddTicks($"{item}", CName.MapEntitysUpdate, ticks);
               }
               else
               {
-                Window.tryAddTicks(item.Prefab.Identifier, CaptureCategory.ItemsUpdate, ticks);
+                Window.tryAddTicks(item.Prefab.Identifier, CName.MapEntitysUpdate, ticks);
               }
             }
           }
@@ -126,13 +126,13 @@ namespace ShowPerfExtensions
         ticks = sw2.ElapsedTicks;
         if (Showperf.ShouldCapture(item))
         {
-          if (Showperf.Categories.MapEntitysUpdate.byID)
+          if (Showperf.Capture[CName.MapEntitysUpdate].ByID)
           {
-            Window.tryAddTicks($"{item}", CaptureCategory.ItemsUpdate, ticks);
+            Window.tryAddTicks($"{item}", CName.MapEntitysUpdate, ticks);
           }
           else
           {
-            Window.tryAddTicks(item.Prefab.Identifier, CaptureCategory.ItemsUpdate, ticks);
+            Window.tryAddTicks(item.Prefab.Identifier, CName.MapEntitysUpdate, ticks);
           }
         }
       }

@@ -10,50 +10,63 @@ namespace ShowPerfExtensions
 {
   public partial class Mod : IAssemblyPlugin
   {
-    public class ShowperfCategory
+    public enum CName
+    {
+      None,
+      All,
+      MapEntitysUpdate,
+      CharactersUpdate,
+      MapEntityDrawing,
+      LevelObjectsDrawing,
+      LevelMisc,
+      ItemComponentsUpdate,
+    }
+
+
+    public class CaptureState
     {
       public bool IsActive;
-      public string description;
-      public bool byID;
+      public string Description;
+      public bool ByID;
 
-      public ShowperfCategory(string description, bool byID = true)
+      public CaptureState(string description = "", bool byID = true)
       {
-        this.description = description;
-        this.byID = byID;
+        Description = description;
+        ByID = byID;
       }
     }
 
-    public class ShowperfCategories
+    public class CaptureManager
     {
-      public ShowperfCategory MapEntitysUpdate = new ShowperfCategory("");
-      public ShowperfCategory CharactersUpdate = new ShowperfCategory("");
-      public ShowperfCategory MapEntityDrawing = new ShowperfCategory("");
-      public ShowperfCategory LevelObjectsDrawing = new ShowperfCategory("");
-      public ShowperfCategory LevelMisc = new ShowperfCategory("");
-      public ShowperfCategory ItemComponentsUpdate = new ShowperfCategory("");
-
-      public void Activate(ShowperfCategory c)
+      public Dictionary<CName, CaptureState> Capture = new Dictionary<CName, CaptureState>()
       {
-        if (!c.IsActive)
-        {
-          c.IsActive = true;
-          ActiveCount++;
-        }
+        {CName.None , new CaptureState()},
+        {CName.All , new CaptureState()},
+        {CName.MapEntitysUpdate , new CaptureState()},
+        {CName.MapEntityDrawing , new CaptureState()},
+        {CName.CharactersUpdate , new CaptureState()},
+        {CName.LevelObjectsDrawing , new CaptureState()},
+        {CName.LevelMisc ,new CaptureState()},
+        {CName.ItemComponentsUpdate , new CaptureState()},
+      };
+      public CaptureState this[CName name]
+      {
+        get => Capture[name];
+        set => Capture[name] = value;
+      }
+      public HashSet<CName> Active = new HashSet<CName>();
+
+      public void Toggle(CName name)
+      {
+        if (Capture[name].IsActive) Active.Remove(name); else Active.Add(name);
+        Capture[name].IsActive = !Capture[name].IsActive;
+      }
+      public void ToggleByID(CName name)
+      {
+        Capture[name].ByID = !Capture[name].ByID;
       }
 
-      public void Deactivate(ShowperfCategory c)
-      {
-        if (c.IsActive)
-        {
-          c.IsActive = false;
-          ActiveCount--;
-        }
-      }
-
-      public int ActiveCount = 0;
-
-
-      public ShowperfCategories() { }
+      public CaptureManager() { }
     }
   }
 }

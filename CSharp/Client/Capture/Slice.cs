@@ -16,11 +16,11 @@ namespace ShowPerfExtensions
   {
     public class Slice
     {
-      public Dictionary<CaptureCategory, Dictionary<int, UpdateTicks>> Categories;
+      public Dictionary<CName, Dictionary<int, UpdateTicks>> Categories;
 
       public Slice()
       {
-        Categories = new Dictionary<CaptureCategory, Dictionary<int, UpdateTicks>>();
+        Categories = new Dictionary<CName, Dictionary<int, UpdateTicks>>();
       }
 
       public void Clear()
@@ -28,7 +28,7 @@ namespace ShowPerfExtensions
         Categories.Clear();
       }
 
-      public Dictionary<int, UpdateTicks> this[CaptureCategory cat]
+      public Dictionary<int, UpdateTicks> this[CName cat]
       {
         get => Categories[cat];
         set => Categories[cat] = value;
@@ -36,7 +36,7 @@ namespace ShowPerfExtensions
 
       public void Add(Slice s)
       {
-        foreach (CaptureCategory cat in s.Categories.Keys)
+        foreach (CName cat in s.Categories.Keys)
         {
           if (!Categories.ContainsKey(cat)) Categories[cat] = new Dictionary<int, UpdateTicks>();
 
@@ -50,7 +50,7 @@ namespace ShowPerfExtensions
 
       public void Substract(Slice s)
       {
-        foreach (CaptureCategory cat in s.Categories.Keys)
+        foreach (CName cat in s.Categories.Keys)
         {
           if (!Categories.ContainsKey(cat)) Categories[cat] = new Dictionary<int, UpdateTicks>();
 

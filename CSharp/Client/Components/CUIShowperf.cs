@@ -13,13 +13,11 @@ namespace ShowPerfExtensions
   {
     public class CUIShowperf : CUIFrame
     {
-      public ShowperfCategories Categories;
+      public CaptureManager Capture;
       public HashSet<SubmarineType> CaptureFrom = new HashSet<SubmarineType>()
       {
         // SubmarineType.Player,
       };
-
-
 
       public CUIView View;
 
@@ -31,7 +29,7 @@ namespace ShowPerfExtensions
 
       public void Update()
       {
-        if (Categories.ActiveCount != 0)
+        if (Capture.Active.Count != 0)
         {
           Window.Update();
           View.Update();
@@ -46,7 +44,7 @@ namespace ShowPerfExtensions
         CUIButton b = new CUIButton("By ID");
         b.OnMouseDown += (CUIMouse m) =>
         {
-          Categories.MapEntityDrawing.byID = !Categories.MapEntityDrawing.byID;
+          Capture.ToggleByID(CName.MapEntityDrawing);
           Window.Reset();
         };
         Append(b);
@@ -56,8 +54,8 @@ namespace ShowPerfExtensions
         View.FillEmptySpace = true;
         Append(View);
 
-        Categories = new ShowperfCategories();
-        Categories.Activate(Categories.MapEntityDrawing);
+        Capture = new CaptureManager();
+        Capture.Toggle(CName.MapEntityDrawing);
       }
     }
   }

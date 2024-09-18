@@ -19,8 +19,8 @@ namespace ShowPerfExtensions
   {
     public static bool Character_UpdateAll_Replace(float deltaTime, Camera cam)
     {
-      if (!Showperf.Categories.CharactersUpdate.IsActive) return true;
-      Window.ensureCategory(CaptureCategory.Characters);
+      if (!Showperf.Capture[CName.CharactersUpdate].IsActive) return true;
+      Window.ensureCategory(CName.CharactersUpdate);
 
       var sw = new System.Diagnostics.Stopwatch();
       long ticks;
@@ -100,13 +100,13 @@ namespace ShowPerfExtensions
           ticks = sw.ElapsedTicks;
           if (Showperf.ShouldCapture(character))
           {
-            if (Showperf.Categories.CharactersUpdate.byID)
+            if (Showperf.Capture[CName.CharactersUpdate].ByID)
             {
-              Window.tryAddTicks((int)character.ID, $"{character.ID}|{character}{info} - {alive}:{enabled}:{simplified}", CaptureCategory.Characters, ticks);
+              Window.tryAddTicks((int)character.ID, $"{character.ID}|{character}{info} - {alive}:{enabled}:{simplified}", CName.CharactersUpdate, ticks);
             }
             else
             {
-              Window.tryAddTicks($"{character}", CaptureCategory.Characters, ticks);
+              Window.tryAddTicks($"{character}", CName.CharactersUpdate, ticks);
             }
           }
 

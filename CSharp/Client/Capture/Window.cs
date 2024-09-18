@@ -157,17 +157,17 @@ namespace ShowPerfExtensions
         info($"Reset| fps:{fps} duration:{duration} partialSums.Count: {partialSums.Count}");
       }
 
-      public void ensureCategory(CaptureCategory cat)
+      public void ensureCategory(CName cat)
       {
         if (!firstSlice.Categories.ContainsKey(cat)) firstSlice[cat] = new Dictionary<int, UpdateTicks>();
       }
 
-      public void tryAddTicks(Identifier id, CaptureCategory cat, double ticks) => tryAddTicks(id.HashCode, id.Value, cat, ticks);
+      public void tryAddTicks(Identifier id, CName cat, double ticks) => tryAddTicks(id.HashCode, id.Value, cat, ticks);
 
-      public void tryAddTicks(string id, CaptureCategory cat, double ticks) => tryAddTicks(id.GetHashCode(), id, cat, ticks);
+      public void tryAddTicks(string id, CName cat, double ticks) => tryAddTicks(id.GetHashCode(), id, cat, ticks);
 
 
-      public void tryAddTicks(int id, string name, CaptureCategory cat, double ticks)
+      public void tryAddTicks(int id, string name, CName cat, double ticks)
       {
         try
         {
@@ -191,7 +191,7 @@ namespace ShowPerfExtensions
         }
       }
 
-      public UpdateTicks GetTotal(CaptureCategory cat, int id)
+      public UpdateTicks GetTotal(CName cat, int id)
       {
         try
         {

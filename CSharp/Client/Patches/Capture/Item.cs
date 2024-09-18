@@ -20,8 +20,8 @@ namespace ShowPerfExtensions
   {
     public static bool Item_Update_Replace(float deltaTime, Camera cam, Item __instance)
     {
-      if (!Showperf.Categories.ItemComponentsUpdate.IsActive) return true;
-      Window.ensureCategory(CaptureCategory.ItemComponents);
+      if (!Showperf.Capture[CName.ItemComponentsUpdate].IsActive) return true;
+      Window.ensureCategory(CName.ItemComponentsUpdate);
 
       Item _ = __instance;
 
@@ -59,13 +59,13 @@ namespace ShowPerfExtensions
       ticks = sw.ElapsedTicks;
       if (Showperf.ShouldCapture(_))
       {
-        if (Showperf.Categories.ItemComponentsUpdate.byID)
+        if (Showperf.Capture[CName.ItemComponentsUpdate].ByID)
         {
-          Window.tryAddTicks($"{_}.AITarget", CaptureCategory.ItemComponents, ticks);
+          Window.tryAddTicks($"{_}.AITarget", CName.ItemComponentsUpdate, ticks);
         }
         else
         {
-          Window.tryAddTicks($"{_.Prefab.Identifier.Value}.AITarget", CaptureCategory.ItemComponents, ticks);
+          Window.tryAddTicks($"{_.Prefab.Identifier.Value}.AITarget", CName.ItemComponentsUpdate, ticks);
         }
       }
 
@@ -149,13 +149,13 @@ namespace ShowPerfExtensions
         ticks = sw.ElapsedTicks;
         if (Showperf.ShouldCapture(_))
         {
-          if (Showperf.Categories.ItemComponentsUpdate.byID)
+          if (Showperf.Capture[CName.ItemComponentsUpdate].ByID)
           {
-            Window.tryAddTicks($"{_}.{ic.Name}", CaptureCategory.ItemComponents, ticks);
+            Window.tryAddTicks($"{_}.{ic.Name}", CName.ItemComponentsUpdate, ticks);
           }
           else
           {
-            Window.tryAddTicks($"{_.Prefab.Identifier.Value}.{ic.Name}", CaptureCategory.ItemComponents, ticks);
+            Window.tryAddTicks($"{_.Prefab.Identifier.Value}.{ic.Name}", CName.ItemComponentsUpdate, ticks);
           }
         }
       }
