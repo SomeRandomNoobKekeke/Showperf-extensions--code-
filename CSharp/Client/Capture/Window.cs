@@ -19,16 +19,12 @@ namespace ShowPerfExtensions
   {
     public class CaptureWindow : IDisposable
     {
-      public Stopwatch stopwatch;
-
-
       public double FrameDuration;
-      public double LastUpdateTime;
       public bool Frozen = false;
-      public int frames;
-      public int Frames
+
+      private int frames; public int Frames
       {
-        get { return frames; }
+        get => frames;
         set
         {
           frames = Math.Max(1, value);
@@ -37,10 +33,10 @@ namespace ShowPerfExtensions
           Reset();
         }
       }
-      private double duration;
-      public double Duration
+
+      private double duration; public double Duration
       {
-        get { return duration; }
+        get => duration;
         set
         {
           duration = Math.Max(0.1, value);
@@ -48,11 +44,9 @@ namespace ShowPerfExtensions
           Reset();
         }
       }
-
-      private double fps;
-      public double FPS
+      private double fps; public double FPS
       {
-        get { return fps; }
+        get => fps;
         set
         {
           fps = Math.Min(Math.Max(1, value), 60);
@@ -61,11 +55,7 @@ namespace ShowPerfExtensions
           Reset();
         }
       }
-
-
-
-      public bool accumulate = false;
-      public bool Accumulate
+      private bool accumulate; public bool Accumulate
       {
         get => accumulate;
         set
@@ -74,12 +64,9 @@ namespace ShowPerfExtensions
           Reset();
         }
       }
-      public Slice firstSlice;
-
+      public Slice FirstSlice;
       public Slice TotalTicks = new Slice();
-
-      public Queue<Slice> partialSums;
-
+      public Queue<Slice> PartialSums;
 
       public CaptureWindow(double duration = 3, int fps = 30)
       {
@@ -96,33 +83,32 @@ namespace ShowPerfExtensions
       {
         if (Accumulate)
         {
-          TotalTicks.Add(firstSlice);
-          firstSlice.Clear();
+          TotalTicks.Add(FirstSlice);
+          FirstSlice.Clear();
         }
         else
         {
           if (Frames == 1)
           {
             TotalTicks.Clear();
-            TotalTicks.Add(firstSlice);
-            firstSlice.Clear();
+            TotalTicks.Add(FirstSlice);
+            FirstSlice.Clear();
           }
           else
           {
-            Slice lastSlice = partialSums.Dequeue();
+            Slice lastSlice = PartialSums.Dequeue();
 
-            TotalTicks.Add(firstSlice);
+            TotalTicks.Add(FirstSlice);
             TotalTicks.Substract(lastSlice);
 
             lastSlice.Clear();
-            firstSlice = lastSlice;
-            partialSums.Enqueue(lastSlice);
+            FirstSlice = lastSlice;
+            PartialSums.Enqueue(lastSlice);
           }
         }
-
-        //debugCapacity();
       }
 
+      public double LastUpdateTime;
       public bool ShouldUpdate => Timing.TotalTime - LastUpdateTime > FrameDuration;
 
       public void Update()
@@ -142,60 +128,32 @@ namespace ShowPerfExtensions
 
       public void Reset()
       {
-        partialSums ??= new Queue<Slice>(frames);
-        partialSums.Clear();
+        PartialSums ??= new Queue<Slice>(Frames);
+        PartialSums.Clear();
         TotalTicks.Clear();
 
-        for (int i = 0; i < frames - 1; i++)
+        for (int i = 0; i < Frames - 1; i++)
         {
-          partialSums.Enqueue(new Slice());
+          PartialSums.Enqueue(new Slice());
         }
 
-        firstSlice = new Slice();
-        partialSums.Enqueue(firstSlice);
+        FirstSlice = new Slice();
+        PartialSums.Enqueue(FirstSlice);
 
-        info($"Reset| fps:{fps} duration:{duration} partialSums.Count: {partialSums.Count}");
+        info($"Reset| fps:{fps} duration:{duration} PartialSums.Count: {PartialSums.Count}");
       }
 
-      public void ensureCategory(CName cat)
+      public void AddTicks(UpdateTicks t)
       {
-        if (!firstSlice.Categories.ContainsKey(cat)) firstSlice[cat] = new Dictionary<int, UpdateTicks>();
+        try { FirstSlice.Add(t); }
+        catch (Exception e) { err(e.Message); }
       }
 
-      public void tryAddTicks(Identifier id, CName cat, double ticks) => tryAddTicks(id.HashCode, id.Value, cat, ticks);
-
-      public void tryAddTicks(string id, CName cat, double ticks) => tryAddTicks(id.GetHashCode(), id, cat, ticks);
-
-
-      public void tryAddTicks(int id, string name, CName cat, double ticks)
+      public UpdateTicks GetTotal(int id)
       {
         try
         {
-          if (firstSlice[cat].ContainsKey(id))
-          {
-            firstSlice[cat][id] += ticks;
-          }
-          else
-          {
-            firstSlice[cat][id] = new UpdateTicks(name, ticks);
-          }
-        }
-        catch (KeyNotFoundException e)
-        {
-          ensureCategory(cat);
-          err(e.Message);
-        }
-        catch (Exception e)
-        {
-          err(e.Message);
-        }
-      }
-
-      public UpdateTicks GetTotal(CName cat, int id)
-      {
-        try
-        {
-          return Accumulate ? TotalTicks[cat][id] : TotalTicks[cat][id] / Frames * FPS;
+          return Accumulate ? TotalTicks[id] : TotalTicks[id] / Frames * FPS;
         }
         catch (Exception e)
         {
@@ -204,37 +162,36 @@ namespace ShowPerfExtensions
         }
       }
 
-      public void debugCapacity()
-      {
-        if (mod.debug)
-        {
-          StringBuilder sb = new StringBuilder();
-          string s = "";
-          foreach (Slice slice in partialSums)
-          {
+      // public void debugCapacity()
+      // {
+      //   if (mod.debug)
+      //   {
+      //     StringBuilder sb = new StringBuilder();
+      //     string s = "";
+      //     foreach (Slice slice in PartialSums)
+      //     {
 
-            int sum = 0;
-            foreach (var cat in slice.Categories)
-            {
-              sum += cat.Value.Count;
-            }
+      //       int sum = 0;
+      //       foreach (var cat in slice.Categories)
+      //       {
+      //         sum += cat.Value.Count;
+      //       }
 
-            sb.Append($"{sum}|");
-          }
+      //       sb.Append($"{sum}|");
+      //     }
 
-          log(sb.ToString());
-        }
-      }
-
+      //     log(sb.ToString());
+      //   }
+      // }
 
       public void Dispose()
       {
-        foreach (var s in partialSums) s.Clear();
-        partialSums.Clear();
+        foreach (var s in PartialSums) s.Clear();
+        PartialSums.Clear();
         TotalTicks.Clear();
 
-        firstSlice = null;
-        partialSums = null;
+        FirstSlice = null;
+        PartialSums = null;
         TotalTicks = null;
       }
     }

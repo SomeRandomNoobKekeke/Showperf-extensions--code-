@@ -17,42 +17,57 @@ namespace ShowPerfExtensions
   {
     public struct UpdateTicks
     {
-      public string ID;
+      public string Name;
+      public int Hash;
       public double Ticks;
 
-      public UpdateTicks(string id, double ticks)
+      public UpdateTicks(string name, int hash, double ticks)
       {
-        this.ID = id;
-        this.Ticks = ticks;
+        Name = name;
+        Hash = hash;
+        Ticks = ticks;
       }
+      public UpdateTicks(Identifier id, double ticks)
+      {
+        Name = id.Value;
+        Hash = id.HashCode;
+        Ticks = ticks;
+      }
+      public UpdateTicks(string name, double ticks)
+      {
+        Name = name;
+        Hash = name.GetHashCode();
+        Ticks = ticks;
+      }
+
 
       public static UpdateTicks operator +(UpdateTicks a, UpdateTicks b)
       {
-        return new UpdateTicks(a.ID, a.Ticks + b.Ticks);
+        return new UpdateTicks(a.Name, a.Hash, a.Ticks + b.Ticks);
       }
       public static UpdateTicks operator +(UpdateTicks a, double ticks)
       {
-        return new UpdateTicks(a.ID, a.Ticks + ticks);
+        return new UpdateTicks(a.Name, a.Hash, a.Ticks + ticks);
       }
 
       public static UpdateTicks operator -(UpdateTicks a, UpdateTicks b)
       {
-        return new UpdateTicks(a.ID, a.Ticks - b.Ticks);
+        return new UpdateTicks(a.Name, a.Hash, a.Ticks - b.Ticks);
       }
 
       public static UpdateTicks operator -(UpdateTicks a)
       {
-        return new UpdateTicks(a.ID, -a.Ticks);
+        return new UpdateTicks(a.Name, a.Hash, -a.Ticks);
       }
 
       public static UpdateTicks operator *(UpdateTicks a, double mult)
       {
-        return new UpdateTicks(a.ID, a.Ticks * mult);
+        return new UpdateTicks(a.Name, a.Hash, a.Ticks * mult);
       }
 
       public static UpdateTicks operator /(UpdateTicks a, double div)
       {
-        return new UpdateTicks(a.ID, a.Ticks / div);
+        return new UpdateTicks(a.Name, a.Hash, a.Ticks / div);
       }
     }
 

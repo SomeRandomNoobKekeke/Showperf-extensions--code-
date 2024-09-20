@@ -14,51 +14,37 @@ namespace ShowPerfExtensions
 {
   public partial class Mod : IAssemblyPlugin
   {
+    // mb this should just be derived from dict
     public class Slice
     {
-      public Dictionary<CName, Dictionary<int, UpdateTicks>> Categories;
+      public Dictionary<int, UpdateTicks> Values = new Dictionary<int, UpdateTicks>();
 
-      public Slice()
+      public Dictionary<int, UpdateTicks>.KeyCollection Keys => Values.Keys;
+      public void Clear() => Values.Clear();
+      public UpdateTicks this[int hash]
       {
-        Categories = new Dictionary<CName, Dictionary<int, UpdateTicks>>();
+        get => Values[hash];
+        set => Values[hash] = value;
       }
 
-      public void Clear()
+      public void Add(UpdateTicks t)
       {
-        Categories.Clear();
-      }
-
-      public Dictionary<int, UpdateTicks> this[CName cat]
-      {
-        get => Categories[cat];
-        set => Categories[cat] = value;
+        Values[t.Hash] = Values.ContainsKey(t.Hash) ? Values[t.Hash] + t : t;
       }
 
       public void Add(Slice s)
       {
-        foreach (CName cat in s.Categories.Keys)
+        foreach (int id in s.Values.Keys)
         {
-          if (!Categories.ContainsKey(cat)) Categories[cat] = new Dictionary<int, UpdateTicks>();
-
-          foreach (int id in s.Categories[cat].Keys)
-          {
-            if (!Categories[cat].ContainsKey(id)) Categories[cat][id] = s.Categories[cat][id];
-            else Categories[cat][id] += s.Categories[cat][id];
-          }
+          Values[id] = Values.ContainsKey(id) ? Values[id] + s.Values[id] : s.Values[id];
         }
       }
 
       public void Substract(Slice s)
       {
-        foreach (CName cat in s.Categories.Keys)
+        foreach (int id in s.Values.Keys)
         {
-          if (!Categories.ContainsKey(cat)) Categories[cat] = new Dictionary<int, UpdateTicks>();
-
-          foreach (int id in s.Categories[cat].Keys)
-          {
-            if (!Categories[cat].ContainsKey(id)) Categories[cat][id] = -s.Categories[cat][id];
-            else Categories[cat][id] -= s.Categories[cat][id];
-          }
+          Values[id] = Values.ContainsKey(id) ? Values[id] - s.Values[id] : -s.Values[id];
         }
       }
     }

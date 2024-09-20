@@ -27,6 +27,9 @@ namespace ShowPerfExtensions
     public static CUIShowperf Showperf;
     public CUIMainComponent CUI;
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static void Capture(UpdateTicks t) => Window.AddTicks(t);
+
     public void Initialize()
     {
       mod = this;

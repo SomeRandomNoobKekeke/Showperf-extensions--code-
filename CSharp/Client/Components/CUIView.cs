@@ -43,7 +43,7 @@ namespace ShowPerfExtensions
 
       public string GetName(UpdateTicks t)
       {
-        return $"{ConverToUnits(t.Ticks)} {t.ID}";
+        return $"{ConverToUnits(t.Ticks)} {t.Name}";
 
       }
       public Color GetColor(UpdateTicks t)
@@ -77,16 +77,13 @@ namespace ShowPerfExtensions
         {
           Clear();
 
-          foreach (CName cat in Window.TotalTicks.Categories.Keys)
+          foreach (int id in Window.TotalTicks.Keys)
           {
-            foreach (int id in Window.TotalTicks[cat].Keys)
-            {
-              UpdateTicks t = Window.GetTotal(cat, id);
-              Values.Add(t);
-              Sum += t.Ticks;
+            UpdateTicks t = Window.GetTotal(id);
+            Values.Add(t);
+            Sum += t.Ticks;
 
-              TopValue = Math.Max(TopValue, t.Ticks);
-            }
+            TopValue = Math.Max(TopValue, t.Ticks);
           }
 
           Values.Sort((a, b) => (int)(b.Ticks - a.Ticks));
