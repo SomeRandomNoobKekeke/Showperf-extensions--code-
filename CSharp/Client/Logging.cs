@@ -1,5 +1,8 @@
+#define DEBUG
+
 using System;
 using System.Reflection;
+using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,6 +23,7 @@ namespace ShowPerfExtensions
 
     public static void info(object msg, [CallerFilePath] string source = "", [CallerLineNumber] int lineNumber = 0)
     {
+#if DEBUG
       if (mod.debug)
       {
         var fi = new FileInfo(source);
@@ -27,10 +31,12 @@ namespace ShowPerfExtensions
         log($"{fi.Directory.Name}/{fi.Name}:{lineNumber}", Color.Cyan * 0.5f);
         log(msg, Color.Cyan);
       }
+#endif
     }
 
     public static void err(object msg, [CallerFilePath] string source = "", [CallerLineNumber] int lineNumber = 0)
     {
+#if DEBUG
       if (mod.debug)
       {
         var fi = new FileInfo(source);
@@ -38,6 +44,7 @@ namespace ShowPerfExtensions
         log($"{fi.Directory.Name}/{fi.Name}:{lineNumber}", Color.Orange * 0.5f);
         log(msg, Color.Orange);
       }
+#endif
     }
   }
 }

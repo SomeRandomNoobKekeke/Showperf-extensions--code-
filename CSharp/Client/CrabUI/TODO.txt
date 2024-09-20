@@ -1,0 +1,28 @@
+Grid and flex layout
+
+debug
+rework mouse events
+
+Rethink mouse events
+Sliding
+Drag on different events, start and stop on component
+culling
+
+sprites
+
+Default colors for everything
+
+max right
+
+CutOff should be on border box
+(border box should be outside content box)
+
+Restore original on double click
+
+Mb mouse events should be consumed based on presence of callbacks rather than some props
+
+Think about global mouse up
+
+cursor
+Shadow dom + shadow Layout
+Anchors

@@ -29,7 +29,7 @@ namespace CrabUI
     {
       Connections.Add(new CUISchemeLink(start, end));
     }
-
+    protected override CUIRect DragZone => new CUIRect(-1000000, -1000000, 2000000, 2000000);
 
     public Color LineColor = Color.White;
     public float LineWidth = 2f;

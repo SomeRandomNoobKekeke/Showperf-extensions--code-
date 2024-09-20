@@ -24,6 +24,7 @@ namespace CrabUI
 
     public CUIPages() : base()
     {
+      HideChildrenOutsideFrame = true;
     }
 
     public CUIPages(float? x, float? y, float? w, float? h) : this()

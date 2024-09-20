@@ -1,1 +1,1 @@
-CUI culling
+move id into update ticks

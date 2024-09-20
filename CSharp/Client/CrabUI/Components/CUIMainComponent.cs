@@ -56,16 +56,19 @@ namespace CrabUI
         }
 
         //TODO why am i sure that grabbed have parent?
+        if (!Mouse.Held)
+        {
+          Grabbed = null;
+          ResizingComponent = null;
+        }
         if (Grabbed != null && Mouse.Moved)
         {
           Grabbed.TryDragTo(Mouse.Position - Grabbed.Parent.Real.Position - GrabbedOffset);
-          if (!Mouse.Held) Grabbed = null;
         }
 
         if (ResizingComponent != null && Mouse.Moved)
         {
           ResizingComponent.TryToResize(Mouse.Position - ResizingComponent.Real.Position);
-          if (!Mouse.Held) ResizingComponent = null;
         }
 
         //RunStraigth(c => c.UpdateStateBeforeLayout());
@@ -113,12 +116,12 @@ namespace CrabUI
       }
 
       CUIComponent CurrentMouseOn = null;
-
       MouseOnList.Clear();
 
 
       if (GUI.MouseOn == null || GUI.MouseOn == dummyComponent)
       {
+        //skip main component
         foreach (CUIComponent child in this.Children)
         {
           CheckIfContainsMouse(child);

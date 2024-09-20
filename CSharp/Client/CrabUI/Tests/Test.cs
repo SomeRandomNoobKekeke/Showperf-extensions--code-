@@ -66,8 +66,6 @@ namespace CrabUI
       t2.Absolute.Position = new Vector2(80, 20);
       t3.Absolute.Position = new Vector2(100, 40);
 
-      t1.Debug = true;
-
       CUI.Append(f);
     }
 

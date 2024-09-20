@@ -38,8 +38,8 @@ namespace ShowPerfExtensions
       CUI.Append(Showperf);
       CUI.OnStep += () => Showperf.Update();
 
-      // CUI.Load(CUITest.ButtonsOnSimpleLayout);
-      //CUI.OnStep += () => log($"{CUI.DrawTime} {CUI.UpdateTime}");
+      //CUI.Load(CUITest.ButtonsOnSimpleLayout);
+      // CUI.OnStep += () => log($"{String.Format("{0:000000}", CUI.DrawTime)} {String.Format("{0:000000}", CUI.UpdateTime)}");
 
       PatchAll();
 
