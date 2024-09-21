@@ -17,34 +17,34 @@ namespace ShowPerfExtensions
     // mb this should just be derived from dict
     public class Slice
     {
-      public Dictionary<int, UpdateTicks> Values = new Dictionary<int, UpdateTicks>();
+      public Dictionary<int, UpdateTicks> Ticks = new Dictionary<int, UpdateTicks>();
 
-      public Dictionary<int, UpdateTicks>.KeyCollection Keys => Values.Keys;
-      public void Clear() => Values.Clear();
+      public Dictionary<int, UpdateTicks>.KeyCollection Keys => Ticks.Keys;
+      public void Clear() => Ticks.Clear();
       public UpdateTicks this[int hash]
       {
-        get => Values[hash];
-        set => Values[hash] = value;
+        get => Ticks[hash];
+        set => Ticks[hash] = value;
       }
 
       public void Add(UpdateTicks t)
       {
-        Values[t.Hash] = Values.ContainsKey(t.Hash) ? Values[t.Hash] + t : t;
+        Ticks[t.Hash] = Ticks.ContainsKey(t.Hash) ? Ticks[t.Hash] + t : t;
       }
 
       public void Add(Slice s)
       {
-        foreach (int id in s.Values.Keys)
+        foreach (int id in s.Ticks.Keys)
         {
-          Values[id] = Values.ContainsKey(id) ? Values[id] + s.Values[id] : s.Values[id];
+          Ticks[id] = Ticks.ContainsKey(id) ? Ticks[id] + s.Ticks[id] : s.Ticks[id];
         }
       }
 
       public void Substract(Slice s)
       {
-        foreach (int id in s.Values.Keys)
+        foreach (int id in s.Ticks.Keys)
         {
-          Values[id] = Values.ContainsKey(id) ? Values[id] - s.Values[id] : -s.Values[id];
+          Ticks[id] = Ticks.ContainsKey(id) ? Ticks[id] - s.Ticks[id] : -s.Ticks[id];
         }
       }
     }

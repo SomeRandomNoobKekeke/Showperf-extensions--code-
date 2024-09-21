@@ -1,3 +1,5 @@
+#define SHOWPERF
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -83,13 +85,16 @@ namespace CrabUI
       {
         if (MouseOn != null) GUI.MouseOn = dummyComponent;
       }
-
-      UpdateTime = sw.ElapsedTicks;
+      CUI.Capture("1", 123);
+      CUI.Capture("12", 123);
+      CUI.Capture("123", 123);
+      CUI.Capture("CUI.Update", sw.ElapsedTicks);
 
       sw.Restart();
       DrawRecursive(spriteBatch);
       DrawFrontRecursive(spriteBatch);
-      DrawTime = sw.ElapsedTicks;
+
+      CUI.Capture("CUI.Draw", sw.ElapsedTicks);
     }
 
     private void HandleMouse()
@@ -249,7 +254,7 @@ namespace CrabUI
         main.Step(spriteBatch);
         //‖color:Yellow‖CUI:‖end‖
       }
-      catch (Exception e) { log($"CUI: {e}", Color.Yellow); }
+      catch (Exception e) { CUI.log($"CUI: {e}", Color.Yellow); }
     }
 
     private static void CUIBlockScroll(float deltaTime, ref bool allowMove, ref bool allowZoom, bool allowInput, bool? followSub)

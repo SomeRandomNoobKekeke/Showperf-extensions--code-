@@ -27,8 +27,8 @@ namespace ShowPerfExtensions
     public static CUIShowperf Showperf;
     public CUIMainComponent CUI;
 
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static void Capture(UpdateTicks t) => Window.AddTicks(t);
+    public static void Capture(string name, int hash, double ticks) => Window.AddTicks(new UpdateTicks(name, hash, ticks));
+    public static void Capture(string name, double ticks) => Window.AddTicks(new UpdateTicks(name, ticks));
 
     public void Initialize()
     {
@@ -40,6 +40,8 @@ namespace ShowPerfExtensions
 
       CUI.Append(Showperf);
       CUI.OnStep += () => Showperf.Update();
+
+      //Showperf.Capture.Toggle(CName.MapEntityDrawing);
 
       //CUI.Load(CUITest.ButtonsOnSimpleLayout);
       // CUI.OnStep += () => log($"{String.Format("{0:000000}", CUI.DrawTime)} {String.Format("{0:000000}", CUI.UpdateTime)}");

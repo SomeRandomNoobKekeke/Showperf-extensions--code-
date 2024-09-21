@@ -253,7 +253,7 @@ namespace CrabUI
 
     protected void DrawRecursive(SpriteBatch spriteBatch)
     {
-      if (Debug) log(this);
+      if (Debug) CUI.log(this);
 
       if (Visible) Draw(spriteBatch);
 
@@ -311,11 +311,5 @@ namespace CrabUI
     }
 
     public override string ToString() => $"{base.ToString()}:{ID} {Real} A:{Absolute} R:{Relative} AMin:{AbsoluteMin} RMin:{RelativeMin} AMax:{AbsoluteMax} RMax:{RelativeMax}";
-
-    public static void log(object msg, Color? cl = null)
-    {
-      cl ??= Color.Cyan;
-      LuaCsLogger.LogMessage($"{msg ?? "null"}", cl * 0.8f, cl);
-    }
   }
 }

@@ -1,3 +1,5 @@
+#define DEBUG
+
 using System;
 using System.Reflection;
 using System.Diagnostics;
@@ -19,7 +21,9 @@ namespace ShowPerfExtensions
       LuaCsLogger.LogMessage($"{msg ?? "null"}", cl * 0.8f, cl);
     }
 
-    // [Conditional("DONT")]
+#if !DEBUG
+    [Conditional("DONT")]
+#endif
     public static void info(object msg, [CallerFilePath] string source = "", [CallerLineNumber] int lineNumber = 0)
     {
       if (mod.debug)
@@ -31,7 +35,9 @@ namespace ShowPerfExtensions
       }
     }
 
-    // [Conditional("DONT")]
+#if !DEBUG
+    [Conditional("DONT")]
+#endif
     public static void err(object msg, [CallerFilePath] string source = "", [CallerLineNumber] int lineNumber = 0)
     {
       if (mod.debug)

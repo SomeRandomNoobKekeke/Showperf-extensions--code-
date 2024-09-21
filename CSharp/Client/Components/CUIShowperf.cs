@@ -33,10 +33,12 @@ namespace ShowPerfExtensions
 
       public void Update()
       {
-        if (Capture.Active.Count != 0)
+        if (true || Capture.Active.Count != 0)
         {
           Window.Update();
           View.Update();
+
+          log(String.Join(",", Window.FirstSlice.Ticks.Values.Select(v => v.Name)));
         }
       }
 
@@ -85,10 +87,9 @@ namespace ShowPerfExtensions
 
 
 
-        Pages.Open(Menu);
+        Pages.Open(View);
 
         Capture = new CaptureManager();
-        Capture.Toggle(CName.MapEntityDrawing);
       }
     }
   }
