@@ -39,8 +39,8 @@ namespace ShowPerfExtensions
 
         int start = (int)Math.Floor(-View.Scroll / StringHeight) - ScrollSurround;
         int end = (int)Math.Ceiling((-View.Scroll + View.Real.Height) / StringHeight) + ScrollSurround;
-        start = Math.Max(0, Math.Min(start, View.Values.Count - 1));
-        end = Math.Max(0, Math.Min(end, View.Values.Count - 1));
+        start = Math.Max(0, Math.Min(start, View.Values.Count));
+        end = Math.Max(0, Math.Min(end, View.Values.Count));
 
         for (int i = start; i < end; i++)
         {

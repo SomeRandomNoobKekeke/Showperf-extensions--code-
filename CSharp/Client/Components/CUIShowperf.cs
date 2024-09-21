@@ -38,7 +38,7 @@ namespace ShowPerfExtensions
           Window.Update();
           View.Update();
 
-          log(String.Join(",", Window.FirstSlice.Ticks.Values.Select(v => v.Name)));
+          //log(String.Join(",", Window.FirstSlice.Ticks.Values.Select(v => v.Name)));
         }
       }
 

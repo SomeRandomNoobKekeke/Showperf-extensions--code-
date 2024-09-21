@@ -85,9 +85,7 @@ namespace CrabUI
       {
         if (MouseOn != null) GUI.MouseOn = dummyComponent;
       }
-      CUI.Capture("1", 123);
-      CUI.Capture("12", 123);
-      CUI.Capture("123", 123);
+
       CUI.Capture("CUI.Update", sw.ElapsedTicks);
 
       sw.Restart();
