@@ -77,14 +77,19 @@ namespace ShowPerfExtensions
         {
           Clear();
 
-          foreach (int id in Window.TotalTicks.Keys)
-          {
-            UpdateTicks t = Window.GetTotal(id);
-            Values.Add(t);
-            Sum += t.Ticks;
 
-            TopValue = Math.Max(TopValue, t.Ticks);
+          foreach (int cat in Window.TotalTicks.Keys)
+          {
+            foreach (int id in Window.TotalTicks[cat].Keys)
+            {
+              UpdateTicks t = Window.GetTotal(cat, id);
+              Values.Add(t);
+              Sum += t.Ticks;
+
+              TopValue = Math.Max(TopValue, t.Ticks);
+            }
           }
+
 
           Values.Sort((a, b) => (int)(b.Ticks - a.Ticks));
 

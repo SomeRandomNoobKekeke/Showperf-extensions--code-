@@ -21,6 +21,7 @@ namespace ShowPerfExtensions
     public static bool Submarine_DrawFront_Replace(SpriteBatch spriteBatch, bool editing = false, Predicate<MapEntity> predicate = null)
     {
       if (!Showperf.Capture[CName.MapEntityDrawing].IsActive) return true;
+      Window.EnsureCategory(CName.MapEntityDrawing);
 
       var entitiesToRender = !editing && Submarine.visibleEntities != null ? Submarine.visibleEntities : MapEntity.MapEntityList;
 
@@ -44,11 +45,11 @@ namespace ShowPerfExtensions
         {
           if (Showperf.Capture[CName.MapEntityDrawing].ByID || e.Prefab == null)
           {
-            Window.AddTicks(new UpdateTicks($"{e.Name} (ID: {e.ID})", ticks));
+            Window.AddTicks(new UpdateTicks(ticks, CName.MapEntityDrawing, $"{e.Name} (ID: {e.ID})"));
           }
           else
           {
-            Window.AddTicks(new UpdateTicks(e.Prefab.Identifier, ticks));
+            Window.AddTicks(new UpdateTicks(ticks, CName.MapEntityDrawing, e.Prefab.Identifier));
           }
         }
       }
@@ -89,6 +90,7 @@ namespace ShowPerfExtensions
     public static bool Submarine_DrawBack_Replace(SpriteBatch spriteBatch, bool editing = false, Predicate<MapEntity> predicate = null)
     {
       if (!Showperf.Capture[CName.MapEntityDrawing].IsActive) return true;
+      Window.EnsureCategory(CName.MapEntityDrawing);
 
       var entitiesToRender = !editing && Submarine.visibleEntities != null ? Submarine.visibleEntities : MapEntity.MapEntityList;
 
@@ -112,11 +114,11 @@ namespace ShowPerfExtensions
         {
           if (Showperf.Capture[CName.MapEntityDrawing].ByID || e.Prefab == null)
           {
-            Window.AddTicks(new UpdateTicks($"{e.Name} (ID: {e.ID})", ticks));
+            Window.AddTicks(new UpdateTicks(ticks, CName.MapEntityDrawing, $"{e.Name} (ID: {e.ID})"));
           }
           else
           {
-            Window.AddTicks(new UpdateTicks(e.Prefab.Identifier, ticks));
+            Window.AddTicks(new UpdateTicks(ticks, CName.MapEntityDrawing, e.Prefab.Identifier));
           }
         }
       }

@@ -143,22 +143,36 @@ namespace ShowPerfExtensions
         info($"Reset| fps:{fps} duration:{duration} PartialSums.Count: {PartialSums.Count}");
       }
 
-      public void AddTicks(UpdateTicks t)
-      {
-        try { FirstSlice.Add(t); }
-        catch (Exception e) { err(e.Message); }
-      }
+      public void EnsureCategory(int cat) => FirstSlice.EnsureCategory(cat);
+      public void EnsureCategory(CName cat) => FirstSlice.EnsureCategory(cat);
 
-      public UpdateTicks GetTotal(int id)
+      public void AddTicks(UpdateTicks t)
       {
         try
         {
-          return Accumulate ? TotalTicks[id] : TotalTicks[id] / Frames * FPS;
+          FirstSlice.Add(t);
+        }
+        catch (KeyNotFoundException e)
+        {
+          EnsureCategory(t.Category);
+          err($"tried to add ticks to missing category {(CName)t.Category}");
+        }
+        catch (Exception e)
+        {
+          err(e.Message);
+        }
+      }
+
+      public UpdateTicks GetTotal(int category, int id)
+      {
+        try
+        {
+          return Accumulate ? TotalTicks[category][id] : TotalTicks[category][id] / Frames * FPS;
         }
         catch (Exception e)
         {
           err(e);
-          return new UpdateTicks("[[not found]]", 0);
+          return new UpdateTicks(0, category, "[[not found]]");
         }
       }
 

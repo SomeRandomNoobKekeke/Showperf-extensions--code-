@@ -16,10 +16,22 @@ namespace CrabUI
   public static class CUI
   {
 
-    // [Conditional("SHOWPERF")]
-    public static void Capture(string name, int hash, double ticks) => ShowPerfExtensions.Mod.Capture(name, hash, ticks);
-    // [Conditional("SHOWPERF")]
-    public static void Capture(string name, double ticks) => ShowPerfExtensions.Mod.Capture(name, ticks);
+    public static int CUIShowperfCategory = 1000;
+
+#if !SHOWPERF
+    [Conditional("DONT")]
+#endif
+    public static void Capture(double ticks, string name, int hash) => ShowPerfExtensions.Mod.Capture(ticks, CUIShowperfCategory, name, hash);
+
+#if !SHOWPERF
+    [Conditional("DONT")]
+#endif
+    public static void Capture(double ticks, string name) => ShowPerfExtensions.Mod.Capture(ticks, CUIShowperfCategory, name);
+
+#if !SHOWPERF
+    [Conditional("DONT")]
+#endif
+    public static void EnsureCategory() => ShowPerfExtensions.Mod.EnsureCategory(CUIShowperfCategory);
 
     public static void log(object msg, Color? cl = null)
     {

@@ -20,6 +20,7 @@ namespace ShowPerfExtensions
       LevelObjectsDrawing,
       LevelMisc,
       ItemComponentsUpdate,
+      CUI = 1000,
     }
 
 

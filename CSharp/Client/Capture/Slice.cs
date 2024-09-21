@@ -14,37 +14,55 @@ namespace ShowPerfExtensions
 {
   public partial class Mod : IAssemblyPlugin
   {
-    // mb this should just be derived from dict
     public class Slice
     {
-      public Dictionary<int, UpdateTicks> Ticks = new Dictionary<int, UpdateTicks>();
+      public Dictionary<int, Dictionary<int, UpdateTicks>> Categories = new Dictionary<int, Dictionary<int, UpdateTicks>>();
 
-      public Dictionary<int, UpdateTicks>.KeyCollection Keys => Ticks.Keys;
-      public void Clear() => Ticks.Clear();
-      public UpdateTicks this[int hash]
+      public Dictionary<int, Dictionary<int, UpdateTicks>>.KeyCollection Keys => Categories.Keys;
+      public void Clear() => Categories.Clear();
+      public Dictionary<int, UpdateTicks> this[int category]
       {
-        get => Ticks[hash];
-        set => Ticks[hash] = value;
+        get => Categories[category];
+        set => Categories[category] = value;
       }
+
+      public void EnsureCategory(int cat)
+      {
+        if (!Categories.ContainsKey(cat)) Categories[cat] = new Dictionary<int, UpdateTicks>();
+      }
+      public void EnsureCategory(CName cat) => EnsureCategory((int)cat);
 
       public void Add(UpdateTicks t)
       {
-        Ticks[t.Hash] = Ticks.ContainsKey(t.Hash) ? Ticks[t.Hash] + t : t;
+        Categories[t.Category][t.Hash] = Categories[t.Category].ContainsKey(t.Hash) ?
+        Categories[t.Category][t.Hash] + t : t;
       }
 
       public void Add(Slice s)
       {
-        foreach (int id in s.Ticks.Keys)
+        foreach (int cat in s.Categories.Keys)
         {
-          Ticks[id] = Ticks.ContainsKey(id) ? Ticks[id] + s.Ticks[id] : s.Ticks[id];
+          if (!Categories.ContainsKey(cat)) Categories[cat] = new Dictionary<int, UpdateTicks>();
+
+          foreach (int id in s.Categories[cat].Keys)
+          {
+            Categories[cat][id] = Categories[cat].ContainsKey(id) ?
+            Categories[cat][id] + s.Categories[cat][id] : s.Categories[cat][id];
+          }
         }
       }
 
       public void Substract(Slice s)
       {
-        foreach (int id in s.Ticks.Keys)
+        foreach (int cat in s.Categories.Keys)
         {
-          Ticks[id] = Ticks.ContainsKey(id) ? Ticks[id] - s.Ticks[id] : -s.Ticks[id];
+          if (!Categories.ContainsKey(cat)) Categories[cat] = new Dictionary<int, UpdateTicks>();
+
+          foreach (int id in s.Categories[cat].Keys)
+          {
+            Categories[cat][id] = Categories[cat].ContainsKey(id) ?
+            Categories[cat][id] - s.Categories[cat][id] : -s.Categories[cat][id];
+          }
         }
       }
     }

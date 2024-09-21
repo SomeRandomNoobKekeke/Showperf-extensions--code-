@@ -46,6 +46,8 @@ namespace CrabUI
     {
       OnStep?.Invoke();
 
+      CUI.EnsureCategory();
+
       sw.Restart();
       if (Timing.TotalTime - LastUpdateTiming > UpdateInterval)
       {
@@ -86,13 +88,13 @@ namespace CrabUI
         if (MouseOn != null) GUI.MouseOn = dummyComponent;
       }
 
-      CUI.Capture("CUI.Update", sw.ElapsedTicks);
+      CUI.Capture(sw.ElapsedTicks, "CUI.Update");
 
       sw.Restart();
       DrawRecursive(spriteBatch);
       DrawFrontRecursive(spriteBatch);
 
-      CUI.Capture("CUI.Draw", sw.ElapsedTicks);
+      CUI.Capture(sw.ElapsedTicks, "CUI.Draw");
     }
 
     private void HandleMouse()

@@ -19,55 +19,63 @@ namespace ShowPerfExtensions
     {
       public string Name;
       public int Hash;
+      public int Category;
       public double Ticks;
 
-      public UpdateTicks(string name, int hash, double ticks)
+      public UpdateTicks(double ticks, int category, string name, int hash)
       {
         Name = name;
         Hash = hash;
         Ticks = ticks;
+        Category = category;
       }
-      public UpdateTicks(Identifier id, double ticks)
+      public UpdateTicks(double ticks, int category, Identifier id)
       {
         Name = id.Value;
         Hash = id.HashCode;
         Ticks = ticks;
+        Category = category;
       }
-      public UpdateTicks(string name, double ticks)
+      public UpdateTicks(double ticks, int category, string name)
       {
         Name = name;
         Hash = name.GetHashCode();
         Ticks = ticks;
+        Category = category;
       }
+
+      public UpdateTicks(double ticks, CName category, string name, int hash) : this(ticks, (int)category, name, hash) { }
+      public UpdateTicks(double ticks, CName category, Identifier id) : this(ticks, (int)category, id) { }
+      public UpdateTicks(double ticks, CName category, string name) : this(ticks, (int)category, name) { }
 
 
       public static UpdateTicks operator +(UpdateTicks a, UpdateTicks b)
       {
-        return new UpdateTicks(a.Name, a.Hash, a.Ticks + b.Ticks);
+        return new UpdateTicks(a.Ticks + b.Ticks, a.Category, a.Name, a.Hash);
       }
       public static UpdateTicks operator +(UpdateTicks a, double ticks)
       {
-        return new UpdateTicks(a.Name, a.Hash, a.Ticks + ticks);
+        return new UpdateTicks(a.Ticks + ticks, a.Category, a.Name, a.Hash);
       }
 
       public static UpdateTicks operator -(UpdateTicks a, UpdateTicks b)
       {
-        return new UpdateTicks(a.Name, a.Hash, a.Ticks - b.Ticks);
+        return new UpdateTicks(a.Ticks - b.Ticks, a.Category, a.Name, a.Hash);
       }
 
       public static UpdateTicks operator -(UpdateTicks a)
       {
-        return new UpdateTicks(a.Name, a.Hash, -a.Ticks);
+        return new UpdateTicks(-a.Ticks, a.Category, a.Name, a.Hash);
       }
 
       public static UpdateTicks operator *(UpdateTicks a, double mult)
       {
-        return new UpdateTicks(a.Name, a.Hash, a.Ticks * mult);
+        return new UpdateTicks(a.Ticks * mult, a.Category, a.Name, a.Hash);
       }
 
       public static UpdateTicks operator /(UpdateTicks a, double div)
       {
-        return new UpdateTicks(a.Name, a.Hash, a.Ticks / div);
+        return new UpdateTicks(a.Ticks / div, a.Category, a.Name, a.Hash);
       }
     }
 
