@@ -222,8 +222,21 @@ namespace CrabUI
 
 
     internal bool DecorChanged { get; set; }
-    public Color BackgroundColor = Color.Black * 0.5f;
-    public Color BorderColor = Color.White * 0.5f;
+
+    public bool BackgroundVisible = true;
+    private Color backgroundColor = Color.Black * 0.5f; public Color BackgroundColor
+    {
+      get => backgroundColor;
+      set { backgroundColor = value; BackgroundVisible = backgroundColor != Color.Transparent; }
+    }
+
+    public bool BorderVisible = true;
+    private Color borderColor = Color.White * 0.5f; public Color BorderColor
+    {
+      get => borderColor;
+      set { borderColor = value; BorderVisible = borderColor != Color.Transparent; }
+    }
+
     public float BorderThickness = 1f;
     private Vector2 padding = new Vector2(2, 2); public Vector2 Padding
     {
@@ -236,8 +249,9 @@ namespace CrabUI
     public bool HideChildrenOutsideFrame { get; set; } = false;
     protected virtual void Draw(SpriteBatch spriteBatch)
     {
-      GUI.DrawRectangle(spriteBatch, Real.Position, Real.Size, BackgroundColor, isFilled: true);
-      GUI.DrawRectangle(spriteBatch, BorderBox.Position, BorderBox.Size, BorderColor, thickness: BorderThickness);
+      if (BackgroundVisible) GUI.DrawRectangle(spriteBatch, Real.Position, Real.Size, BackgroundColor, isFilled: true);
+
+      if (BorderVisible) GUI.DrawRectangle(spriteBatch, BorderBox.Position, BorderBox.Size, BorderColor, thickness: BorderThickness);
 
       if (Resizible)
       {
@@ -260,7 +274,7 @@ namespace CrabUI
 
       sw.Restart();
       Draw(spriteBatch);
-      CUI.Capture(sw.ElapsedTicks, $"CUI.Draw:{base.ToString()}");
+      //CUI.Capture(sw.ElapsedTicks, $"CUI.Draw:{base.ToString()}");
 
       Rectangle prevScissorRect = spriteBatch.GraphicsDevice.ScissorRectangle;
 
@@ -314,6 +328,8 @@ namespace CrabUI
         RunRecursiveOn(child, action, depth + 1);
       }
     }
+
+    public string Type() => base.ToString();
 
     public override string ToString() => $"{base.ToString()}:{ID} {Real} A:{Absolute} R:{Relative} AMin:{AbsoluteMin} RMin:{RelativeMin} AMax:{AbsoluteMax} RMax:{RelativeMax}";
   }

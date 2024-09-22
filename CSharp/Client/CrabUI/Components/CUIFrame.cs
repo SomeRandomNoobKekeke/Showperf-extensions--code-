@@ -14,12 +14,12 @@ namespace CrabUI
 
     protected override void Draw(SpriteBatch spriteBatch)
     {
-      GUI.DrawRectangle(spriteBatch, Real.Position, Real.Size, BackgroundColor, isFilled: true);
+      if (BackgroundVisible) GUI.DrawRectangle(spriteBatch, Real.Position, Real.Size, BackgroundColor, isFilled: true);
     }
 
     protected override void DrawFront(SpriteBatch spriteBatch)
     {
-      GUI.DrawRectangle(spriteBatch, BorderBox.Position, BorderBox.Size, BorderColor, thickness: BorderThickness);
+      if (BorderVisible) GUI.DrawRectangle(spriteBatch, BorderBox.Position, BorderBox.Size, BorderColor, thickness: BorderThickness);
 
       if (Resizible)
       {
