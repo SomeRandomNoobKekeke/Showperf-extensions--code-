@@ -24,7 +24,7 @@ namespace ShowPerfExtensions
       public GUIFont Font { get; set; } = GUIStyle.MonospacedFont;
       public float TextScale { get; set; } = 0.8f;
 
-      public int ScrollSurround = 5;
+      public int ScrollSurround = 0;
 
       public void Update()
       {

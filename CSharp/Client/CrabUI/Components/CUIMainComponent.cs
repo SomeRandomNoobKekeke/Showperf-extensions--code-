@@ -18,12 +18,11 @@ namespace CrabUI
   {
     public long DrawTime;
     public long UpdateTime;
-    public double UpdateInterval = 1.0 / 300.0;
-    public bool StepAlways = true;
-    public event Action OnStep;
+    public double UpdateInterval = 1.0 / 60.0;
+    public event Action OnUpdate;
 
     private Stopwatch sw;
-    private static CUIMainComponent main;
+    private static CUIMainComponent Main;
     private Harmony harmony;
     private List<CUIComponent> Flat = new List<CUIComponent>();
     private CUIMouse Mouse = new CUIMouse();
@@ -32,7 +31,7 @@ namespace CrabUI
     private CUIComponent Grabbed;
     private Vector2 GrabbedOffset;
     private CUIComponent ResizingComponent;
-    private double LastUpdateTiming;
+
 
     private void RunStraigth(Action<CUIComponent> a) { for (int i = 0; i < Flat.Count; i++) a(Flat[i]); }
     private void RunReverse(Action<CUIComponent> a) { for (int i = Flat.Count - 1; i >= 0; i--) a(Flat[i]); }
@@ -43,55 +42,30 @@ namespace CrabUI
       RunRecursiveOn(this, c => Flat.Add(c));
     }
 
-
-    public void Update(double deltaTime)
+    private double LastUpdateTime;
+    public void Update(double totalTime)
     {
-      OnStep?.Invoke();
-
-      // CUI.log(deltaTime);
-
-      CUI.EnsureCategory();
-
       sw.Restart();
-      if (Timing.TotalTime - LastUpdateTiming > UpdateInterval)
+      if (totalTime - LastUpdateTime >= UpdateInterval)
       {
-
-        Mouse.Scan();
-
         if (TreeChanged)
         {
           FlattenTree();
           TreeChanged = false;
         }
 
-        //TODO why am i sure that grabbed have parent?
-        if (!Mouse.Held)
-        {
-          Grabbed = null;
-          ResizingComponent = null;
-        }
-        if (Grabbed != null && Mouse.Moved)
-        {
-          Grabbed.TryDragTo(Mouse.Position - Grabbed.Parent.Real.Position - GrabbedOffset);
-        }
-
-        if (ResizingComponent != null && Mouse.Moved)
-        {
-          ResizingComponent.TryToResize(Mouse.Position - ResizingComponent.Real.Position);
-        }
+        HandleMouse();
 
         //RunStraigth(c => c.UpdateStateBeforeLayout());
         RunStraigth(c => c.Layout.Update());
         //RunStraigth(c => c.UpdateStateAfterLayout());
 
-        HandleMouse();
+        OnUpdate?.Invoke();
 
-        LastUpdateTiming = Timing.TotalTime;
+        LastUpdateTime = totalTime;
       }
-      else
-      {
-        if (MouseOn != null) GUI.MouseOn = dummyComponent;
-      }
+
+      CUI.EnsureCategory();
       CUI.Capture(sw.ElapsedTicks, "CUI.Update");
     }
 
@@ -102,6 +76,7 @@ namespace CrabUI
       foreach (CUIComponent child in this.Children) { child.DrawRecursive(spriteBatch); }
       foreach (CUIComponent child in this.Children) { child.DrawFrontRecursive(spriteBatch); }
 
+      CUI.EnsureCategory();
       CUI.Capture(sw.ElapsedTicks, "CUI.Draw");
     }
 
@@ -123,6 +98,25 @@ namespace CrabUI
         }
       }
 
+      Mouse.Scan();
+
+      //TODO why am i sure that grabbed have parent?
+      if (!Mouse.Held)
+      {
+        Grabbed = null;
+        ResizingComponent = null;
+      }
+      if (Grabbed != null && Mouse.Moved)
+      {
+        Grabbed.TryDragTo(Mouse.Position - Grabbed.Parent.Real.Position - GrabbedOffset);
+      }
+
+      if (ResizingComponent != null && Mouse.Moved)
+      {
+        ResizingComponent.TryToResize(Mouse.Position - ResizingComponent.Real.Position);
+      }
+
+
       // just deep clear of prev mouse pressed state
       for (int i = MouseOnList.Count - 1; i >= 0; i--)
       {
@@ -135,7 +129,7 @@ namespace CrabUI
 
       if (GUI.MouseOn == null || GUI.MouseOn == dummyComponent)
       {
-        //skip main component
+        //skip Main component
         foreach (CUIComponent child in this.Children)
         {
           CheckIfContainsMouse(child);
@@ -144,7 +138,7 @@ namespace CrabUI
 
       CurrentMouseOn = MouseOnList.LastOrDefault();
 
-      if (CurrentMouseOn != null) GUI.MouseOn = dummyComponent;
+      //if (CurrentMouseOn != null) GUI.MouseOn = dummyComponent;
 
       if (CurrentMouseOn != MouseOn)
       {
@@ -247,12 +241,17 @@ namespace CrabUI
     {
       harmony.Patch(
         original: typeof(GUI).GetMethod("Draw", AccessTools.all),
-        prefix: new HarmonyMethod(typeof(CUIMainComponent).GetMethod("GUI_Draw_Prefix", AccessTools.all))
+        prefix: new HarmonyMethod(typeof(CUIMainComponent).GetMethod("CUIDraw", AccessTools.all))
       );
 
       harmony.Patch(
         original: typeof(GameMain).GetMethod("Update", AccessTools.all),
-        postfix: new HarmonyMethod(typeof(CUIMainComponent).GetMethod("GameMain_Update_Postfix", AccessTools.all))
+        postfix: new HarmonyMethod(typeof(CUIMainComponent).GetMethod("CUIUpdate", AccessTools.all))
+      );
+
+      harmony.Patch(
+        original: typeof(GUI).GetMethod("UpdateMouseOn", AccessTools.all),
+        postfix: new HarmonyMethod(typeof(CUIMainComponent).GetMethod("CUIBlockClicks", AccessTools.all))
       );
 
       harmony.Patch(
@@ -261,16 +260,21 @@ namespace CrabUI
       );
     }
 
-    private static void GameMain_Update_Postfix(GameTime gameTime)
+    private static void CUIUpdate(GameTime gameTime)
     {
-      try { main.Update(gameTime.ElapsedGameTime.TotalSeconds); }
+      try { Main.Update(gameTime.TotalGameTime.TotalSeconds); }
       catch (Exception e) { CUI.log($"CUI: {e}", Color.Yellow); }
     }
 
-    private static void GUI_Draw_Prefix(SpriteBatch spriteBatch)
+    private static void CUIDraw(SpriteBatch spriteBatch)
     {
-      try { main.Draw(spriteBatch); }
+      try { Main.Draw(spriteBatch); }
       catch (Exception e) { CUI.log($"CUI: {e}", Color.Yellow); }
+    }
+
+    private static void CUIBlockClicks(ref GUIComponent __result)
+    {
+      if (GUI.MouseOn == null && Main.MouseOn != null) GUI.MouseOn = dummyComponent;
     }
 
     private static void CUIBlockScroll(float deltaTime, ref bool allowMove, ref bool allowZoom, bool allowInput, bool? followSub)
@@ -292,9 +296,9 @@ namespace CrabUI
 
       harmony = new Harmony("crabui");
 
-      if (main == null)
+      if (Main == null)
       {
-        main = this;
+        Main = this;
         patchAll();
       }
     }

@@ -42,13 +42,13 @@ namespace ShowPerfExtensions
       Showperf = new CUIShowperf(0.6f, 0.1f, 0.4f, 0.8f);
 
       CUI.Append(Showperf);
-      CUI.OnStep += () => Showperf.Update();
+      CUI.OnUpdate += () => Showperf.Update();
 
       Showperf.Capture.Toggle(CName.MapEntityDrawing);
 
-      CUI.Load(CUITest.ManyScissorRects);
+      //CUI.Load(CUITest.FillEmptySpace);
 
-      // CUI.OnStep += () => log($"{String.Format("{0:000000}", CUI.DrawTime)} {String.Format("{0:000000}", CUI.UpdateTime)}");
+      // CUI.OnUpdate += () => log($"{String.Format("{0:000000}", CUI.DrawTime)} {String.Format("{0:000000}", CUI.UpdateTime)}");
 
       PatchAll();
       addCommands();
