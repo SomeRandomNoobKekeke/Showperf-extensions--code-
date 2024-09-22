@@ -53,12 +53,12 @@ namespace ShowPerfExtensions
         CUIButton b = new CUIButton("Click");
         b.OnMouseDown += (CUIMouse m) =>
         {
-          CUIComponent next = null;
-          if (Pages.IsOpened(View)) { Pages.Open(Menu); return; }
-          if (Pages.IsOpened(Menu)) { Pages.Open(View); return; }
+          // CUIComponent next = null;
+          // if (Pages.IsOpened(View)) { Pages.Open(Menu); return; }
+          // if (Pages.IsOpened(Menu)) { Pages.Open(View); return; }
 
-          // Capture.ToggleByID(CName.MapEntityDrawing);
-          // Window.Reset();
+          Capture.ToggleByID(CName.MapEntityDrawing);
+          Window.Reset();
         };
         Append(b);
 

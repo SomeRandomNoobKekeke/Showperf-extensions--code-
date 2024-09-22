@@ -43,12 +43,13 @@ namespace ShowPerfExtensions
       CUI.Append(Showperf);
       CUI.OnStep += () => Showperf.Update();
 
-      // Showperf.Capture.Toggle(CName.MapEntityDrawing);
+      Showperf.Capture.Toggle(CName.MapEntityDrawing);
 
       //CUI.Load(CUITest.ButtonsOnSimpleLayout);
       // CUI.OnStep += () => log($"{String.Format("{0:000000}", CUI.DrawTime)} {String.Format("{0:000000}", CUI.UpdateTime)}");
 
       PatchAll();
+      addCommands();
 
       info($"{ModName} Initialized");
     }
@@ -58,6 +59,7 @@ namespace ShowPerfExtensions
 
     public void Dispose()
     {
+      removeCommands();
       info($"{ModName} Disposed");
     }
   }

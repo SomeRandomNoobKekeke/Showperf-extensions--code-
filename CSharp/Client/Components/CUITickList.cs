@@ -28,7 +28,8 @@ namespace ShowPerfExtensions
 
       public void Update()
       {
-        Absolute.Height = View.Values.Count * StringHeight;
+        //TODO investigate
+        Absolute.Height = (View.Values.Count + 3) * StringHeight; // +1 just for gap
       }
 
       protected override CUIRect DragZone => new CUIRect(0, -1000000, Parent.Real.Width, 2000000);

@@ -20,6 +20,7 @@ namespace ShowPerfExtensions
     {
       public CUITickList TickList;
       public List<UpdateTicks> Values = new List<UpdateTicks>();
+      public HashSet<string> Tracked = new HashSet<string>();
       public double Sum;
       public double Linearity;
       public double Slope;
@@ -33,6 +34,7 @@ namespace ShowPerfExtensions
         TopValue = 0;
         Slope = 0;
       }
+
 
       public static double TicksToMs = 1000.0 / Stopwatch.Frequency;
       public bool ShowInMs = true;
@@ -49,8 +51,7 @@ namespace ShowPerfExtensions
       public Color GetColor(UpdateTicks t)
       {
         Color cl = ShowperfGradient(t.Ticks / TopValue);
-        return cl;
-        //return View.Tracked.Count != 0 && !View.Tracked.Contains(t.ID) ? Color.DarkSlateGray : cl;
+        return Tracked.Count != 0 && !Tracked.Contains(t.Name) ? Color.DarkSlateGray : cl;
       }
       public Color ShowperfGradient(double f) => ShowperfGradient((float)f);
 

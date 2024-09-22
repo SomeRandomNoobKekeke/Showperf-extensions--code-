@@ -87,7 +87,6 @@ namespace CrabUI
       {
         if (MouseOn != null) GUI.MouseOn = dummyComponent;
       }
-
       CUI.Capture(sw.ElapsedTicks, "CUI.Update");
 
       sw.Restart();
@@ -95,6 +94,7 @@ namespace CrabUI
       DrawFrontRecursive(spriteBatch);
 
       CUI.Capture(sw.ElapsedTicks, "CUI.Draw");
+
     }
 
     private void HandleMouse()

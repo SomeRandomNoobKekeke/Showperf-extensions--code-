@@ -44,7 +44,7 @@ namespace ShowPerfExtensions
         {CName.None , new CaptureState()},
         {CName.All , new CaptureState()},
         {CName.MapEntitysUpdate , new CaptureState()},
-        {CName.MapEntityDrawing , new CaptureState()},
+        {CName.MapEntityDrawing , new CaptureState(byID:false)},
         {CName.CharactersUpdate , new CaptureState()},
         {CName.LevelObjectsDrawing , new CaptureState()},
         {CName.LevelMisc ,new CaptureState()},
