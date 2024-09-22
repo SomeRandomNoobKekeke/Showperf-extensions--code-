@@ -44,17 +44,13 @@ namespace CrabUI
     }
 
 
-    public double be;
-    public void Step(SpriteBatch spriteBatch)
+    public void Update(double deltaTime)
     {
       OnStep?.Invoke();
 
+      // CUI.log(deltaTime);
+
       CUI.EnsureCategory();
-
-      //CUI.log(UpdateInterval);
-
-      // CUI.log(Timing.TotalTime - be);
-      // be = Timing.TotalTime;
 
       sw.Restart();
       if (Timing.TotalTime - LastUpdateTiming > UpdateInterval)
@@ -97,7 +93,10 @@ namespace CrabUI
         if (MouseOn != null) GUI.MouseOn = dummyComponent;
       }
       CUI.Capture(sw.ElapsedTicks, "CUI.Update");
+    }
 
+    protected override void Draw(SpriteBatch spriteBatch)
+    {
       sw.Restart();
 
       foreach (CUIComponent child in this.Children) { child.DrawRecursive(spriteBatch); }
@@ -105,6 +104,7 @@ namespace CrabUI
 
       CUI.Capture(sw.ElapsedTicks, "CUI.Draw");
     }
+
 
     private void HandleMouse()
     {
@@ -247,7 +247,12 @@ namespace CrabUI
     {
       harmony.Patch(
         original: typeof(GUI).GetMethod("Draw", AccessTools.all),
-        prefix: new HarmonyMethod(typeof(CUIMainComponent).GetMethod("CUIStep", AccessTools.all))
+        prefix: new HarmonyMethod(typeof(CUIMainComponent).GetMethod("GUI_Draw_Prefix", AccessTools.all))
+      );
+
+      harmony.Patch(
+        original: typeof(GameMain).GetMethod("Update", AccessTools.all),
+        postfix: new HarmonyMethod(typeof(CUIMainComponent).GetMethod("GameMain_Update_Postfix", AccessTools.all))
       );
 
       harmony.Patch(
@@ -256,13 +261,15 @@ namespace CrabUI
       );
     }
 
-    private static void CUIStep(SpriteBatch spriteBatch)
+    private static void GameMain_Update_Postfix(GameTime gameTime)
     {
-      try
-      {
-        main.Step(spriteBatch);
-        //‖color:Yellow‖CUI:‖end‖
-      }
+      try { main.Update(gameTime.ElapsedGameTime.TotalSeconds); }
+      catch (Exception e) { CUI.log($"CUI: {e}", Color.Yellow); }
+    }
+
+    private static void GUI_Draw_Prefix(SpriteBatch spriteBatch)
+    {
+      try { main.Draw(spriteBatch); }
       catch (Exception e) { CUI.log($"CUI: {e}", Color.Yellow); }
     }
 
