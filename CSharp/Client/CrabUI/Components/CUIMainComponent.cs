@@ -90,8 +90,9 @@ namespace CrabUI
       CUI.Capture(sw.ElapsedTicks, "CUI.Update");
 
       sw.Restart();
-      DrawRecursive(spriteBatch);
-      DrawFrontRecursive(spriteBatch);
+
+      foreach (CUIComponent child in this.Children) { child.DrawRecursive(spriteBatch); }
+      foreach (CUIComponent child in this.Children) { child.DrawFrontRecursive(spriteBatch); }
 
       CUI.Capture(sw.ElapsedTicks, "CUI.Draw");
 

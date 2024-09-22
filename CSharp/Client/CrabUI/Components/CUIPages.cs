@@ -24,6 +24,8 @@ namespace CrabUI
 
     public CUIPages() : base()
     {
+      BackgroundColor = Color.Transparent;
+      BorderColor = Color.Transparent;
       HideChildrenOutsideFrame = true;
     }
 

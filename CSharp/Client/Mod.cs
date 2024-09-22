@@ -36,9 +36,10 @@ namespace ShowPerfExtensions
     {
       mod = this;
 
+      GameMain.PerformanceCounter.DrawTimeGraph = new Graph(1000);
       Window = new CaptureWindow(duration: 3, fps: 30);
       CUI = new CUIMainComponent();
-      Showperf = new CUIShowperf(0.7f, 0.1f, 0.3f, 0.8f);
+      Showperf = new CUIShowperf(0.6f, 0.1f, 0.4f, 0.8f);
 
       CUI.Append(Showperf);
       CUI.OnStep += () => Showperf.Update();

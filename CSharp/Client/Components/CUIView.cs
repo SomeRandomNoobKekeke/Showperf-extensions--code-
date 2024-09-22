@@ -113,7 +113,9 @@ namespace ShowPerfExtensions
       {
         TickList = new CUITickList(this);
         Append(TickList);
-        BackgroundColor = Color.Black * 0.5f;
+        BackgroundColor = Color.Transparent;
+        //BorderColor = Color.Transparent;
+        HideChildrenOutsideFrame = false;
       }
     }
   }

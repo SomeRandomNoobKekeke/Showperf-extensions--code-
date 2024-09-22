@@ -110,6 +110,11 @@ namespace ShowPerfExtensions
         }
       }, () => new string[][] { Showperf.View.Values.Select(t => t.Name).ToArray() }));
 
+      addedCommands.Add(new DebugConsole.Command("bebe", "", (string[] args) =>
+      {
+        Showperf.Visible = !Showperf.Visible;
+      }));
+
       // addedCommands.Add(new DebugConsole.Command("showperf_untrack|s_untrack", "", (string[] args) =>
       // {
       //   if (args.Length == 0 || args[0] == "all")

@@ -55,7 +55,9 @@ namespace CrabUI
     {
       base.Draw(spriteBatch);
 
-      Font.DrawString(spriteBatch, WrappedText, TextDrawPos, TextColor, rotation: 0, origin: new Vector2(0, 0), TextScale, spriteEffects: SpriteEffects.None, layerDepth: 0.1f);
+      // Font.DrawString(spriteBatch, WrappedText, TextDrawPos, TextColor, rotation: 0, origin: Vector2.Zero, TextScale, spriteEffects: SpriteEffects.None, layerDepth: 0.1f);
+
+      Font.Value.DrawString(spriteBatch, WrappedText, TextDrawPos, TextColor, rotation: 0, origin: Vector2.Zero, TextScale, se: SpriteEffects.None, layerDepth: 0.1f);
     }
 
     public CUITextBlock(string text = "")

@@ -33,18 +33,17 @@ namespace ShowPerfExtensions
 
       public void Update()
       {
-        if (true || Capture.Active.Count != 0)
+        if (Capture.Active.Count != 0)
         {
           Window.Update();
           View.Update();
-
-          //log(String.Join(",", Window.FirstSlice.Ticks.Values.Select(v => v.Name)));
         }
       }
 
       public CUIShowperf(float x, float y, float w, float h) : base(x, y, w, h)
       {
         Layout = new CUILayoutVerticalList(this);
+        HideChildrenOutsideFrame = false;
 
         CUIComponent handle = Append(new CUIComponent(0, 0, 1, null));
         handle.Absolute.Height = 15;
@@ -65,6 +64,7 @@ namespace ShowPerfExtensions
         Pages = new CUIPages();
         Pages.FillEmptySpace = true;
         Append(Pages);
+        // Pages.HideChildrenOutsideFrame = false;
 
         View = new CUIView();
         View.Relative.Set(0, 0, 1, 1);

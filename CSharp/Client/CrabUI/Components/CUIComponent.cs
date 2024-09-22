@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Diagnostics;
 
 using Barotrauma;
 using Microsoft.Xna.Framework;
@@ -16,6 +17,7 @@ namespace CrabUI
     public static Dictionary<int, CUIComponent> ComponentsById = new Dictionary<int, CUIComponent>();
     public int ID;
     public bool Debug;
+    public Stopwatch sw = new Stopwatch();
 
     public static Vector2 GameScreenSize => new Vector2(GameMain.GraphicsWidth, GameMain.GraphicsHeight);
     public static GUIButton dummyComponent = new GUIButton(new RectTransform(new Point(0, 0)));
@@ -254,8 +256,11 @@ namespace CrabUI
     protected void DrawRecursive(SpriteBatch spriteBatch)
     {
       if (Debug) CUI.log(this);
+      if (!Visible) return;
 
-      if (Visible) Draw(spriteBatch);
+      sw.Restart();
+      Draw(spriteBatch);
+      CUI.Capture(sw.ElapsedTicks, $"CUI.Draw:{base.ToString()}");
 
       Rectangle prevScissorRect = spriteBatch.GraphicsDevice.ScissorRectangle;
 
