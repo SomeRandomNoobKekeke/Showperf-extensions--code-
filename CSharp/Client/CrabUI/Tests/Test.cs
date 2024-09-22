@@ -76,7 +76,7 @@ namespace CrabUI
           );
 
           //c.BackgroundColor = Color.Transparent;
-          c.BorderColor = Color.Transparent;
+          //c.BorderColor = Color.Transparent;
         }
       }
 

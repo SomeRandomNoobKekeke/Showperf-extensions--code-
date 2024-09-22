@@ -64,6 +64,7 @@ namespace ShowPerfExtensions
         Pages = new CUIPages();
         Pages.FillEmptySpace = true;
         Append(Pages);
+        Pages.BackgroundColor = Color.DarkBlue * 0.5f;
         // Pages.HideChildrenOutsideFrame = false;
 
         View = new CUIView();
