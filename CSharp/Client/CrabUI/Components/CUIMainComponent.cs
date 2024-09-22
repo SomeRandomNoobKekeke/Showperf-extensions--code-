@@ -19,6 +19,7 @@ namespace CrabUI
     public long DrawTime;
     public long UpdateTime;
     public double UpdateInterval = 1.0 / 300.0;
+    public bool StepAlways = true;
     public event Action OnStep;
 
     private Stopwatch sw;
@@ -42,15 +43,23 @@ namespace CrabUI
       RunRecursiveOn(this, c => Flat.Add(c));
     }
 
+
+    public double be;
     public void Step(SpriteBatch spriteBatch)
     {
       OnStep?.Invoke();
 
       CUI.EnsureCategory();
 
+      //CUI.log(UpdateInterval);
+
+      // CUI.log(Timing.TotalTime - be);
+      // be = Timing.TotalTime;
+
       sw.Restart();
       if (Timing.TotalTime - LastUpdateTiming > UpdateInterval)
       {
+
         Mouse.Scan();
 
         if (TreeChanged)
@@ -95,7 +104,6 @@ namespace CrabUI
       foreach (CUIComponent child in this.Children) { child.DrawFrontRecursive(spriteBatch); }
 
       CUI.Capture(sw.ElapsedTicks, "CUI.Draw");
-
     }
 
     private void HandleMouse()
@@ -280,7 +288,6 @@ namespace CrabUI
       if (main == null)
       {
         main = this;
-
         patchAll();
       }
     }

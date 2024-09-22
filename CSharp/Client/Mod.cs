@@ -46,7 +46,7 @@ namespace ShowPerfExtensions
 
       Showperf.Capture.Toggle(CName.MapEntityDrawing);
 
-      //CUI.Load(CUITest.FillEmptySpace);
+      CUI.Load(CUITest.ManyScissorRects);
 
       // CUI.OnStep += () => log($"{String.Format("{0:000000}", CUI.DrawTime)} {String.Format("{0:000000}", CUI.UpdateTime)}");
 
