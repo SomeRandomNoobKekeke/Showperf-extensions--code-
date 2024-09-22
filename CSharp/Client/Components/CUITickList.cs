@@ -28,11 +28,10 @@ namespace ShowPerfExtensions
 
       public void Update()
       {
-        //TODO investigate
-        Absolute.Height = (View.Values.Count + 3) * StringHeight; // +1 just for gap
+        Absolute.Height = (View.Values.Count + 2) * StringHeight; // +2 just for gap
       }
 
-      protected override CUIRect DragZone => new CUIRect(0, -1000000, Parent.Real.Width, 2000000);
+      protected override CUINullRect DragZone => new CUINullRect(0, null, Parent.Real.Width, null);
 
       protected override void Draw(SpriteBatch spriteBatch)
       {

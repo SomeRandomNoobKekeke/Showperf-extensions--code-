@@ -16,7 +16,7 @@ namespace CrabUI
   {
     private class CUITestLooseFrame : CUIFrame
     {
-      protected override CUIRect DragZone => new CUIRect(
+      protected override CUINullRect DragZone => new CUINullRect(
         -Parent.Real.Width * 0.2f,
         -Parent.Real.Height * 0.2f,
         Parent.Real.Width * 1.4f,
@@ -36,31 +36,10 @@ namespace CrabUI
       float fpos = 0.02f;
       float fsize = 1f - fpos * 2;
 
-      f = f.Append(new CUITestLooseFrame(fpos, fpos, fsize, fsize));
-      f = f.Append(new CUITestLooseFrame(fpos, fpos, fsize, fsize));
-      f = f.Append(new CUITestLooseFrame(fpos, fpos, fsize, fsize));
-      f = f.Append(new CUITestLooseFrame(fpos, fpos, fsize, fsize));
-      f = f.Append(new CUITestLooseFrame(fpos, fpos, fsize, fsize));
-      f = f.Append(new CUITestLooseFrame(fpos, fpos, fsize, fsize));
-      f = f.Append(new CUITestLooseFrame(fpos, fpos, fsize, fsize));
-      f = f.Append(new CUITestLooseFrame(fpos, fpos, fsize, fsize));
-      f = f.Append(new CUITestLooseFrame(fpos, fpos, fsize, fsize));
-      f = f.Append(new CUITestLooseFrame(fpos, fpos, fsize, fsize));
-      f = f.Append(new CUITestLooseFrame(fpos, fpos, fsize, fsize));
-      f = f.Append(new CUITestLooseFrame(fpos, fpos, fsize, fsize));
-      f = f.Append(new CUITestLooseFrame(fpos, fpos, fsize, fsize));
-      f = f.Append(new CUITestLooseFrame(fpos, fpos, fsize, fsize));
-      f = f.Append(new CUITestLooseFrame(fpos, fpos, fsize, fsize));
-      f = f.Append(new CUITestLooseFrame(fpos, fpos, fsize, fsize));
-      f = f.Append(new CUITestLooseFrame(fpos, fpos, fsize, fsize));
-      f = f.Append(new CUITestLooseFrame(fpos, fpos, fsize, fsize));
-      f = f.Append(new CUITestLooseFrame(fpos, fpos, fsize, fsize));
-      f = f.Append(new CUITestLooseFrame(fpos, fpos, fsize, fsize));
-      f = f.Append(new CUITestLooseFrame(fpos, fpos, fsize, fsize));
-      f = f.Append(new CUITestLooseFrame(fpos, fpos, fsize, fsize));
-      f = f.Append(new CUITestLooseFrame(fpos, fpos, fsize, fsize));
-      f = f.Append(new CUITestLooseFrame(fpos, fpos, fsize, fsize));
-
+      for (int i = 0; i < 20; i++)
+      {
+        f = f.Append(new CUITestLooseFrame(fpos, fpos, fsize, fsize));
+      }
 
       int count = 10;
       float size = 1.0f / count;

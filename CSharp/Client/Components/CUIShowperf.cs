@@ -43,7 +43,7 @@ namespace ShowPerfExtensions
       public CUIShowperf(float x, float y, float w, float h) : base(x, y, w, h)
       {
         Layout = new CUILayoutVerticalList(this);
-        HideChildrenOutsideFrame = false;
+        // HideChildrenOutsideFrame = false;
 
         CUIComponent handle = Append(new CUIComponent(0, 0, 1, null));
         handle.Absolute.Height = 15;

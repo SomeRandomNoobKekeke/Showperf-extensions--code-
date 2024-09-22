@@ -187,23 +187,21 @@ namespace CrabUI
 
     public bool Dragable { get; set; }
 
-    //TODO probably should be a NullRect
-    protected virtual CUIRect DragZone => new CUIRect(Vector2.Zero, Parent.Real.Size);
+    protected virtual CUINullRect DragZone => new CUINullRect(Vector2.Zero, Parent.Real.Size);
 
 
     //TODO this probably should be in layout
     protected void TryDragTo(Vector2 to)
     {
-      //if (Parent == null) return;
-
       float newX = to.X;
       float newY = to.Y;
 
-      if (newX + Real.Width > DragZone.Width) newX = DragZone.Width - Real.Width;
-      if (newY + Real.Height > DragZone.Height) newY = DragZone.Height - Real.Height;
+      if (DragZone.Width.HasValue && newX + Real.Width > DragZone.Width.Value) newX = DragZone.Width.Value - Real.Width;
 
-      if (newX < DragZone.Left) newX = DragZone.Left;
-      if (newY < DragZone.Top) newY = DragZone.Top;
+      if (DragZone.Height.HasValue && newY + Real.Height > DragZone.Height.Value) newY = DragZone.Height.Value - Real.Height;
+
+      if (DragZone.Left.HasValue && newX < DragZone.Left.Value) newX = DragZone.Left.Value;
+      if (DragZone.Top.HasValue && newY < DragZone.Top.Value) newY = DragZone.Top.Value;
 
       Absolute.Left = newX;
       Absolute.Top = newY;

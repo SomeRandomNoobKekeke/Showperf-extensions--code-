@@ -110,6 +110,8 @@ namespace CrabUI
       Host = host;
     }
 
+    public CUINullRect(Vector2 position, Vector2 size) : this(position.X, position.Y, size.X, size.Y) { }
+
     public CUINullRect(float? x, float? y, float? w, float? h, CUIComponent host = null)
     {
       Left = x;

@@ -18,7 +18,7 @@ namespace CrabUI
   {
     public long DrawTime;
     public long UpdateTime;
-    public double UpdateInterval = 1.0 / 60.0;
+    public double UpdateInterval = 1.0 / 300.0;
     public event Action OnUpdate;
 
     private Stopwatch sw;
