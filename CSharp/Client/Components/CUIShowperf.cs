@@ -22,7 +22,7 @@ namespace ShowPerfExtensions
         // SubmarineType.Player,
       };
       CUIPages Pages;
-      public CUIView View;
+      public CUITickList TickList;
       public CUIScheme Menu;
 
 
@@ -36,7 +36,7 @@ namespace ShowPerfExtensions
         if (Capture.Active.Count != 0)
         {
           Window.Update();
-          View.Update();
+          TickList.Update();
         }
       }
 
@@ -47,19 +47,23 @@ namespace ShowPerfExtensions
 
         CUIComponent handle = Append(new CUIComponent(0, 0, 1, null));
         handle.Absolute.Height = 15;
+        handle.BorderColor = Color.Transparent;
 
 
-        CUIButton b = new CUIButton("Click");
+        CUIComponent b = Append(new CUIButton("ToggleByID"));
         b.OnMouseDown += (CUIMouse m) =>
         {
-          // CUIComponent next = null;
-          // if (Pages.IsOpened(View)) { Pages.Open(Menu); return; }
-          // if (Pages.IsOpened(Menu)) { Pages.Open(View); return; }
-
           Capture.ToggleByID(CName.MapEntityDrawing);
           Window.Reset();
         };
-        Append(b);
+
+
+        CUIComponent bb = Append(new CUIButton("Click"));
+        bb.OnMouseDown += (CUIMouse m) =>
+        {
+          if (Pages.IsOpened(TickList)) { Pages.Open(Menu); return; }
+          if (Pages.IsOpened(Menu)) { Pages.Open(TickList); return; }
+        };
 
         Pages = new CUIPages();
         Pages.FillEmptySpace = true;
@@ -67,8 +71,8 @@ namespace ShowPerfExtensions
 
 
 
-        View = new CUIView();
-        View.Relative.Set(0, 0, 1, 1);
+        TickList = new CUITickList();
+        TickList.Relative.Set(0, 0, 1, 1);
 
 
 
@@ -88,7 +92,7 @@ namespace ShowPerfExtensions
 
 
 
-        Pages.Open(View);
+        Pages.Open(TickList);
 
         Capture = new CaptureManager();
       }

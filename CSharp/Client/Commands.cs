@@ -97,18 +97,18 @@ namespace ShowPerfExtensions
       {
         if (args.Length > 0)
         {
-          if (!Showperf.View.Tracked.Contains(args[0]))
+          if (!Showperf.TickList.Tracked.Contains(args[0]))
           {
-            if (Showperf.View.Tracked.Add(args[0])) log($"{args[0]} Tracked");
+            if (Showperf.TickList.Tracked.Add(args[0])) log($"{args[0]} Tracked");
             else log($"{args[0]} not found :(");
           }
           else
           {
-            if (Showperf.View.Tracked.Remove(args[0])) log($"{args[0]} Untracked");
+            if (Showperf.TickList.Tracked.Remove(args[0])) log($"{args[0]} Untracked");
             else log($"{args[0]} not found :(");
           }
         }
-      }, () => new string[][] { Showperf.View.Values.Select(t => t.Name).ToArray() }));
+      }, () => new string[][] { Showperf.TickList.Values.Select(t => t.Name).ToArray() }));
 
       addedCommands.Add(new DebugConsole.Command("bebe", "", (string[] args) =>
       {

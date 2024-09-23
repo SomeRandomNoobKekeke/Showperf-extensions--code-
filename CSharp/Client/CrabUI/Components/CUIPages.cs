@@ -14,6 +14,7 @@ namespace CrabUI
     public CUIComponent OpenedPage;
 
     public bool IsOpened(CUIComponent p) => OpenedPage == p;
+    internal override CUINullRect ChildrenBoundaries => new CUINullRect(null, null, null, null);
 
     public void Open(CUIComponent p)
     {
