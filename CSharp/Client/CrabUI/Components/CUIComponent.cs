@@ -111,6 +111,8 @@ namespace CrabUI
       }
     }
 
+    public CUIAnchor Anchor = new CUIAnchor(CUIAnchorType.LeftTop);
+
     private CUINullRect absolute; public CUINullRect Absolute
     {
       get => absolute;
@@ -209,6 +211,9 @@ namespace CrabUI
       InvokeOnDrag(newX, newY);
     }
 
+
+    public CUIResizeHandle? LeftResizeHandle;
+    public CUIResizeHandle? RightResizeHandle;
     public bool Resizible { get; set; }
     protected CUIRect ResizeHandle { get; set; }
 
@@ -267,7 +272,7 @@ namespace CrabUI
 
     protected void DrawRecursive(SpriteBatch spriteBatch)
     {
-      if (Debug) CUI.log(this);
+      // if (Debug) CUI.log(this);
       if (!Visible) return;
 
       sw.Restart();
@@ -329,6 +334,6 @@ namespace CrabUI
 
     public string Type() => base.ToString();
 
-    public override string ToString() => $"{base.ToString()}:{ID} {Real} A:{Absolute} R:{Relative} AMin:{AbsoluteMin} RMin:{RelativeMin} AMax:{AbsoluteMax} RMax:{RelativeMax}";
+    public override string ToString() => $"{base.ToString()}:{ID} {Real} {Anchor.Type} A:{Absolute} R:{Relative} AMin:{AbsoluteMin} RMin:{RelativeMin} AMax:{AbsoluteMax} RMax:{RelativeMax}";
   }
 }

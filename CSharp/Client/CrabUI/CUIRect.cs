@@ -22,11 +22,20 @@ namespace CrabUI
 
     public Vector2 Size => new Vector2(Width, Height);
     public Vector2 Position => new Vector2(Left, Top);
-    public Vector2 RightBottom => new Vector2(Right, Bottom);
-
-    public Vector2 Center => new Vector2(Left + Width / 2, Top + Height / 2);
-
+    public Vector2 Center => new Vector2(Left + Width / 2, Top + Height / 2); // xd
     public Rectangle Box => new Rectangle((int)Left, (int)Top, (int)Width, (int)Height);
+
+    public Vector2 LeftTop => new Vector2(Left, Top);
+    public Vector2 LeftCenter => new Vector2(Left, Top + Height / 2);
+    public Vector2 LeftBottom => new Vector2(Left, Top + Height);
+    public Vector2 CenterTop => new Vector2(Left + Width / 2, Top);
+    public Vector2 CenterCenter => new Vector2(Left + Width / 2, Top + Height / 2);
+    public Vector2 CenterBottom => new Vector2(Left + Width / 2, Top + Height);
+    public Vector2 RightTop => new Vector2(Left + Width, Top);
+    public Vector2 RightCenter => new Vector2(Left + Width, Top + Height / 2);
+    public Vector2 RightBottom => new Vector2(Left + Width, Top + Height);
+
+
 
     public CUIRect Shift(Vector2 shift)
     {

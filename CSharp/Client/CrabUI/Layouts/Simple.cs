@@ -20,26 +20,26 @@ namespace CrabUI
         {
           float x, y, w, h;
 
-          x = Host.Real.Left;
-          if (c.Relative.Left.HasValue) x = Host.Real.Left + c.Relative.Left.Value * Host.Real.Width;
-          if (c.Absolute.Left.HasValue) x = Host.Real.Left + c.Absolute.Left.Value;
+          x = 0;
+          if (c.Relative.Left.HasValue) x = c.Relative.Left.Value * Host.Real.Width;
+          if (c.Absolute.Left.HasValue) x = c.Absolute.Left.Value;
 
-          if (c.RelativeMin.Left.HasValue) x = Math.Max(x, Host.Real.Left + c.RelativeMin.Left.Value * Host.Real.Width);
-          if (c.AbsoluteMin.Left.HasValue) x = Math.Max(x, Host.Real.Left + c.AbsoluteMin.Left.Value);
+          if (c.RelativeMin.Left.HasValue) x = Math.Max(x, c.RelativeMin.Left.Value * Host.Real.Width);
+          if (c.AbsoluteMin.Left.HasValue) x = Math.Max(x, c.AbsoluteMin.Left.Value);
 
-          if (c.RelativeMax.Left.HasValue) x = Math.Min(x, Host.Real.Left + c.RelativeMax.Left.Value * Host.Real.Width);
-          if (c.AbsoluteMax.Left.HasValue) x = Math.Min(x, Host.Real.Left + c.AbsoluteMax.Left.Value);
+          if (c.RelativeMax.Left.HasValue) x = Math.Min(x, c.RelativeMax.Left.Value * Host.Real.Width);
+          if (c.AbsoluteMax.Left.HasValue) x = Math.Min(x, c.AbsoluteMax.Left.Value);
 
 
-          y = Host.Real.Top;
-          if (c.Relative.Top.HasValue) y = Host.Real.Top + c.Relative.Top.Value * Host.Real.Height;
-          if (c.Absolute.Top.HasValue) y = Host.Real.Top + c.Absolute.Top.Value;
+          y = 0;
+          if (c.Relative.Top.HasValue) y = c.Relative.Top.Value * Host.Real.Height;
+          if (c.Absolute.Top.HasValue) y = c.Absolute.Top.Value;
 
-          if (c.RelativeMin.Top.HasValue) y = Math.Max(y, Host.Real.Top + c.RelativeMin.Top.Value * Host.Real.Height);
-          if (c.AbsoluteMin.Top.HasValue) y = Math.Max(y, Host.Real.Top + c.AbsoluteMin.Top.Value);
+          if (c.RelativeMin.Top.HasValue) y = Math.Max(y, c.RelativeMin.Top.Value * Host.Real.Height);
+          if (c.AbsoluteMin.Top.HasValue) y = Math.Max(y, c.AbsoluteMin.Top.Value);
 
-          if (c.RelativeMax.Top.HasValue) y = Math.Min(y, Host.Real.Top + c.RelativeMax.Top.Value * Host.Real.Height);
-          if (c.AbsoluteMax.Top.HasValue) y = Math.Min(y, Host.Real.Top + c.AbsoluteMax.Top.Value);
+          if (c.RelativeMax.Top.HasValue) y = Math.Min(y, c.RelativeMax.Top.Value * Host.Real.Height);
+          if (c.AbsoluteMax.Top.HasValue) y = Math.Min(y, c.AbsoluteMax.Top.Value);
 
 
           w = 0;
@@ -65,7 +65,12 @@ namespace CrabUI
 
           Vector2 OkSize = c.AmIOkWithThisSize(new Vector2(w, h));
 
-          c.Real = new CUIRect(x, y, OkSize.X, OkSize.Y);
+
+          Vector2 Pos = c.Anchor.PosOf(Host.Real) + new Vector2(x, y) - c.Anchor.PosOf(new CUIRect(0, 0, w, h));
+
+          c.Real = new CUIRect(Pos, OkSize);
+
+          //if (c.Debug) CUI.log(c); // TODO make special method for such calls in CUI
         }
 
         Changed = false;

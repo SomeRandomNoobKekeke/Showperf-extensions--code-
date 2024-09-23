@@ -50,6 +50,7 @@ namespace CrabUI
       PrevScrollWheelValue = CurrentState.ScrollWheelValue;
 
       DoubleClick = false;
+      //FIXME remove Timing.TotalTime, it may not be updated
       if (Down)
       {
         if (Timing.TotalTime - PrevMouseDownTiming < DoubleClickInterval)

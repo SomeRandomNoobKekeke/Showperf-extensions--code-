@@ -10,7 +10,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace CrabUI
 {
-  public partial class CUIButton : CUITextBlock
+  public class CUIButton : CUITextBlock
   {
     public GUISoundType ClickSound { get; set; } = GUISoundType.Select;
 

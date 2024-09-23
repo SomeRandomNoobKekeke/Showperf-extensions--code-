@@ -14,7 +14,7 @@ using HarmonyLib;
 
 namespace CrabUI
 {
-  public partial class CUIMainComponent : CUIComponent
+  public class CUIMainComponent : CUIComponent
   {
     public long DrawTime;
     public long UpdateTime;
