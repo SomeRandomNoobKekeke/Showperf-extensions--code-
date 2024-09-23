@@ -11,7 +11,6 @@ namespace CrabUI
 {
   public class CUIFrame : CUIComponent
   {
-
     protected override void Draw(SpriteBatch spriteBatch)
     {
       if (BackgroundVisible) GUI.DrawRectangle(spriteBatch, Real.Position, Real.Size, BackgroundColor, isFilled: true);
@@ -21,16 +20,20 @@ namespace CrabUI
     {
       if (BorderVisible) GUI.DrawRectangle(spriteBatch, BorderBox.Position, BorderBox.Size, BorderColor, thickness: BorderThickness);
 
-      if (Resizible)
-      {
-        GUI.DrawRectangle(spriteBatch, ResizeHandle.Position, ResizeHandle.Size, BorderColor, isFilled: true);
-      }
+      LeftResizeHandle.Draw(spriteBatch);
+      RightResizeHandle.Draw(spriteBatch);
+
+      // if (Resizible)
+      // {
+      //   GUI.DrawRectangle(spriteBatch, ResizeHandle.Position, ResizeHandle.Size, BorderColor, isFilled: true);
+      // }
     }
 
     public CUIFrame() : base()
     {
       HideChildrenOutsideFrame = true;
-      Resizible = true;
+      RightResizeHandle.Visible = true;
+      LeftResizeHandle.Visible = true;
       Dragable = true;
     }
 

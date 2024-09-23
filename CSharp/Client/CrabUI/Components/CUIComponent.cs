@@ -80,6 +80,9 @@ namespace CrabUI
     {
       //TODO unhardcode
       ResizeHandle = new CUIRect(Real.Right - 9, Real.Bottom - 9, 9, 9);
+
+      LeftResizeHandle.Update();
+      RightResizeHandle.Update();
     }
     // protected virtual void UpdateStateBeforeLayout() { }
     // protected virtual void UpdateStateAfterLayout() { }
@@ -256,10 +259,13 @@ namespace CrabUI
 
       if (BorderVisible) GUI.DrawRectangle(spriteBatch, BorderBox.Position, BorderBox.Size, BorderColor, thickness: BorderThickness);
 
-      if (Resizible)
-      {
-        GUI.DrawRectangle(spriteBatch, ResizeHandle.Position, ResizeHandle.Size, BorderColor, isFilled: true);
-      }
+      LeftResizeHandle.Draw(spriteBatch);
+      RightResizeHandle.Draw(spriteBatch);
+
+      // if (Resizible)
+      // {
+      //   GUI.DrawRectangle(spriteBatch, ResizeHandle.Position, ResizeHandle.Size, BorderColor, isFilled: true);
+      // }
     }
 
     protected virtual void DrawFront(SpriteBatch spriteBatch) { }
@@ -311,6 +317,9 @@ namespace CrabUI
       Relative = new CUINullRect();
       RelativeMin = new CUINullRect();
       RelativeMax = new CUINullRect();
+
+      LeftResizeHandle = new CUIResizeHandle(this, CUIAnchorType.LeftBottom);
+      RightResizeHandle = new CUIResizeHandle(this, CUIAnchorType.RightBottom);
 
       // OnMouseUp += (CUIMouse m) => Mod.log($"OnMouseUp {this}");
       // OnMouseDown += (CUIMouse m) => Mod.log($"OnMouseDown {this}");

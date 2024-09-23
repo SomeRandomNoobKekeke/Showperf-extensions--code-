@@ -40,6 +40,7 @@ namespace CrabUI
 
       inner.BackgroundColor = Color.Yellow * 0.5f;
       inner.AbsoluteMin.Left = 100f;
+      inner.RelativeMax.Width = 1f;
 
       CUI.Append(outer);
     }

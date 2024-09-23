@@ -32,6 +32,8 @@ namespace CrabUI
     private Vector2 GrabbedOffset;
     private CUIComponent ResizingComponent;
 
+    private CUIResizeHandle GrabbedResizeHandle;
+
 
     private void RunStraigth(Action<CUIComponent> a) { for (int i = 0; i < Flat.Count; i++) a(Flat[i]); }
     private void RunReverse(Action<CUIComponent> a) { for (int i = Flat.Count - 1; i >= 0; i--) a(Flat[i]); }
@@ -104,16 +106,21 @@ namespace CrabUI
       if (!Mouse.Held)
       {
         Grabbed = null;
-        ResizingComponent = null;
+        if (GrabbedResizeHandle != null)
+        {
+          GrabbedResizeHandle.EndResize();
+          GrabbedResizeHandle = null;
+        }
       }
+
       if (Grabbed != null && Mouse.Moved)
       {
         Grabbed.TryDragTo(Mouse.Position - Grabbed.Parent.Real.Position - GrabbedOffset);
       }
 
-      if (ResizingComponent != null && Mouse.Moved)
+      if (GrabbedResizeHandle != null && Mouse.Moved)
       {
-        ResizingComponent.TryToResize(Mouse.Position - ResizingComponent.Real.Position);
+        GrabbedResizeHandle.Resize(Mouse.Position);
       }
 
 
@@ -163,20 +170,28 @@ namespace CrabUI
       if (Mouse.Down)
       {
         // Click on resize handle?
-        if (ResizingComponent == null)
+        if (GrabbedResizeHandle == null)
         {
           for (int i = MouseOnList.Count - 1; i >= 0; i--)
           {
-            if (MouseOnList[i].Resizible && MouseOnList[i].ResizeHandle.Contains(Mouse.Position))
+            if (MouseOnList[i].RightResizeHandle.IsHit(Mouse.Position))
             {
-              ResizingComponent = MouseOnList[i];
+              GrabbedResizeHandle = MouseOnList[i].RightResizeHandle;
+              GrabbedResizeHandle.BeginResize(Mouse.Position);
+              break;
+            }
+
+            if (MouseOnList[i].LeftResizeHandle.IsHit(Mouse.Position))
+            {
+              GrabbedResizeHandle = MouseOnList[i].LeftResizeHandle;
+              GrabbedResizeHandle.BeginResize(Mouse.Position);
               break;
             }
           }
         }
 
         // Init Drag and drop?
-        if (ResizingComponent == null && Grabbed == null)
+        if (GrabbedResizeHandle == null && Grabbed == null)
         {
           for (int i = MouseOnList.Count - 1; i >= 0; i--)
           {
@@ -192,7 +207,7 @@ namespace CrabUI
         }
       }
 
-      if (ResizingComponent == null && Grabbed == null)
+      if (GrabbedResizeHandle == null && Grabbed == null)
       {
         for (int i = MouseOnList.Count - 1; i >= 0; i--)
         {
