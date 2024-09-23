@@ -26,6 +26,8 @@ namespace CrabUI
       }
     }
 
+    internal override CUINullRect ChildrenBoundaries => new CUINullRect(0, null, Real.Width, null);
+
     private void ValidateScroll()
     {
       scroll = Math.Min(0, Math.Max(scroll, Real.Height - listLayout.TotalHeight));

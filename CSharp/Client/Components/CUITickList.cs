@@ -31,7 +31,7 @@ namespace ShowPerfExtensions
         Absolute.Height = (View.Values.Count + 2) * StringHeight; // +2 just for gap
       }
 
-      protected override CUINullRect DragZone => new CUINullRect(0, null, Parent.Real.Width, null);
+
 
       protected override void Draw(SpriteBatch spriteBatch)
       {

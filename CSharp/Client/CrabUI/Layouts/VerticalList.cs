@@ -74,19 +74,18 @@ namespace CrabUI
         float y = 0;
         foreach (CUIComponentSize c in Sizes)
         {
-          c.Component.Real = new CUIRect(
+          c.Component.Real = CheckChildBoundaries(
             Host.Real.Left + Host.ChildrenOffset.X,
             Host.Real.Top + Host.ChildrenOffset.Y + y,
             c.Size.X,
             c.Size.Y
           );
+
           y += c.Size.Y;
         }
 
         Changed = false;
       }
-
-
 
       if (Host.DecorChanged)
       {

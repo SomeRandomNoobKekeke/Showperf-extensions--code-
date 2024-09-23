@@ -52,6 +52,31 @@ namespace CrabUI
       Changed = false;
     }
 
+    protected CUIRect CheckChildBoundaries(float x, float y, float w, float h)
+    {
+      if (Host.ChildrenBoundaries.Width.HasValue && x - Host.Real.Left + w > Host.ChildrenBoundaries.Width.Value)
+      {
+        x = Host.ChildrenBoundaries.Width.Value - w + Host.Real.Left;
+      }
+
+      if (Host.ChildrenBoundaries.Height.HasValue && y - Host.Real.Top + h > Host.ChildrenBoundaries.Height.Value)
+      {
+        y = Host.ChildrenBoundaries.Height.Value - h + Host.Real.Top;
+      }
+
+      if (Host.ChildrenBoundaries.Left.HasValue && x - Host.Real.Left < Host.ChildrenBoundaries.Left.Value)
+      {
+        x = Host.ChildrenBoundaries.Left.Value + Host.Real.Left;
+      }
+
+      if (Host.ChildrenBoundaries.Top.HasValue && y - Host.Real.Top < Host.ChildrenBoundaries.Top.Value)
+      {
+        y = Host.ChildrenBoundaries.Top.Value + Host.Real.Top;
+      }
+
+      return new CUIRect(x, y, w, h);
+    }
+
     public CUILayout(CUIComponent host)
     {
       Host = host;

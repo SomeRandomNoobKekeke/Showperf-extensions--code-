@@ -18,8 +18,8 @@ namespace CrabUI
     public CUIAnchor Anchor;
     public CUINullRect Absolute;
 
-    public Color BackgroundColor = Color.White;
-    public Color GrabbedColor = Color.Cyan;
+    public Color BackgroundColor = Color.White * 0.25f;
+    public Color GrabbedColor = Color.Cyan * 0.5f;
     public Vector2 GrabOffset;
 
     public bool Grabbed;
@@ -88,9 +88,9 @@ namespace CrabUI
       Host = host;
 
       Anchor = new CUIAnchor(anchor);
-      BackgroundColor = Host.BorderColor;
+      //BackgroundColor = Host.BorderColor;
 
-      Absolute = new CUINullRect(0, 0, 15, 15);
+      Absolute = new CUINullRect(0, 0, 15, 10);
     }
   }
 }

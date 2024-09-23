@@ -63,12 +63,12 @@ namespace CrabUI
           if (c.RelativeMax.Height.HasValue) h = Math.Min(h, c.RelativeMax.Height.Value * Host.Real.Height);
           if (c.AbsoluteMax.Height.HasValue) h = Math.Min(h, c.AbsoluteMax.Height.Value);
 
-          Vector2 OkSize = c.AmIOkWithThisSize(new Vector2(w, h));
+          (w, h) = c.AmIOkWithThisSize(new Vector2(w, h));
+
+          (x, y) = c.Anchor.PosOf(Host.Real) + new Vector2(x, y) - c.Anchor.PosOf(new CUIRect(0, 0, w, h));
 
 
-          Vector2 Pos = c.Anchor.PosOf(Host.Real) + new Vector2(x, y) - c.Anchor.PosOf(new CUIRect(0, 0, w, h));
-
-          c.Real = new CUIRect(Pos, OkSize);
+          c.Real = CheckChildBoundaries(x, y, w, h);
 
           //if (c.Debug) CUI.log(c); // TODO make special method for such calls in CUI
         }

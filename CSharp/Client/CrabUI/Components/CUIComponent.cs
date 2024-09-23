@@ -78,9 +78,6 @@ namespace CrabUI
 
     internal virtual void UpdatePseudoChildren()
     {
-      //TODO unhardcode
-      ResizeHandle = new CUIRect(Real.Right - 9, Real.Bottom - 9, 9, 9);
-
       LeftResizeHandle.Update();
       RightResizeHandle.Update();
     }
@@ -113,6 +110,8 @@ namespace CrabUI
         OnChildrenPropChanged();
       }
     }
+
+    internal virtual CUINullRect ChildrenBoundaries => new CUINullRect(0, 0, Real.Width, Real.Height);
 
     public CUIAnchor Anchor = new CUIAnchor(CUIAnchorType.LeftTop);
 
@@ -192,40 +191,16 @@ namespace CrabUI
 
     public bool Dragable { get; set; }
 
-    protected virtual CUINullRect DragZone => new CUINullRect(Vector2.Zero, Parent.Real.Size);
-
-
-    //TODO this probably should be in layout
+    //TODO rethink
+    //protected virtual CUINullRect DragZone => new CUINullRect(null, null, null, null);
     protected void TryDragTo(Vector2 to)
     {
-      float newX = to.X;
-      float newY = to.Y;
-
-      if (DragZone.Width.HasValue && newX + Real.Width > DragZone.Width.Value) newX = DragZone.Width.Value - Real.Width;
-
-      if (DragZone.Height.HasValue && newY + Real.Height > DragZone.Height.Value) newY = DragZone.Height.Value - Real.Height;
-
-      if (DragZone.Left.HasValue && newX < DragZone.Left.Value) newX = DragZone.Left.Value;
-      if (DragZone.Top.HasValue && newY < DragZone.Top.Value) newY = DragZone.Top.Value;
-
-      Absolute.Left = newX;
-      Absolute.Top = newY;
-
-      InvokeOnDrag(newX, newY);
+      Absolute.Position = to;
+      InvokeOnDrag(to.X, to.Y);
     }
 
-
-    public CUIResizeHandle? LeftResizeHandle;
-    public CUIResizeHandle? RightResizeHandle;
-    public bool Resizible { get; set; }
-    protected CUIRect ResizeHandle { get; set; }
-
-    protected void TryToResize(Vector2 newSize)
-    {
-      Absolute.Width = Math.Max(ResizeHandle.Width, newSize.X);
-      Absolute.Height = Math.Max(ResizeHandle.Height, newSize.Y);
-    }
-
+    public CUIResizeHandle LeftResizeHandle;
+    public CUIResizeHandle RightResizeHandle;
 
     internal bool DecorChanged { get; set; }
 
@@ -261,11 +236,6 @@ namespace CrabUI
 
       LeftResizeHandle.Draw(spriteBatch);
       RightResizeHandle.Draw(spriteBatch);
-
-      // if (Resizible)
-      // {
-      //   GUI.DrawRectangle(spriteBatch, ResizeHandle.Position, ResizeHandle.Size, BorderColor, isFilled: true);
-      // }
     }
 
     protected virtual void DrawFront(SpriteBatch spriteBatch) { }
@@ -320,11 +290,6 @@ namespace CrabUI
 
       LeftResizeHandle = new CUIResizeHandle(this, CUIAnchorType.LeftBottom);
       RightResizeHandle = new CUIResizeHandle(this, CUIAnchorType.RightBottom);
-
-      // OnMouseUp += (CUIMouse m) => Mod.log($"OnMouseUp {this}");
-      // OnMouseDown += (CUIMouse m) => Mod.log($"OnMouseDown {this}");
-      // OnMouseEnter += (CUIMouse m) => Mod.log($"OnMouseEnter {this}");
-      // OnMouseLeave += (CUIMouse m) => Mod.log($"OnMouseLeave {this}");
     }
 
     public CUIComponent(float? x, float? y, float? w, float? h) : this()

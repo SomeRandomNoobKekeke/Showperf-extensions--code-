@@ -16,22 +16,23 @@ namespace CrabUI
   {
     private class CUITestLooseFrame : CUIFrame
     {
-      protected override CUINullRect DragZone => new CUINullRect(
-        -Parent.Real.Width * 0.2f,
-        -Parent.Real.Height * 0.2f,
-        Parent.Real.Width * 1.4f,
-        Parent.Real.Height * 1.4f
+      internal override CUINullRect ChildrenBoundaries => new CUINullRect(
+        -Real.Width * 0.1f,
+        -Real.Height * 0.1f,
+        Real.Width * 1.1f,
+        Real.Height * 1.1f
       );
+
       public CUITestLooseFrame(float? x, float? y, float? w, float? h) : base(x, y, w, h)
       {
-        BackgroundColor = Color.Black * 0.1f;
+        BackgroundColor = Color.Black * 0.2f;
         // HideChildrenOutsideFrame = false;
       }
     }
 
     public static void ManyScissorRects(CUIMainComponent CUI)
     {
-      CUIComponent f = CUI.Append(new CUIFrame(0.2f, 0.2f, 0.6f, 0.6f));
+      CUIComponent f = CUI.Append(new CUITestLooseFrame(0.2f, 0.2f, 0.6f, 0.6f));
 
       float fpos = 0.02f;
       float fsize = 1f - fpos * 2;

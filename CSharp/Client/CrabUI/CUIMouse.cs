@@ -15,7 +15,7 @@ namespace CrabUI
   public class CUIMouse
   {
     public static double DoubleClickInterval = 0.18;
-    public static float ScrollSpeed = 5f;
+    public static float ScrollSpeed = 0.6f;
 
     private double PrevMouseDownTiming;
     private int PrevScrollWheelValue;
@@ -46,7 +46,7 @@ namespace CrabUI
       PositionDif = Position - PrevPosition;
       Moved = PositionDif != Vector2.Zero;
 
-      Scroll = (CurrentState.ScrollWheelValue - PrevScrollWheelValue) / ScrollSpeed;
+      Scroll = (CurrentState.ScrollWheelValue - PrevScrollWheelValue) * ScrollSpeed;
       PrevScrollWheelValue = CurrentState.ScrollWheelValue;
 
       DoubleClick = false;

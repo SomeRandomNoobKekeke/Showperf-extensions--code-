@@ -22,11 +22,6 @@ namespace CrabUI
 
       LeftResizeHandle.Draw(spriteBatch);
       RightResizeHandle.Draw(spriteBatch);
-
-      // if (Resizible)
-      // {
-      //   GUI.DrawRectangle(spriteBatch, ResizeHandle.Position, ResizeHandle.Size, BorderColor, isFilled: true);
-      // }
     }
 
     public CUIFrame() : base()

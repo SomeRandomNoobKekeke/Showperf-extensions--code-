@@ -29,7 +29,8 @@ namespace CrabUI
     {
       Connections.Add(new CUISchemeLink(start, end));
     }
-    protected override CUINullRect DragZone => new CUINullRect(null, null, null, null);
+
+    // internal override CUINullRect ChildrenBoundaries => new CUINullRect(null, null, null, null);
 
     public Color LineColor = Color.White;
     public float LineWidth = 2f;

@@ -30,8 +30,6 @@ namespace CrabUI
     private List<CUIComponent> MouseOnList = new List<CUIComponent>();
     private CUIComponent Grabbed;
     private Vector2 GrabbedOffset;
-    private CUIComponent ResizingComponent;
-
     private CUIResizeHandle GrabbedResizeHandle;
 
 

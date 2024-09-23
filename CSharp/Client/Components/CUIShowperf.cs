@@ -64,13 +64,13 @@ namespace ShowPerfExtensions
         Pages = new CUIPages();
         Pages.FillEmptySpace = true;
         Append(Pages);
-        Pages.BackgroundColor = Color.DarkBlue * 0.5f;
-        // Pages.HideChildrenOutsideFrame = false;
+
+
 
         View = new CUIView();
         View.Relative.Set(0, 0, 1, 1);
 
-        //Append(View);
+
 
         Menu = new CUIScheme(0, 0, 1, 1);
 
