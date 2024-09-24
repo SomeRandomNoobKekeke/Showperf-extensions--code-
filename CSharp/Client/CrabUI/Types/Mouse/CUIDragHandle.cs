@@ -33,8 +33,9 @@ namespace CrabUI
 
     public void DragTo(Vector2 to)
     {
-      Host.Absolute.Position = to - Host.Parent.Real.Position - GrabOffset;
-      Host.InvokeOnDrag(to.X, to.Y);
+      Vector2 pos = to - Host.Parent.Real.Position - GrabOffset;
+      Host.Absolute.Position = pos;
+      Host.InvokeOnDrag(pos.X, pos.Y);
     }
 
     public CUIDragHandle(CUIComponent host)
