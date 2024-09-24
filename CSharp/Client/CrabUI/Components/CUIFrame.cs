@@ -27,8 +27,7 @@ namespace CrabUI
     public CUIFrame() : base()
     {
       HideChildrenOutsideFrame = true;
-      RightResizeHandle.Visible = true;
-      LeftResizeHandle.Visible = true;
+      Resizible = true;
       Draggable = true;
     }
 
