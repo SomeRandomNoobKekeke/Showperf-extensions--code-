@@ -108,9 +108,10 @@ namespace CrabUI
 
     public bool MouseOver { get; set; }
     public bool MousePressed { get; set; }
-    public bool PassMouseClicks { get; set; } = true;
-    public bool PassDragAndDrop { get; set; } = true;
-    public bool PassSwipe { get; set; } = true;
+    public bool ConsumeMouseClicks { get; set; }
+    public bool ConsumeDragAndDrop { get; set; }
+    public bool ConsumeSwipe { get; set; }
+    public bool ConsumeMouseScroll { get; set; }
 
 
     // Without wrappers they will throw FieldAccessException
@@ -196,7 +197,10 @@ namespace CrabUI
       set { fillEmptySpace = value; OnPropChanged(); }
     }
 
+
+    //TODO rethink
     protected CUIRect BorderBox;
+    protected CUIRect ScissorBox;
     private CUIRect real; public virtual CUIRect Real
     {
       get => real;
@@ -208,6 +212,12 @@ namespace CrabUI
           real.Top - BorderThickness,
           real.Width + BorderThickness * 2,
           real.Height + BorderThickness * 2
+        );
+        ScissorBox = new CUIRect(
+          real.Left + 1,
+          real.Top + 1,
+          real.Width - 1,
+          real.Height - 1
         );
       }
     }
@@ -274,7 +284,7 @@ namespace CrabUI
       if (HideChildrenOutsideFrame)
       {
         spriteBatch.End();
-        spriteBatch.GraphicsDevice.ScissorRectangle = Rectangle.Intersect(prevScissorRect, Real.Box);
+        spriteBatch.GraphicsDevice.ScissorRectangle = Rectangle.Intersect(prevScissorRect, ScissorBox.Box);
         spriteBatch.Begin(SpriteSortMode.Deferred, samplerState: GUI.SamplerState, rasterizerState: GameMain.ScissorTestEnable);
       }
 

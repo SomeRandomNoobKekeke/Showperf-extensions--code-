@@ -50,13 +50,13 @@ namespace ShowPerfExtensions
         handle.Absolute.Height = 15;
         handle.BorderColor = Color.Transparent;
 
-
-        CUIComponent b = Append(new CUIButton("ToggleByID"));
-        b.OnMouseDown += (CUIMouse m) =>
+        CUIToggleButton ToggleByID = new CUIToggleButton("ToggleByID");
+        ToggleByID.OnStateChange += (state) =>
         {
-          Capture.ToggleByID(CName.MapEntityDrawing);
+          Capture.SetByID(CName.MapEntityDrawing, state);
           Window.Reset();
         };
+        Append(ToggleByID);
 
 
         CUIComponent bb = Append(new CUIButton("Click"));
@@ -80,6 +80,8 @@ namespace ShowPerfExtensions
         MapFrame = new CUIComponent(0, 0, 1, 1);
         MapFrame.Swipeable = true;
         MapFrame.OnDClick += (CUIMouse m) => MapFrame.ChildrenOffset = Vector2.Zero;
+        MapFrame.BorderColor = Color.Transparent;
+        MapFrame.BackgroundColor = Color.Black * 0.5f;
 
         Menu = new CUIMap();
         MapFrame.Append(Menu);

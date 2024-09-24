@@ -32,7 +32,7 @@ namespace ShowPerfExtensions
 
         public void Update()
         {
-          Absolute.Height = (TickList.Values.Count + 2) * StringHeight; // +2 just for gap
+          Absolute.Height = (TickList.Values.Count) * StringHeight;
         }
 
         protected override void Draw(SpriteBatch spriteBatch)
@@ -49,7 +49,7 @@ namespace ShowPerfExtensions
             Font.DrawString(
                 spriteBatch,
                 TickList.GetName(TickList.Values[i]),
-                Real.Position + new Vector2(0, i * StringHeight),
+                Real.Position + new Vector2(Padding.X, i * StringHeight),
                 TickList.GetColor(TickList.Values[i]),
                 rotation: 0,
                 origin: Vector2.Zero,

@@ -115,6 +115,8 @@ namespace ShowPerfExtensions
         BackgroundColor = Color.Black * 0.75f;
         BorderColor = Color.Transparent;
         HideChildrenOutsideFrame = false;
+
+        BottomGap = TickBlock.StringHeight * 2;
       }
     }
   }

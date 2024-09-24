@@ -62,11 +62,8 @@ namespace ShowPerfExtensions
         if (Capture[name].IsActive) Active.Remove(name); else Active.Add(name);
         Capture[name].IsActive = !Capture[name].IsActive;
       }
-      public void ToggleByID(CName name)
-      {
-        Capture[name].ByID = !Capture[name].ByID;
-      }
-
+      public void ToggleByID(CName name) { Capture[name].ByID = !Capture[name].ByID; }
+      public void SetByID(CName name, bool value) { Capture[name].ByID = value; }
       public CaptureManager() { }
     }
   }

@@ -38,7 +38,7 @@ namespace CrabUI
     private Vector2 GrabbedOffset;
 
 
-
+    internal override CUINullRect ChildrenBoundaries => new CUINullRect(0, 0, Real.Width, Real.Height);
     private void RunStraigth(Action<CUIComponent> a) { for (int i = 0; i < Flat.Count; i++) a(Flat[i]); }
     private void RunReverse(Action<CUIComponent> a) { for (int i = Flat.Count - 1; i >= 0; i--) a(Flat[i]); }
 
@@ -173,17 +173,21 @@ namespace CrabUI
         MouseOn = CurrentMouseOn;
       }
 
+      for (int i = MouseOnList.Count - 1; i >= 0; i--)
+      {
+        if (Mouse.Scrolled) MouseOnList[i].InvokeOnScroll(Mouse.Scroll);
+
+        if (MouseOnList[i].ConsumeMouseScroll) break;
+      }
 
       for (int i = MouseOnList.Count - 1; i >= 0; i--)
       {
         MouseOnList[i].MousePressed = Mouse.Held;
-
         if (Mouse.Down) MouseOnList[i].InvokeOnMouseDown(Mouse);
         if (Mouse.Up) MouseOnList[i].InvokeOnMouseUp(Mouse);
         if (Mouse.DoubleClick) MouseOnList[i].InvokeOnDClick(Mouse);
-        if (Mouse.Scrolled) MouseOnList[i].InvokeOnScroll(Mouse.Scroll);
 
-        if (!MouseOnList[i].PassMouseClicks) break;
+        if (MouseOnList[i].ConsumeMouseClicks) break;
       }
 
 
@@ -216,7 +220,7 @@ namespace CrabUI
           break;
         }
 
-        if (!MouseOnList[i].PassDragAndDrop) break;
+        if (MouseOnList[i].ConsumeSwipe) break;
       }
       if (GrabbedSwipeHandle != null) return;
 
@@ -230,7 +234,7 @@ namespace CrabUI
           break;
         }
 
-        if (!MouseOnList[i].PassDragAndDrop) break;
+        if (MouseOnList[i].ConsumeDragAndDrop) break;
       }
       if (GrabbedDragHandle != null) return;
 

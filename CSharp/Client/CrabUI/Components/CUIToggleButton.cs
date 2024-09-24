@@ -10,28 +10,36 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace CrabUI
 {
-  public class CUIButton : CUITextBlock
+  public class CUIToggleButton : CUITextBlock
   {
     public GUISoundType ClickSound { get; set; } = GUISoundType.Select;
+    public event Action<bool> OnStateChange;
+    private bool state; public bool State
+    {
+      get => state;
+      set { state = value; OnStateChange?.Invoke(state); }
+    }
 
     protected override void Draw(SpriteBatch spriteBatch)
     {
       BackgroundColor = new Color(0, 0, 32);
-      if (MouseOver) BackgroundColor = new Color(0, 0, 64);
-      if (MousePressed) BackgroundColor = new Color(0, 32, 127);
+      if (State) BackgroundColor = new Color(0, 200, 64);
 
       base.Draw(spriteBatch);
     }
-    public CUIButton(string text) : base(text)
+    public CUIToggleButton(string text) : base(text)
     {
       ConsumeMouseClicks = true;
       ConsumeDragAndDrop = true;
+
       BorderColor = Color.White;
       Wrap = false;
 
       Padding = new Vector2(2, 2);
       TextAling.Type = CUIAnchorType.CenterCenter;
+
       OnMouseDown += (CUIMouse m) => SoundPlayer.PlayUISound(ClickSound);
+      OnMouseDown += (CUIMouse m) => State = !State;
     }
   }
 }

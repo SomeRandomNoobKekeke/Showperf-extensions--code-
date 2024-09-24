@@ -13,6 +13,9 @@ namespace CrabUI
   {
     public bool Scrollable { get; set; } = true;
 
+    public float TopGap = 0f;
+    public float BottomGap = 0f;
+
     private CUILayoutVerticalList listLayout;
 
     private float scroll; public float Scroll
@@ -30,7 +33,7 @@ namespace CrabUI
 
     private void ValidateScroll()
     {
-      scroll = Math.Min(0, Math.Max(scroll, Real.Height - listLayout.TotalHeight));
+      scroll = Math.Min(TopGap, Math.Max(scroll, Real.Height - listLayout.TotalHeight - BottomGap));
       ChildrenOffset = new Vector2(0, scroll);
     }
 

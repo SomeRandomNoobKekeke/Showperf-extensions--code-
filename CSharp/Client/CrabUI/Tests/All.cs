@@ -26,7 +26,7 @@ namespace CrabUI
       foreach (var sound in Enum.GetValues(typeof(GUISoundType)).Cast<GUISoundType>())
       {
         CUIComponent b = l.Append(new CUITextBlock($"{sound}"));
-        b.Relative.Height = 0.1f;
+        //b.Relative.Height = 0.1f;
       }
 
       CUI.Append(f);
