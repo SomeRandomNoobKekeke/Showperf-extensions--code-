@@ -36,28 +36,28 @@ namespace CrabUI
     public void EndResize()
     {
       Grabbed = false;
+      CUI.Main.OnResizeEnd(this);
     }
 
     // TODO check bugs when trying to resize beyond absolute min
     public void Resize(Vector2 cursorPos)
     {
+      // NOTE: i tried to use GrabOffset and it's just more annoying
+      // you can accidentally resize something beyond screen bounds
       if (Anchor.Type == CUIAnchorType.RightBottom)
       {
-        Host.Absolute.Width = Math.Max(Real.Width, cursorPos.X - Host.Real.Left - GrabOffset.X + Real.Width);
-        Host.Absolute.Height = Math.Max(Real.Height, cursorPos.Y - Host.Real.Top - GrabOffset.Y + Real.Height);
+        Host.Absolute.Width = Math.Max(Real.Width, cursorPos.X - Host.Real.Left);
+        Host.Absolute.Height = Math.Max(Real.Height, cursorPos.Y - Host.Real.Top);
         return;
       }
 
       if (Anchor.Type == CUIAnchorType.LeftBottom)
       {
-        float w = Math.Max(
-          Real.Width,
-          Host.Real.Width - (cursorPos.X - Host.Real.Left - GrabOffset.X)
-        );
+        float w = Math.Max(Real.Width, Host.Real.Width - (cursorPos.X - Host.Real.Left));
 
         Host.Absolute.Left = Host.Real.Right - w - Host.Parent.Real.Left;
         Host.Absolute.Width = w;
-        Host.Absolute.Height = Math.Max(Real.Height, cursorPos.Y - Host.Real.Top - GrabOffset.Y + Real.Height);
+        Host.Absolute.Height = Math.Max(Real.Height, cursorPos.Y - Host.Real.Top);
         return;
       }
     }

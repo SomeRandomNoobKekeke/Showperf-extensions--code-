@@ -16,21 +16,26 @@ namespace CrabUI
 {
   public class CUIMainComponent : CUIComponent
   {
+    public static CUIMainComponent Main;
+
     public long DrawTime;
     public long UpdateTime;
     public double UpdateInterval = 1.0 / 300.0;
     public event Action OnUpdate;
 
+
+    public CUIDragHandle GrabbedDragHandle;
+    public CUIResizeHandle GrabbedResizeHandle;
+    public CUIComponent MouseOn;
+    public CUIMouse Mouse = new CUIMouse();
+
+
     private Stopwatch sw;
-    private static CUIMainComponent Main;
     private Harmony harmony;
     private List<CUIComponent> Flat = new List<CUIComponent>();
-    private CUIMouse Mouse = new CUIMouse();
-    private CUIComponent MouseOn;
     private List<CUIComponent> MouseOnList = new List<CUIComponent>();
-    private CUIComponent Grabbed;
     private Vector2 GrabbedOffset;
-    private CUIResizeHandle GrabbedResizeHandle;
+
 
 
     private void RunStraigth(Action<CUIComponent> a) { for (int i = 0; i < Flat.Count; i++) a(Flat[i]); }
@@ -80,7 +85,11 @@ namespace CrabUI
       CUI.Capture(sw.ElapsedTicks, "CUI.Draw");
     }
 
+    //  https://youtu.be/xuFgUmYCS8E?feature=shared&t=72
+    #region HandleMouse Start 
 
+    public void OnDragEnd(CUIDragHandle c) { if (c == GrabbedDragHandle) GrabbedDragHandle = null; }
+    public void OnResizeEnd(CUIResizeHandle c) { if (c == GrabbedResizeHandle) GrabbedResizeHandle = null; }
     private void HandleMouse()
     {
       void CheckIfContainsMouse(CUIComponent c)
@@ -100,27 +109,19 @@ namespace CrabUI
 
       Mouse.Scan();
 
-      //TODO why am i sure that grabbed have parent?
+      if (!Mouse.SomethingHappened) return;
+
       if (!Mouse.Held)
       {
-        Grabbed = null;
-        if (GrabbedResizeHandle != null)
-        {
-          GrabbedResizeHandle.EndResize();
-          GrabbedResizeHandle = null;
-        }
+        GrabbedDragHandle?.EndDrag();
+        GrabbedResizeHandle?.EndResize();
       }
 
-      if (Grabbed != null && Mouse.Moved)
+      if (Mouse.Moved)
       {
-        Grabbed.TryDragTo(Mouse.Position - Grabbed.Parent.Real.Position - GrabbedOffset);
+        GrabbedDragHandle?.DragTo(Mouse.Position);
+        GrabbedResizeHandle?.Resize(Mouse.Position);
       }
-
-      if (GrabbedResizeHandle != null && Mouse.Moved)
-      {
-        GrabbedResizeHandle.Resize(Mouse.Position);
-      }
-
 
       // just deep clear of prev mouse pressed state
       for (int i = MouseOnList.Count - 1; i >= 0; i--)
@@ -189,14 +190,14 @@ namespace CrabUI
         }
 
         // Init Drag and drop?
-        if (GrabbedResizeHandle == null && Grabbed == null)
+        if (GrabbedResizeHandle == null && GrabbedDragHandle == null)
         {
           for (int i = MouseOnList.Count - 1; i >= 0; i--)
           {
-            if (MouseOnList[i].Dragable)
+            if (MouseOnList[i].DragHandle.Draggable)
             {
-              Grabbed = MouseOnList[i];
-              GrabbedOffset = Mouse.Position - MouseOnList[i].Real.Position;
+              GrabbedDragHandle = MouseOnList[i].DragHandle;
+              GrabbedDragHandle.BeginDrag(Mouse.Position);
               break;
             }
 
@@ -205,7 +206,7 @@ namespace CrabUI
         }
       }
 
-      if (GrabbedResizeHandle == null && Grabbed == null)
+      if (GrabbedResizeHandle == null && GrabbedDragHandle == null)
       {
         for (int i = MouseOnList.Count - 1; i >= 0; i--)
         {
@@ -249,7 +250,9 @@ namespace CrabUI
         }
       }
     }
-
+    #endregion
+    #region HandleMouse End
+    #endregion
     private void patchAll()
     {
       harmony.Patch(

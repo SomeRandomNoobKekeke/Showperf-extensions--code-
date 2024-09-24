@@ -29,9 +29,12 @@ namespace CrabUI
     public bool Up;
     public bool Held;
     public float Scroll;
+    public bool Scrolled;
     public Vector2 Position;
     public Vector2 PositionDif;
     public bool Moved;
+
+    public bool SomethingHappened;
 
     public void Scan()
     {
@@ -48,6 +51,7 @@ namespace CrabUI
 
       Scroll = (CurrentState.ScrollWheelValue - PrevScrollWheelValue) * ScrollSpeed;
       PrevScrollWheelValue = CurrentState.ScrollWheelValue;
+      Scrolled = Scroll != 0;
 
       DoubleClick = false;
       //FIXME remove Timing.TotalTime, it may not be updated
@@ -60,6 +64,8 @@ namespace CrabUI
 
         PrevMouseDownTiming = Timing.TotalTime;
       }
+
+      SomethingHappened = Up || Down || Moved || Scrolled;
 
       PrevState = CurrentState;
     }

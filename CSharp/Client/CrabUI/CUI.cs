@@ -15,6 +15,7 @@ namespace CrabUI
 {
   public static class CUI
   {
+    public static CUIMainComponent Main => CUIMainComponent.Main;
 
     public static int CUIShowperfCategory = 1000;
 

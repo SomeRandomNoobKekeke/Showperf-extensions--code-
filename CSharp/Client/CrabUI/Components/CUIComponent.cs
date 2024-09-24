@@ -181,24 +181,26 @@ namespace CrabUI
     public bool PassMouseScroll { get; set; } = true;
 
     // Without wrappers they will throw FieldAccessException
-    public event Action<CUIMouse> OnMouseLeave; protected void InvokeOnMouseLeave(CUIMouse m) => OnMouseLeave?.Invoke(m);
-    public event Action<CUIMouse> OnMouseEnter; protected void InvokeOnMouseEnter(CUIMouse m) => OnMouseEnter?.Invoke(m);
-    public event Action<CUIMouse> OnMouseDown; protected void InvokeOnMouseDown(CUIMouse m) => OnMouseDown?.Invoke(m);
-    public event Action<CUIMouse> OnMouseUp; protected void InvokeOnMouseUp(CUIMouse m) => OnMouseUp?.Invoke(m);
-    public event Action<CUIMouse> OnDClick; protected void InvokeOnDClick(CUIMouse m) => OnDClick?.Invoke(m);
-    public event Action<float> OnScroll; protected void InvokeOnScroll(float scroll) => OnScroll?.Invoke(scroll);
-    public event Action<float, float> OnDrag; protected void InvokeOnDrag(float x, float y) => OnDrag?.Invoke(x, y);
+    public event Action<CUIMouse> OnMouseLeave; internal void InvokeOnMouseLeave(CUIMouse m) => OnMouseLeave?.Invoke(m);
+    public event Action<CUIMouse> OnMouseEnter; internal void InvokeOnMouseEnter(CUIMouse m) => OnMouseEnter?.Invoke(m);
+    public event Action<CUIMouse> OnMouseDown; internal void InvokeOnMouseDown(CUIMouse m) => OnMouseDown?.Invoke(m);
+    public event Action<CUIMouse> OnMouseUp; internal void InvokeOnMouseUp(CUIMouse m) => OnMouseUp?.Invoke(m);
+    public event Action<CUIMouse> OnDClick; internal void InvokeOnDClick(CUIMouse m) => OnDClick?.Invoke(m);
+    public event Action<float> OnScroll; internal void InvokeOnScroll(float scroll) => OnScroll?.Invoke(scroll);
+    public event Action<float, float> OnDrag; internal void InvokeOnDrag(float x, float y) => OnDrag?.Invoke(x, y);
 
-    public bool Dragable { get; set; }
+
 
     //TODO rethink
     //protected virtual CUINullRect DragZone => new CUINullRect(null, null, null, null);
-    protected void TryDragTo(Vector2 to)
-    {
-      Absolute.Position = to;
-      InvokeOnDrag(to.X, to.Y);
-    }
 
+    public CUIDragHandle DragHandle;
+
+    public bool Draggable
+    {
+      get => DragHandle.Draggable;
+      set => DragHandle.Draggable = value;
+    }
     public CUIResizeHandle LeftResizeHandle;
     public CUIResizeHandle RightResizeHandle;
 
@@ -288,6 +290,7 @@ namespace CrabUI
       RelativeMin = new CUINullRect();
       RelativeMax = new CUINullRect();
 
+      DragHandle = new CUIDragHandle(this);
       LeftResizeHandle = new CUIResizeHandle(this, CUIAnchorType.LeftBottom);
       RightResizeHandle = new CUIResizeHandle(this, CUIAnchorType.RightBottom);
     }

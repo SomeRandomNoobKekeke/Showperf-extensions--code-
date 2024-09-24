@@ -23,7 +23,7 @@ namespace ShowPerfExtensions
       };
       CUIPages Pages;
       public CUITickList TickList;
-      public CUIScheme Menu;
+      public CUIMap Menu;
 
 
       public bool ShouldCapture(Entity e)
@@ -76,7 +76,7 @@ namespace ShowPerfExtensions
 
 
 
-        Menu = new CUIScheme(0, 0, 1, 1);
+        Menu = new CUIMap(0, 0, 1, 1);
 
         CUIButton b1 = (CUIButton)Menu.Append(new CUIButton("kokoko"));
         CUIButton b2 = (CUIButton)Menu.Append(new CUIButton("kokoko"));
@@ -87,8 +87,9 @@ namespace ShowPerfExtensions
         b3.Absolute.Position = new Vector2(0, 200);
 
         Menu.OnDClick += (CUIMouse m) => Menu.Absolute.Position = Vector2.Zero;
-        Menu.Dragable = true;
+        Menu.Draggable = true;
         Menu.Connect(b1, b2);
+        Menu.Connect(b2, b3, Color.Lime);
 
 
 
