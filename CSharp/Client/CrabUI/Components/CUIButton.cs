@@ -31,7 +31,7 @@ namespace CrabUI
       Wrap = false;
 
       Padding = new Vector2(2, 2);
-      TextAling = CUITextAling.Center;
+      TextAling.Type = CUIAnchorType.CenterCenter;
       OnMouseDown += (CUIMouse m) => SoundPlayer.PlayUISound(ClickSound);
     }
   }

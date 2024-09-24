@@ -86,7 +86,7 @@ namespace CrabUI
       l.Append(new CUITextBlock("be be be be be be be be be be be be be be be be be be")
       {
         TextScale = 1.5f,
-        TextAling = CUITextAling.Center,
+        TextAling = new CUIAnchor(CUIAnchorType.CenterCenter),
         BackgroundColor = Color.Red * 0.25f,
         FillEmptySpace = true
       });
@@ -94,7 +94,7 @@ namespace CrabUI
       l.Append(new CUITextBlock("be be be be be be be be be be be be be be be be be be")
       {
         TextScale = 1.5f,
-        TextAling = CUITextAling.Center,
+        TextAling = new CUIAnchor(CUIAnchorType.CenterCenter),
         BackgroundColor = Color.Red * 0.25f,
         FillEmptySpace = true
       });

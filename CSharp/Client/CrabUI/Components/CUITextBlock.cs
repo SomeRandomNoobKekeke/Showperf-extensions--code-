@@ -27,12 +27,13 @@ namespace CrabUI
 
       RealTextSize = Font.MeasureString(WrappedText) * TextScale + Padding * 2;
 
+      //TODO why is it here?
       AbsoluteMin.Size = RealTextSize;
 
       return new Vector2(Math.Max(size.X, RealTextSize.X), Math.Max(size.Y, RealTextSize.Y));
     }
 
-    public CUITextAling TextAling = CUITextAling.Start;
+    public CUIAnchor TextAling = new CUIAnchor(CUIAnchorType.LeftTop);
     public Color TextColor { get; set; } = Color.White;
     public GUIFont Font { get; set; } = GUIStyle.SmallFont;
     private float textScale = 1f; public float TextScale
@@ -46,9 +47,11 @@ namespace CrabUI
 
     internal override void UpdatePseudoChildren()
     {
-      if (TextAling == CUITextAling.Start) TextDrawPos = Real.Position + Padding;
-      if (TextAling == CUITextAling.Center) TextDrawPos = Real.Position + (Real.Size - RealTextSize) / 2.0f;
-      if (TextAling == CUITextAling.End) TextDrawPos = Real.Position - Padding + (Real.Size - RealTextSize);
+      TextDrawPos = TextAling.GetChildPos(Real, Vector2.Zero, RealTextSize) + Padding;
+
+      // if (TextAling == CUIAnchorType.LeftTop) TextDrawPos = Real.Position + Padding;
+      // if (TextAling == CUITextAling.Center) TextDrawPos = Real.Position + (Real.Size - RealTextSize) / 2.0f;
+      // if (TextAling == CUITextAling.End) TextDrawPos = Real.Position - Padding + (Real.Size - RealTextSize);
     }
 
     protected override void Draw(SpriteBatch spriteBatch)

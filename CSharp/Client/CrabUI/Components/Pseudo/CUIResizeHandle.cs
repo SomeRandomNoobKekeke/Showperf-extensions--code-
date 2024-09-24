@@ -81,7 +81,7 @@ namespace CrabUI
       if (Absolute.Width.HasValue) w = Absolute.Width.Value;
       if (Absolute.Height.HasValue) h = Absolute.Height.Value;
 
-      Vector2 Pos = Anchor.PosOf(Host.Real) + new Vector2(x, y) - Anchor.PosOf(new CUIRect(0, 0, w, h));
+      Vector2 Pos = Anchor.GetChildPos(Host.Real, new Vector2(x, y), new Vector2(w, h));
 
       Real = new CUIRect(Pos, new Vector2(w, h));
     }

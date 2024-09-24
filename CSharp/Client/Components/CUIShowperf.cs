@@ -81,11 +81,7 @@ namespace ShowPerfExtensions
         MapFrame.Swipeable = true;
         MapFrame.OnDClick += (CUIMouse m) => MapFrame.ChildrenOffset = Vector2.Zero;
 
-        Menu = new CUIMap()
-        {
-          Absolute = new CUINullRect(0, 0, 1000, 1000)
-        };
-        Menu.BackgroundColor = Color.Lime;
+        Menu = new CUIMap();
         MapFrame.Append(Menu);
 
         CUIButton b1 = (CUIButton)Menu.Append(new CUIButton("kokoko"));

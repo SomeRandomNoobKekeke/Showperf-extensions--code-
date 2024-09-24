@@ -48,6 +48,8 @@ namespace CrabUI
 
     public CUIMap() : base()
     {
+      BackgroundColor = Color.Transparent;
+      BorderColor = Color.Transparent;
     }
 
     public CUIMap(float? x, float? y, float? w, float? h) : this()

@@ -20,7 +20,8 @@ namespace CrabUI
 
   public class CUIAnchor
   {
-    public Vector2 PosOf(CUIRect rect) => Type switch
+    public CUIAnchorType Type = CUIAnchorType.LeftTop;
+    public Vector2 PosIn(CUIRect rect) => Type switch
     {
       CUIAnchorType.LeftTop => rect.LeftTop,
       CUIAnchorType.LeftCenter => rect.LeftCenter,
@@ -33,7 +34,10 @@ namespace CrabUI
       CUIAnchorType.RightBottom => rect.RightBottom,
     };
 
-    public CUIAnchorType Type = CUIAnchorType.LeftTop;
+    public Vector2 GetChildPos(CUIRect parent, Vector2 offset, Vector2 childSize)
+    {
+      return PosIn(parent) + offset - PosIn(new CUIRect(childSize));
+    }
 
     public CUIAnchor(CUIAnchorType type = CUIAnchorType.LeftTop)
     {
