@@ -17,10 +17,25 @@ namespace CrabUI
     LeftBottom, CenterBottom, RightBottom,
   }
 
-
+  // TODO ackshually i think this could be just vector
   public class CUIAnchor
   {
-    public CUIAnchorType Type = CUIAnchorType.LeftTop;
+    public CUIAnchorType Type;
+
+    public Vector2 Direction => Type switch
+    {
+      CUIAnchorType.LeftTop => new Vector2(1, 1),
+      CUIAnchorType.LeftCenter => new Vector2(1, 0),
+      CUIAnchorType.LeftBottom => new Vector2(1, -1),
+      CUIAnchorType.CenterTop => new Vector2(0, 1),
+      CUIAnchorType.CenterCenter => new Vector2(0, 0),
+      CUIAnchorType.CenterBottom => new Vector2(0, -1),
+      CUIAnchorType.RightTop => new Vector2(-1, 1),
+      CUIAnchorType.RightCenter => new Vector2(-1, 0),
+      CUIAnchorType.RightBottom => new Vector2(-1, -1),
+    };
+
+
     public Vector2 PosIn(CUIRect rect) => Type switch
     {
       CUIAnchorType.LeftTop => rect.LeftTop,

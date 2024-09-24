@@ -25,12 +25,12 @@ namespace CrabUI
       if (Wrap) WrappedText = Font.WrapText(Text, size.X / TextScale - Padding.X * 2);
       else WrappedText = Text;
 
-      RealTextSize = Font.MeasureString(WrappedText) * TextScale + Padding * 2;
+      RealTextSize = Font.MeasureString(WrappedText) * TextScale;
+      Vector2 minSize = RealTextSize + Padding * 2;
 
-      //TODO why is it here?
-      AbsoluteMin.Size = RealTextSize;
+      AbsoluteMin.Size = minSize;
 
-      return new Vector2(Math.Max(size.X, RealTextSize.X), Math.Max(size.Y, RealTextSize.Y));
+      return new Vector2(Math.Max(size.X, minSize.X), Math.Max(size.Y, minSize.Y));
     }
 
     public CUIAnchor TextAling = new CUIAnchor(CUIAnchorType.LeftTop);
@@ -47,9 +47,7 @@ namespace CrabUI
 
     internal override void UpdatePseudoChildren()
     {
-
-      TextDrawPos = TextAling.GetChildPos(Real, Vector2.Zero, RealTextSize);
-      CUI.log($"{this} {TextAling.Type} {Real.Size} {RealTextSize} {TextDrawPos - Real.Position}");
+      TextDrawPos = TextAling.GetChildPos(Real, Vector2.Zero, RealTextSize) + Padding * TextAling.Direction;
     }
 
     protected override void Draw(SpriteBatch spriteBatch)

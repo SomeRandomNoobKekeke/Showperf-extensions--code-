@@ -17,7 +17,12 @@ namespace CrabUI
     public static void ClickSounds(CUIMainComponent CUI)
     {
       CUIComponent f = new CUIFrame(0.6f, 0.2f, 0.2f, 0.6f);
-      CUIComponent l = f.Append(new CUIVerticalList(0f, 0f, 1f, 1f));
+      CUIComponent l = f.Append(new CUIVerticalList(0f, 0f, 1f, 1f)
+      {
+        Scrollable = true
+      });
+
+
       foreach (var sound in Enum.GetValues(typeof(GUISoundType)).Cast<GUISoundType>())
       {
         CUIComponent b = l.Append(new CUIButton($"{sound}") { ClickSound = sound });
