@@ -68,7 +68,7 @@ namespace CrabUI
     #region Layout
     public virtual CUILayout Layout { get; set; }
 
-    internal virtual CUINullRect ChildrenBoundaries => new CUINullRect(0, 0, Real.Width, Real.Height);
+    internal virtual CUINullRect ChildrenBoundaries => new CUINullRect(null, null, null, null);
     private Vector2 childrenOffset; public Vector2 ChildrenOffset
     {
       get => childrenOffset;
@@ -110,7 +110,8 @@ namespace CrabUI
     public bool MousePressed { get; set; }
     public bool PassMouseClicks { get; set; } = true;
     public bool PassDragAndDrop { get; set; } = true;
-    public bool PassMouseScroll { get; set; } = true;
+    public bool PassSwipe { get; set; } = true;
+
 
     // Without wrappers they will throw FieldAccessException
     public event Action<CUIMouse> OnMouseLeave; internal void InvokeOnMouseLeave(CUIMouse m) => OnMouseLeave?.Invoke(m);
@@ -303,6 +304,7 @@ namespace CrabUI
       RelativeMax = new CUINullRect();
 
       DragHandle = new CUIDragHandle(this);
+      SwipeHandle = new CUISwipeHandle(this);
       LeftResizeHandle = new CUIResizeHandle(this, CUIAnchorType.LeftBottom);
       RightResizeHandle = new CUIResizeHandle(this, CUIAnchorType.RightBottom);
     }

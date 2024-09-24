@@ -16,4 +16,9 @@ namespace CrabUI
     Center,
     End,
   }
+
+  public enum CUIMouseEvent
+  {
+    Down, DClick
+  }
 }

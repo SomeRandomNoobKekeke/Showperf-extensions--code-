@@ -23,6 +23,7 @@ namespace ShowPerfExtensions
       };
       CUIPages Pages;
       public CUITickList TickList;
+      CUIComponent MapFrame;
       public CUIMap Menu;
 
 
@@ -61,8 +62,8 @@ namespace ShowPerfExtensions
         CUIComponent bb = Append(new CUIButton("Click"));
         bb.OnMouseDown += (CUIMouse m) =>
         {
-          if (Pages.IsOpened(TickList)) { Pages.Open(Menu); return; }
-          if (Pages.IsOpened(Menu)) { Pages.Open(TickList); return; }
+          if (Pages.IsOpened(TickList)) { Pages.Open(MapFrame); return; }
+          if (Pages.IsOpened(MapFrame)) { Pages.Open(TickList); return; }
         };
 
         Pages = new CUIPages();
@@ -76,7 +77,16 @@ namespace ShowPerfExtensions
 
 
 
-        Menu = new CUIMap(0, 0, 1, 1);
+        MapFrame = new CUIComponent(0, 0, 1, 1);
+        MapFrame.Swipeable = true;
+        MapFrame.OnDClick += (CUIMouse m) => MapFrame.ChildrenOffset = Vector2.Zero;
+
+        Menu = new CUIMap()
+        {
+          Absolute = new CUINullRect(0, 0, 1000, 1000)
+        };
+        Menu.BackgroundColor = Color.Lime;
+        MapFrame.Append(Menu);
 
         CUIButton b1 = (CUIButton)Menu.Append(new CUIButton("kokoko"));
         CUIButton b2 = (CUIButton)Menu.Append(new CUIButton("kokoko"));
@@ -86,14 +96,11 @@ namespace ShowPerfExtensions
         b2.Absolute.Position = new Vector2(200, 100);
         b3.Absolute.Position = new Vector2(0, 200);
 
-        Menu.OnDClick += (CUIMouse m) => Menu.Absolute.Position = Vector2.Zero;
-        Menu.Draggable = true;
+
         Menu.Connect(b1, b2);
         Menu.Connect(b2, b3, Color.Lime);
 
-
-
-        Pages.Open(TickList);
+        Pages.Open(MapFrame);
 
         Capture = new CaptureManager();
       }

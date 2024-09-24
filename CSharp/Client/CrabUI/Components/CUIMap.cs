@@ -29,12 +29,6 @@ namespace CrabUI
 
     private List<CUIMapLink> Connections = new List<CUIMapLink>();
 
-    public override CUIComponent Append(CUIComponent c)
-    {
-      c.Anchor.Type = CUIAnchorType.LeftCenter;
-      return base.Append(c);
-    }
-
     internal override CUINullRect ChildrenBoundaries => new CUINullRect(null, null, null, null);
 
     public void Connect(CUIComponent start, CUIComponent end, Color? color = null)

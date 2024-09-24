@@ -68,7 +68,7 @@ namespace CrabUI
           (x, y) = c.Anchor.PosOf(Host.Real) + new Vector2(x, y) - c.Anchor.PosOf(new CUIRect(0, 0, w, h));
 
 
-          c.Real = CheckChildBoundaries(x, y, w, h);
+          c.Real = CheckChildBoundaries(x + Host.ChildrenOffset.X, y + Host.ChildrenOffset.Y, w, h);
 
           //if (c.Debug) CUI.log(c); // TODO make special method for such calls in CUI
         }

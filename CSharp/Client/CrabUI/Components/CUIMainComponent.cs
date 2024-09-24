@@ -86,7 +86,7 @@ namespace CrabUI
       CUI.Capture(sw.ElapsedTicks, "CUI.Draw");
     }
 
-    //  https://youtu.be/xuFgUmYCS8E?feature=shared&t=72
+    // https://youtu.be/xuFgUmYCS8E?feature=shared&t=72
     #region HandleMouse Start 
 
     public void OnDragEnd(CUIDragHandle h) { if (h == GrabbedDragHandle) GrabbedDragHandle = null; }
@@ -119,14 +119,17 @@ namespace CrabUI
       {
         GrabbedDragHandle?.EndDrag();
         GrabbedResizeHandle?.EndResize();
+        GrabbedSwipeHandle?.EndSwipe();
       }
 
       if (Mouse.Moved)
       {
         GrabbedDragHandle?.DragTo(Mouse.Position);
         GrabbedResizeHandle?.Resize(Mouse.Position);
+        GrabbedSwipeHandle?.Swipe(Mouse);
       }
 
+      //TODO think where should i put it?
       if (GrabbedResizeHandle != null || GrabbedDragHandle != null || GrabbedSwipeHandle != null) return;
 
       // just deep clear of prev mouse pressed state
@@ -171,41 +174,6 @@ namespace CrabUI
       }
 
 
-
-      for (int i = MouseOnList.Count - 1; i >= 0; i--)
-      {
-        if (MouseOnList[i].RightResizeHandle.IsHit(Mouse.Position))
-        {
-          GrabbedResizeHandle = MouseOnList[i].RightResizeHandle;
-          GrabbedResizeHandle.BeginResize(Mouse.Position);
-          break;
-        }
-
-        if (MouseOnList[i].LeftResizeHandle.IsHit(Mouse.Position))
-        {
-          GrabbedResizeHandle = MouseOnList[i].LeftResizeHandle;
-          GrabbedResizeHandle.BeginResize(Mouse.Position);
-          break;
-        }
-      }
-      if (GrabbedResizeHandle != null) return;
-
-
-      for (int i = MouseOnList.Count - 1; i >= 0; i--)
-      {
-        if (MouseOnList[i].DragHandle.Draggable)
-        {
-          GrabbedDragHandle = MouseOnList[i].DragHandle;
-          GrabbedDragHandle.BeginDrag(Mouse.Position);
-          break;
-        }
-
-        if (!MouseOnList[i].PassDragAndDrop) break;
-      }
-      if (GrabbedDragHandle != null) return;
-
-
-
       for (int i = MouseOnList.Count - 1; i >= 0; i--)
       {
         MouseOnList[i].MousePressed = Mouse.Held;
@@ -217,6 +185,56 @@ namespace CrabUI
 
         if (!MouseOnList[i].PassMouseClicks) break;
       }
+
+
+      // Resize
+      for (int i = MouseOnList.Count - 1; i >= 0; i--)
+      {
+        if (MouseOnList[i].RightResizeHandle.ShouldStart(Mouse))
+        {
+          GrabbedResizeHandle = MouseOnList[i].RightResizeHandle;
+          GrabbedResizeHandle.BeginResize(Mouse.Position);
+          break;
+        }
+
+        if (MouseOnList[i].LeftResizeHandle.ShouldStart(Mouse))
+        {
+          GrabbedResizeHandle = MouseOnList[i].LeftResizeHandle;
+          GrabbedResizeHandle.BeginResize(Mouse.Position);
+          break;
+        }
+      }
+      if (GrabbedResizeHandle != null) return;
+
+      // Swipe
+      for (int i = MouseOnList.Count - 1; i >= 0; i--)
+      {
+        if (MouseOnList[i].SwipeHandle.ShouldStart(Mouse))
+        {
+          GrabbedSwipeHandle = MouseOnList[i].SwipeHandle;
+          GrabbedSwipeHandle.BeginSwipe(Mouse.Position);
+          break;
+        }
+
+        if (!MouseOnList[i].PassDragAndDrop) break;
+      }
+      if (GrabbedSwipeHandle != null) return;
+
+      // Drag
+      for (int i = MouseOnList.Count - 1; i >= 0; i--)
+      {
+        if (MouseOnList[i].DragHandle.ShouldStart(Mouse))
+        {
+          GrabbedDragHandle = MouseOnList[i].DragHandle;
+          GrabbedDragHandle.BeginDrag(Mouse.Position);
+          break;
+        }
+
+        if (!MouseOnList[i].PassDragAndDrop) break;
+      }
+      if (GrabbedDragHandle != null) return;
+
+
     }
     #endregion
     #region HandleMouse End

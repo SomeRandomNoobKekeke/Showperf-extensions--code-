@@ -25,7 +25,15 @@ namespace CrabUI
     public bool Grabbed;
     public bool Visible = false;
 
-    public bool IsHit(Vector2 cursorPos) => Visible && Real.Contains(cursorPos);
+    public CUIMouseEvent Trigger = CUIMouseEvent.Down;
+
+    public bool ShouldStart(CUIMouse mouse)
+    {
+      return Visible && Real.Contains(mouse.Position) && (
+        (Trigger == CUIMouseEvent.Down && mouse.Down) ||
+        (Trigger == CUIMouseEvent.DClick && mouse.DoubleClick)
+      );
+    }
 
     public void BeginResize(Vector2 cursorPos)
     {
