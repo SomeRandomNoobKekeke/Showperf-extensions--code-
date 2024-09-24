@@ -52,7 +52,8 @@ namespace ShowPerfExtensions
 
         CUIComponent Buttons = Append(new CUIHorizontalList()
         {
-          Absolute = new CUINullRect(null, null, null, 20)
+          Absolute = new CUINullRect(null, null, null, 20),
+          HideChildrenOutsideFrame = false,
         });
 
 
@@ -103,7 +104,6 @@ namespace ShowPerfExtensions
         b1.Absolute.Position = new Vector2(0, 0);
         b2.Absolute.Position = new Vector2(200, 100);
         b3.Absolute.Position = new Vector2(0, 200);
-        b2.Absolute.Size = new Vector2(100, 20);
 
         Map.Connect(b1, b2);
         Map.Connect(b2, b3, Color.Lime);

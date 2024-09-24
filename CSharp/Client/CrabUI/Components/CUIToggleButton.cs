@@ -33,9 +33,7 @@ namespace CrabUI
       ConsumeDragAndDrop = true;
 
       BorderColor = CUIColors.ComponentBorder;
-      Wrap = false;
 
-      Padding = new Vector2(20, 2);
       TextAling.Type = CUIAnchorType.CenterCenter;
 
       OnMouseDown += (CUIMouse m) => SoundPlayer.PlayUISound(ClickSound);

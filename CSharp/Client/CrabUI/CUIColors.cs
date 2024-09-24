@@ -19,10 +19,10 @@ namespace CrabUI
 
     public static Color ButtonInactive = new Color(0, 0, 32);
     public static Color ButtonHover = new Color(0, 0, 64);
-    public static Color ButtonPressed = new Color(0, 32, 127);
+    public static Color ButtonPressed = new Color(0, 32, 128);
 
 
     public static Color ToggleButtonOff = new Color(0, 0, 32);
-    public static Color ToggleButtonOn = new Color(0, 32, 127);
+    public static Color ToggleButtonOn = new Color(0, 128, 64);
   }
 }

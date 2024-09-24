@@ -335,7 +335,8 @@ namespace CrabUI
     }
 
     public override string ToString() => $"{base.ToString()}:{ID}";
+    public void Info(object msg) { if (Debug) CUI.log($"{this} {msg}"); }
+    public void PrintLayout() => Info($"{Real} {Anchor.Type} A:{Absolute} R:{Relative} AMin:{AbsoluteMin} RMin:{RelativeMin} AMax:{AbsoluteMax} RMax:{RelativeMax}");
 
-    public string PrintLayout() => $"{base.ToString()}:{ID} {Real} {Anchor.Type} A:{Absolute} R:{Relative} AMin:{AbsoluteMin} RMin:{RelativeMin} AMax:{AbsoluteMax} RMax:{RelativeMax}";
   }
 }

@@ -16,7 +16,7 @@ namespace CrabUI
       get => text;
       set { text = value; OnPropChanged(); }
     }
-    public bool Wrap { get; set; } = true;
+    public bool Wrap { get; set; }
 
     private string WrappedText { get; set; } = "";
 
@@ -61,7 +61,7 @@ namespace CrabUI
 
     public CUITextBlock(string text = "")
     {
-      Padding = new Vector2(2, -2);
+      Padding = new Vector2(4, 2);
       Text = text;
       BackgroundColor = Color.Transparent;
       BorderColor = Color.Transparent;

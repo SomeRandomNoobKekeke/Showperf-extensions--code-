@@ -15,9 +15,16 @@ namespace CrabUI
     public GUISoundType ClickSound { get; set; } = GUISoundType.Select;
 
 
+    public CUIComponent Options;
+
+
+    internal override void UpdatePseudoChildren()
+    {
+      base.UpdatePseudoChildren();
+    }
+
     protected override void Draw(SpriteBatch spriteBatch)
     {
-
       base.Draw(spriteBatch);
     }
     public CUIDropDown() : base("CUIDropDown")
@@ -26,9 +33,11 @@ namespace CrabUI
       ConsumeDragAndDrop = true;
 
       BorderColor = CUIColors.ComponentBorder;
-      Wrap = false;
+      BackgroundColor = CUIColors.ButtonInactive;
 
-      Padding = new Vector2(2, 2);
+      Options = new CUIComponent(0, 0, 1, 10);
+      Options.BackgroundColor = Color.Yellow * 0.25f;
+      Append(Options);
 
 
       OnMouseDown += (CUIMouse m) => SoundPlayer.PlayUISound(ClickSound);
