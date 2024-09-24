@@ -120,6 +120,7 @@ namespace CrabUI
     public event Action<CUIMouse> OnDClick; internal void InvokeOnDClick(CUIMouse m) => OnDClick?.Invoke(m);
     public event Action<float> OnScroll; internal void InvokeOnScroll(float scroll) => OnScroll?.Invoke(scroll);
     public event Action<float, float> OnDrag; internal void InvokeOnDrag(float x, float y) => OnDrag?.Invoke(x, y);
+    public event Action<float, float> OnSwipe; internal void InvokeOnSwipe(float x, float y) => OnSwipe?.Invoke(x, y);
 
 
     //TODO rethink
@@ -138,6 +139,13 @@ namespace CrabUI
     {
       get => LeftResizeHandle.Visible || RightResizeHandle.Visible;
       set { LeftResizeHandle.Visible = value; RightResizeHandle.Visible = value; }
+    }
+
+    public CUISwipeHandle SwipeHandle;
+    public bool Swipeable
+    {
+      get => SwipeHandle.Swipeable;
+      set => SwipeHandle.Swipeable = value;
     }
 
     #endregion

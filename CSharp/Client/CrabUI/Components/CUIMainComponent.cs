@@ -26,6 +26,7 @@ namespace CrabUI
 
     public CUIDragHandle GrabbedDragHandle;
     public CUIResizeHandle GrabbedResizeHandle;
+    public CUISwipeHandle GrabbedSwipeHandle;
     public CUIComponent MouseOn;
     public CUIMouse Mouse = new CUIMouse();
 
@@ -88,8 +89,11 @@ namespace CrabUI
     //  https://youtu.be/xuFgUmYCS8E?feature=shared&t=72
     #region HandleMouse Start 
 
-    public void OnDragEnd(CUIDragHandle c) { if (c == GrabbedDragHandle) GrabbedDragHandle = null; }
-    public void OnResizeEnd(CUIResizeHandle c) { if (c == GrabbedResizeHandle) GrabbedResizeHandle = null; }
+    public void OnDragEnd(CUIDragHandle h) { if (h == GrabbedDragHandle) GrabbedDragHandle = null; }
+    public void OnResizeEnd(CUIResizeHandle h) { if (h == GrabbedResizeHandle) GrabbedResizeHandle = null; }
+    public void OnSwipeEnd(CUISwipeHandle h) { if (h == GrabbedSwipeHandle) GrabbedSwipeHandle = null; }
+
+
     private void HandleMouse()
     {
       void CheckIfContainsMouse(CUIComponent c)
@@ -122,6 +126,8 @@ namespace CrabUI
         GrabbedDragHandle?.DragTo(Mouse.Position);
         GrabbedResizeHandle?.Resize(Mouse.Position);
       }
+
+      if (GrabbedResizeHandle != null || GrabbedDragHandle != null || GrabbedSwipeHandle != null) return;
 
       // just deep clear of prev mouse pressed state
       for (int i = MouseOnList.Count - 1; i >= 0; i--)
@@ -165,89 +171,51 @@ namespace CrabUI
       }
 
 
-      //TODO optimize
-      if (Mouse.Down)
-      {
-        // Click on resize handle?
-        if (GrabbedResizeHandle == null)
-        {
-          for (int i = MouseOnList.Count - 1; i >= 0; i--)
-          {
-            if (MouseOnList[i].RightResizeHandle.IsHit(Mouse.Position))
-            {
-              GrabbedResizeHandle = MouseOnList[i].RightResizeHandle;
-              GrabbedResizeHandle.BeginResize(Mouse.Position);
-              break;
-            }
 
-            if (MouseOnList[i].LeftResizeHandle.IsHit(Mouse.Position))
-            {
-              GrabbedResizeHandle = MouseOnList[i].LeftResizeHandle;
-              GrabbedResizeHandle.BeginResize(Mouse.Position);
-              break;
-            }
-          }
+      for (int i = MouseOnList.Count - 1; i >= 0; i--)
+      {
+        if (MouseOnList[i].RightResizeHandle.IsHit(Mouse.Position))
+        {
+          GrabbedResizeHandle = MouseOnList[i].RightResizeHandle;
+          GrabbedResizeHandle.BeginResize(Mouse.Position);
+          break;
         }
 
-        // Init Drag and drop?
-        if (GrabbedResizeHandle == null && GrabbedDragHandle == null)
+        if (MouseOnList[i].LeftResizeHandle.IsHit(Mouse.Position))
         {
-          for (int i = MouseOnList.Count - 1; i >= 0; i--)
-          {
-            if (MouseOnList[i].DragHandle.Draggable)
-            {
-              GrabbedDragHandle = MouseOnList[i].DragHandle;
-              GrabbedDragHandle.BeginDrag(Mouse.Position);
-              break;
-            }
-
-            if (!MouseOnList[i].PassDragAndDrop) break;
-          }
+          GrabbedResizeHandle = MouseOnList[i].LeftResizeHandle;
+          GrabbedResizeHandle.BeginResize(Mouse.Position);
+          break;
         }
       }
+      if (GrabbedResizeHandle != null) return;
 
-      if (GrabbedResizeHandle == null && GrabbedDragHandle == null)
+
+      for (int i = MouseOnList.Count - 1; i >= 0; i--)
       {
-        for (int i = MouseOnList.Count - 1; i >= 0; i--)
+        if (MouseOnList[i].DragHandle.Draggable)
         {
-          MouseOnList[i].MousePressed = Mouse.Held;
+          GrabbedDragHandle = MouseOnList[i].DragHandle;
+          GrabbedDragHandle.BeginDrag(Mouse.Position);
+          break;
         }
+
+        if (!MouseOnList[i].PassDragAndDrop) break;
       }
+      if (GrabbedDragHandle != null) return;
 
-      if (Mouse.Down)
-      {
-        for (int i = MouseOnList.Count - 1; i >= 0; i--)
-        {
-          MouseOnList[i].InvokeOnMouseDown(Mouse);
-          if (!MouseOnList[i].PassMouseClicks) break;
-        }
-      }
 
-      if (Mouse.Up)
-      {
-        for (int i = MouseOnList.Count - 1; i >= 0; i--)
-        {
-          MouseOnList[i].InvokeOnMouseUp(Mouse);
-          if (!MouseOnList[i].PassMouseClicks) break;
-        }
-      }
 
-      if (Mouse.DoubleClick)
+      for (int i = MouseOnList.Count - 1; i >= 0; i--)
       {
-        for (int i = MouseOnList.Count - 1; i >= 0; i--)
-        {
-          MouseOnList[i].InvokeOnDClick(Mouse);
-          if (!MouseOnList[i].PassMouseClicks) break;
-        }
-      }
+        MouseOnList[i].MousePressed = Mouse.Held;
 
-      if (Mouse.Scroll != 0)
-      {
-        for (int i = MouseOnList.Count - 1; i >= 0; i--)
-        {
-          MouseOnList[i].InvokeOnScroll(Mouse.Scroll);
-          if (!MouseOnList[i].PassMouseScroll) break;
-        }
+        if (Mouse.Down) MouseOnList[i].InvokeOnMouseDown(Mouse);
+        if (Mouse.Up) MouseOnList[i].InvokeOnMouseUp(Mouse);
+        if (Mouse.DoubleClick) MouseOnList[i].InvokeOnDClick(Mouse);
+        if (Mouse.Scrolled) MouseOnList[i].InvokeOnScroll(Mouse.Scroll);
+
+        if (!MouseOnList[i].PassMouseClicks) break;
       }
     }
     #endregion
