@@ -155,6 +155,8 @@ namespace CrabUI
 
       //if (CurrentMouseOn != null) GUI.MouseOn = dummyComponent;
 
+
+      //Enter / Leave
       if (CurrentMouseOn != MouseOn)
       {
         if (MouseOn != null)
@@ -171,23 +173,6 @@ namespace CrabUI
         }
 
         MouseOn = CurrentMouseOn;
-      }
-
-      for (int i = MouseOnList.Count - 1; i >= 0; i--)
-      {
-        if (Mouse.Scrolled) MouseOnList[i].InvokeOnScroll(Mouse.Scroll);
-
-        if (MouseOnList[i].ConsumeMouseScroll) break;
-      }
-
-      for (int i = MouseOnList.Count - 1; i >= 0; i--)
-      {
-        MouseOnList[i].MousePressed = Mouse.Held;
-        if (Mouse.Down) MouseOnList[i].InvokeOnMouseDown(Mouse);
-        if (Mouse.Up) MouseOnList[i].InvokeOnMouseUp(Mouse);
-        if (Mouse.DoubleClick) MouseOnList[i].InvokeOnDClick(Mouse);
-
-        if (MouseOnList[i].ConsumeMouseClicks) break;
       }
 
 
@@ -209,6 +194,25 @@ namespace CrabUI
         }
       }
       if (GrabbedResizeHandle != null) return;
+
+      //Scroll
+      for (int i = MouseOnList.Count - 1; i >= 0; i--)
+      {
+        if (Mouse.Scrolled) MouseOnList[i].InvokeOnScroll(Mouse.Scroll);
+
+        if (MouseOnList[i].ConsumeMouseScroll) break;
+      }
+
+      //Clicks
+      for (int i = MouseOnList.Count - 1; i >= 0; i--)
+      {
+        MouseOnList[i].MousePressed = Mouse.Held;
+        if (Mouse.Down) MouseOnList[i].InvokeOnMouseDown(Mouse);
+        if (Mouse.Up) MouseOnList[i].InvokeOnMouseUp(Mouse);
+        if (Mouse.DoubleClick) MouseOnList[i].InvokeOnDClick(Mouse);
+
+        if (MouseOnList[i].ConsumeMouseClicks) break;
+      }
 
       // Swipe
       for (int i = MouseOnList.Count - 1; i >= 0; i--)

@@ -226,14 +226,14 @@ namespace CrabUI
     #region Graphic Props
     internal bool DecorChanged { get; set; }
     public bool BackgroundVisible = true;
-    private Color backgroundColor = Color.Black * 0.5f; public Color BackgroundColor
+    private Color backgroundColor = CUIColors.ComponentBackground; public Color BackgroundColor
     {
       get => backgroundColor;
       set { backgroundColor = value; BackgroundVisible = backgroundColor != Color.Transparent; }
     }
 
     public bool BorderVisible = true;
-    private Color borderColor = Color.White * 0.5f; public Color BorderColor
+    private Color borderColor = CUIColors.ComponentBorder; public Color BorderColor
     {
       get => borderColor;
       set { borderColor = value; BorderVisible = borderColor != Color.Transparent; }
@@ -334,8 +334,8 @@ namespace CrabUI
       }
     }
 
-    public string Type() => base.ToString();
+    public override string ToString() => $"{base.ToString()}:{ID}";
 
-    public override string ToString() => $"{base.ToString()}:{ID} {Real} {Anchor.Type} A:{Absolute} R:{Relative} AMin:{AbsoluteMin} RMin:{RelativeMin} AMax:{AbsoluteMax} RMax:{RelativeMax}";
+    public string PrintLayout() => $"{base.ToString()}:{ID} {Real} {Anchor.Type} A:{Absolute} R:{Relative} AMin:{AbsoluteMin} RMin:{RelativeMin} AMax:{AbsoluteMax} RMax:{RelativeMax}";
   }
 }

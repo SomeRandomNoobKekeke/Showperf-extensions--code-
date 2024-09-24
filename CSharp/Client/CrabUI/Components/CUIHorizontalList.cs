@@ -9,14 +9,14 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace CrabUI
 {
-  public class CUIVerticalList : CUIComponent
+  public class CUIHorizontalList : CUIComponent
   {
     public bool Scrollable { get; set; }
 
-    public float TopGap = 0f;
-    public float BottomGap = 0f;
+    public float LeftGap = 0f;
+    public float RightGap = 0f;
 
-    private CUILayoutVerticalList listLayout;
+    private CUILayoutHorizontalList listLayout;
 
     private float scroll; public float Scroll
     {
@@ -29,12 +29,12 @@ namespace CrabUI
       }
     }
 
-    internal override CUINullRect ChildrenBoundaries => new CUINullRect(0, null, Real.Width, null);
+    internal override CUINullRect ChildrenBoundaries => new CUINullRect(null, 0, null, Real.Height);
 
     private void ValidateScroll()
     {
-      scroll = Math.Min(TopGap, Math.Max(scroll, Real.Height - listLayout.TotalHeight - BottomGap));
-      ChildrenOffset = new Vector2(0, scroll);
+      scroll = Math.Min(LeftGap, Math.Max(scroll, Real.Width - listLayout.TotalWidth - RightGap));
+      ChildrenOffset = new Vector2(scroll, 0);
     }
 
     internal override void ChildrenSizeCalculated()
@@ -42,11 +42,11 @@ namespace CrabUI
       ValidateScroll();
     }
 
-    public CUIVerticalList() : base()
+    public CUIHorizontalList() : base()
     {
       HideChildrenOutsideFrame = true;
 
-      listLayout = new CUILayoutVerticalList(this);
+      listLayout = new CUILayoutHorizontalList(this);
       Layout = listLayout;
 
       OnScroll += (float s) => Scroll += s;
@@ -55,7 +55,7 @@ namespace CrabUI
       // BorderColor = Color.Transparent;
     }
 
-    public CUIVerticalList(float? x, float? y, float? w, float? h) : this()
+    public CUIHorizontalList(float? x, float? y, float? w, float? h) : this()
     {
       Relative.Set(x, y, w, h);
     }

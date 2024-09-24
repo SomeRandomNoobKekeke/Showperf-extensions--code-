@@ -24,7 +24,7 @@ namespace ShowPerfExtensions
       CUIPages Pages;
       public CUITickList TickList;
       CUIComponent MapFrame;
-      public CUIMap Menu;
+      public CUIMap Map;
 
 
       public bool ShouldCapture(Entity e)
@@ -50,13 +50,23 @@ namespace ShowPerfExtensions
         handle.Absolute.Height = 15;
         handle.BorderColor = Color.Transparent;
 
-        CUIToggleButton ToggleByID = new CUIToggleButton("ToggleByID");
+        CUIComponent Buttons = Append(new CUIHorizontalList()
+        {
+          Absolute = new CUINullRect(null, null, null, 20)
+        });
+
+
+        CUIToggleButton ToggleByID = new CUIToggleButton("ToggleByID", null, 1);
         ToggleByID.OnStateChange += (state) =>
         {
           Capture.SetByID(CName.MapEntityDrawing, state);
           Window.Reset();
         };
-        Append(ToggleByID);
+        Buttons.Append(ToggleByID);
+
+        CUIDropDown SubType = new CUIDropDown(null, 1);
+        Buttons.Append(SubType);
+
 
 
         CUIComponent bb = Append(new CUIButton("Click"));
@@ -83,20 +93,20 @@ namespace ShowPerfExtensions
         MapFrame.BorderColor = Color.Transparent;
         MapFrame.BackgroundColor = Color.Black * 0.5f;
 
-        Menu = new CUIMap();
-        MapFrame.Append(Menu);
+        Map = new CUIMap();
+        MapFrame.Append(Map);
 
-        CUIButton b1 = (CUIButton)Menu.Append(new CUIButton("kokoko"));
-        CUIButton b2 = (CUIButton)Menu.Append(new CUIButton("kokoko"));
-        CUIButton b3 = (CUIButton)Menu.Append(new CUIButton("kokoko"));
+        CUIButton b1 = (CUIButton)Map.Append(new CUIButton("kokoko"));
+        CUIButton b2 = (CUIButton)Map.Append(new CUIButton("kokoko"));
+        CUIButton b3 = (CUIButton)Map.Append(new CUIButton("kokoko"));
 
         b1.Absolute.Position = new Vector2(0, 0);
         b2.Absolute.Position = new Vector2(200, 100);
         b3.Absolute.Position = new Vector2(0, 200);
 
 
-        Menu.Connect(b1, b2);
-        Menu.Connect(b2, b3, Color.Lime);
+        Map.Connect(b1, b2);
+        Map.Connect(b2, b3, Color.Lime);
 
         Pages.Open(MapFrame);
 

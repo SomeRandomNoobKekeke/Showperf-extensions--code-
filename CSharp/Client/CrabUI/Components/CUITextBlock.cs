@@ -47,11 +47,9 @@ namespace CrabUI
 
     internal override void UpdatePseudoChildren()
     {
-      TextDrawPos = TextAling.GetChildPos(Real, Vector2.Zero, RealTextSize);
 
-      // if (TextAling == CUIAnchorType.LeftTop) TextDrawPos = Real.Position + Padding;
-      // if (TextAling == CUITextAling.Center) TextDrawPos = Real.Position + (Real.Size - RealTextSize) / 2.0f;
-      // if (TextAling == CUITextAling.End) TextDrawPos = Real.Position - Padding + (Real.Size - RealTextSize);
+      TextDrawPos = TextAling.GetChildPos(Real, Vector2.Zero, RealTextSize);
+      CUI.log($"{this} {TextAling.Type} {Real.Size} {RealTextSize} {TextDrawPos - Real.Position}");
     }
 
     protected override void Draw(SpriteBatch spriteBatch)

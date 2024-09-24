@@ -16,9 +16,9 @@ namespace CrabUI
 
     protected override void Draw(SpriteBatch spriteBatch)
     {
-      BackgroundColor = new Color(0, 0, 32);
-      if (MouseOver) BackgroundColor = new Color(0, 0, 64);
-      if (MousePressed) BackgroundColor = new Color(0, 32, 127);
+      BackgroundColor = CUIColors.ButtonInactive;
+      if (MouseOver) BackgroundColor = CUIColors.ButtonHover;
+      if (MousePressed) BackgroundColor = CUIColors.ButtonPressed;
 
       base.Draw(spriteBatch);
     }
@@ -26,12 +26,18 @@ namespace CrabUI
     {
       ConsumeMouseClicks = true;
       ConsumeDragAndDrop = true;
-      BorderColor = Color.White;
+      //ConsumeSwipe = true;
+      BorderColor = CUIColors.ComponentBorder;
       Wrap = false;
 
       Padding = new Vector2(2, 2);
       TextAling.Type = CUIAnchorType.CenterCenter;
       OnMouseDown += (CUIMouse m) => SoundPlayer.PlayUISound(ClickSound);
+    }
+
+    public CUIButton(string text, float? width, float? height) : this(text)
+    {
+      Relative = new CUINullRect(null, null, width, height);
     }
   }
 }
