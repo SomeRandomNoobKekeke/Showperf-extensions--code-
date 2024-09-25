@@ -34,6 +34,8 @@ namespace CrabUI
     private Stopwatch sw;
     private Harmony harmony;
     private List<CUIComponent> Flat = new List<CUIComponent>();
+    private List<CUIComponent> Leaves = new List<CUIComponent>();
+    private SortedList<int, List<CUIComponent>> Layers = new SortedList<int, List<CUIComponent>>();
     private List<CUIComponent> MouseOnList = new List<CUIComponent>();
     private Vector2 GrabbedOffset;
 
@@ -45,7 +47,23 @@ namespace CrabUI
     private void FlattenTree()
     {
       Flat.Clear();
-      RunRecursiveOn(this, c => Flat.Add(c));
+      Layers.Clear();
+      // Leaves.Clear();
+
+      RunRecursiveOn(this, (component, depth) =>
+      {
+        int d = component.ZIndex ?? depth;
+
+        if (!Layers.ContainsKey(d)) Layers[d] = new List<CUIComponent>();
+        Layers[d].Add(component);
+      });
+
+      foreach (var layer in Layers)
+      {
+        Flat.AddRange(layer.Value);
+      }
+
+      // RunRecursiveOn(this, (component, depth) => Flat.Add(component));
     }
 
     private double LastUpdateTime;
@@ -75,12 +93,45 @@ namespace CrabUI
       CUI.Capture(sw.ElapsedTicks, "CUI.Update");
     }
 
+    private void StopStart(SpriteBatch spriteBatch, Rectangle SRect)
+    {
+      spriteBatch.End();
+      spriteBatch.GraphicsDevice.ScissorRectangle = SRect;
+      spriteBatch.Begin(SpriteSortMode.Deferred, samplerState: GUI.SamplerState, rasterizerState: GameMain.ScissorTestEnable);
+    }
     protected override void Draw(SpriteBatch spriteBatch)
     {
       sw.Restart();
 
-      foreach (CUIComponent child in this.Children) { child.DrawRecursive(spriteBatch); }
-      foreach (CUIComponent child in this.Children) { child.DrawFrontRecursive(spriteBatch); }
+      Rectangle OriginalSRect = spriteBatch.GraphicsDevice.ScissorRectangle;
+      Rectangle SRect = OriginalSRect;
+
+      try
+      {
+        RunStraigth(c =>
+        {
+          if (!c.Visible) return;
+          if (c.Parent != null && c.Parent.ScissorRect.HasValue && SRect != c.Parent.ScissorRect.Value)
+          {
+            SRect = c.Parent.ScissorRect.Value;
+            StopStart(spriteBatch, SRect);
+          }
+          c.Draw(spriteBatch);
+        });
+      }
+      finally
+      {
+        if (spriteBatch.GraphicsDevice.ScissorRectangle != OriginalSRect) StopStart(spriteBatch, OriginalSRect);
+      }
+
+      RunStraigth(c =>
+      {
+        if (!c.Visible) return;
+        c.DrawFront(spriteBatch);
+      });
+
+      //foreach (CUIComponent child in this.Children) { child.DrawRecursive(spriteBatch); }
+      //foreach (CUIComponent child in this.Children) { child.DrawFrontRecursive(spriteBatch); }
 
       CUI.EnsureCategory();
       CUI.Capture(sw.ElapsedTicks, "CUI.Draw");
@@ -96,21 +147,6 @@ namespace CrabUI
 
     private void HandleMouse()
     {
-      void CheckIfContainsMouse(CUIComponent c)
-      {
-        bool mouseInRect = c.Real.Contains(Mouse.Position);
-
-        if (mouseInRect) MouseOnList.Add(c);
-
-        if (!c.HideChildrenOutsideFrame || mouseInRect)
-        {
-          foreach (CUIComponent child in c.Children)
-          {
-            CheckIfContainsMouse(child);
-          }
-        }
-      }
-
       Mouse.Scan();
 
       if (!Mouse.SomethingHappened) return;
@@ -136,22 +172,31 @@ namespace CrabUI
       for (int i = MouseOnList.Count - 1; i >= 0; i--)
       {
         MouseOnList[i].MousePressed = false;
+        MouseOnList[i].MouseOver = false;
       }
 
       CUIComponent CurrentMouseOn = null;
       MouseOnList.Clear();
 
-
       if (GUI.MouseOn == null || GUI.MouseOn == dummyComponent)
       {
-        //skip Main component
-        foreach (CUIComponent child in this.Children)
+        RunStraigth(c =>
         {
-          CheckIfContainsMouse(child);
-        }
+          bool ok = !c.IgnoreEvents && c.Real.Contains(Mouse.Position);
+
+          if (c.Parent != null && c.Parent.ScissorRect.HasValue &&
+              !c.Parent.ScissorRect.Value.Contains(Mouse.CurrentState.Position))
+          {
+            ok = false;
+          }
+
+          if (ok) MouseOnList.Add(c);
+        });
       }
 
       CurrentMouseOn = MouseOnList.LastOrDefault();
+
+
 
       //if (CurrentMouseOn != null) GUI.MouseOn = dummyComponent;
 
@@ -159,22 +204,11 @@ namespace CrabUI
       //Enter / Leave
       if (CurrentMouseOn != MouseOn)
       {
-        if (MouseOn != null)
-        {
-          MouseOn.InvokeOnMouseLeave(Mouse);
-          MouseOn.MouseOver = false;
-          //MouseOn.MousePressed = false;
-        }
-
-        if (CurrentMouseOn != null)
-        {
-          CurrentMouseOn.InvokeOnMouseEnter(Mouse);
-          CurrentMouseOn.MouseOver = true;
-        }
+        MouseOn?.InvokeOnMouseLeave(Mouse);
+        CurrentMouseOn?.InvokeOnMouseEnter(Mouse);
 
         MouseOn = CurrentMouseOn;
       }
-
 
       // Resize
       for (int i = MouseOnList.Count - 1; i >= 0; i--)
@@ -206,7 +240,10 @@ namespace CrabUI
       //Clicks
       for (int i = MouseOnList.Count - 1; i >= 0; i--)
       {
+        //TODO mb this should be applied  separately
         MouseOnList[i].MousePressed = Mouse.Held;
+        MouseOnList[i].MouseOver = true;
+
         if (Mouse.Down) MouseOnList[i].InvokeOnMouseDown(Mouse);
         if (Mouse.Up) MouseOnList[i].InvokeOnMouseUp(Mouse);
         if (Mouse.DoubleClick) MouseOnList[i].InvokeOnDClick(Mouse);
@@ -302,6 +339,7 @@ namespace CrabUI
     {
       Real = new CUIRect(0, 0, GameMain.GraphicsWidth, GameMain.GraphicsHeight);
       Visible = false;
+      IgnoreEvents = true;
       sw = new Stopwatch();
 
       harmony = new Harmony("crabui");

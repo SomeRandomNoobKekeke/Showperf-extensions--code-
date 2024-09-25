@@ -20,22 +20,33 @@ namespace CrabUI
 
     internal override void UpdatePseudoChildren()
     {
+
       base.UpdatePseudoChildren();
     }
 
     protected override void Draw(SpriteBatch spriteBatch)
     {
+      BackgroundColor = CUIColors.ButtonInactive;
+      if (Options.MouseOver) BackgroundColor = Color.Yellow;
+      if (Options.MousePressed) BackgroundColor = CUIColors.ButtonPressed;
+
       base.Draw(spriteBatch);
     }
     public CUIDropDown() : base("CUIDropDown")
     {
       ConsumeMouseClicks = true;
       ConsumeDragAndDrop = true;
+      ConsumeSwipe = true;
 
       BorderColor = CUIColors.ComponentBorder;
       BackgroundColor = CUIColors.ButtonInactive;
 
-      Options = new CUIComponent(0, 0, 1, 10);
+      Options = new CUIComponent(0, 0.5f, 1, 10);
+
+      Options.ConsumeMouseClicks = true;
+      Options.ConsumeDragAndDrop = true;
+      Options.ConsumeSwipe = true;
+      Options.ZIndex = 100;
       Options.BackgroundColor = Color.Yellow * 0.25f;
       Append(Options);
 

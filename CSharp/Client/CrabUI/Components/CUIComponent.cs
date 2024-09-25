@@ -20,6 +20,7 @@ namespace CrabUI
     public Stopwatch sw = new Stopwatch();
 
     public static Vector2 GameScreenSize => new Vector2(GameMain.GraphicsWidth, GameMain.GraphicsHeight);
+    public static Rectangle GameScreenRect => new Rectangle(0, 0, GameMain.GraphicsWidth, GameMain.GraphicsHeight);
     public static GUIButton dummyComponent = new GUIButton(new RectTransform(new Point(0, 0)));
 
 
@@ -29,13 +30,22 @@ namespace CrabUI
     private CUIComponent? parent; public CUIComponent? Parent
     {
       get => parent;
-      set { parent = value; TreeChanged = true; Layout.Changed = true; }
+      set { parent = value; TreeChanged = true; OnPropChanged(); }
     }
     private bool treeChanged = true; public bool TreeChanged
     {
       get => treeChanged;
       set { treeChanged = value; if (value && Parent != null) Parent.TreeChanged = true; }
     }
+
+    public int? ZIndex;
+
+    // public int Depth;
+    // public void DepthImpulse(int d)
+    // {
+    //   Depth = Math.Max(Depth, d);
+    //   if (Parent != null) Parent.DepthImpulse(d + 1);
+    // }
 
     public virtual CUIComponent Append(CUIComponent c) => append(c);
     protected CUIComponent append(CUIComponent c)
@@ -90,6 +100,9 @@ namespace CrabUI
 
     #endregion
     #region Events
+
+    // guh
+    public bool IgnoreEvents;
 
     internal virtual void ChildrenSizeCalculated() { }
 
@@ -198,9 +211,10 @@ namespace CrabUI
     }
 
 
-    //TODO rethink
+
     protected CUIRect BorderBox;
-    protected CUIRect ScissorBox;
+
+    protected Rectangle? ScissorRect;
     private CUIRect real; public virtual CUIRect Real
     {
       get => real;
@@ -213,12 +227,26 @@ namespace CrabUI
           real.Width + BorderThickness * 2,
           real.Height + BorderThickness * 2
         );
-        ScissorBox = new CUIRect(
-          real.Left + 1,
-          real.Top + 1,
-          real.Width - 1,
-          real.Height - 1
-        );
+
+        if (HideChildrenOutsideFrame)
+        {
+          Rectangle SRect = new Rectangle(
+            (int)real.Left + 1,
+            (int)real.Top + 1,
+            (int)real.Width - 1,
+            (int)real.Height - 1
+          );
+
+          if (Parent?.ScissorRect != null)
+          {
+            ScissorRect = Rectangle.Intersect(Parent.ScissorRect.Value, SRect);
+          }
+          else
+          {
+            ScissorRect = SRect;
+          }
+        }
+        else ScissorRect = Parent?.ScissorRect;
       }
     }
 
@@ -263,40 +291,7 @@ namespace CrabUI
 
     protected virtual void DrawFront(SpriteBatch spriteBatch) { }
 
-    protected void DrawFrontRecursive(SpriteBatch spriteBatch)
-    {
-      if (Visible) DrawFront(spriteBatch);
-      Children.ForEach(c => c.DrawFrontRecursive(spriteBatch));
-    }
 
-    protected void DrawRecursive(SpriteBatch spriteBatch)
-    {
-      // if (Debug) CUI.log(this);
-      if (!Visible) return;
-
-      sw.Restart();
-      Draw(spriteBatch);
-      //CUI.Capture(sw.ElapsedTicks, $"CUI.Draw:{base.ToString()}");
-      sw.Stop();
-
-      Rectangle prevScissorRect = spriteBatch.GraphicsDevice.ScissorRectangle;
-
-      if (HideChildrenOutsideFrame)
-      {
-        spriteBatch.End();
-        spriteBatch.GraphicsDevice.ScissorRectangle = Rectangle.Intersect(prevScissorRect, ScissorBox.Box);
-        spriteBatch.Begin(SpriteSortMode.Deferred, samplerState: GUI.SamplerState, rasterizerState: GameMain.ScissorTestEnable);
-      }
-
-      Children.ForEach(c => c.DrawRecursive(spriteBatch));
-
-      if (HideChildrenOutsideFrame)
-      {
-        spriteBatch.End();
-        spriteBatch.GraphicsDevice.ScissorRectangle = prevScissorRect;
-        spriteBatch.Begin(SpriteSortMode.Deferred, samplerState: GUI.SamplerState, rasterizerState: GameMain.ScissorTestEnable);
-      }
-    }
     #endregion
     #region Constructors
     public CUIComponent()
@@ -325,9 +320,9 @@ namespace CrabUI
     }
     #endregion
 
-    protected static void RunRecursiveOn(CUIComponent component, Action<CUIComponent> action, int depth = 0)
+    protected static void RunRecursiveOn(CUIComponent component, Action<CUIComponent, int> action, int depth = 0)
     {
-      action(component);
+      action(component, depth);
       foreach (CUIComponent child in component.Children)
       {
         RunRecursiveOn(child, action, depth + 1);
@@ -335,7 +330,7 @@ namespace CrabUI
     }
 
     public override string ToString() => $"{base.ToString()}:{ID}";
-    public void Info(object msg) { if (Debug) CUI.log($"{this} {msg}"); }
+    public void Info(object msg) => CUI.log($"{this} {msg}");
     public void PrintLayout() => Info($"{Real} {Anchor.Type} A:{Absolute} R:{Relative} AMin:{AbsoluteMin} RMin:{RelativeMin} AMax:{AbsoluteMax} RMax:{RelativeMax}");
 
   }
