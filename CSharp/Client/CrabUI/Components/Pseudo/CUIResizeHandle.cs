@@ -47,7 +47,6 @@ namespace CrabUI
       CUI.Main.OnResizeEnd(this);
     }
 
-    // TODO check bugs when trying to resize beyond absolute min
     public void Resize(Vector2 cursorPos)
     {
       // NOTE: i tried to use GrabOffset and it's just more annoying

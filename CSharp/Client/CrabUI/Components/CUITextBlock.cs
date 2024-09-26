@@ -14,7 +14,7 @@ namespace CrabUI
     private string text = ""; public string Text
     {
       get => text;
-      set { text = value; OnPropChanged(); }
+      set { text = value; OnPropChanged("Text"); }
     }
     public bool Wrap { get; set; }
 

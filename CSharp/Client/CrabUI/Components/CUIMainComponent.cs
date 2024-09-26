@@ -69,7 +69,6 @@ namespace CrabUI
     private double LastUpdateTime;
     public void Update(double totalTime)
     {
-      sw.Restart();
       if (totalTime - LastUpdateTime >= UpdateInterval)
       {
         if (TreeChanged)
@@ -80,19 +79,12 @@ namespace CrabUI
 
         HandleMouse();
 
-        //RunStraigth(c => c.UpdateStateBeforeLayout());
         RunStraigth(c => c.Layout.Update());
-        //RunStraigth(c => c.UpdateStateAfterLayout());
-
-
 
         OnUpdate?.Invoke();
 
         LastUpdateTime = totalTime;
       }
-
-      CUI.EnsureCategory();
-      CUI.Capture(sw.ElapsedTicks, "CUI.Update");
     }
 
     private void StopStart(SpriteBatch spriteBatch, Rectangle SRect)
@@ -103,8 +95,6 @@ namespace CrabUI
     }
     protected override void Draw(SpriteBatch spriteBatch)
     {
-      sw.Restart();
-
       Rectangle OriginalSRect = spriteBatch.GraphicsDevice.ScissorRectangle;
       Rectangle SRect = OriginalSRect;
 
@@ -131,12 +121,6 @@ namespace CrabUI
         if (!c.Visible) return;
         c.DrawFront(spriteBatch);
       });
-
-      //foreach (CUIComponent child in this.Children) { child.DrawRecursive(spriteBatch); }
-      //foreach (CUIComponent child in this.Children) { child.DrawFrontRecursive(spriteBatch); }
-
-      CUI.EnsureCategory();
-      CUI.Capture(sw.ElapsedTicks, "CUI.Draw");
     }
 
     // https://youtu.be/xuFgUmYCS8E?feature=shared&t=72

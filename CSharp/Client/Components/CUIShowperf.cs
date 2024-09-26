@@ -110,7 +110,7 @@ namespace ShowPerfExtensions
         Map.Connect(b1, b2);
         Map.Connect(b2, b3, Color.Lime);
 
-        Pages.Open(MapFrame);
+        Pages.Open(TickList);
 
         Capture = new CaptureManager();
       }

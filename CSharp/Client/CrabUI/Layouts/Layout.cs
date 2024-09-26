@@ -52,6 +52,8 @@ namespace CrabUI
       Changed = false;
     }
 
+
+    //TODO this is wrong, i should decrease w,h here
     protected CUIRect CheckChildBoundaries(float x, float y, float w, float h)
     {
       if (Host.ChildrenBoundaries.Width.HasValue && x - Host.Real.Left + w > Host.ChildrenBoundaries.Width.Value)

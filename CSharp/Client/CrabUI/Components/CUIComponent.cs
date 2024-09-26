@@ -32,7 +32,7 @@ namespace CrabUI
     private CUIComponent? parent; public CUIComponent? Parent
     {
       get => parent;
-      set { parent = value; TreeChanged = true; OnPropChanged(); }
+      set { parent = value; TreeChanged = true; OnPropChanged("Parent"); }
     }
     private bool treeChanged = true; public bool TreeChanged
     {
@@ -87,7 +87,7 @@ namespace CrabUI
       set
       {
         zIndex = value;
-        OnPropChanged();
+        OnPropChanged("ZIndex");
         foreach (var child in Children)
         {
           child.ZIndex = zIndex.HasValue ? zIndex.Value + 1 : null;
@@ -136,8 +136,9 @@ namespace CrabUI
 
     internal virtual Vector2 AmIOkWithThisSize(Vector2 size) => size;
 
-    internal void OnPropChanged()
+    internal void OnPropChanged(string PropName)
     {
+      Info(PropName);
       Layout.Changed = true;
     }
 
@@ -242,7 +243,7 @@ namespace CrabUI
     private bool fillEmptySpace; public bool FillEmptySpace
     {
       get => fillEmptySpace;
-      set { fillEmptySpace = value; OnPropChanged(); }
+      set { fillEmptySpace = value; OnPropChanged("FillEmptySpace"); }
     }
 
 

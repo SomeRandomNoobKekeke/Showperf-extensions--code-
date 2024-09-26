@@ -123,6 +123,10 @@ namespace CrabUI
 
     public CUIDropDown() : base("CUIDropDown")
     {
+      InactiveColor = CUIColors.DropDownInactive;
+      MouseOverColor = CUIColors.DropDownHover;
+      MousePressedColor = CUIColors.DropDownPressed;
+
       Box = new CUIDropDownBox(this);
       Append(Box);
       OnMouseDown += (CUIMouse m) => Toggle();
