@@ -16,20 +16,20 @@ namespace ShowPerfExtensions
   {
     public class CUIShowperf : CUIFrame
     {
-      public CaptureManager Capture;
-      public HashSet<SubmarineType> CaptureFrom = new HashSet<SubmarineType>()
-      {
-        // SubmarineType.Player,
-      };
-      CUIPages Pages;
+      public CaptureManager Capture = new CaptureManager();
+      public SubmarineType? CaptureFrom = null;
+
+
+
+      public CUIPages Pages;
       public CUITickList TickList;
-      CUIComponent MapFrame;
+      public CUIComponent MapFrame;
       public CUIMap Map;
 
 
       public bool ShouldCapture(Entity e)
       {
-        return CaptureFrom.Count == 0 || (e.Submarine != null && CaptureFrom.Contains(e.Submarine.Info.Type));
+        return !CaptureFrom.HasValue || e.Submarine.Info.Type == CaptureFrom.Value;
       }
 
       public void Update()
@@ -41,23 +41,19 @@ namespace ShowPerfExtensions
         }
       }
 
-      public CUIShowperf(float x, float y, float w, float h) : base(x, y, w, h)
+      public void CreateGUI()
       {
-        Layout = new CUILayoutVerticalList();
-        // HideChildrenOutsideFrame = false;
+        this["handle"] = new CUIComponent(0, 0, 1, null);
+        this["handle"].Absolute.Height = 30;
+        this["handle"].BorderColor = Color.Transparent;
+        log(this["handle"]);
 
-        CUIComponent handle = Append(new CUIComponent(0, 0, 1, null));
-        handle.Absolute.Height = 15;
-        handle.BorderColor = Color.Transparent;
 
         CUIComponent Buttons = Append(new CUIHorizontalList()
         {
           Absolute = new CUINullRect(null, null, null, 20),
           HideChildrenOutsideFrame = false,
         });
-
-
-
 
         CUIToggleButton ToggleByID = new CUIToggleButton("ToggleByID", 1 / 3f, 1);
         ToggleByID.OnStateChange += (state) =>
@@ -112,7 +108,13 @@ namespace ShowPerfExtensions
 
         Pages.Open(TickList);
 
-        Capture = new CaptureManager();
+      }
+
+      public CUIShowperf(float x, float y, float w, float h) : base(x, y, w, h)
+      {
+        Layout = new CUILayoutVerticalList();
+
+        CreateGUI();
       }
     }
   }

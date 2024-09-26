@@ -40,17 +40,30 @@ namespace CrabUI
       set { treeChanged = value; if (value && Parent != null) Parent.TreeChanged = true; }
     }
 
+    public Dictionary<string, CUIComponent> NamedChildren = new Dictionary<string, CUIComponent>();
+    public string AKA;
 
-
-    public virtual CUIComponent Append(CUIComponent c) => append(c);
-    protected CUIComponent append(CUIComponent c)
+    public CUIComponent this[string name]
     {
-      if (c != null)
+      get => NamedChildren.GetValueOrDefault(name);
+      set => Append(value, name);
+    }
+
+    public virtual CUIComponent Append(CUIComponent c, string name = null) => append(c, name);
+    protected CUIComponent append(CUIComponent c, string name = null)
+    {
+      if (c == null) return c;
+
+      c.Parent = this;
+      PassPropsToChild(c);
+
+      if (name != null)
       {
-        c.Parent = this;
-        PassPropsToChild(c);
-        Children.Add(c);
+        NamedChildren[name] = c;
+        c.AKA = name;
       }
+      Children.Add(c);
+
       return c;
     }
 
@@ -58,6 +71,12 @@ namespace CrabUI
     protected void removeChild(CUIComponent c)
     {
       if (c == null || !Children.Contains(c)) return;
+
+      if (c.AKA != null && NamedChildren.ContainsKey(c.AKA))
+      {
+        NamedChildren.Remove(c.AKA);
+        c.AKA = null;
+      }
       c.Parent = null;
       TreeChanged = true;
       Children.Remove(c);
@@ -66,7 +85,8 @@ namespace CrabUI
     public virtual void RemoveAllChildren() => removeAllChildren();
     protected void removeAllChildren()
     {
-      foreach (CUIComponent c in Children) { c.Parent = null; }
+      foreach (CUIComponent c in Children) { c.Parent = null; c.AKA = null; }
+      NamedChildren.Clear();
       Children.Clear();
       TreeChanged = true;
     }
@@ -138,7 +158,7 @@ namespace CrabUI
 
     internal void OnPropChanged(string PropName)
     {
-      Info(PropName);
+      //Info(PropName);
       Layout.Changed = true;
     }
 
@@ -365,7 +385,7 @@ namespace CrabUI
       }
     }
 
-    public override string ToString() => $"{base.ToString()}:{ID}";
+    public override string ToString() => $"{base.ToString()}:{ID}:{AKA}";
 
     public void Info(object msg, [CallerFilePath] string source = "", [CallerLineNumber] int lineNumber = 0)
     {

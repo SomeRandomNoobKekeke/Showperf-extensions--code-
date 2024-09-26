@@ -43,9 +43,10 @@ namespace CrabUI
       OnMouseDown += (CUIMouse m) => State = !State;
     }
 
-    public CUIToggleButton(string text, float? width, float? height) : this(text)
+    public CUIToggleButton(string text, float? width, float? height) : this(text, null, null, width, height) { }
+    public CUIToggleButton(string text, float? x, float? y, float? w, float? h) : this(text)
     {
-      Relative = new CUINullRect(null, null, width, height);
+      Relative = new CUINullRect(x, y, w, h);
     }
   }
 }

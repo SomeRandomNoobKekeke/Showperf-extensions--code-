@@ -15,6 +15,8 @@ namespace CrabUI
   //TODO this should be in some xml
   public static class CUIColors
   {
+    public static float DefaultStringHeight = 21f;
+
     public static Color ComponentBackground = Color.Black * 0.5f;
     public static Color ComponentBorder = Color.White * 0.5f;
 
