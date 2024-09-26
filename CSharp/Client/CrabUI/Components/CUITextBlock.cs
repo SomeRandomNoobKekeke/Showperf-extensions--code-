@@ -66,5 +66,14 @@ namespace CrabUI
       BackgroundColor = Color.Transparent;
       BorderColor = Color.Transparent;
     }
+
+    public CUITextBlock(string text, float? width, float? height) : this(text)
+    {
+      Relative = new CUINullRect(null, null, width, height);
+    }
+    public CUITextBlock(string text, float? x, float? y, float? w, float? h) : this(text)
+    {
+      Relative = new CUINullRect(x, y, w, h);
+    }
   }
 }

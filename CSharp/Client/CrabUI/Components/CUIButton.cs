@@ -41,5 +41,10 @@ namespace CrabUI
     {
       Relative.Set(null, null, width, height);
     }
+
+    public CUIButton(string text, float? x, float? y, float? w, float? h) : this(text)
+    {
+      Relative.Set(x, y, w, h);
+    }
   }
 }

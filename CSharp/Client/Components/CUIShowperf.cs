@@ -23,7 +23,6 @@ namespace ShowPerfExtensions
 
       public CUIPages Pages;
       public CUITickList TickList;
-      public CUIComponent MapFrame;
       public CUIMap Map;
 
 
@@ -44,16 +43,16 @@ namespace ShowPerfExtensions
       public void CreateGUI()
       {
         this["handle"] = new CUIComponent(0, 0, 1, null);
-        this["handle"].Absolute.Height = 30;
+        this["handle"].Absolute.Height = 22;
         this["handle"].BorderColor = Color.Transparent;
-        log(this["handle"]);
 
 
-        CUIComponent Buttons = Append(new CUIHorizontalList()
+        this["buttons1"] = new CUIHorizontalList()
         {
-          Absolute = new CUINullRect(null, null, null, 20),
+          Absolute = new CUINullRect(null, null, null, 22),
           HideChildrenOutsideFrame = false,
-        });
+        };
+
 
         CUIToggleButton ToggleByID = new CUIToggleButton("ToggleByID", 1 / 3f, 1);
         ToggleByID.OnStateChange += (state) =>
@@ -61,43 +60,37 @@ namespace ShowPerfExtensions
           Capture.SetByID(CName.MapEntityDrawing, state);
           Window.Reset();
         };
-        Buttons.Append(ToggleByID);
+        Remember(this["buttons1"]["byID"] = ToggleByID);
+
+
+
 
         CUIDropDown SubType = new CUIDropDown(1 / 3f, 1);
-        Buttons.Append(SubType);
-
+        Remember(this["buttons1"]["SubType"] = SubType);
 
 
         CUIComponent bb = Append(new CUIButton("Click"));
         bb.OnMouseDown += (CUIMouse m) =>
         {
-          if (Pages.IsOpened(TickList)) { Pages.Open(MapFrame); return; }
-          if (Pages.IsOpened(MapFrame)) { Pages.Open(TickList); return; }
+          if (Pages.IsOpened(TickList)) { Pages.Open(Map); return; }
+          if (Pages.IsOpened(Map)) { Pages.Open(TickList); return; }
         };
 
-        Pages = new CUIPages();
+        Pages = (CUIPages)Append(new CUIPages());
         Pages.FillEmptySpace = true;
-        Append(Pages);
+
 
 
 
         TickList = new CUITickList();
         TickList.Relative.Set(0, 0, 1, 1);
 
+        Map = new CUIMap(0, 0, 1, 1);
 
 
-        MapFrame = new CUIComponent(0, 0, 1, 1);
-        MapFrame.Swipeable = true;
-        MapFrame.OnDClick += (CUIMouse m) => MapFrame.ChildrenOffset = Vector2.Zero;
-        MapFrame.BorderColor = Color.Transparent;
-        MapFrame.BackgroundColor = Color.Black * 0.5f;
-
-        Map = new CUIMap();
-        MapFrame.Append(Map);
-
-        CUIButton b1 = (CUIButton)Map.Append(new CUIButton("kokoko"));
-        CUIButton b2 = (CUIButton)Map.Append(new CUIButton("kokoko"));
-        CUIButton b3 = (CUIButton)Map.Append(new CUIButton("kokoko"));
+        CUIButton b1 = (CUIButton)Map.Add(new CUIButton("kokoko"));
+        CUIButton b2 = (CUIButton)Map.Add(new CUIButton("kokoko"));
+        CUIButton b3 = (CUIButton)Map.Add(new CUIButton("kokoko"));
 
         b1.Absolute.Position = new Vector2(0, 0);
         b2.Absolute.Position = new Vector2(200, 100);

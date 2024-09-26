@@ -40,17 +40,20 @@ namespace CrabUI
       set { treeChanged = value; if (value && Parent != null) Parent.TreeChanged = true; }
     }
 
-    public Dictionary<string, CUIComponent> NamedChildren = new Dictionary<string, CUIComponent>();
+    public Dictionary<string, CUIComponent> NamedComponents = new Dictionary<string, CUIComponent>();
     public string AKA;
+
+
+    public CUIComponent Remember(CUIComponent c, string name) => NamedComponents[name] = c;
+    public CUIComponent Remember(CUIComponent c) => NamedComponents[c.AKA ?? ""] = c;
 
     public CUIComponent this[string name]
     {
-      get => NamedChildren.GetValueOrDefault(name);
+      get => NamedComponents.GetValueOrDefault(name);
       set => Append(value, name);
     }
 
-    public virtual CUIComponent Append(CUIComponent c, string name = null) => append(c, name);
-    protected CUIComponent append(CUIComponent c, string name = null)
+    public CUIComponent Append(CUIComponent c, string name = null)
     {
       if (c == null) return c;
 
@@ -59,7 +62,7 @@ namespace CrabUI
 
       if (name != null)
       {
-        NamedChildren[name] = c;
+        NamedComponents[name] = c;
         c.AKA = name;
       }
       Children.Add(c);
@@ -67,14 +70,13 @@ namespace CrabUI
       return c;
     }
 
-    public virtual void RemoveChild(CUIComponent c) => removeChild(c);
-    protected void removeChild(CUIComponent c)
+    public void RemoveChild(CUIComponent c)
     {
       if (c == null || !Children.Contains(c)) return;
 
-      if (c.AKA != null && NamedChildren.ContainsKey(c.AKA))
+      if (c.AKA != null && NamedComponents.ContainsKey(c.AKA))
       {
-        NamedChildren.Remove(c.AKA);
+        NamedComponents.Remove(c.AKA);
         c.AKA = null;
       }
       c.Parent = null;
@@ -82,15 +84,13 @@ namespace CrabUI
       Children.Remove(c);
     }
 
-    public virtual void RemoveAllChildren() => removeAllChildren();
-    protected void removeAllChildren()
+    public void RemoveAllChildren()
     {
       foreach (CUIComponent c in Children) { c.Parent = null; c.AKA = null; }
-      NamedChildren.Clear();
+      NamedComponents.Clear();
       Children.Clear();
       TreeChanged = true;
     }
-
 
     public bool ShouldPassPropsToChildren = true;
     private void PassPropsToChild(CUIComponent child)
@@ -151,8 +151,6 @@ namespace CrabUI
       LeftResizeHandle.Update();
       RightResizeHandle.Update();
     }
-    // protected virtual void UpdateStateBeforeLayout() { }
-    // protected virtual void UpdateStateAfterLayout() { }
 
     internal virtual Vector2 AmIOkWithThisSize(Vector2 size) => size;
 
@@ -192,10 +190,6 @@ namespace CrabUI
     public event Action<float> OnScroll; internal void InvokeOnScroll(float scroll) => OnScroll?.Invoke(scroll);
     public event Action<float, float> OnDrag; internal void InvokeOnDrag(float x, float y) => OnDrag?.Invoke(x, y);
     public event Action<float, float> OnSwipe; internal void InvokeOnSwipe(float x, float y) => OnSwipe?.Invoke(x, y);
-
-
-    //TODO rethink
-    //protected virtual CUINullRect DragZone => new CUINullRect(null, null, null, null);
 
     public CUIDragHandle DragHandle;
     public bool Draggable
@@ -268,8 +262,8 @@ namespace CrabUI
 
 
 
+    public bool HideChildrenOutsideFrame { get; set; } = false;
     protected CUIRect BorderBox;
-
     protected Rectangle? ScissorRect;
     private CUIRect real; public virtual CUIRect Real
     {
@@ -309,14 +303,14 @@ namespace CrabUI
     #endregion
     #region Graphic Props
     internal bool DecorChanged { get; set; }
-    public bool BackgroundVisible = true;
+    private bool BackgroundVisible = true;
     private Color backgroundColor = CUIColors.ComponentBackground; public Color BackgroundColor
     {
       get => backgroundColor;
       set { backgroundColor = value; BackgroundVisible = backgroundColor != Color.Transparent; }
     }
 
-    public bool BorderVisible = true;
+    private bool BorderVisible = true;
     private Color borderColor = CUIColors.ComponentBorder; public Color BorderColor
     {
       get => borderColor;
@@ -329,9 +323,6 @@ namespace CrabUI
       get => padding;
       set { padding = value; DecorChanged = true; }
     }
-
-
-    public bool HideChildrenOutsideFrame { get; set; } = false;
 
     #endregion
     #region Methods

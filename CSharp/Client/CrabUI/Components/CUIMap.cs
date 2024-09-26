@@ -9,7 +9,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace CrabUI
 {
-  public partial class CUIMap : CUIComponent
+  public class CUIMapContent : CUIComponent
   {
     private class CUIMapLink
     {
@@ -46,15 +46,43 @@ namespace CrabUI
       }
     }
 
-    public CUIMap() : base()
+    public CUIMapContent() : base()
     {
       BackgroundColor = Color.Transparent;
       BorderColor = Color.Transparent;
     }
 
-    public CUIMap(float? x, float? y, float? w, float? h) : this()
+    public CUIMapContent(float? x, float? y, float? w, float? h) : this()
     {
       Relative.Set(x, y, w, h);
     }
   }
+
+  public class CUIMap : CUIComponent
+  {
+    public CUIMapContent Map;
+
+    public CUIComponent Add(CUIComponent c) => Map.Append(c);
+    public void Connect(CUIComponent start, CUIComponent end, Color? color = null)
+    {
+      Map.Connect(start, end, color);
+    }
+
+    public CUIMap() : base()
+    {
+      Swipeable = true;
+      OnDClick += (m) => ChildrenOffset = Vector2.Zero;
+      BorderColor = Color.Transparent;
+      BackgroundColor = CUIColors.ComponentBackground;
+
+      this.Append(Map = new CUIMapContent());
+
+    }
+
+    public CUIMap(float? x, float? y, float? w, float? h) : this()
+    {
+      Relative = new CUINullRect(x, y, w, h);
+    }
+  }
+
 }
