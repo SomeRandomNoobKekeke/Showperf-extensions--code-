@@ -83,7 +83,7 @@ namespace CrabUI
       }
     }
 
-    public CUILayoutSimple(CUIComponent host) : base(host)
+    public CUILayoutSimple(CUIComponent host = null) : base(host)
     {
 
     }

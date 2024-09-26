@@ -13,6 +13,9 @@ namespace CrabUI
   public class CUIToggleButton : CUITextBlock
   {
     public GUISoundType ClickSound { get; set; } = GUISoundType.Select;
+    public Color OnColor = CUIColors.ToggleButtonOn;
+    public Color OffColor = CUIColors.ToggleButtonOff;
+
     public event Action<bool> OnStateChange;
     private bool state; public bool State
     {
@@ -22,8 +25,8 @@ namespace CrabUI
 
     protected override void Draw(SpriteBatch spriteBatch)
     {
-      if (State) BackgroundColor = CUIColors.ToggleButtonOn;
-      else BackgroundColor = CUIColors.ToggleButtonOff;
+      if (State) BackgroundColor = OnColor;
+      else BackgroundColor = OffColor;
 
       base.Draw(spriteBatch);
     }

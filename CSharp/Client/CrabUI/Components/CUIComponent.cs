@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Diagnostics;
+using System.Runtime.CompilerServices;
+using System.IO;
 
 using Barotrauma;
 using Microsoft.Xna.Framework;
@@ -38,14 +40,7 @@ namespace CrabUI
       set { treeChanged = value; if (value && Parent != null) Parent.TreeChanged = true; }
     }
 
-    public int? ZIndex;
 
-    // public int Depth;
-    // public void DepthImpulse(int d)
-    // {
-    //   Depth = Math.Max(Depth, d);
-    //   if (Parent != null) Parent.DepthImpulse(d + 1);
-    // }
 
     public virtual CUIComponent Append(CUIComponent c) => append(c);
     protected CUIComponent append(CUIComponent c)
@@ -53,6 +48,7 @@ namespace CrabUI
       if (c != null)
       {
         c.Parent = this;
+        PassPropsToChild(c);
         Children.Add(c);
       }
       return c;
@@ -74,9 +70,51 @@ namespace CrabUI
       Children.Clear();
       TreeChanged = true;
     }
+
+
+    public bool ShouldPassPropsToChildren = true;
+    private void PassPropsToChild(CUIComponent child)
+    {
+      if (!ShouldPassPropsToChildren) return;
+
+      if (ZIndex.HasValue) child.ZIndex = ZIndex.Value + 1;
+      if (IgnoreEvents) child.IgnoreEvents = true;
+      if (!Visible) child.Visible = false;
+    }
+    private int? zIndex; public int? ZIndex
+    {
+      get => zIndex;
+      set
+      {
+        zIndex = value;
+        OnPropChanged();
+        foreach (var child in Children)
+        {
+          child.ZIndex = zIndex.HasValue ? zIndex.Value + 1 : null;
+        }
+      }
+    }
+    private bool ignoreEvents; public bool IgnoreEvents
+    {
+      get => ignoreEvents;
+      set { ignoreEvents = value; foreach (var child in Children) child.IgnoreEvents = value; }
+    }
+    private bool visible = true; public bool Visible
+    {
+      get => visible;
+      set { visible = value; foreach (var child in Children) child.Visible = value; }
+    }
+
+
     #endregion
     #region Layout
-    public virtual CUILayout Layout { get; set; }
+
+
+    private CUILayout layout; public CUILayout Layout
+    {
+      get => layout;
+      set { layout = value; layout.Host = this; }
+    }
 
     internal virtual CUINullRect ChildrenBoundaries => new CUINullRect(null, null, null, null);
     private Vector2 childrenOffset; public Vector2 ChildrenOffset
@@ -98,14 +136,6 @@ namespace CrabUI
 
     internal virtual Vector2 AmIOkWithThisSize(Vector2 size) => size;
 
-    #endregion
-    #region Events
-
-    // guh
-    public bool IgnoreEvents;
-
-    internal virtual void ChildrenSizeCalculated() { }
-
     internal void OnPropChanged()
     {
       Layout.Changed = true;
@@ -118,6 +148,11 @@ namespace CrabUI
         child.Layout.Changed = true;
       }
     }
+
+    #endregion
+    #region Events
+
+    internal virtual void ChildrenSizeCalculated() { }
 
     public bool MouseOver { get; set; }
     public bool MousePressed { get; set; }
@@ -274,7 +309,7 @@ namespace CrabUI
       set { padding = value; DecorChanged = true; }
     }
 
-    public bool Visible { get; set; } = true;
+
     public bool HideChildrenOutsideFrame { get; set; } = false;
 
     #endregion
@@ -299,7 +334,7 @@ namespace CrabUI
       ID = MaxID++;
       ComponentsById[ID] = this;
 
-      Layout = new CUILayoutSimple(this);
+      Layout = new CUILayoutSimple();
 
       Absolute = new CUINullRect();
       AbsoluteMin = new CUINullRect();
@@ -330,7 +365,15 @@ namespace CrabUI
     }
 
     public override string ToString() => $"{base.ToString()}:{ID}";
-    public void Info(object msg) => CUI.log($"{this} {msg}");
+
+    public void Info(object msg, [CallerFilePath] string source = "", [CallerLineNumber] int lineNumber = 0)
+    {
+      var fi = new FileInfo(source);
+
+      CUI.log($"{fi.Directory.Name}/{fi.Name}:{lineNumber}", Color.Yellow * 0.5f);
+      CUI.log($"{this} {msg ?? "null"}", Color.Yellow);
+    }
+
     public void PrintLayout() => Info($"{Real} {Anchor.Type} A:{Absolute} R:{Relative} AMin:{AbsoluteMin} RMin:{RelativeMin} AMax:{AbsoluteMax} RMax:{RelativeMax}");
 
   }

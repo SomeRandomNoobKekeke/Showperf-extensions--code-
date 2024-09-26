@@ -5,11 +5,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Diagnostics;
+using System.Runtime.CompilerServices;
+using System.IO;
 
 using Barotrauma;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Graphics;
+
+
 
 namespace CrabUI
 {
@@ -18,6 +22,8 @@ namespace CrabUI
     public static CUIMainComponent Main => CUIMainComponent.Main;
 
     public static int CUIShowperfCategory = 1000;
+
+    public static bool Debug = true;
 
 #if !SHOWPERF
     [Conditional("DONT")]
@@ -36,8 +42,19 @@ namespace CrabUI
 
     public static void log(object msg, Color? cl = null)
     {
-      cl ??= Color.Cyan;
+      cl ??= Color.Yellow;
       LuaCsLogger.LogMessage($"{msg ?? "null"}", cl * 0.8f, cl);
+    }
+
+    public static void info(object msg, [CallerFilePath] string source = "", [CallerLineNumber] int lineNumber = 0)
+    {
+      if (Debug)
+      {
+        var fi = new FileInfo(source);
+
+        log($"{fi.Directory.Name}/{fi.Name}:{lineNumber}", Color.Yellow * 0.5f);
+        log(msg, Color.Yellow);
+      }
     }
   }
 }

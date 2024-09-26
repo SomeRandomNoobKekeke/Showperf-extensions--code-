@@ -47,11 +47,11 @@ namespace CrabUI
             if (c.Relative.Width.HasValue) w = c.Relative.Width.Value * Host.Real.Width;
             if (c.Absolute.Width.HasValue) w = c.Absolute.Width.Value;
 
-            if (c.RelativeMin.Width.HasValue) w = Math.Max(h, c.RelativeMin.Width.Value * Host.Real.Width);
-            if (c.AbsoluteMin.Width.HasValue) w = Math.Max(h, c.AbsoluteMin.Width.Value);
+            if (c.RelativeMin.Width.HasValue) w = Math.Max(w, c.RelativeMin.Width.Value * Host.Real.Width);
+            if (c.AbsoluteMin.Width.HasValue) w = Math.Max(w, c.AbsoluteMin.Width.Value);
 
-            if (c.RelativeMax.Width.HasValue) w = Math.Min(h, c.RelativeMax.Width.Value * Host.Real.Width);
-            if (c.AbsoluteMax.Width.HasValue) w = Math.Min(h, c.AbsoluteMax.Width.Value);
+            if (c.RelativeMax.Width.HasValue) w = Math.Min(w, c.RelativeMax.Width.Value * Host.Real.Width);
+            if (c.AbsoluteMax.Width.HasValue) w = Math.Min(w, c.AbsoluteMax.Width.Value);
 
             s = c.AmIOkWithThisSize(new Vector2(w, h));
 
@@ -94,7 +94,7 @@ namespace CrabUI
 
     }
 
-    public CUILayoutHorizontalList(CUIComponent host) : base(host)
+    public CUILayoutHorizontalList(CUIComponent host = null) : base(host)
     {
 
     }

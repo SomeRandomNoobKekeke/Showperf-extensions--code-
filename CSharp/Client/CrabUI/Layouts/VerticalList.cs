@@ -94,7 +94,7 @@ namespace CrabUI
 
     }
 
-    public CUILayoutVerticalList(CUIComponent host) : base(host)
+    public CUILayoutVerticalList(CUIComponent host = null) : base(host)
     {
 
     }

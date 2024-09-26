@@ -43,7 +43,7 @@ namespace ShowPerfExtensions
 
       public CUIShowperf(float x, float y, float w, float h) : base(x, y, w, h)
       {
-        Layout = new CUILayoutVerticalList(this);
+        Layout = new CUILayoutVerticalList();
         // HideChildrenOutsideFrame = false;
 
         CUIComponent handle = Append(new CUIComponent(0, 0, 1, null));
@@ -57,7 +57,9 @@ namespace ShowPerfExtensions
         });
 
 
-        CUIToggleButton ToggleByID = new CUIToggleButton("ToggleByID", null, 1);
+
+
+        CUIToggleButton ToggleByID = new CUIToggleButton("ToggleByID", 1 / 3f, 1);
         ToggleByID.OnStateChange += (state) =>
         {
           Capture.SetByID(CName.MapEntityDrawing, state);
@@ -65,7 +67,7 @@ namespace ShowPerfExtensions
         };
         Buttons.Append(ToggleByID);
 
-        CUIDropDown SubType = new CUIDropDown(null, 1);
+        CUIDropDown SubType = new CUIDropDown(1 / 3f, 1);
         Buttons.Append(SubType);
 
 

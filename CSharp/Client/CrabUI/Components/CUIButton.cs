@@ -14,15 +14,19 @@ namespace CrabUI
   {
     public GUISoundType ClickSound { get; set; } = GUISoundType.Select;
 
+    public Color InactiveColor = CUIColors.ButtonInactive;
+    public Color MouseOverColor = CUIColors.ButtonHover;
+    public Color MousePressedColor = CUIColors.ButtonPressed;
+
     protected override void Draw(SpriteBatch spriteBatch)
     {
-      BackgroundColor = CUIColors.ButtonInactive;
-      if (MouseOver) BackgroundColor = CUIColors.ButtonHover;
-      if (MousePressed) BackgroundColor = CUIColors.ButtonPressed;
+      BackgroundColor = InactiveColor;
+      if (MouseOver) BackgroundColor = MouseOverColor;
+      if (MousePressed) BackgroundColor = MousePressedColor;
 
       base.Draw(spriteBatch);
     }
-    public CUIButton(string text) : base(text)
+    public CUIButton(string text = "") : base(text)
     {
       ConsumeMouseClicks = true;
       ConsumeDragAndDrop = true;
@@ -35,7 +39,7 @@ namespace CrabUI
 
     public CUIButton(string text, float? width, float? height) : this(text)
     {
-      Relative = new CUINullRect(null, null, width, height);
+      Relative.Set(null, null, width, height);
     }
   }
 }

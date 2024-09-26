@@ -84,6 +84,8 @@ namespace CrabUI
         RunStraigth(c => c.Layout.Update());
         //RunStraigth(c => c.UpdateStateAfterLayout());
 
+
+
         OnUpdate?.Invoke();
 
         LastUpdateTime = totalTime;
@@ -200,7 +202,7 @@ namespace CrabUI
 
       //if (CurrentMouseOn != null) GUI.MouseOn = dummyComponent;
 
-
+      //TODO those event are a bit useless, mb add similar bubbling events?
       //Enter / Leave
       if (CurrentMouseOn != MouseOn)
       {
@@ -340,6 +342,7 @@ namespace CrabUI
       Real = new CUIRect(0, 0, GameMain.GraphicsWidth, GameMain.GraphicsHeight);
       Visible = false;
       IgnoreEvents = true;
+      ShouldPassPropsToChildren = false;
       sw = new Stopwatch();
 
       harmony = new Harmony("crabui");

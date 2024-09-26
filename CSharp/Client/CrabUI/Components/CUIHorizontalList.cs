@@ -46,7 +46,7 @@ namespace CrabUI
     {
       HideChildrenOutsideFrame = true;
 
-      listLayout = new CUILayoutHorizontalList(this);
+      listLayout = new CUILayoutHorizontalList();
       Layout = listLayout;
 
       OnScroll += (float s) => Scroll += s;

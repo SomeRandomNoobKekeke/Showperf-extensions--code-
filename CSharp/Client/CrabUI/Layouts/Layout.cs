@@ -12,7 +12,7 @@ namespace CrabUI
 {
   public class CUILayout
   {
-    protected CUIComponent Host;
+    internal CUIComponent Host;
 
     // TODO rethink
     // public void PropagateUp()
@@ -77,7 +77,7 @@ namespace CrabUI
       return new CUIRect(x, y, w, h);
     }
 
-    public CUILayout(CUIComponent host)
+    public CUILayout(CUIComponent host = null)
     {
       Host = host;
     }
