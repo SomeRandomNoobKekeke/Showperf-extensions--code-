@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Diagnostics;
 
 using Barotrauma;
 using Microsoft.Xna.Framework;
@@ -44,16 +45,9 @@ namespace CrabUI
           _value = value;
           if (value && Host != null)
           {
-            try
-            {
-              Host.Layout.DecorChanged.Value = true;
-              if (Host.Parent != null) Host.Parent.Layout.Changed.Value = true;
-              foreach (CUIComponent child in Host.Children) child.Layout.Changed.PropagateDown();
-            }
-            catch (Exception e)
-            {
-              CUI.log(e);
-            }
+            Host.Layout.DecorChanged.Value = true;
+            if (Host.Parent != null) Host.Parent.Layout.Changed.Value = true;
+            foreach (CUIComponent child in Host.Children) child.Layout.Changed.PropagateDown();
           }
         }
       }
@@ -82,6 +76,23 @@ namespace CrabUI
       }
       public DecorChangedState(CUILayout layout) : base(layout) { _value = true; }
     }
+
+    public class ChildrenChangedState : State
+    {
+      public override bool Value
+      {
+        get => _value;
+        set
+        {
+          _value = value;
+          if (value && Host != null && Host.Parent != null)
+          {
+            Host.Parent.Layout.ChildrenChanged.Value = true;
+          }
+        }
+      }
+      public ChildrenChangedState(CUILayout layout) : base(layout) { _value = true; }
+    }
     #endregion
 
 
@@ -90,6 +101,7 @@ namespace CrabUI
 
     public ChangedState Changed;
     public DecorChangedState DecorChanged;
+    public ChildrenChangedState ChildrenChanged;
 
     internal virtual void Update()
     {
@@ -107,7 +119,12 @@ namespace CrabUI
 
     internal virtual void ResizeToContent()
     {
+      if (Host.FitContent.X || Host.FitContent.Y)
+      {
+        // do something
+      }
 
+      ChildrenChanged.Value = false;
     }
 
 
@@ -142,6 +159,7 @@ namespace CrabUI
       Host = host;
       Changed = new ChangedState(this);
       DecorChanged = new DecorChangedState(this);
+      ChildrenChanged = new ChildrenChangedState(this);
     }
   }
 }

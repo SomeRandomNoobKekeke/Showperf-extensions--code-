@@ -79,7 +79,11 @@ namespace CrabUI
 
         HandleMouse();
 
-        RunStraigth(c => c.Layout.Update());
+        RunStraigth(c =>
+        {
+          c.Layout.Update();
+          c.Layout.UpdateDecor();
+        });
 
         OnUpdate?.Invoke();
 

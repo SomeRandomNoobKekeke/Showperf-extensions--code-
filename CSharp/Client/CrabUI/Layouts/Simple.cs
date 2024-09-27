@@ -75,8 +75,6 @@ namespace CrabUI
 
         Changed.Value = false;
       }
-
-      UpdateDecor();
     }
 
     public CUILayoutSimple(CUIComponent host = null) : base(host)

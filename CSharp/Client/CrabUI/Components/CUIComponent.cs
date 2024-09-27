@@ -156,17 +156,20 @@ namespace CrabUI
 
     internal void OnPropChanged(string PropName = "")
     {
-      //Info(PropName);
       Layout.Changed.Value = true;
     }
 
     internal void OnDecorPropChanged(string PropName = "")
     {
-      //Info(PropName);
       Layout.DecorChanged.Value = true;
     }
 
-    internal void OnChildrenPropChanged()
+    internal void OnAbsolutePropChanged(string PropName = "")
+    {
+      Layout.DecorChanged.Value = true;
+    }
+
+    internal void OnChildrenPropChanged(string PropName = "")
     {
       foreach (CUIComponent child in Children)
       {
@@ -266,7 +269,7 @@ namespace CrabUI
       set { fillEmptySpace = value; OnPropChanged("FillEmptySpace"); }
     }
 
-    private bool fitContent; public bool FitContent
+    private CUIBool2 fitContent; public CUIBool2 FitContent
     {
       get => fitContent;
       set { fitContent = value; }

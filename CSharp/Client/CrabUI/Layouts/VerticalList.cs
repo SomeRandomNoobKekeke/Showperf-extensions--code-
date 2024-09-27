@@ -85,8 +85,6 @@ namespace CrabUI
 
         Changed.Value = false;
       }
-
-      UpdateDecor();
     }
 
 
