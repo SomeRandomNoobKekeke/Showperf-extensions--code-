@@ -154,17 +154,23 @@ namespace CrabUI
 
     internal virtual Vector2 AmIOkWithThisSize(Vector2 size) => size;
 
-    internal void OnPropChanged(string PropName)
+    internal void OnPropChanged(string PropName = "")
     {
       //Info(PropName);
-      Layout.Changed = true;
+      Layout.Changed.Value = true;
+    }
+
+    internal void OnDecorPropChanged(string PropName = "")
+    {
+      //Info(PropName);
+      Layout.DecorChanged.Value = true;
     }
 
     internal void OnChildrenPropChanged()
     {
       foreach (CUIComponent child in Children)
       {
-        child.Layout.Changed = true;
+        child.Layout.Changed.Value = true;
       }
     }
 
@@ -260,6 +266,12 @@ namespace CrabUI
       set { fillEmptySpace = value; OnPropChanged("FillEmptySpace"); }
     }
 
+    private bool fitContent; public bool FitContent
+    {
+      get => fitContent;
+      set { fitContent = value; }
+    }
+
 
 
     public bool HideChildrenOutsideFrame { get; set; } = false;
@@ -302,15 +314,14 @@ namespace CrabUI
 
     #endregion
     #region Graphic Props
-    internal bool DecorChanged { get; set; }
-    private bool BackgroundVisible = true;
+    protected bool BackgroundVisible = true;
     private Color backgroundColor = CUIColors.ComponentBackground; public Color BackgroundColor
     {
       get => backgroundColor;
       set { backgroundColor = value; BackgroundVisible = backgroundColor != Color.Transparent; }
     }
 
-    private bool BorderVisible = true;
+    protected bool BorderVisible = true;
     private Color borderColor = CUIColors.ComponentBorder; public Color BorderColor
     {
       get => borderColor;
@@ -321,7 +332,7 @@ namespace CrabUI
     private Vector2 padding = new Vector2(2, 2); public Vector2 Padding
     {
       get => padding;
-      set { padding = value; DecorChanged = true; }
+      set { padding = value; OnDecorPropChanged("Padding"); }
     }
 
     #endregion

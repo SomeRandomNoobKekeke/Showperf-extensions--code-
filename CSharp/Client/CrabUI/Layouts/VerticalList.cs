@@ -29,7 +29,7 @@ namespace CrabUI
 
     internal override void Update()
     {
-      if (Changed)
+      if (Changed.Value)
       {
         Sizes.Clear();
         Resizible.Clear();
@@ -83,16 +83,13 @@ namespace CrabUI
           y += c.Size.Y;
         }
 
-        Changed = false;
+        Changed.Value = false;
       }
 
-      if (Host.DecorChanged)
-      {
-        Host.UpdatePseudoChildren();
-        Host.DecorChanged = false;
-      }
-
+      UpdateDecor();
     }
+
+
 
     public CUILayoutVerticalList(CUIComponent host = null) : base(host)
     {

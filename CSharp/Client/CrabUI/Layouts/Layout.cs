@@ -12,44 +12,102 @@ namespace CrabUI
 {
   public class CUILayout
   {
-    internal CUIComponent Host;
-
-    // TODO rethink
-    // public void PropagateUp()
-    // {
-    //   changed = true;
-    //   if (Host.Parent != null) Host.Parent.Layout.PropagateUp();
-    // }
-
-    private void PropagateDown()
+    #region Cringe
+    public class State
     {
-      changed = true;
-      Host.DecorChanged = true;
-      foreach (CUIComponent child in Host.Children)
+      public CUILayout Layout;
+      public CUIComponent Host => Layout.Host;
+      protected bool _value; public virtual bool Value
       {
-        child.Layout.PropagateDown();
-      }
-    }
-    private bool changed = true; public bool Changed
-    {
-      get => changed;
-      set
-      {
-        changed = value;
-        if (changed)
+        get => _value;
+        set
         {
-          Host.DecorChanged = true;
-          if (Host.Parent != null) Host.Parent.Layout.changed = true;
-          foreach (CUIComponent child in Host.Children) child.Layout.PropagateDown();
+          _value = value;
+          PropagateUp();
+          PropagateDown();
         }
       }
+
+      public virtual void PropagateUp() { }
+      public virtual void PropagateDown() { }
+
+      public State(CUILayout layout) { Layout = layout; }
     }
+
+    public class ChangedState : State
+    {
+      public override bool Value
+      {
+        get => _value;
+        set
+        {
+          _value = value;
+          if (value && Host != null)
+          {
+            try
+            {
+              Host.Layout.DecorChanged.Value = true;
+              if (Host.Parent != null) Host.Parent.Layout.Changed.Value = true;
+              foreach (CUIComponent child in Host.Children) child.Layout.Changed.PropagateDown();
+            }
+            catch (Exception e)
+            {
+              CUI.log(e);
+            }
+          }
+        }
+      }
+      public override void PropagateDown()
+      {
+        _value = true;
+        if (Host != null)
+        {
+          Host.Layout.DecorChanged.Value = true;
+          foreach (CUIComponent child in Host.Children)
+          {
+            child.Layout.Changed.PropagateDown();
+          }
+        }
+      }
+
+      public ChangedState(CUILayout layout) : base(layout) { _value = true; }
+    }
+
+    public class DecorChangedState : State
+    {
+      public override bool Value
+      {
+        get => _value;
+        set => _value = value;
+      }
+      public DecorChangedState(CUILayout layout) : base(layout) { _value = true; }
+    }
+    #endregion
+
+
+
+    internal CUIComponent Host;
+
+    public ChangedState Changed;
+    public DecorChangedState DecorChanged;
 
     internal virtual void Update()
     {
-      if (Host.DecorChanged) Host.UpdatePseudoChildren();
-      if (!Changed) return;
-      Changed = false;
+      Changed.Value = false;
+    }
+
+    internal virtual void UpdateDecor()
+    {
+      if (DecorChanged.Value)
+      {
+        Host.UpdatePseudoChildren();
+        DecorChanged.Value = false;
+      }
+    }
+
+    internal virtual void ResizeToContent()
+    {
+
     }
 
 
@@ -82,6 +140,8 @@ namespace CrabUI
     public CUILayout(CUIComponent host = null)
     {
       Host = host;
+      Changed = new ChangedState(this);
+      DecorChanged = new DecorChangedState(this);
     }
   }
 }

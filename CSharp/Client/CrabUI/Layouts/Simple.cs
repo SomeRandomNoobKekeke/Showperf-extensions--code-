@@ -14,7 +14,7 @@ namespace CrabUI
   {
     internal override void Update()
     {
-      if (Changed)
+      if (Changed.Value)
       {
         foreach (CUIComponent c in Host.Children)
         {
@@ -73,14 +73,10 @@ namespace CrabUI
           //if (c.Debug) CUI.log(c); // TODO make special method for such calls in CUI
         }
 
-        Changed = false;
+        Changed.Value = false;
       }
 
-      if (Host.DecorChanged)
-      {
-        Host.UpdatePseudoChildren();
-        Host.DecorChanged = false;
-      }
+      UpdateDecor();
     }
 
     public CUILayoutSimple(CUIComponent host = null) : base(host)

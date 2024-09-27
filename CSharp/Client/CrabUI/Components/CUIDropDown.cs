@@ -118,6 +118,7 @@ namespace CrabUI
     {
       Selected = option;
       Text = option.Text;
+      OnPropChanged();
     }
 
 
@@ -134,7 +135,7 @@ namespace CrabUI
 
       Add("1");
       Add("2");
-      Add("3");
+      Add("2313123123123");
       Add("4");
 
 
