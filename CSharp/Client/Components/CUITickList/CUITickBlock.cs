@@ -32,7 +32,7 @@ namespace ShowPerfExtensions
 
         public void Update()
         {
-          Absolute.Height = TickList.Values.Count * StringHeight;
+          Absolute = Absolute with { Height = TickList.Values.Count * StringHeight };
         }
 
         protected override void Draw(SpriteBatch spriteBatch)

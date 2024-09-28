@@ -14,7 +14,7 @@ namespace CrabUI
     private string text = ""; public string Text
     {
       get => text;
-      set { text = value; OnPropChanged("Text"); }
+      set { text = value; OnPropChanged(); }
     }
     public bool Wrap { get; set; }
 
@@ -30,8 +30,7 @@ namespace CrabUI
       RealTextSize = Font.MeasureString(WrappedText) * TextScale;
 
       Vector2 minSize = RealTextSize + Padding * 2;
-      AbsoluteMin.Size = minSize;
-
+      AbsoluteMin = AbsoluteMin with { Size = minSize };
 
       return new Vector2(Math.Max(size.X, minSize.X), Math.Max(size.Y, minSize.Y));
     }
@@ -42,7 +41,7 @@ namespace CrabUI
     private float textScale = 1f; public float TextScale
     {
       get => textScale;
-      set { textScale = value; OnDecorPropChanged("TextScale"); }
+      set { textScale = value; OnDecorPropChanged(); }
     }
     private Vector2 RealTextSize;
     private Vector2 TextDrawPos;

@@ -10,7 +10,6 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace CrabUI
 {
-
   public struct CUIBool2
   {
     public bool X;

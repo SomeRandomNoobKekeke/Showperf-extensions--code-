@@ -26,12 +26,11 @@ namespace CrabUI
       foreach (var sound in Enum.GetValues(typeof(GUISoundType)).Cast<GUISoundType>())
       {
         CUIComponent b = l.Append(new CUIButton($"{sound}") { ClickSound = sound });
-        b.Relative.Height = 0.1f;
+        b.Relative = new CUINullRect(null, null, null, 0.1f);
       }
       foreach (var sound in Enum.GetValues(typeof(GUISoundType)).Cast<GUISoundType>())
       {
         CUIComponent b = l.Append(new CUITextBlock($"{sound}"));
-        //b.Relative.Height = 0.1f;
       }
 
       CUI.Append(f);
@@ -44,7 +43,7 @@ namespace CrabUI
       outer.Append(inner);
 
       inner.BackgroundColor = Color.Yellow * 0.5f;
-      inner.AbsoluteMin.Left = 100f;
+      inner.AbsoluteMin = new CUINullRect(100f, null, null, null);
       //inner.RelativeMax.Width = 1f;
 
       CUI.Append(outer);
@@ -58,17 +57,17 @@ namespace CrabUI
       CUIComponent b2 = f.Append(new CUIButton("bebebe"));
       CUIComponent b3 = f.Append(new CUIButton("bebebe"));
 
-      b1.Absolute.Position = new Vector2(30, 0);
-      b2.Absolute.Position = new Vector2(0, 20);
-      b3.Absolute.Position = new Vector2(30, 40);
+      b1.Absolute = new CUINullRect(30, 0, null, null);
+      b2.Absolute = new CUINullRect(0, 20, null, null);
+      b3.Absolute = new CUINullRect(30, 40, null, null);
 
       CUIComponent t1 = f.Append(new CUITextBlock("kokoko") { BorderColor = Color.White });
       CUIComponent t2 = f.Append(new CUITextBlock("kokoko") { BorderColor = Color.White });
       CUIComponent t3 = f.Append(new CUITextBlock("kokoko") { BorderColor = Color.White });
 
-      t1.Absolute.Position = new Vector2(100, 0);
-      t2.Absolute.Position = new Vector2(80, 20);
-      t3.Absolute.Position = new Vector2(100, 40);
+      t1.Absolute = new CUINullRect(100, 0, null, null);
+      t2.Absolute = new CUINullRect(80, 20, null, null);
+      t3.Absolute = new CUINullRect(100, 40, null, null);
 
       CUI.Append(f);
     }
@@ -85,8 +84,8 @@ namespace CrabUI
       l.Append(new CUIButton($"bebebe"));
       l.Append(new CUIButton($"bebebe"));
       l.Append(new CUIButton($"bebebe"));
-      l.Append(new CUIButton($"bebebe")).Relative.Height = 0.1f;
-
+      CUIComponent b = l.Append(new CUIButton($"bebebe"));
+      b.Relative = new CUINullRect(null, null, null, 0.1f);
 
       l.Append(new CUITextBlock("be be be be be be be be be be be be be be be be be be")
       {

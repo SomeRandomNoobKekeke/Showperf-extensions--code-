@@ -53,8 +53,11 @@ namespace CrabUI
       // you can accidentally resize something beyond screen bounds
       if (Anchor.Type == CUIAnchorType.RightBottom)
       {
-        Host.Absolute.Width = Math.Max(Real.Width, cursorPos.X - Host.Real.Left);
-        Host.Absolute.Height = Math.Max(Real.Height, cursorPos.Y - Host.Real.Top);
+        Host.Absolute = Host.Absolute with
+        {
+          Width = Math.Max(Real.Width, cursorPos.X - Host.Real.Left),
+          Height = Math.Max(Real.Height, cursorPos.Y - Host.Real.Top),
+        };
         return;
       }
 
@@ -62,9 +65,13 @@ namespace CrabUI
       {
         float w = Math.Max(Real.Width, Host.Real.Width - (cursorPos.X - Host.Real.Left));
 
-        Host.Absolute.Left = Host.Real.Right - w - Host.Parent.Real.Left;
-        Host.Absolute.Width = w;
-        Host.Absolute.Height = Math.Max(Real.Height, cursorPos.Y - Host.Real.Top);
+        Host.Absolute = Host.Absolute with
+        {
+          Left = Host.Real.Right - w - Host.Parent.Real.Left,
+          Width = w,
+          Height = Math.Max(Real.Height, cursorPos.Y - Host.Real.Top),
+        };
+
         return;
       }
     }

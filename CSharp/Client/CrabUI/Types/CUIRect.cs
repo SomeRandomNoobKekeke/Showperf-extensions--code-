@@ -65,70 +65,32 @@ namespace CrabUI
 
     public override string ToString() => $"[{Left}, {Top}, {Width}, {Height}]";
   }
-  public class CUINullRect
+  public struct CUINullRect
   {
-    public CUIComponent host; public CUIComponent Host
-    {
-      get => host;
-      set { host = value; Host?.OnPropChanged("Host"); }
-    }
-
-    private float? left; public float? Left
-    {
-      get => left;
-      set { left = value; Host?.OnPropChanged("Left"); }
-    }
-    private float? top; public float? Top
-    {
-      get => top;
-      set { top = value; Host?.OnPropChanged("Top"); }
-    }
-
-    private float? width; public float? Width
-    {
-      get => width;
-      set { width = value.HasValue ? Math.Max(0f, value.Value) : value; Host?.OnPropChanged("Width"); }
-    }
-    private float? height; public float? Height
-    {
-      get => height;
-      set { height = value.HasValue ? Math.Max(0f, value.Value) : value; Host?.OnPropChanged("Height"); }
-    }
+    public float? Left;
+    public float? Top;
+    public float? Width;
+    public float? Height;
 
     public Vector2 Size
     {
       get => new Vector2(Width ?? 0, Height ?? 0);
-      set { width = value.X; height = value.Y; Host?.OnPropChanged("Size"); }
+      set { Width = value.X; Height = value.Y; }
     }
     public Vector2 Position
     {
       get => new Vector2(Left ?? 0, Top ?? 0);
-      set { left = value.X; top = value.Y; Host?.OnPropChanged("Position"); }
-    }
-
-    public void Set(float? x, float? y, float? w, float? h)
-    {
-      Left = x;
-      Top = y;
-      Width = w;
-      Height = h;
-    }
-
-    public CUINullRect(CUIComponent host = null)
-    {
-      Host = host;
+      set { Left = value.X; Top = value.Y; }
     }
 
     public CUINullRect(Vector2 position, Vector2 size) : this(position.X, position.Y, size.X, size.Y) { }
 
-    public CUINullRect(float? x, float? y, float? w, float? h, CUIComponent host = null)
+    public CUINullRect(float? x, float? y, float? w, float? h)
     {
       Left = x;
       Top = y;
       Width = w;
       Height = h;
-
-      Host = host;
     }
 
     public override string ToString() => $"[{Left}, {Top}, {Width}, {Height}]";

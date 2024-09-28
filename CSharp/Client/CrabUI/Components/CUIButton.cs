@@ -39,12 +39,12 @@ namespace CrabUI
 
     public CUIButton(string text, float? width, float? height) : this(text)
     {
-      Relative.Set(null, null, width, height);
+      Relative = new CUINullRect(null, null, width, height);
     }
 
     public CUIButton(string text, float? x, float? y, float? w, float? h) : this(text)
     {
-      Relative.Set(x, y, w, h);
+      Relative = new CUINullRect(x, y, w, h);
     }
   }
 }

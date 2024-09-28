@@ -45,7 +45,7 @@ namespace CrabUI
         Options.Add(o);
         Append(o);
 
-        this.Absolute.Height = Options.Count * Host.EnforcedOptionHeight;
+        Absolute = Absolute with { Height = Options.Count * Host.EnforcedOptionHeight };
 
         return o;
       }
@@ -92,7 +92,7 @@ namespace CrabUI
         Value = value;
 
         Relative = new CUINullRect(0, null, 1, null);
-        Absolute.Height = Host.EnforcedOptionHeight;
+        Absolute = Absolute with { Height = Host.EnforcedOptionHeight };
         TextAling.Type = CUIAnchorType.CenterCenter;
 
         OnMouseDown += (CUIMouse m) => Host.Select(this);
@@ -145,7 +145,7 @@ namespace CrabUI
 
     public CUIDropDown(float? x, float? y, float? w, float? h) : this()
     {
-      Relative.Set(x, y, w, h);
+      Relative = new CUINullRect(x, y, w, h);
     }
   }
 }

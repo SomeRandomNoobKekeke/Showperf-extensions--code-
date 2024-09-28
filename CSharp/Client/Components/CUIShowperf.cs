@@ -43,7 +43,7 @@ namespace ShowPerfExtensions
       public void CreateGUI()
       {
         this["handle"] = new CUIComponent(0, 0, 1, null);
-        this["handle"].Absolute.Height = 22;
+        this["handle"].Absolute = new CUINullRect(null, null, null, 22);
         this["handle"].BorderColor = Color.Transparent;
 
 
@@ -85,7 +85,7 @@ namespace ShowPerfExtensions
 
 
         TickList = new CUITickList();
-        TickList.Relative.Set(0, 0, 1, 1);
+        TickList.Relative = new CUINullRect(0, 0, 1, 1);
 
         Map = new CUIMap(0, 0, 1, 1);
 
@@ -94,9 +94,9 @@ namespace ShowPerfExtensions
         CUIButton b2 = (CUIButton)Map.Add(new CUIButton("kokoko"));
         CUIButton b3 = (CUIButton)Map.Add(new CUIButton("kokoko"));
 
-        b1.Absolute.Position = new Vector2(0, 0);
-        b2.Absolute.Position = new Vector2(200, 100);
-        b3.Absolute.Position = new Vector2(0, 200);
+        b1.Absolute = new CUINullRect(0, 0, null, null);
+        b2.Absolute = new CUINullRect(200, 100, null, null);
+        b3.Absolute = new CUINullRect(0, 200, null, null);
 
         Map.Connect(b1, b2);
         Map.Connect(b2, b3, Color.Lime);

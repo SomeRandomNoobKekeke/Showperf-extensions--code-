@@ -32,7 +32,7 @@ namespace CrabUI
     private CUIComponent? parent; public CUIComponent? Parent
     {
       get => parent;
-      set { parent = value; TreeChanged = true; OnPropChanged("Parent"); }
+      set { parent = value; TreeChanged = true; OnPropChanged(); }
     }
     private bool treeChanged = true; public bool TreeChanged
     {
@@ -107,7 +107,7 @@ namespace CrabUI
       set
       {
         zIndex = value;
-        OnPropChanged("ZIndex");
+        OnPropChanged();
         foreach (var child in Children)
         {
           child.ZIndex = zIndex.HasValue ? zIndex.Value + 1 : null;
@@ -154,22 +154,10 @@ namespace CrabUI
 
     internal virtual Vector2 AmIOkWithThisSize(Vector2 size) => size;
 
-    internal void OnPropChanged(string PropName = "")
-    {
-      Layout.Changed.Value = true;
-    }
-
-    internal void OnDecorPropChanged(string PropName = "")
-    {
-      Layout.DecorChanged.Value = true;
-    }
-
-    internal void OnAbsolutePropChanged(string PropName = "")
-    {
-      Layout.DecorChanged.Value = true;
-    }
-
-    internal void OnChildrenPropChanged(string PropName = "")
+    internal void OnPropChanged() => Layout.Changed.Value = true;
+    internal void OnDecorPropChanged() => Layout.DecorChanged.Value = true;
+    internal void OnAbsolutePropChanged() => Layout.DecorChanged.Value = true;
+    internal void OnChildrenPropChanged()
     {
       foreach (CUIComponent child in Children)
       {
@@ -229,44 +217,44 @@ namespace CrabUI
     private CUINullRect absolute; public CUINullRect Absolute
     {
       get => absolute;
-      set { absolute = value; absolute.Host = this; }
+      set { absolute = value; OnPropChanged(); }
     }
 
     private CUINullRect absoluteMin; public CUINullRect AbsoluteMin
     {
       get => absoluteMin;
-      set { absoluteMin = value; absoluteMin.Host = this; }
+      set { absoluteMin = value; OnPropChanged(); }
     }
 
     private CUINullRect absoluteMax; public CUINullRect AbsoluteMax
     {
       get => absoluteMax;
-      set { absoluteMax = value; absoluteMax.Host = this; }
+      set { absoluteMax = value; OnPropChanged(); }
     }
 
     private CUINullRect relative; public CUINullRect Relative
     {
       get => relative;
-      set { relative = value; relative.Host = this; }
+      set { relative = value; OnPropChanged(); }
     }
 
     private CUINullRect relativeMin; public CUINullRect RelativeMin
     {
       get => relativeMin;
-      set { relativeMin = value; relativeMin.Host = this; }
+      set { relativeMin = value; OnPropChanged(); }
     }
 
     private CUINullRect relativeMax; public CUINullRect RelativeMax
     {
       get => relativeMax;
-      set { relativeMax = value; relativeMax.Host = this; }
+      set { relativeMax = value; OnPropChanged(); }
     }
 
 
     private bool fillEmptySpace; public bool FillEmptySpace
     {
       get => fillEmptySpace;
-      set { fillEmptySpace = value; OnPropChanged("FillEmptySpace"); }
+      set { fillEmptySpace = value; OnPropChanged(); }
     }
 
     private CUIBool2 fitContent; public CUIBool2 FitContent
@@ -335,7 +323,7 @@ namespace CrabUI
     private Vector2 padding = new Vector2(2, 2); public Vector2 Padding
     {
       get => padding;
-      set { padding = value; OnDecorPropChanged("Padding"); }
+      set { padding = value; OnDecorPropChanged(); }
     }
 
     #endregion
@@ -377,7 +365,7 @@ namespace CrabUI
 
     public CUIComponent(float? x, float? y, float? w, float? h) : this()
     {
-      Relative.Set(x, y, w, h);
+      Relative = new CUINullRect(x, y, w, h);
     }
     #endregion
 

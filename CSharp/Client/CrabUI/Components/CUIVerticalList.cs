@@ -57,7 +57,7 @@ namespace CrabUI
 
     public CUIVerticalList(float? x, float? y, float? w, float? h) : this()
     {
-      Relative.Set(x, y, w, h);
+      Relative = new CUINullRect(x, y, w, h);
     }
   }
 }
