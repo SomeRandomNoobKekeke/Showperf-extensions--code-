@@ -26,7 +26,7 @@ namespace CrabUI
     public static GUIButton dummyComponent = new GUIButton(new RectTransform(new Point(0, 0)));
 
 
-    #region Tree
+    #region Tree --------------------------------------------------------
     public List<CUIComponent> Children = new List<CUIComponent>();
 
     private CUIComponent? parent; public CUIComponent? Parent
@@ -127,7 +127,7 @@ namespace CrabUI
 
 
     #endregion
-    #region Layout
+    #region Layout --------------------------------------------------------
 
 
     private CUILayout layout; public CUILayout Layout
@@ -166,7 +166,7 @@ namespace CrabUI
     }
 
     #endregion
-    #region Events
+    #region Events --------------------------------------------------------
 
     internal virtual void ChildrenSizeCalculated() { }
 
@@ -211,7 +211,7 @@ namespace CrabUI
     }
 
     #endregion
-    #region Props
+    #region Props --------------------------------------------------------
     public CUIAnchor Anchor = new CUIAnchor(CUIAnchorType.LeftTop);
 
     private CUINullRect absolute; public CUINullRect Absolute
@@ -304,7 +304,7 @@ namespace CrabUI
     }
 
     #endregion
-    #region Graphic Props
+    #region Graphic Props --------------------------------------------------------
     protected bool BackgroundVisible = true;
     private Color backgroundColor = CUIColors.ComponentBackground; public Color BackgroundColor
     {
@@ -327,7 +327,46 @@ namespace CrabUI
     }
 
     #endregion
-    #region Methods
+
+    #region State --------------------------------------------------------
+    public Dictionary<string, CUIComponent> State = new Dictionary<string, CUIComponent>();
+    public CUIComponent Clone()
+    {
+      CUIComponent clone = new CUIComponent();
+      clone.Apply(this);
+      return clone;
+    }
+    public virtual void Apply(CUIComponent state)
+    {
+      ShouldPassPropsToChildren = state.ShouldPassPropsToChildren;
+      ZIndex = state.ZIndex;
+      IgnoreEvents = state.IgnoreEvents;
+      Visible = state.Visible;
+      ChildrenOffset = state.ChildrenOffset;
+      Draggable = state.Draggable;
+      LeftResizeHandle.Visible = state.LeftResizeHandle.Visible;
+      RightResizeHandle.Visible = state.RightResizeHandle.Visible;
+      Swipeable = state.Swipeable;
+      Anchor = state.Anchor;
+      Absolute = state.Absolute;
+      AbsoluteMax = state.AbsoluteMax;
+      AbsoluteMin = state.AbsoluteMin;
+      Relative = state.Relative;
+      RelativeMax = state.RelativeMax;
+      RelativeMin = state.RelativeMin;
+      FillEmptySpace = state.FillEmptySpace;
+      FitContent = state.FitContent;
+      HideChildrenOutsideFrame = state.HideChildrenOutsideFrame;
+      BackgroundColor = state.BackgroundColor;
+      BorderColor = state.BorderColor;
+      BorderThickness = state.BorderThickness;
+      Padding = state.Padding;
+    }
+
+
+
+    #endregion
+    #region Methods --------------------------------------------------------
 
     protected virtual void Draw(SpriteBatch spriteBatch)
     {
@@ -343,7 +382,7 @@ namespace CrabUI
 
 
     #endregion
-    #region Constructors
+    #region Constructors --------------------------------------------------------
     public CUIComponent()
     {
       ID = MaxID++;

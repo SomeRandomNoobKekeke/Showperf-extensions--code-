@@ -1,9 +1,6 @@
-States
-
 Grid and flex layout
 culling
 sprites
-Default colors for everything
 max right
 cursor
 Shadow dom + shadow Layout

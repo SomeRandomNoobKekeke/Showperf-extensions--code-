@@ -71,6 +71,7 @@ namespace CrabUI
     public CUIMap() : base()
     {
       Swipeable = true;
+      ConsumeMouseClicks = true;
       OnDClick += (m) => ChildrenOffset = Vector2.Zero;
       BorderColor = Color.Transparent;
       BackgroundColor = CUIColors.ComponentBackground;

@@ -110,6 +110,9 @@ namespace ShowPerfExtensions
         Layout = new CUILayoutVerticalList();
 
         CreateGUI();
+
+        State["init"] = this.Clone();
+        OnDClick += m => this.Apply(State["init"]);
       }
     }
   }
