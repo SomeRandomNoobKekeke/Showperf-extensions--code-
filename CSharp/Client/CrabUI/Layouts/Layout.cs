@@ -105,7 +105,11 @@ namespace CrabUI
 
     internal virtual void Update()
     {
-      Changed.Value = false;
+      if (Changed.Value)
+      {
+        // do something
+        Changed.Value = false;
+      }
     }
 
     internal virtual void UpdateDecor()

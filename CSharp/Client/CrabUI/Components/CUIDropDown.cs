@@ -45,7 +45,7 @@ namespace CrabUI
         Options.Add(o);
         Append(o);
 
-        Absolute = Absolute with { Height = Options.Count * Host.EnforcedOptionHeight };
+        //Absolute = Absolute with { Height = Options.Count * Host.EnforcedOptionHeight };
 
         return o;
       }
@@ -57,8 +57,8 @@ namespace CrabUI
         Visible = false;
         IgnoreEvents = true;
 
-        Relative = new CUINullRect(0, 1, 1, 10);
-        FitContent = new CUIBool2(true, false);
+        Relative = new CUINullRect(0, 1, 1, null);
+        FitContent = new CUIBool2(true, true);
 
         ConsumeMouseClicks = true;
         ConsumeDragAndDrop = true;
@@ -67,7 +67,9 @@ namespace CrabUI
         ZIndex = 100;
         BackgroundColor = Host.BoxColor;
         OnMouseDown += (m) => Close();
-        //OnMouseLeave += (m) => Close();
+
+        CUI.Main.OnMouseDown += (m) => Close();
+
 
         Close();
       }
@@ -94,7 +96,6 @@ namespace CrabUI
 
         Relative = new CUINullRect(0, null, 1, null);
         Absolute = Absolute with { Height = Host.EnforcedOptionHeight };
-        TextAling.Type = CUIAnchorType.CenterCenter;
 
         OnMouseDown += (CUIMouse m) => Host.Select(this);
         OnMouseDown += (CUIMouse m) => SoundPlayer.PlayUISound(Host.ClickSound);
@@ -106,6 +107,8 @@ namespace CrabUI
     public Color OptionColor = CUIColors.DropDownOption;
     public Color OptionHover = CUIColors.DropDownOptionHover;
     public float EnforcedOptionHeight = 21f;
+
+
 
     public CUIDropDownBox Box;
     public CUIDropDownOption Selected;

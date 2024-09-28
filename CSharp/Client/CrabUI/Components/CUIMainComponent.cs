@@ -312,7 +312,7 @@ namespace CrabUI
 
     private static void CUIBlockClicks(ref GUIComponent __result)
     {
-      if (GUI.MouseOn == null && Main.MouseOn != null) GUI.MouseOn = dummyComponent;
+      if (GUI.MouseOn == null && Main.MouseOn != null && Main.MouseOn != Main) GUI.MouseOn = dummyComponent;
     }
 
     private static void CUIBlockScroll(float deltaTime, ref bool allowMove, ref bool allowZoom, bool allowInput, bool? followSub)
@@ -330,7 +330,7 @@ namespace CrabUI
     {
       Real = new CUIRect(0, 0, GameMain.GraphicsWidth, GameMain.GraphicsHeight);
       Visible = false;
-      IgnoreEvents = true;
+      //IgnoreEvents = true;
       ShouldPassPropsToChildren = false;
       sw = new Stopwatch();
 

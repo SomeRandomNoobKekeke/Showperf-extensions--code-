@@ -328,6 +328,7 @@ namespace CrabUI
 
     #endregion
     #region Methods
+
     protected virtual void Draw(SpriteBatch spriteBatch)
     {
       if (BackgroundVisible) GUI.DrawRectangle(spriteBatch, Real.Position, Real.Size, BackgroundColor, isFilled: true);
