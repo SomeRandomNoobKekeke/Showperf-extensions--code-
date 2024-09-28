@@ -77,7 +77,7 @@ namespace CrabUI
       public DecorChangedState(CUILayout layout) : base(layout) { _value = true; }
     }
 
-    public class ChildrenChangedState : State
+    public class AbsoluteChangedState : State
     {
       public override bool Value
       {
@@ -87,11 +87,11 @@ namespace CrabUI
           _value = value;
           if (value && Host != null && Host.Parent != null)
           {
-            Host.Parent.Layout.ChildrenChanged.Value = true;
+            Host.Parent.Layout.AbsoluteChanged.Value = true;
           }
         }
       }
-      public ChildrenChangedState(CUILayout layout) : base(layout) { _value = true; }
+      public AbsoluteChangedState(CUILayout layout) : base(layout) { _value = true; }
     }
     #endregion
 
@@ -101,7 +101,7 @@ namespace CrabUI
 
     public ChangedState Changed;
     public DecorChangedState DecorChanged;
-    public ChildrenChangedState ChildrenChanged;
+    public AbsoluteChangedState AbsoluteChanged;
 
     internal virtual void Update()
     {
@@ -124,7 +124,7 @@ namespace CrabUI
         // do something
       }
 
-      ChildrenChanged.Value = false;
+      AbsoluteChanged.Value = false;
     }
 
 
@@ -159,7 +159,7 @@ namespace CrabUI
       Host = host;
       Changed = new ChangedState(this);
       DecorChanged = new DecorChangedState(this);
-      ChildrenChanged = new ChildrenChangedState(this);
+      AbsoluteChanged = new AbsoluteChangedState(this);
     }
   }
 }

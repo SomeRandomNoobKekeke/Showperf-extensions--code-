@@ -156,7 +156,7 @@ namespace CrabUI
 
     internal void OnPropChanged() => Layout.Changed.Value = true;
     internal void OnDecorPropChanged() => Layout.DecorChanged.Value = true;
-    internal void OnAbsolutePropChanged() => Layout.DecorChanged.Value = true;
+    internal void OnAbsolutePropChanged() => Layout.AbsoluteChanged.Value = true;
     internal void OnChildrenPropChanged()
     {
       foreach (CUIComponent child in Children)
@@ -217,19 +217,19 @@ namespace CrabUI
     private CUINullRect absolute; public CUINullRect Absolute
     {
       get => absolute;
-      set { absolute = value; OnPropChanged(); }
+      set { absolute = value; OnPropChanged(); OnAbsolutePropChanged(); }
     }
 
     private CUINullRect absoluteMin; public CUINullRect AbsoluteMin
     {
       get => absoluteMin;
-      set { absoluteMin = value; OnPropChanged(); }
+      set { absoluteMin = value; OnPropChanged(); OnAbsolutePropChanged(); }
     }
 
     private CUINullRect absoluteMax; public CUINullRect AbsoluteMax
     {
       get => absoluteMax;
-      set { absoluteMax = value; OnPropChanged(); }
+      set { absoluteMax = value; OnPropChanged(); OnAbsolutePropChanged(); }
     }
 
     private CUINullRect relative; public CUINullRect Relative
@@ -260,7 +260,7 @@ namespace CrabUI
     private CUIBool2 fitContent; public CUIBool2 FitContent
     {
       get => fitContent;
-      set { fitContent = value; }
+      set { fitContent = value; OnPropChanged(); OnAbsolutePropChanged(); }
     }
 
 

@@ -54,7 +54,7 @@ namespace ShowPerfExtensions
         };
 
 
-        CUIToggleButton ToggleByID = new CUIToggleButton("ToggleByID", 0.5f, 1);
+        CUIToggleButton ToggleByID = new CUIToggleButton("ToggleByID");
 
         ToggleByID.OnStateChange += (state) =>
         {
@@ -66,7 +66,7 @@ namespace ShowPerfExtensions
 
 
 
-        CUIDropDown SubType = new CUIDropDown(0.5f, 1);
+        CUIDropDown SubType = new CUIDropDown();
 
         Remember(this["buttons1"]["SubType"] = SubType);
 

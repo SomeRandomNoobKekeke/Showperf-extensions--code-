@@ -77,6 +77,56 @@ namespace CrabUI
       }
     }
 
+    internal override void ResizeToContent()
+    {
+      if (Host.FitContent.X)
+      {
+        float rightmostRight = 0;
+        foreach (CUIComponent c in Host.Children)
+        {
+          float x = 0;
+          float w = 0;
+
+          if (c.Absolute.Left.HasValue) x = c.Absolute.Left.Value;
+          if (c.AbsoluteMin.Left.HasValue) x = Math.Max(x, c.AbsoluteMin.Left.Value);
+          if (c.AbsoluteMax.Left.HasValue) x = Math.Min(x, c.AbsoluteMax.Left.Value);
+
+          if (c.Absolute.Width.HasValue) w = c.Absolute.Width.Value;
+          if (c.AbsoluteMin.Width.HasValue) w = Math.Max(w, c.AbsoluteMin.Width.Value);
+          if (c.AbsoluteMax.Width.HasValue) w = Math.Min(w, c.AbsoluteMax.Width.Value);
+
+          rightmostRight = Math.Max(rightmostRight, x + w);
+        }
+
+        Host.Absolute = Host.Absolute with { Width = rightmostRight };
+      }
+
+      if (Host.FitContent.Y)
+      {
+        float bottommostBottom = 0;
+        foreach (CUIComponent c in Host.Children)
+        {
+          float y = 0;
+          float h = 0;
+
+          if (c.Absolute.Top.HasValue) y = c.Absolute.Top.Value;
+          if (c.AbsoluteMin.Top.HasValue) y = Math.Max(y, c.AbsoluteMin.Top.Value);
+          if (c.AbsoluteMax.Top.HasValue) y = Math.Min(y, c.AbsoluteMax.Top.Value);
+
+          if (c.Absolute.Height.HasValue) h = c.Absolute.Height.Value;
+          if (c.AbsoluteMin.Height.HasValue) h = Math.Max(h, c.AbsoluteMin.Height.Value);
+          if (c.AbsoluteMax.Height.HasValue) h = Math.Min(h, c.AbsoluteMax.Height.Value);
+
+          bottommostBottom = Math.Max(bottommostBottom, y + h);
+        }
+
+        Host.Absolute = Host.Absolute with { Height = bottommostBottom };
+      }
+
+      AbsoluteChanged.Value = false;
+    }
+
+
     public CUILayoutSimple(CUIComponent host = null) : base(host)
     {
 

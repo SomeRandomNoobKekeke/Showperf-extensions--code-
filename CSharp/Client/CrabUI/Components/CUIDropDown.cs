@@ -58,6 +58,7 @@ namespace CrabUI
         IgnoreEvents = true;
 
         Relative = new CUINullRect(0, 1, 1, 10);
+        FitContent = new CUIBool2(true, false);
 
         ConsumeMouseClicks = true;
         ConsumeDragAndDrop = true;
@@ -127,6 +128,8 @@ namespace CrabUI
       InactiveColor = CUIColors.DropDownInactive;
       MouseOverColor = CUIColors.DropDownHover;
       MousePressedColor = CUIColors.DropDownPressed;
+
+      FitContent = new CUIBool2(true, false);
 
       Box = new CUIDropDownBox(this);
       Append(Box);

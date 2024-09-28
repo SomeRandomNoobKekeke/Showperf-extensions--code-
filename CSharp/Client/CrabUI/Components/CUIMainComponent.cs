@@ -79,6 +79,7 @@ namespace CrabUI
 
         HandleMouse();
 
+        RunReverse(c => c.Layout.ResizeToContent());
         RunStraigth(c =>
         {
           c.Layout.Update();
