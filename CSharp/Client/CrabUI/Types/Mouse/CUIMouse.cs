@@ -36,8 +36,13 @@ namespace CrabUI
 
     public bool SomethingHappened;
 
+    //TODO rethink, this is too hacky
+    public bool ClickConsumed;
+
     public void Scan()
     {
+      ClickConsumed = false;
+
       CurrentState = Mouse.GetState();
 
       Down = PrevState.LeftButton == ButtonState.Released && CurrentState.LeftButton == ButtonState.Pressed;

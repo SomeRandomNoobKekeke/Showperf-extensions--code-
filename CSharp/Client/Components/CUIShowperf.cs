@@ -112,7 +112,11 @@ namespace ShowPerfExtensions
         CreateGUI();
 
         State["init"] = this.Clone();
-        OnDClick += m => this.Apply(State["init"]);
+        OnDClick += m =>
+        {
+          m.ClickConsumed = true;
+          this.Apply(State["init"]);
+        };
       }
     }
   }

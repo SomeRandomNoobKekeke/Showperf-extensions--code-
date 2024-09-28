@@ -169,6 +169,7 @@ namespace CrabUI
       CUIComponent CurrentMouseOn = null;
       MouseOnList.Clear();
 
+      // form MouseOnList
       if (GUI.MouseOn == null || GUI.MouseOn == dummyComponent)
       {
         RunStraigth(c =>
@@ -241,6 +242,7 @@ namespace CrabUI
 
         if (MouseOnList[i].ConsumeMouseClicks) break;
       }
+      if (Mouse.ClickConsumed) return;
 
       // Swipe
       for (int i = MouseOnList.Count - 1; i >= 0; i--)
