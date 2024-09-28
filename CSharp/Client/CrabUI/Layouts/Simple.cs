@@ -98,7 +98,7 @@ namespace CrabUI
           rightmostRight = Math.Max(rightmostRight, x + w);
         }
 
-        Host.Absolute = Host.Absolute with { Width = rightmostRight };
+        Host.AbsoluteMin = Host.AbsoluteMin with { Width = rightmostRight };
       }
 
       if (Host.FitContent.Y)
@@ -120,7 +120,7 @@ namespace CrabUI
           bottommostBottom = Math.Max(bottommostBottom, y + h);
         }
 
-        Host.Absolute = Host.Absolute with { Height = bottommostBottom };
+        Host.AbsoluteMin = Host.AbsoluteMin with { Height = bottommostBottom };
       }
 
       AbsoluteChanged.Value = false;
