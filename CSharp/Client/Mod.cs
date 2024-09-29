@@ -41,7 +41,11 @@ namespace ShowPerfExtensions
       GameMain.PerformanceCounter.DrawTimeGraph = new Graph(1000);
       Window = new CaptureWindow(duration: 3, fps: 30);
       CUI = new CUIMainComponent();
-      Showperf = new CUIShowperf(0.6f, 0.1f, 0.4f, 0.8f);
+      Showperf = new CUIShowperf()
+      {
+        Relative = new CUINullRect(0.5f, null, null, null),
+        Absolute = new CUINullRect(null, 50, 350, 600),
+      };
 
       CUI.Append(Showperf);
       CUI.OnUpdate += () => Showperf.Update();

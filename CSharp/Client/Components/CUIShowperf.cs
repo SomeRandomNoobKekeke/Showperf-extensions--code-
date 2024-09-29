@@ -60,10 +60,7 @@ namespace ShowPerfExtensions
 
 
 
-        this["buttons1"] = new CUIHorizontalList()
-        {
-          FitContent = new CUIBool2(false, true),
-        };
+        this["buttons1"] = new CUIHorizontalList() { FitContent = new CUIBool2(false, true) };
 
 
         this["buttons1"].Append(ById = new CUIToggleButton("By Id")
@@ -127,7 +124,7 @@ namespace ShowPerfExtensions
 
       }
 
-      public CUIShowperf(float x, float y, float w, float h) : base(x, y, w, h)
+      public CUIShowperf() : base()
       {
         Layout = new CUILayoutVerticalList();
 
@@ -139,6 +136,10 @@ namespace ShowPerfExtensions
           m.ClickConsumed = true;
           this.ApplyState(State["init"]);
         };
+      }
+      public CUIShowperf(float x, float y, float w, float h) : this()
+      {
+        Relative = new CUINullRect(x, y, w, h);
       }
     }
   }

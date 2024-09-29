@@ -135,24 +135,35 @@ namespace CrabUI
     //TODO this is wrong, i should decrease w,h here
     protected CUIRect CheckChildBoundaries(float x, float y, float w, float h)
     {
-      if (Host.ChildrenBoundaries.Width.HasValue && x - Host.Real.Left + w > Host.ChildrenBoundaries.Width.Value)
+      // x > Host.Right
+      if (Host.ChildrenBoundaries.Width.HasValue && x > Host.Real.Left + Host.ChildrenBoundaries.Width.Value)
       {
-        x = Host.ChildrenBoundaries.Width.Value - w + Host.Real.Left;
+        x = Host.Real.Left + Host.ChildrenBoundaries.Width.Value;
       }
-
-      if (Host.ChildrenBoundaries.Height.HasValue && y - Host.Real.Top + h > Host.ChildrenBoundaries.Height.Value)
+      // y > Host.Bottom
+      if (Host.ChildrenBoundaries.Height.HasValue && y > Host.Real.Top + Host.ChildrenBoundaries.Height.Value)
       {
-        y = Host.ChildrenBoundaries.Height.Value - h + Host.Real.Top;
+        y = Host.Real.Top + Host.ChildrenBoundaries.Height.Value;
       }
-
-      if (Host.ChildrenBoundaries.Left.HasValue && x - Host.Real.Left < Host.ChildrenBoundaries.Left.Value)
+      // x < Host.Left
+      if (Host.ChildrenBoundaries.Left.HasValue && x < Host.Real.Left + Host.ChildrenBoundaries.Left.Value)
       {
-        x = Host.ChildrenBoundaries.Left.Value + Host.Real.Left;
+        x = Host.Real.Left + Host.ChildrenBoundaries.Left.Value;
       }
-
-      if (Host.ChildrenBoundaries.Top.HasValue && y - Host.Real.Top < Host.ChildrenBoundaries.Top.Value)
+      // y < Host.Top
+      if (Host.ChildrenBoundaries.Top.HasValue && y < Host.Real.Top + Host.ChildrenBoundaries.Top.Value)
       {
-        y = Host.ChildrenBoundaries.Top.Value + Host.Real.Top;
+        y = Host.Real.Top + Host.ChildrenBoundaries.Top.Value;
+      }
+      // x + w > Host.Right
+      if (Host.ChildrenBoundaries.Width.HasValue && x + w > Host.Real.Left + Host.ChildrenBoundaries.Width.Value)
+      {
+        w = Host.Real.Left + Host.ChildrenBoundaries.Width.Value - x;
+      }
+      // y + h > Host.Bottom
+      if (Host.ChildrenBoundaries.Height.HasValue && y + h > Host.Real.Top + Host.ChildrenBoundaries.Height.Value)
+      {
+        h = Host.Real.Top + Host.ChildrenBoundaries.Height.Value - y;
       }
 
       return new CUIRect(x, y, w, h);

@@ -40,7 +40,7 @@ namespace CrabUI
     private Vector2 GrabbedOffset;
 
 
-    internal override CUINullRect ChildrenBoundaries => new CUINullRect(0, 0, Real.Width, Real.Height);
+    internal override CUINullRect ChildrenBoundaries => new CUINullRect(1, 1, Real.Width - 2, Real.Height - 2);
     private void RunStraigth(Action<CUIComponent> a) { for (int i = 0; i < Flat.Count; i++) a(Flat[i]); }
     private void RunReverse(Action<CUIComponent> a) { for (int i = Flat.Count - 1; i >= 0; i--) a(Flat[i]); }
 

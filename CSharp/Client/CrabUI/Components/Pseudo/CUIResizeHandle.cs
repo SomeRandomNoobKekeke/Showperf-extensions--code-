@@ -106,6 +106,7 @@ namespace CrabUI
       //BackgroundColor = Host.BorderColor;
 
       Absolute = new CUINullRect(0, 0, 15, 10);
+      //Host.AbsoluteMin = Host.AbsoluteMin with { Size = Absolute.Size };
     }
   }
 }

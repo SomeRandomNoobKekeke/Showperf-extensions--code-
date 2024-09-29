@@ -41,7 +41,9 @@ namespace CrabUI
 
     public void DragTo(Vector2 to)
     {
-      Vector2 pos = to - Host.Parent.Real.Position - GrabOffset;
+      //TODO use anchors
+      // Vector2 pos = Host.Anchor.PosIn(new CUIRect(to - GrabOffset, Host.Real.Size)) - Host.Anchor.PosIn(Host.Parent.Real);
+      Vector2 pos = to - GrabOffset - Host.Parent.Real.Position;
       Host.Absolute = Host.Absolute with { Position = pos };
       Host.InvokeOnDrag(pos.X, pos.Y);
     }
