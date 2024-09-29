@@ -18,6 +18,7 @@ namespace CrabUI
     public CUIAnchor Anchor;
     public CUINullRect Absolute;
 
+    //TODO unhardcode these colors
     public Color BackgroundColor = Color.White * 0.25f;
     public Color GrabbedColor = Color.Cyan * 0.5f;
     public Vector2 GrabOffset;

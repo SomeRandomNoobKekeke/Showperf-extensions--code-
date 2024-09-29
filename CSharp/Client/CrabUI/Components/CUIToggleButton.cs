@@ -13,8 +13,10 @@ namespace CrabUI
   public class CUIToggleButton : CUITextBlock
   {
     public GUISoundType ClickSound { get; set; } = GUISoundType.Select;
-    public Color OnColor = CUIColors.ToggleButtonOn;
-    public Color OffColor = CUIColors.ToggleButtonOff;
+    public Color OnColor;
+    public Color OnHoverColor;
+    public Color OffColor;
+    public Color OffHoverColor;
 
     public event Action<bool> OnStateChange;
     private bool state; public bool State
@@ -25,8 +27,16 @@ namespace CrabUI
 
     protected override void Draw(SpriteBatch spriteBatch)
     {
-      if (State) BackgroundColor = OnColor;
-      else BackgroundColor = OffColor;
+      if (State)
+      {
+        if (MouseOver) BackgroundColor = OnHoverColor;
+        else BackgroundColor = OnColor;
+      }
+      else
+      {
+        if (MouseOver) BackgroundColor = OffHoverColor;
+        else BackgroundColor = OffColor;
+      }
 
       base.Draw(spriteBatch);
     }
@@ -35,7 +45,11 @@ namespace CrabUI
       ConsumeMouseClicks = true;
       ConsumeDragAndDrop = true;
 
-      BorderColor = CUIColors.ComponentBorder;
+      OnColor = CUIPallete.Default.Secondary.On;
+      OnHoverColor = CUIPallete.Default.Secondary.OnHover;
+      OffColor = CUIPallete.Default.Secondary.Off;
+      OffHoverColor = CUIPallete.Default.Secondary.OffHover;
+      BorderColor = CUIPallete.Default.Secondary.Border;
 
       TextAling.Type = CUIAnchorType.CenterCenter;
 

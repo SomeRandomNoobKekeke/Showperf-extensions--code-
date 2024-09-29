@@ -47,6 +47,8 @@ namespace ShowPerfExtensions
       Showperf.Capture.Toggle(CName.MapEntityDrawing);
 
 
+
+
       //CUI.Load(CUITest.ClickSounds);
 
       // CUI.OnUpdate += () => log($"{String.Format("{0:000000}", CUI.DrawTime)} {String.Format("{0:000000}", CUI.UpdateTime)}");

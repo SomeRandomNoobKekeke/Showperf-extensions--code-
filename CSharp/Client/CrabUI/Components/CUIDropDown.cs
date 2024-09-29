@@ -65,7 +65,11 @@ namespace CrabUI
         ConsumeSwipe = true;
         HideChildrenOutsideFrame = false;
         ZIndex = 100;
-        BackgroundColor = Host.BoxColor;
+
+        BackgroundColor = CUIPallete.Default.Tertiary.Off;
+        BorderColor = CUIPallete.Default.Tertiary.Border;
+
+
         OnMouseDown += (m) => Close();
 
         CUI.Main.OnMouseDown += (m) => Close();
@@ -82,10 +86,12 @@ namespace CrabUI
 
       public string Value;
 
+      public Color HoverColor;
+
       protected override void Draw(SpriteBatch spriteBatch)
       {
-        BackgroundColor = Host.OptionColor;
-        if (MouseOver) BackgroundColor = Host.OptionHover;
+        BackgroundColor = Color.Transparent;
+        if (MouseOver) BackgroundColor = HoverColor;
         base.Draw(spriteBatch);
       }
 
@@ -93,6 +99,9 @@ namespace CrabUI
       {
         Host = host;
         Value = value;
+
+        HoverColor = CUIPallete.Default.Tertiary.OffHover;
+        TextColor = CUIPallete.Default.Tertiary.Text;
 
         Relative = new CUINullRect(0, null, 1, null);
         Absolute = Absolute with { Height = Host.EnforcedOptionHeight };
@@ -103,9 +112,7 @@ namespace CrabUI
     }
 
     public GUISoundType ClickSound { get; set; } = GUISoundType.Select;
-    public Color BoxColor = CUIColors.DropDownBox;
-    public Color OptionColor = CUIColors.DropDownOption;
-    public Color OptionHover = CUIColors.DropDownOptionHover;
+
     public float EnforcedOptionHeight = 21f;
 
 
@@ -128,10 +135,6 @@ namespace CrabUI
 
     public CUIDropDown() : base("CUIDropDown")
     {
-      InactiveColor = CUIColors.DropDownInactive;
-      MouseOverColor = CUIColors.DropDownHover;
-      MousePressedColor = CUIColors.DropDownPressed;
-
       FitContent = new CUIBool2(true, false);
 
       Box = new CUIDropDownBox(this);
@@ -143,8 +146,6 @@ namespace CrabUI
       Add("2");
       Add("2313123123123");
       Add("4");
-
-
     }
 
     public CUIDropDown(float? width, float? height) : this(null, null, width, height) { }

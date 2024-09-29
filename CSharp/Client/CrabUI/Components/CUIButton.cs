@@ -14,9 +14,9 @@ namespace CrabUI
   {
     public GUISoundType ClickSound { get; set; } = GUISoundType.Select;
 
-    public Color InactiveColor = CUIColors.ButtonInactive;
-    public Color MouseOverColor = CUIColors.ButtonHover;
-    public Color MousePressedColor = CUIColors.ButtonPressed;
+    public Color InactiveColor;
+    public Color MouseOverColor;
+    public Color MousePressedColor;
 
     protected override void Draw(SpriteBatch spriteBatch)
     {
@@ -31,7 +31,12 @@ namespace CrabUI
       ConsumeMouseClicks = true;
       ConsumeDragAndDrop = true;
       //ConsumeSwipe = true;
-      BorderColor = CUIColors.ComponentBorder;
+
+      InactiveColor = CUIPallete.Default.Secondary.Off;
+      MouseOverColor = CUIPallete.Default.Secondary.OffHover;
+      MousePressedColor = CUIPallete.Default.Secondary.On;
+      BorderColor = CUIPallete.Default.Secondary.Border;
+
 
       TextAling.Type = CUIAnchorType.CenterCenter;
       OnMouseDown += (CUIMouse m) => SoundPlayer.PlayUISound(ClickSound);

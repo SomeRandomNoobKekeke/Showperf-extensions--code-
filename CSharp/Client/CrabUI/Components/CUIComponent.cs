@@ -284,10 +284,10 @@ namespace CrabUI
         if (HideChildrenOutsideFrame)
         {
           Rectangle SRect = new Rectangle(
-            (int)real.Left + 1,
-            (int)real.Top + 1,
-            (int)real.Width - 1,
-            (int)real.Height - 1
+            (int)real.Left,
+            (int)real.Top,
+            (int)real.Width,
+            (int)real.Height
           );
 
           if (Parent?.ScissorRect != null)
@@ -305,15 +305,15 @@ namespace CrabUI
 
     #endregion
     #region Graphic Props --------------------------------------------------------
-    protected bool BackgroundVisible = true;
-    private Color backgroundColor = CUIColors.ComponentBackground; public Color BackgroundColor
+    protected bool BackgroundVisible;
+    private Color backgroundColor; public Color BackgroundColor
     {
       get => backgroundColor;
       set { backgroundColor = value; BackgroundVisible = backgroundColor != Color.Transparent; }
     }
 
-    protected bool BorderVisible = true;
-    private Color borderColor = CUIColors.ComponentBorder; public Color BorderColor
+    protected bool BorderVisible;
+    private Color borderColor; public Color BorderColor
     {
       get => borderColor;
       set { borderColor = value; BorderVisible = borderColor != Color.Transparent; }
@@ -333,11 +333,15 @@ namespace CrabUI
     public CUIComponent Clone()
     {
       CUIComponent clone = new CUIComponent();
-      clone.Apply(this);
+      clone.ApplyState(this);
       return clone;
     }
-    public virtual void Apply(CUIComponent state)
+    public virtual void ApplyState(CUIComponent state)
     {
+      if (state == null) return;
+
+
+
       ShouldPassPropsToChildren = state.ShouldPassPropsToChildren;
       ZIndex = state.ZIndex;
       IgnoreEvents = state.IgnoreEvents;
@@ -387,6 +391,9 @@ namespace CrabUI
     {
       ID = MaxID++;
       ComponentsById[ID] = this;
+
+      BackgroundColor = CUIPallete.Default.Primary.Off;
+      BorderColor = CUIPallete.Default.Primary.Border;
 
       Layout = new CUILayoutSimple();
 

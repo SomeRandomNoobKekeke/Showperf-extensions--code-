@@ -16,9 +16,8 @@ namespace CrabUI
       get => text;
       set { text = value; OnPropChanged(); }
     }
-    public bool Wrap { get; set; }
-
-    private string WrappedText { get; set; } = "";
+    public bool Wrap;
+    private string WrappedText = "";
 
 
 
@@ -36,8 +35,8 @@ namespace CrabUI
     }
 
     public CUIAnchor TextAling = new CUIAnchor(CUIAnchorType.LeftTop);
-    public Color TextColor { get; set; } = Color.White;
-    public GUIFont Font { get; set; } = GUIStyle.SmallFont;
+    public Color TextColor;
+    public GUIFont Font = GUIStyle.SmallFont;
     private float textScale = 1f; public float TextScale
     {
       get => textScale;
@@ -65,8 +64,10 @@ namespace CrabUI
     {
       Padding = new Vector2(4, 2);
       Text = text;
+
       BackgroundColor = Color.Transparent;
       BorderColor = Color.Transparent;
+      TextColor = CUIPallete.Default.Secondary.Text;
     }
 
     public CUITextBlock(string text, float? width, float? height) : this(text)

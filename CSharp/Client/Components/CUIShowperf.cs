@@ -115,7 +115,7 @@ namespace ShowPerfExtensions
         OnDClick += m =>
         {
           m.ClickConsumed = true;
-          this.Apply(State["init"]);
+          this.ApplyState(State["init"]);
         };
       }
     }
