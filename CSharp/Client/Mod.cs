@@ -23,6 +23,8 @@ namespace ShowPerfExtensions
     public bool debug = true;
 
 
+    public enum SubType { Player, Outpost, OutpostModule, Wreck, BeaconStation, EnemySubmarine, Ruin, All }
+
     public static CaptureWindow Window;
     public static CUIShowperf Showperf;
     public CUIMainComponent CUI;

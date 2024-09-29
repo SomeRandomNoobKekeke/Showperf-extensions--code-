@@ -45,8 +45,6 @@ namespace CrabUI
         Options.Add(o);
         Append(o);
 
-        //Absolute = Absolute with { Height = Options.Count * Host.EnforcedOptionHeight };
-
         return o;
       }
 
@@ -69,11 +67,9 @@ namespace CrabUI
         BackgroundColor = CUIPallete.Default.Tertiary.Off;
         BorderColor = CUIPallete.Default.Tertiary.Border;
 
-
         OnMouseDown += (m) => Close();
 
         CUI.Main.OnMouseDown += (m) => Close();
-
 
         Close();
       }
@@ -83,9 +79,7 @@ namespace CrabUI
     public class CUIDropDownOption : CUITextBlock
     {
       public CUIDropDown Host;
-
       public string Value;
-
       public Color HoverColor;
 
       protected override void Draw(SpriteBatch spriteBatch)
@@ -104,17 +98,12 @@ namespace CrabUI
         TextColor = CUIPallete.Default.Tertiary.Text;
 
         Relative = new CUINullRect(0, null, 1, null);
-        Absolute = Absolute with { Height = Host.EnforcedOptionHeight };
 
         OnMouseDown += (CUIMouse m) => Host.Select(this);
         OnMouseDown += (CUIMouse m) => SoundPlayer.PlayUISound(Host.ClickSound);
       }
     }
-
     public GUISoundType ClickSound { get; set; } = GUISoundType.Select;
-
-    public float EnforcedOptionHeight = 21f;
-
 
 
     public CUIDropDownBox Box;
@@ -125,11 +114,12 @@ namespace CrabUI
     public void Close() => Box.Close();
     public void Toggle() => Box.Toggle();
 
+    public void Select(string value) => Select(Box.Options.Find(o => o.Value == value));
     public void Select(CUIDropDownOption option)
     {
+      if (option == null) return;
       Selected = option;
       Text = option.Text;
-      OnPropChanged();
     }
 
 
@@ -141,11 +131,6 @@ namespace CrabUI
       Append(Box);
       OnMouseDown += (CUIMouse m) => Toggle();
       Close();
-
-      Add("1");
-      Add("2");
-      Add("2313123123123");
-      Add("4");
     }
 
     public CUIDropDown(float? width, float? height) : this(null, null, width, height) { }

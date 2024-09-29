@@ -37,8 +37,9 @@ namespace CrabUI
       MousePressedColor = CUIPallete.Default.Secondary.On;
       BorderColor = CUIPallete.Default.Secondary.Border;
 
-
       TextAling.Type = CUIAnchorType.CenterCenter;
+      Padding = new Vector2(4, 2);
+
       OnMouseDown += (CUIMouse m) => SoundPlayer.PlayUISound(ClickSound);
     }
 

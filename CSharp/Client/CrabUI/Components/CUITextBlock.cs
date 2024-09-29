@@ -36,8 +36,8 @@ namespace CrabUI
 
     public CUIAnchor TextAling = new CUIAnchor(CUIAnchorType.LeftTop);
     public Color TextColor;
-    public GUIFont Font = GUIStyle.SmallFont;
-    private float textScale = 1f; public float TextScale
+    public GUIFont Font = GUIStyle.Font;
+    private float textScale = 0.9f; public float TextScale
     {
       get => textScale;
       set { textScale = value; OnDecorPropChanged(); }
@@ -62,7 +62,7 @@ namespace CrabUI
 
     public CUITextBlock(string text = "")
     {
-      Padding = new Vector2(4, 2);
+      Padding = new Vector2(4, 0);
       Text = text;
 
       BackgroundColor = Color.Transparent;

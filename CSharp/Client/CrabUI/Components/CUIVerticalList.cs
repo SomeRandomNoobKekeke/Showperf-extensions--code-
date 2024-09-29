@@ -44,7 +44,7 @@ namespace CrabUI
 
     public CUIVerticalList() : base()
     {
-      HideChildrenOutsideFrame = true;
+      //HideChildrenOutsideFrame = true;
 
       listLayout = new CUILayoutVerticalList();
       Layout = listLayout;

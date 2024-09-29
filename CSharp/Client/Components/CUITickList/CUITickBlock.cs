@@ -24,9 +24,9 @@ namespace ShowPerfExtensions
 
         public float StringHeight = 12f;
 
-        public Color TextColor { get; set; } = Color.White;
-        public GUIFont Font { get; set; } = GUIStyle.MonospacedFont;
-        public float TextScale { get; set; } = 0.8f;
+        public Color TextColor = Color.White;
+        public GUIFont Font = GUIStyle.MonospacedFont;
+        public float TextScale = 0.8f;
 
         public int ScrollSurround = 0;
 

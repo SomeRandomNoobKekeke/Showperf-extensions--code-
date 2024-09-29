@@ -20,11 +20,17 @@ namespace ShowPerfExtensions
       public SubmarineType? CaptureFrom = null;
 
 
+      public CUIVerticalList Header;
+      public CUITextBlock CategoryLine;
+      public CUITextBlock SumLine;
 
       public CUIPages Pages;
       public CUITickList TickList;
       public CUIMap Map;
 
+      public CUIDropDown SubTypeDD;
+      public CUIToggleButton ById;
+      public CUIToggleButton Accumulate;
 
       public bool ShouldCapture(Entity e)
       {
@@ -42,33 +48,50 @@ namespace ShowPerfExtensions
 
       public void CreateGUI()
       {
-        this["handle"] = new CUIComponent(0, 0, 1, null);
-        this["handle"].Absolute = new CUINullRect(null, null, null, 22);
-        this["handle"].BorderColor = Color.Transparent;
+        Append(Header = new CUIVerticalList()
+        {
+          BackgroundColor = Color.Black * 0.5f,
+          FitContent = new CUIBool2(false, true),
+        });
+
+        Header.Append(CategoryLine = new CUITextBlock("CategoryLine"));
+        Header.Append(SumLine = new CUITextBlock("SumLine"));
+
+
 
 
         this["buttons1"] = new CUIHorizontalList()
         {
-          Absolute = new CUINullRect(null, null, null, 22),
-          HideChildrenOutsideFrame = false,
+          FitContent = new CUIBool2(false, true),
         };
 
 
-        CUIToggleButton ToggleByID = new CUIToggleButton("ToggleByID", 0.5f, 1);
-
-        ToggleByID.OnStateChange += (state) =>
+        this["buttons1"].Append(ById = new CUIToggleButton("By Id")
+        {
+          FillEmptySpace = new CUIBool2(true, false)
+        });
+        ById.OnStateChange += (state) =>
         {
           Capture.SetByID(CName.MapEntityDrawing, state);
           Window.Reset();
         };
-        Remember(this["buttons1"]["byID"] = ToggleByID);
+
+        this["buttons1"].Append(Accumulate = new CUIToggleButton("Mean")
+        {
+          FillEmptySpace = new CUIBool2(true, false)
+        });
+        Accumulate.OnStateChange += v => Accumulate.Text = v ? "Sum" : "Mean";
 
 
-
-
-        CUIDropDown SubType = new CUIDropDown(0.5f, 1);
-
-        Remember(this["buttons1"]["SubType"] = SubType);
+        this["buttons1"].Append(SubTypeDD = new CUIDropDown()
+        {
+          FillEmptySpace = new CUIBool2(true, false)
+        });
+        foreach (SubType st in Enum.GetValues(typeof(SubType)))
+        {
+          SubTypeDD.Add(st.ToString());
+        }
+        SubTypeDD.Select(SubmarineType.Player.ToString());
 
 
         CUIComponent bb = Append(new CUIButton("Click"));
@@ -77,9 +100,8 @@ namespace ShowPerfExtensions
           if (Pages.IsOpened(TickList)) { Pages.Open(Map); return; }
           if (Pages.IsOpened(Map)) { Pages.Open(TickList); return; }
         };
-
         Pages = (CUIPages)Append(new CUIPages());
-        Pages.FillEmptySpace = true;
+        Pages.FillEmptySpace = new CUIBool2(false, true);
 
 
 

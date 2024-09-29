@@ -11,6 +11,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace CrabUI
 {
+  // Not used yet
   public static class CUIDefault
   {
     public static float StringHeight = 21f;
@@ -19,6 +20,5 @@ namespace CrabUI
     {
 
     };
-
   }
 }

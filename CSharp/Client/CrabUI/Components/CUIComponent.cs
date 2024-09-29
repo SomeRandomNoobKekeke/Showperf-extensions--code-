@@ -110,7 +110,8 @@ namespace CrabUI
         OnPropChanged();
         foreach (var child in Children)
         {
-          child.ZIndex = zIndex.HasValue ? zIndex.Value + 1 : null;
+          //TODO think, should i propagate null?
+          if (zIndex.HasValue) child.ZIndex = zIndex.Value + 1;
         }
       }
     }
@@ -251,7 +252,7 @@ namespace CrabUI
     }
 
 
-    private bool fillEmptySpace; public bool FillEmptySpace
+    private CUIBool2 fillEmptySpace; public CUIBool2 FillEmptySpace
     {
       get => fillEmptySpace;
       set { fillEmptySpace = value; OnPropChanged(); }
@@ -283,11 +284,12 @@ namespace CrabUI
 
         if (HideChildrenOutsideFrame)
         {
+          //TODO Remove these + 1
           Rectangle SRect = new Rectangle(
-            (int)real.Left,
-            (int)real.Top,
-            (int)real.Width,
-            (int)real.Height
+            (int)real.Left + 1,
+            (int)real.Top + 1,
+            (int)real.Width - 2,
+            (int)real.Height - 2
           );
 
           if (Parent?.ScissorRect != null)
@@ -339,8 +341,6 @@ namespace CrabUI
     public virtual void ApplyState(CUIComponent state)
     {
       if (state == null) return;
-
-
 
       ShouldPassPropsToChildren = state.ShouldPassPropsToChildren;
       ZIndex = state.ZIndex;

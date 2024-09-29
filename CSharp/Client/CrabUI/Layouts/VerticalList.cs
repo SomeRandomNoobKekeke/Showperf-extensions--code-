@@ -42,7 +42,7 @@ namespace CrabUI
           float h = 0;
           Vector2 s = new Vector2(w, h);
 
-          if (!c.FillEmptySpace)
+          if (!c.FillEmptySpace.Y)
           {
             if (c.Relative.Height.HasValue) h = c.Relative.Height.Value * Host.Real.Height;
             if (c.Absolute.Height.HasValue) h = c.Absolute.Height.Value;
@@ -61,12 +61,12 @@ namespace CrabUI
           CUIComponentSize size = new CUIComponentSize(c, s);
 
           Sizes.Add(size);
-          if (c.FillEmptySpace) Resizible.Add(size);
+          if (c.FillEmptySpace.Y) Resizible.Add(size);
         }
 
         float dif = Host.Real.Height - TotalHeight;
 
-        Resizible.ForEach(c => c.Size = new Vector2(c.Size.X, dif / Resizible.Count));
+        Resizible.ForEach(c => c.Size = c.Component.AmIOkWithThisSize(new Vector2(c.Size.X, dif / Resizible.Count)));
 
         Host.ChildrenSizeCalculated();
 
@@ -110,7 +110,7 @@ namespace CrabUI
         foreach (CUIComponent c in Host.Children)
         {
           float h = 0;
-          if (!c.FillEmptySpace)
+          if (!c.FillEmptySpace.Y)
           {
             if (c.Absolute.Height.HasValue) h = c.Absolute.Height.Value;
             if (c.AbsoluteMin.Height.HasValue) h = Math.Max(h, c.AbsoluteMin.Height.Value);

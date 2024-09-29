@@ -42,7 +42,7 @@ namespace CrabUI
           float w = 0;
           Vector2 s = new Vector2(w, h);
 
-          if (!c.FillEmptySpace)
+          if (!c.FillEmptySpace.X)
           {
             if (c.Relative.Width.HasValue) w = c.Relative.Width.Value * Host.Real.Width;
             if (c.Absolute.Width.HasValue) w = c.Absolute.Width.Value;
@@ -61,12 +61,12 @@ namespace CrabUI
           CUIComponentSize size = new CUIComponentSize(c, s);
 
           Sizes.Add(size);
-          if (c.FillEmptySpace) Resizible.Add(size);
+          if (c.FillEmptySpace.X) Resizible.Add(size);
         }
 
         float dif = Host.Real.Width - TotalWidth;
 
-        Resizible.ForEach(c => c.Size = new Vector2(dif / Resizible.Count, c.Size.Y));
+        Resizible.ForEach(c => c.Size = c.Component.AmIOkWithThisSize(new Vector2(dif / Resizible.Count, c.Size.Y)));
 
         Host.ChildrenSizeCalculated();
 
@@ -95,10 +95,13 @@ namespace CrabUI
         foreach (CUIComponent c in Host.Children)
         {
           float w = 0;
-          if (c.Absolute.Width.HasValue) w = c.Absolute.Width.Value;
-          if (c.AbsoluteMin.Width.HasValue) w = Math.Max(w, c.AbsoluteMin.Width.Value);
-          if (c.AbsoluteMax.Width.HasValue) w = Math.Min(w, c.AbsoluteMax.Width.Value);
-          tw += w;
+          if (!c.FillEmptySpace.X)
+          {
+            if (c.Absolute.Width.HasValue) w = c.Absolute.Width.Value;
+            if (c.AbsoluteMin.Width.HasValue) w = Math.Max(w, c.AbsoluteMin.Width.Value);
+            if (c.AbsoluteMax.Width.HasValue) w = Math.Min(w, c.AbsoluteMax.Width.Value);
+            tw += w;
+          }
         }
 
         Host.AbsoluteMin = Host.AbsoluteMin with { Width = tw };
@@ -110,13 +113,10 @@ namespace CrabUI
         foreach (CUIComponent c in Host.Children)
         {
           float h = 0;
-          if (!c.FillEmptySpace)
-          {
-            if (c.Absolute.Height.HasValue) h = c.Absolute.Height.Value;
-            if (c.AbsoluteMin.Height.HasValue) h = Math.Max(h, c.AbsoluteMin.Height.Value);
-            if (c.AbsoluteMax.Height.HasValue) h = Math.Min(h, c.AbsoluteMax.Height.Value);
-            th = Math.Max(th, h);
-          }
+          if (c.Absolute.Height.HasValue) h = c.Absolute.Height.Value;
+          if (c.AbsoluteMin.Height.HasValue) h = Math.Max(h, c.AbsoluteMin.Height.Value);
+          if (c.AbsoluteMax.Height.HasValue) h = Math.Min(h, c.AbsoluteMax.Height.Value);
+          th = Math.Max(th, h);
         }
 
         Host.Absolute = Host.Absolute with { Height = th };

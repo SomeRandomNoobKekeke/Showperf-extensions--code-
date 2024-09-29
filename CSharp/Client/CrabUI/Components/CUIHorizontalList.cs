@@ -44,7 +44,7 @@ namespace CrabUI
 
     public CUIHorizontalList() : base()
     {
-      HideChildrenOutsideFrame = true;
+      //HideChildrenOutsideFrame = true;
 
       listLayout = new CUILayoutHorizontalList();
       Layout = listLayout;
