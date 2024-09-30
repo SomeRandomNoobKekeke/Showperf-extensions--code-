@@ -78,11 +78,22 @@ namespace ShowPerfExtensions
           Window.Reset();
         };
 
-        this["buttons1"].Append(Accumulate = new CUIToggleButton("Mean")
+        CUIMultiButton m = new CUIMultiButton()
         {
           FillEmptySpace = new CUIBool2(true, false)
-        });
-        Accumulate.OnStateChange += v => Accumulate.Text = v ? "Sum" : "Mean";
+        };
+
+        m.Add(new CUIButton("Mean")).OnMouseDown += (m) => log("Mean");
+        m.Add(new CUIButton("Sum")).OnMouseDown += (m) => log("Sum");
+        m.Select(0);
+
+
+        this["buttons1"].Append(m);
+        // this["buttons1"].Append(Accumulate = new CUIToggleButton("Mean")
+        // {
+        //   FillEmptySpace = new CUIBool2(true, false)
+        // });
+        // Accumulate.OnStateChange += v => Accumulate.Text = v ? "Sum" : "Mean";
 
 
         this["buttons1"].Append(SubTypeDD = new CUIDropDown()
