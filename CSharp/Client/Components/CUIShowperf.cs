@@ -17,7 +17,13 @@ namespace ShowPerfExtensions
     public class CUIShowperf : CUIFrame
     {
       public CaptureManager Capture = new CaptureManager();
-      public SubmarineType? CaptureFrom = null;
+
+      //TODO mb this should be in Window like all the other props
+      private SubType captureFrom; public SubType CaptureFrom
+      {
+        get => captureFrom;
+        set { captureFrom = value; Window.Reset(); }
+      }
 
 
       public CUIVerticalList Header;
@@ -34,7 +40,7 @@ namespace ShowPerfExtensions
 
       public bool ShouldCapture(Entity e)
       {
-        return !CaptureFrom.HasValue || e.Submarine.Info.Type == CaptureFrom.Value;
+        return CaptureFrom == SubType.All || (int)e.Submarine.Info.Type == (int)CaptureFrom;
       }
 
       public void Update()
@@ -101,9 +107,11 @@ namespace ShowPerfExtensions
         });
         foreach (SubType st in Enum.GetValues(typeof(SubType)))
         {
-          SubTypeDD.Add(st.ToString());
+          SubTypeDD.Add(st);
         }
-        SubTypeDD.Select(SubmarineType.Player.ToString());
+        SubTypeDD.OnSelect += (v) => CaptureFrom = Enum.Parse<SubType>(v);
+
+        SubTypeDD.Select(SubType.All);
 
 
         CUIComponent bb = Append(new CUIButton("Click"));

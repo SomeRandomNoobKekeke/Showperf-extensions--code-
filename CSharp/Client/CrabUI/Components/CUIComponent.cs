@@ -285,7 +285,7 @@ namespace CrabUI
 
         if (HideChildrenOutsideFrame)
         {
-          //TODO Remove these + 1
+          //HACK Remove these + 1
           Rectangle SRect = new Rectangle(
             (int)real.Left + 1,
             (int)real.Top + 1,

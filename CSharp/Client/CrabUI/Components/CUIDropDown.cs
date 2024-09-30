@@ -35,12 +35,12 @@ namespace CrabUI
       public void Toggle() => Opened = !Opened;
 
 
-
-      public CUIDropDownOption Add(string text, string value = null)
+      //HACK mmm... sneaky text objects
+      public CUIDropDownOption Add(object text, object value = null)
       {
         value ??= text;
 
-        CUIDropDownOption o = new CUIDropDownOption(text, value, Host);
+        CUIDropDownOption o = new CUIDropDownOption(text.ToString(), value.ToString(), Host);
 
         Options.Add(o);
         Append(o);
@@ -79,6 +79,7 @@ namespace CrabUI
     public class CUIDropDownOption : CUITextBlock
     {
       public CUIDropDown Host;
+      //TODO mb Value should be object
       public string Value;
       public Color HoverColor;
 
@@ -109,16 +110,19 @@ namespace CrabUI
     public CUIDropDownBox Box;
     public CUIDropDownOption Selected;
 
-    public CUIDropDownOption Add(string text, string value = null) => Box.Add(text, value);
+    public CUIDropDownOption Add(object text, object value = null) => Box.Add(text, value);
     public void Open() => Box.Open();
     public void Close() => Box.Close();
     public void Toggle() => Box.Toggle();
 
-    public void Select(string value) => Select(Box.Options.Find(o => o.Value == value));
+    public event Action<string> OnSelect;
+
+    public void Select(object value) => Select(Box.Options.Find(o => o.Value == value.ToString()));
     public void Select(CUIDropDownOption option)
     {
       if (option == null) return;
       Selected = option;
+      OnSelect?.Invoke(Selected.Value);
       Text = option.Text;
     }
 

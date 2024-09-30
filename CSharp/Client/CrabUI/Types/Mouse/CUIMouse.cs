@@ -36,7 +36,7 @@ namespace CrabUI
 
     public bool SomethingHappened;
 
-    //TODO rethink, this is too hacky
+    //HACK rethink, this is too hacky
     public bool ClickConsumed;
 
     public void Scan()
