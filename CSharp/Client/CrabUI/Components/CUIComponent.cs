@@ -138,6 +138,7 @@ namespace CrabUI
     }
 
     internal virtual CUINullRect ChildrenBoundaries => new CUINullRect(null, null, null, null);
+    internal virtual CUINullRect ChildOffsetBounds => new CUINullRect(null, null, null, null);
     private Vector2 childrenOffset; public Vector2 ChildrenOffset
     {
       get => childrenOffset;

@@ -28,23 +28,25 @@ namespace ShowPerfExtensions
         public GUIFont Font = GUIStyle.MonospacedFont;
         public float TextScale = 0.8f;
 
-        public int ScrollSurround = 0;
+
+        public int VisibleRangeStart;
+        public int VisibleRangeEnd;
+
 
         public void Update()
         {
-          Absolute = Absolute with { Height = TickList.Values.Count * StringHeight };
+          VisibleRangeStart = (int)Math.Floor(-TickList.Scroll / StringHeight);
+          VisibleRangeStart = Math.Max(0, Math.Min(VisibleRangeStart, TickList.Values.Count));
+
+          VisibleRangeEnd = (int)Math.Ceiling((-TickList.Scroll + TickList.Real.Height) / StringHeight);
+          VisibleRangeEnd = Math.Max(0, Math.Min(VisibleRangeEnd, TickList.Values.Count));
         }
 
         protected override void Draw(SpriteBatch spriteBatch)
         {
           float y = 0;
 
-          int start = (int)Math.Floor(-TickList.Scroll / StringHeight) - ScrollSurround;
-          int end = (int)Math.Ceiling((-TickList.Scroll + TickList.Real.Height) / StringHeight) + ScrollSurround;
-          start = Math.Max(0, Math.Min(start, TickList.Values.Count));
-          end = Math.Max(0, Math.Min(end, TickList.Values.Count));
-
-          for (int i = start; i < end; i++)
+          for (int i = VisibleRangeStart; i < VisibleRangeEnd; i++)
           {
             Font.DrawString(
                 spriteBatch,
@@ -58,7 +60,6 @@ namespace ShowPerfExtensions
                 layerDepth: 0.1f
               );
           }
-
         }
 
         public CUITickBlock(CUITickList tickList)
@@ -68,8 +69,8 @@ namespace ShowPerfExtensions
           BorderColor = Color.Transparent;
 
           //TODO this should use slide as it doesn't trigger size recalc every nanosec
-          Draggable = true;
-          OnDrag += (x, y) => TickList.Scroll = y;
+          // Draggable = true;
+          // OnDrag += (x, y) => TickList.Scroll = y;
         }
       }
     }

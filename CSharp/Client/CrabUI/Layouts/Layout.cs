@@ -132,19 +132,9 @@ namespace CrabUI
     }
 
 
-    //TODO this is wrong, i should decrease w,h here
+    //TODO idk
     protected CUIRect CheckChildBoundaries(float x, float y, float w, float h)
     {
-      // x > Host.Right
-      if (Host.ChildrenBoundaries.Width.HasValue && x > Host.Real.Left + Host.ChildrenBoundaries.Width.Value)
-      {
-        x = Host.Real.Left + Host.ChildrenBoundaries.Width.Value;
-      }
-      // y > Host.Bottom
-      if (Host.ChildrenBoundaries.Height.HasValue && y > Host.Real.Top + Host.ChildrenBoundaries.Height.Value)
-      {
-        y = Host.Real.Top + Host.ChildrenBoundaries.Height.Value;
-      }
       // x < Host.Left
       if (Host.ChildrenBoundaries.Left.HasValue && x < Host.Real.Left + Host.ChildrenBoundaries.Left.Value)
       {
@@ -158,12 +148,12 @@ namespace CrabUI
       // x + w > Host.Right
       if (Host.ChildrenBoundaries.Width.HasValue && x + w > Host.Real.Left + Host.ChildrenBoundaries.Width.Value)
       {
-        w = Host.Real.Left + Host.ChildrenBoundaries.Width.Value - x;
+        x = Host.Real.Left + Host.ChildrenBoundaries.Width.Value - w;
       }
       // y + h > Host.Bottom
       if (Host.ChildrenBoundaries.Height.HasValue && y + h > Host.Real.Top + Host.ChildrenBoundaries.Height.Value)
       {
-        h = Host.Real.Top + Host.ChildrenBoundaries.Height.Value - y;
+        y = Host.Real.Top + Host.ChildrenBoundaries.Height.Value - h;
       }
 
       return new CUIRect(x, y, w, h);

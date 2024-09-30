@@ -48,6 +48,7 @@ namespace CrabUI
       CUI.Main.OnResizeEnd(this);
     }
 
+    //FIXME bugs when resizing beyond bounds
     public void Resize(Vector2 cursorPos)
     {
       // NOTE: i tried to use GrabOffset and it's just more annoying

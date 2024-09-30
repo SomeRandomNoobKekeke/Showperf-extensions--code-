@@ -129,8 +129,8 @@ namespace ShowPerfExtensions
         Layout = new CUILayoutVerticalList();
 
         CreateGUI();
+        HideChildrenOutsideFrame = false;
 
-        State["init"] = this.Clone();
         OnDClick += m =>
         {
           m.ClickConsumed = true;

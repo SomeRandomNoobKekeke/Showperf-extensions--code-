@@ -4,6 +4,9 @@ using System.Collections.Generic;
 using System.Linq;
 
 using Barotrauma;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework.Graphics;
 using HarmonyLib;
 using CrabUI;
 
@@ -43,9 +46,17 @@ namespace ShowPerfExtensions
       CUI = new CUIMainComponent();
       Showperf = new CUIShowperf()
       {
-        Relative = new CUINullRect(0.5f, null, null, null),
-        Absolute = new CUINullRect(null, 50, 350, 600),
+        Absolute = new CUINullRect(null, null, 350, 600),
       };
+
+      Showperf.Absolute = new CUINullRect(
+        CUIAnchor.GetChildPos(CUI.Real, CUIAnchorType.RightCenter, new Vector2(-1, 0), Showperf.Absolute.Size),
+        Showperf.Absolute.Size
+      );
+
+
+
+      Showperf.State["init"] = Showperf.Clone();
 
       CUI.Append(Showperf);
       CUI.OnUpdate += () => Showperf.Update();

@@ -108,14 +108,22 @@ namespace ShowPerfExtensions
         }
       }
 
+      internal override CUINullRect ChildOffsetBounds => new CUINullRect(0, TopGap, 0, Real.Height - Values.Count * TickBlock.StringHeight - BottomGap);
+
+
       public CUITickList() : base()
       {
-        TickBlock = new CUITickBlock(this);
-        Append(TickBlock);
+        Append(TickBlock = new CUITickBlock(this));
+        ConsumeDragAndDrop = true;
+
         BackgroundColor = Color.Black * 0.75f;
         BorderColor = Color.Transparent;
         HideChildrenOutsideFrame = false;
         Scrollable = true;
+        Swipeable = true;
+
+
+        OnSwipe += (x, y) => Info(this.ChildrenOffset);
 
         BottomGap = TickBlock.StringHeight * 2;
       }

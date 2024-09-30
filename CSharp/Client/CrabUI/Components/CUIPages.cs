@@ -26,7 +26,7 @@ namespace CrabUI
     {
       BackgroundColor = Color.Transparent;
       BorderColor = Color.Transparent;
-      HideChildrenOutsideFrame = true;
+      HideChildrenOutsideFrame = false;
     }
 
     public CUIPages(float? x, float? y, float? w, float? h) : this()

@@ -16,30 +16,33 @@ namespace CrabUI
     public float TopGap = 0f;
     public float BottomGap = 0f;
 
-    private CUILayoutVerticalList listLayout;
+    protected CUILayoutVerticalList listLayout;
 
     private float scroll; public float Scroll
     {
-      get => scroll;
+      get => ChildrenOffset.Y;
       set
       {
         if (!Scrollable) return;
-        scroll = value;
-        OnChildrenPropChanged();
+        ChildrenOffset = new Vector2(ChildrenOffset.X, value);
       }
     }
 
     internal override CUINullRect ChildrenBoundaries => new CUINullRect(0, null, Real.Width, null);
-
-    private void ValidateScroll()
-    {
-      scroll = Math.Min(TopGap, Math.Max(scroll, Real.Height - listLayout.TotalHeight - BottomGap));
-      ChildrenOffset = new Vector2(0, scroll);
-    }
+    // TODO w,h here means right and bottom, this is sneaky, rethink
+    internal override CUINullRect ChildOffsetBounds => new CUINullRect(0, TopGap, 0, Real.Height - listLayout.TotalHeight - BottomGap);
 
     internal override void ChildrenSizeCalculated()
     {
-      ValidateScroll();
+      CUINullRect bounds = ChildOffsetBounds;
+      float x = 0;
+      float y = 0;
+
+      if (bounds.Top.HasValue) y = Math.Max(ChildrenOffset.Y, bounds.Top.Value);
+      if (bounds.Height.HasValue) y = Math.Min(bounds.Height.Value, ChildrenOffset.Y);
+
+      ChildrenOffset = new Vector2(x, y);
+      Info($"{ChildOffsetBounds} {ChildrenOffset}");
     }
 
     public CUIVerticalList() : base()
