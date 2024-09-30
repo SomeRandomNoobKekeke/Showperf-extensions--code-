@@ -29,13 +29,13 @@ namespace CrabUI
     {
       Primary = new CUIColorPreset()
       {
-        Border = new Color(255, 255, 255, 128),
+        Border = new Color(128, 128, 128, 255),
         Text = new Color(255, 255, 255, 255),
         Off = new Color(0, 0, 0, 128),
       },
       Secondary = new CUIColorPreset()
       {
-        Border = new Color(255, 255, 255, 128),
+        Border = new Color(100, 100, 100, 255),
         Text = new Color(255, 255, 255, 255),
         Off = new Color(0, 0, 32, 255),
         OffHover = new Color(0, 0, 64, 255),
@@ -44,7 +44,7 @@ namespace CrabUI
       },
       Tertiary = new CUIColorPreset()
       {
-        Border = new Color(255, 255, 255, 128),
+        Border = new Color(100, 100, 100, 255),
         Text = new Color(255, 255, 255, 255),
         Off = new Color(32, 0, 32, 255),
         OffHover = new Color(64, 0, 64, 255),

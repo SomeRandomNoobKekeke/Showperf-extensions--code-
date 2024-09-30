@@ -66,7 +66,7 @@ namespace ShowPerfExtensions
 
 
 
-      //CUI.Load(CUITest.ClickSounds);
+      //CUI.Load(CUITest.Swipe);
 
       // CUI.OnUpdate += () => log($"{String.Format("{0:000000}", CUI.DrawTime)} {String.Format("{0:000000}", CUI.UpdateTime)}");
 

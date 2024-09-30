@@ -18,33 +18,39 @@ namespace CrabUI
 
     private CUILayoutHorizontalList listLayout;
 
-    private float scroll; public float Scroll
+    public float Scroll
     {
-      get => scroll;
+      get => ChildrenOffset.X;
       set
       {
         if (!Scrollable) return;
-        scroll = value;
-        OnChildrenPropChanged();
+        ChildrenOffset = new Vector2(value, ChildrenOffset.Y);
       }
     }
 
     internal override CUINullRect ChildrenBoundaries => new CUINullRect(null, 0, null, Real.Height);
 
-    private void ValidateScroll()
-    {
-      scroll = Math.Min(LeftGap, Math.Max(scroll, Real.Width - listLayout.TotalWidth - RightGap));
-      ChildrenOffset = new Vector2(scroll, 0);
-    }
+    internal override CUINullRect ChildOffsetBounds => new CUINullRect(0, 0, 0, 0);
 
+    //TODO test, i just copypasted code from vlist and didn't test at all, lol
     internal override void ChildrenSizeCalculated()
     {
-      ValidateScroll();
+      CUINullRect bounds = ChildOffsetBounds;
+      float x = ChildrenOffset.X;
+      float y = ChildrenOffset.Y;
+
+      if (bounds.Left.HasValue) x = Math.Min(bounds.Left.Value, x);
+      if (bounds.Width.HasValue) x = Math.Max(bounds.Width.Value, x);
+
+      if (bounds.Top.HasValue) y = Math.Min(bounds.Top.Value, y);
+      if (bounds.Height.HasValue) y = Math.Max(bounds.Height.Value, y);
+
+      ChildrenOffset = new Vector2(x, y);
     }
 
     public CUIHorizontalList() : base()
     {
-      //HideChildrenOutsideFrame = true;
+      HideChildrenOutsideFrame = true;
 
       listLayout = new CUILayoutHorizontalList();
       Layout = listLayout;

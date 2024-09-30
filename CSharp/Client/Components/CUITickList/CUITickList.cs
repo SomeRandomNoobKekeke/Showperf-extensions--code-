@@ -72,6 +72,8 @@ namespace ShowPerfExtensions
 
       public void Update()
       {
+        TickBlock.Update();
+
         if (Window.Frozen || GameMain.Instance.Paused) return;
         if (ShouldUpdate)
         {
@@ -93,7 +95,7 @@ namespace ShowPerfExtensions
 
           Values.Sort((a, b) => (int)(b.Ticks - a.Ticks));
 
-          TickBlock.Update();
+
 
           if (Values.Count < 2 || Values.First().Ticks == 0)
           {
@@ -118,12 +120,8 @@ namespace ShowPerfExtensions
 
         BackgroundColor = Color.Black * 0.75f;
         BorderColor = Color.Transparent;
-        HideChildrenOutsideFrame = false;
         Scrollable = true;
         Swipeable = true;
-
-
-        OnSwipe += (x, y) => Info(this.ChildrenOffset);
 
         BottomGap = TickBlock.StringHeight * 2;
       }

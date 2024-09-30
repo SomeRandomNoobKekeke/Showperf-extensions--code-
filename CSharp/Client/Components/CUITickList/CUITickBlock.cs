@@ -36,10 +36,10 @@ namespace ShowPerfExtensions
         public void Update()
         {
           VisibleRangeStart = (int)Math.Floor(-TickList.Scroll / StringHeight);
-          VisibleRangeStart = Math.Max(0, Math.Min(VisibleRangeStart, TickList.Values.Count));
+          VisibleRangeStart = Math.Max(0, Math.Min(VisibleRangeStart, TickList.Values.Count - 1));
 
           VisibleRangeEnd = (int)Math.Ceiling((-TickList.Scroll + TickList.Real.Height) / StringHeight);
-          VisibleRangeEnd = Math.Max(0, Math.Min(VisibleRangeEnd, TickList.Values.Count));
+          VisibleRangeEnd = Math.Max(0, Math.Min(VisibleRangeEnd, TickList.Values.Count - 1));
         }
 
         protected override void Draw(SpriteBatch spriteBatch)

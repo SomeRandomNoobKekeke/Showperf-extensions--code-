@@ -60,7 +60,12 @@ namespace ShowPerfExtensions
 
 
 
-        this["buttons1"] = new CUIHorizontalList() { FitContent = new CUIBool2(false, true) };
+        this["buttons1"] = new CUIHorizontalList()
+        {
+          FitContent = new CUIBool2(false, true),
+          HideChildrenOutsideFrame = false,
+          BorderColor = Color.Transparent,
+        };
 
 
         this["buttons1"].Append(ById = new CUIToggleButton("By Id")
@@ -106,7 +111,10 @@ namespace ShowPerfExtensions
         TickList = new CUITickList();
         TickList.Relative = new CUINullRect(0, 0, 1, 1);
 
-        Map = new CUIMap(0, 0, 1, 1);
+        Map = new CUIMap(0, 0, 1, 1)
+        {
+          BorderColor = Color.Transparent
+        };
 
 
         CUIButton b1 = (CUIButton)Map.Add(new CUIButton("kokoko"));
@@ -129,7 +137,7 @@ namespace ShowPerfExtensions
         Layout = new CUILayoutVerticalList();
 
         CreateGUI();
-        HideChildrenOutsideFrame = false;
+
 
         OnDClick += m =>
         {
