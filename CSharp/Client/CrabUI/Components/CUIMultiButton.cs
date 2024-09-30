@@ -12,6 +12,9 @@ namespace CrabUI
 {
   public class CUIMultiButton : CUIComponent
   {
+    public event Action<CUIButton> OnSelect;
+
+    //TODO this could store any component and no just buttons
     public List<CUIButton> Buttons = new List<CUIButton>();
 
     public CUIButton Selected;
@@ -44,6 +47,7 @@ namespace CrabUI
       RemoveAllChildren();
       Selected = Buttons[i % Buttons.Count];
       Append(Selected);
+      OnSelect?.Invoke(Selected);
     }
 
     internal override Vector2 AmIOkWithThisSize(Vector2 size)

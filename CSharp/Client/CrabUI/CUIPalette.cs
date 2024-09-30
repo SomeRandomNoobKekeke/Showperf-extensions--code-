@@ -46,8 +46,8 @@ namespace CrabUI
       {
         Border = new Color(100, 100, 100, 255),
         Text = new Color(255, 255, 255, 255),
-        Off = new Color(32, 0, 32, 255),
-        OffHover = new Color(64, 0, 64, 255),
+        Off = new Color(16, 0, 32, 255),
+        OffHover = new Color(32, 0, 64, 255),
         On = new Color(255, 0, 255, 255),
         OnHover = new Color(196, 0, 196, 255),
       },

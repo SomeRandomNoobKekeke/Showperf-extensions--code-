@@ -49,16 +49,16 @@ namespace ShowPerfExtensions
           for (int i = VisibleRangeStart; i < VisibleRangeEnd; i++)
           {
             Font.DrawString(
-                spriteBatch,
-                TickList.GetName(TickList.Values[i]),
-                Real.Position + new Vector2(Padding.X, i * StringHeight),
-                TickList.GetColor(TickList.Values[i]),
-                rotation: 0,
-                origin: Vector2.Zero,
-                TextScale,
-                spriteEffects: SpriteEffects.None,
-                layerDepth: 0.1f
-              );
+              spriteBatch,
+              TickList.GetName(TickList.Values[i]),
+              Real.Position + new Vector2(Padding.X, i * StringHeight),
+              TickList.GetColor(TickList.Values[i]),
+              rotation: 0,
+              origin: Vector2.Zero,
+              TextScale,
+              spriteEffects: SpriteEffects.None,
+              layerDepth: 0.1f
+            );
           }
         }
 

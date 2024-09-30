@@ -214,6 +214,8 @@ namespace CrabUI
 
     #endregion
     #region Props --------------------------------------------------------
+    //TODO This is potentially cursed
+    public object Data;
     public CUIAnchor Anchor = new CUIAnchor(CUIAnchorType.LeftTop);
 
     private CUINullRect absolute; public CUINullRect Absolute
@@ -264,8 +266,6 @@ namespace CrabUI
       get => fitContent;
       set { fitContent = value; OnPropChanged(); OnAbsolutePropChanged(); }
     }
-
-
 
     public bool HideChildrenOutsideFrame { get; set; } = false;
     protected CUIRect BorderBox;

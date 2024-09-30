@@ -72,13 +72,9 @@ namespace ShowPerfExtensions
 
       public void Update()
       {
-        TickBlock.Update();
-
-        if (Window.Frozen || GameMain.Instance.Paused) return;
-        if (ShouldUpdate)
+        if (!Window.Frozen && !GameMain.Instance.Paused && ShouldUpdate)
         {
           Clear();
-
 
           foreach (int cat in Window.TotalTicks.Keys)
           {
@@ -92,22 +88,22 @@ namespace ShowPerfExtensions
             }
           }
 
-
           Values.Sort((a, b) => (int)(b.Ticks - a.Ticks));
-
-
 
           if (Values.Count < 2 || Values.First().Ticks == 0)
           {
             Linearity = 0;
-            return;
           }
-
-          Linearity = (Values.First().Ticks * Values.Count / 2 - Sum) / Values.First().Ticks / Values.Count;
-          Linearity = 1.0 - Linearity * 2;
+          else
+          {
+            Linearity = (Values.First().Ticks * Values.Count / 2 - Sum) / Values.First().Ticks / Values.Count;
+            Linearity = 1.0 - Linearity * 2;
+          }
 
           LastUpdateTime = Timing.TotalTime;
         }
+
+        TickBlock.Update();
       }
 
       internal override CUINullRect ChildOffsetBounds => new CUINullRect(0, TopGap, 0, Real.Height - Values.Count * TickBlock.StringHeight - BottomGap);

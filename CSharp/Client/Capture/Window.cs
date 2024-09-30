@@ -17,6 +17,8 @@ namespace ShowPerfExtensions
 {
   public partial class Mod : IAssemblyPlugin
   {
+    public enum CaptureWindowMode { Sum, Mean, Spike }
+
     public class CaptureWindow : IDisposable
     {
       public double FrameDuration;
@@ -55,14 +57,11 @@ namespace ShowPerfExtensions
           Reset();
         }
       }
-      private bool accumulate; public bool Accumulate
+
+      private CaptureWindowMode mode = CaptureWindowMode.Mean; public CaptureWindowMode Mode
       {
-        get => accumulate;
-        set
-        {
-          accumulate = value;
-          Reset();
-        }
+        get => mode;
+        set { mode = value; Reset(); }
       }
       public Slice FirstSlice;
       public Slice TotalTicks = new Slice();
@@ -81,12 +80,13 @@ namespace ShowPerfExtensions
 
       public void Rotate()
       {
-        if (Accumulate)
+        if (Mode == CaptureWindowMode.Sum)
         {
           TotalTicks.Add(FirstSlice);
           FirstSlice.Clear();
         }
-        else
+
+        if (Mode == CaptureWindowMode.Mean)
         {
           if (Frames == 1)
           {
@@ -167,7 +167,11 @@ namespace ShowPerfExtensions
       {
         try
         {
-          return Accumulate ? TotalTicks[category][id] : TotalTicks[category][id] / Frames * FPS;
+          return Mode switch
+          {
+            CaptureWindowMode.Sum => TotalTicks[category][id],
+            CaptureWindowMode.Mean => TotalTicks[category][id] / Frames * FPS
+          };
         }
         catch (Exception e)
         {
