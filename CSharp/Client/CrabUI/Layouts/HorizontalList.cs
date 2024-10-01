@@ -83,8 +83,9 @@ namespace CrabUI
           x += c.Size.X;
         }
 
-        Changed.Value = false;
       }
+
+      base.Update();
     }
 
     internal override void ResizeToContent()
@@ -122,7 +123,7 @@ namespace CrabUI
         Host.Absolute = Host.Absolute with { Height = th };
       }
 
-      AbsoluteChanged.Value = false;
+      base.ResizeToContent();
     }
 
     public CUILayoutHorizontalList(CUIComponent host = null) : base(host)

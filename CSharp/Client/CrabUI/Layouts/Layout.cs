@@ -108,6 +108,8 @@ namespace CrabUI
       if (Changed.Value)
       {
         // do something
+
+        CUIDebug.Capture(Host, CUIDebugEventType.LayoutUpdate, $"{Host.Real}");
         Changed.Value = false;
       }
     }
@@ -126,6 +128,7 @@ namespace CrabUI
       if (Host.FitContent.X || Host.FitContent.Y)
       {
         // do something
+        CUIDebug.Capture(Host, CUIDebugEventType.ResizeToContent, $"{Host.AbsoluteMin} {Host.Absolute}");
       }
 
       AbsoluteChanged.Value = false;

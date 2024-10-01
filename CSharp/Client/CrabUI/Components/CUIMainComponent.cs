@@ -66,11 +66,16 @@ namespace CrabUI
       // RunRecursiveOn(this, (component, depth) => Flat.Add(component));
     }
 
+    #region Update
+
     private double LastUpdateTime;
     public void Update(double totalTime)
     {
+
       if (totalTime - LastUpdateTime >= UpdateInterval)
       {
+        CUIDebug.Flush();
+
         if (TreeChanged)
         {
           FlattenTree();
@@ -93,6 +98,9 @@ namespace CrabUI
         LastUpdateTime = totalTime;
       }
     }
+
+    #endregion
+    #region Draw
 
     private void StopStart(SpriteBatch spriteBatch, Rectangle SRect)
     {
@@ -129,7 +137,7 @@ namespace CrabUI
         c.DrawFront(spriteBatch);
       });
     }
-
+    #endregion
     // https://youtu.be/xuFgUmYCS8E?feature=shared&t=72
     #region HandleMouse Start 
 
@@ -326,6 +334,11 @@ namespace CrabUI
     {
       RemoveAllChildren();
       initFunc(this);
+    }
+
+    public void OpenDebugWindow()
+    {
+      Append(new CUIDebugWindow(0, 0.3f, 0.2f, 0.6f));
     }
 
     public CUIMainComponent() : base()

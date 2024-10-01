@@ -56,6 +56,7 @@ namespace ShowPerfExtensions
 
 
 
+
       Showperf.State["init"] = Showperf.Clone();
 
       CUI.Append(Showperf);
@@ -66,9 +67,14 @@ namespace ShowPerfExtensions
 
 
 
-      //CUI.Load(CUITest.CursedWrappers2);
+      CUI.Load(CUITest.ClickSounds);
 
-      // CUI.OnUpdate += () => log($"{String.Format("{0:000000}", CUI.DrawTime)} {String.Format("{0:000000}", CUI.UpdateTime)}");
+
+
+      CUI.OpenDebugWindow();
+
+
+
 
       PatchAll();
       addCommands();

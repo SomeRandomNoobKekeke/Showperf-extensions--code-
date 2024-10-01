@@ -73,8 +73,9 @@ namespace CrabUI
           //if (c.Debug) CUI.log(c); // TODO make special method for such calls in CUI
         }
 
-        Changed.Value = false;
       }
+
+      base.Update();
     }
 
     internal override void ResizeToContent()
@@ -123,7 +124,7 @@ namespace CrabUI
         Host.AbsoluteMin = Host.AbsoluteMin with { Height = bottommostBottom };
       }
 
-      AbsoluteChanged.Value = false;
+      base.ResizeToContent();
     }
 
 

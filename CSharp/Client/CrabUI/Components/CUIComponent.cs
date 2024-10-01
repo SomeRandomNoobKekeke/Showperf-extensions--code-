@@ -120,6 +120,8 @@ namespace CrabUI
       get => ignoreEvents;
       set { ignoreEvents = value; foreach (var child in Children) child.IgnoreEvents = value; }
     }
+
+    public bool IgnoreDebug;
     private bool visible = true; public bool Visible
     {
       get => visible;
@@ -426,7 +428,7 @@ namespace CrabUI
       }
     }
 
-    public override string ToString() => $"{base.ToString()}:{ID}:{AKA}";
+    public override string ToString() => $"{this.GetType().Name}:{ID}:{AKA}";
 
     public void Info(object msg, [CallerFilePath] string source = "", [CallerLineNumber] int lineNumber = 0)
     {
