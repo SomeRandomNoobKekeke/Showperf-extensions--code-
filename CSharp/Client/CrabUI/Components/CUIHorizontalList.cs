@@ -30,7 +30,13 @@ namespace CrabUI
 
     internal override CUINullRect ChildrenBoundaries => new CUINullRect(null, 0, null, Real.Height);
 
-    internal override CUINullRect ChildOffsetBounds => new CUINullRect(0, 0, 0, 0);
+
+    internal override CUINullRect ChildOffsetBounds => new CUINullRect(
+      0,
+      LeftGap,
+      0,
+      Math.Min(Real.Width - listLayout.TotalWidth - RightGap, 0)
+    );
 
     //TODO test, i just copypasted code from vlist and didn't test at all, lol
     internal override void ChildrenSizeCalculated()

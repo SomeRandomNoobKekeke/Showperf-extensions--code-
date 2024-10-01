@@ -30,7 +30,12 @@ namespace CrabUI
 
     internal override CUINullRect ChildrenBoundaries => new CUINullRect(0, null, Real.Width, null);
     // HACK w,h here means right and bottom, this is sneaky, rethink
-    internal override CUINullRect ChildOffsetBounds => new CUINullRect(0, TopGap, 0, Real.Height - listLayout.TotalHeight - BottomGap);
+    internal override CUINullRect ChildOffsetBounds => new CUINullRect(
+      0,
+      TopGap,
+      0,
+      Math.Min(Real.Height - listLayout.TotalHeight - BottomGap, 0)
+    );
 
     internal override void ChildrenSizeCalculated()
     {

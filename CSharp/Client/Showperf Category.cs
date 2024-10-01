@@ -28,13 +28,7 @@ namespace ShowPerfExtensions
     {
       public bool IsActive;
       public string Description;
-      public bool ByID;
-
-      public CaptureState(string description = "", bool byID = true)
-      {
-        Description = description;
-        ByID = byID;
-      }
+      public bool ByID = true;
     }
 
     public class CaptureManager
@@ -44,7 +38,7 @@ namespace ShowPerfExtensions
         {CName.None , new CaptureState()},
         {CName.All , new CaptureState()},
         {CName.MapEntitysUpdate , new CaptureState()},
-        {CName.MapEntityDrawing , new CaptureState(byID:false)},
+        {CName.MapEntityDrawing , new CaptureState(){ByID = false}},
         {CName.CharactersUpdate , new CaptureState()},
         {CName.LevelObjectsDrawing , new CaptureState()},
         {CName.LevelMisc ,new CaptureState()},
@@ -62,8 +56,16 @@ namespace ShowPerfExtensions
         if (Capture[name].IsActive) Active.Remove(name); else Active.Add(name);
         Capture[name].IsActive = !Capture[name].IsActive;
       }
-      public void ToggleByID(CName name) { Capture[name].ByID = !Capture[name].ByID; }
-      public void SetByID(CName name, bool value) { Capture[name].ByID = value; }
+      public void ToggleByID(CName name)
+      {
+        Capture[name].ByID = !Capture[name].ByID;
+        Window.Reset();
+      }
+      public void SetByID(CName name, bool value)
+      {
+        Capture[name].ByID = value;
+        Window.Reset();
+      }
       public CaptureManager() { }
     }
   }

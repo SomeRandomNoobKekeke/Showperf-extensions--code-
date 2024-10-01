@@ -23,8 +23,10 @@ namespace CrabUI
     {
       Buttons.Add(b);
       b.OnMouseDown += (m) => SelectNext(b);
-      b.Relative = new CUINullRect(0, 0, 1, 1);
+      b.Relative = new CUINullRect(0, 0, 1f, 1f);
+
       b.MousePressedColor = b.MouseOverColor; //HACK remove this kostyl
+
       return b;
     }
 
@@ -50,11 +52,11 @@ namespace CrabUI
       OnSelect?.Invoke(Selected);
     }
 
-    internal override Vector2 AmIOkWithThisSize(Vector2 size)
-    {
-      if (Selected == null) return size;
-      return Selected.AmIOkWithThisSize(size);
-    }
+    // internal override Vector2 AmIOkWithThisSize(Vector2 size)
+    // {
+    //   if (Selected == null) return size;
+    //   return Selected.AmIOkWithThisSize(size);
+    // }
 
 
     public CUIMultiButton() : base()

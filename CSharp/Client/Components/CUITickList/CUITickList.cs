@@ -106,7 +106,12 @@ namespace ShowPerfExtensions
         TickBlock.Update();
       }
 
-      internal override CUINullRect ChildOffsetBounds => new CUINullRect(0, TopGap, 0, Real.Height - Values.Count * TickBlock.StringHeight - BottomGap);
+      internal override CUINullRect ChildOffsetBounds => new CUINullRect(
+        0,
+        TopGap,
+        0,
+        Math.Min(Real.Height - Values.Count * TickBlock.StringHeight - BottomGap, 0)
+      );
 
 
       public CUITickList() : base()

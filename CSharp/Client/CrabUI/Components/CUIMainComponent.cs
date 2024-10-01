@@ -86,6 +86,8 @@ namespace CrabUI
           c.Layout.UpdateDecor();
         });
 
+
+
         OnUpdate?.Invoke();
 
         LastUpdateTime = totalTime;
@@ -187,8 +189,6 @@ namespace CrabUI
       }
 
       CurrentMouseOn = MouseOnList.LastOrDefault();
-
-
 
       //if (CurrentMouseOn != null) GUI.MouseOn = dummyComponent;
 

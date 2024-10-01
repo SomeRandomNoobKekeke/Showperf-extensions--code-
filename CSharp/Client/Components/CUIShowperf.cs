@@ -64,31 +64,38 @@ namespace ShowPerfExtensions
         Header.Append(SumLine = new CUITextBlock("SumLine"));
 
 
-
-
         this["buttons1"] = new CUIHorizontalList()
         {
           FitContent = new CUIBool2(false, true),
           HideChildrenOutsideFrame = false,
-          BorderColor = Color.Transparent,
+
+        };
+
+        this["buttons2"] = new CUIHorizontalList()
+        {
+          BackgroundColor = Color.Yellow,
+          Absolute = new CUINullRect(0, 0, null, 30),
+        };
+        this["buttons3"] = new CUIHorizontalList()
+        {
+          FitContent = new CUIBool2(false, true),
+          HideChildrenOutsideFrame = false,
         };
 
 
-        this["buttons1"].Append(ById = new CUIToggleButton("By Id")
+        ById = new CUIToggleButton("By Id")
         {
-          FillEmptySpace = new CUIBool2(true, false)
-        });
-        ById.OnStateChange += (state) =>
-        {
-          Capture.SetByID(CName.MapEntityDrawing, state);
-          Window.Reset();
+          FillEmptySpace = new CUIBool2(true, false),
         };
+        ById.OnStateChange += (state) => Capture.SetByID(CName.MapEntityDrawing, state);
+        this["buttons1"].Append(ById);
 
         CUIMultiButton m = new CUIMultiButton()
         {
-          FillEmptySpace = new CUIBool2(true, false)
+          FillEmptySpace = new CUIBool2(true, false),
         };
 
+        m.BackgroundColor = Color.Red;
         m.Add(new CUIButton("Mean")).Data = CaptureWindowMode.Mean;
         m.Add(new CUIButton("Sum")).Data = CaptureWindowMode.Sum;
         // m.Add(new CUIButton("Spike")).Data = CaptureWindowMode.Spike;
@@ -96,22 +103,23 @@ namespace ShowPerfExtensions
         m.OnSelect += (b) => Window.Mode = (CaptureWindowMode)b.Data;
         m.Select(0);
 
-
         this["buttons1"].Append(m);
 
 
 
-        this["buttons1"].Append(SubTypeDD = new CUIDropDown()
-        {
-          FillEmptySpace = new CUIBool2(true, false)
-        });
+
+        SubTypeDD = new CUIDropDown() { };
+
         foreach (SubType st in Enum.GetValues(typeof(SubType)))
         {
           SubTypeDD.Add(st);
         }
-        SubTypeDD.OnSelect += (v) => CaptureFrom = Enum.Parse<SubType>(v);
 
+        SubTypeDD.OnSelect += (v) => CaptureFrom = Enum.Parse<SubType>(v);
         SubTypeDD.Select(SubType.All);
+        this["buttons3"].Append(SubTypeDD);
+
+
 
 
         CUIComponent bb = Append(new CUIButton("Click"));
@@ -155,7 +163,6 @@ namespace ShowPerfExtensions
         Layout = new CUILayoutVerticalList();
 
         CreateGUI();
-
 
         OnDClick += m =>
         {

@@ -77,7 +77,7 @@ namespace CrabUI
       if (c.AKA != null && NamedComponents.ContainsKey(c.AKA))
       {
         NamedComponents.Remove(c.AKA);
-        c.AKA = null;
+        //c.AKA = null;
       }
       c.Parent = null;
       TreeChanged = true;
@@ -86,7 +86,7 @@ namespace CrabUI
 
     public void RemoveAllChildren()
     {
-      foreach (CUIComponent c in Children) { c.Parent = null; c.AKA = null; }
+      foreach (CUIComponent c in Children) { c.Parent = null; }
       NamedComponents.Clear();
       Children.Clear();
       TreeChanged = true;
