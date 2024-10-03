@@ -23,8 +23,9 @@ namespace CrabUI
 #endif
     public static void Capture(CUIComponent c, CUIDebugEventType t, string i)
     {
-      if (c.IgnoreDebug) return;
-      CUIDebugWindow.Main?.Capture(new CUIDebugEvent(c, t, i));
+      if (c.IgnoreDebug || CUIDebugWindow.Main == null) return;
+
+      CUIDebugWindow.Main.Capture(new CUIDebugEvent(c, t, i));
     }
 
 #if !CUIDEBUG

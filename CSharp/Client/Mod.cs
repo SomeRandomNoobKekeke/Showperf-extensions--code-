@@ -65,16 +65,8 @@ namespace ShowPerfExtensions
       Showperf.Capture.Toggle(CName.MapEntityDrawing);
 
 
-
-
-      CUI.Load(CUITest.ClickSounds);
-
-
-
+      //CUI.Load(CUITest.CursedWrappers);
       CUI.OpenDebugWindow();
-
-
-
 
       PatchAll();
       addCommands();

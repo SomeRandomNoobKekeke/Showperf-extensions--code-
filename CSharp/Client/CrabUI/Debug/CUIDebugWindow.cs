@@ -25,13 +25,10 @@ namespace CrabUI
     public int target;
 
 
-
-    public float dc;
-    public Color cl;
-
-
     public void Capture(CUIDebugEvent e)
     {
+      if (this["content"] == null) return;
+
       if (target > 200) return;
 
       if (Events.Count < target + 1)
@@ -45,8 +42,6 @@ namespace CrabUI
         Events[target].Value = e;
       }
 
-      Events[target].BackgroundColor = cl;
-
       target++;
     }
 
@@ -54,12 +49,6 @@ namespace CrabUI
     {
       target = 0;
       Events.ForEach(e => e.Flush());
-      dc += 0.01f;
-      if (dc > 1) dc = 0;
-      cl = ToolBox.GradientLerp(dc,
-        Color.Indigo,
-        Color.MidnightBlue
-      );
     }
     public CUIDebugWindow() : base()
     {
@@ -81,6 +70,8 @@ namespace CrabUI
         Scrollable = true,
         IgnoreDebug = true,
       };
+
+
     }
 
     public CUIDebugWindow(float? x, float? y, float? w, float? h) : this()

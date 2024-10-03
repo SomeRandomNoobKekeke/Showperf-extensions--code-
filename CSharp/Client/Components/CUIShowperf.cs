@@ -108,7 +108,10 @@ namespace ShowPerfExtensions
 
 
 
-        SubTypeDD = new CUIDropDown() { };
+        SubTypeDD = new CUIDropDown()
+        {
+          AbsoluteMin = new CUINullRect(null, null, null, 40),
+        };
 
         foreach (SubType st in Enum.GetValues(typeof(SubType)))
         {

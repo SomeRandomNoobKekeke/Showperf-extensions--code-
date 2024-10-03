@@ -92,6 +92,15 @@ namespace CrabUI
         });
 
 
+        //HACK BaroDev(wide)
+        RunStraigth(c =>
+        {
+          c.Layout.Changed.Value = false;
+          c.Layout.DecorChanged.Value = false;
+          c.Layout.AbsoluteChanged.Value = false;
+        });
+
+
 
         OnUpdate?.Invoke();
 

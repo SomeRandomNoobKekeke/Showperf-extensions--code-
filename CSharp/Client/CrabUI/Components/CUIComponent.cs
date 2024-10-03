@@ -158,15 +158,30 @@ namespace CrabUI
 
     internal virtual Vector2 AmIOkWithThisSize(Vector2 size) => size;
 
-    internal void OnPropChanged() => Layout.Changed.Value = true;
-    internal void OnDecorPropChanged() => Layout.DecorChanged.Value = true;
-    internal void OnAbsolutePropChanged() => Layout.AbsoluteChanged.Value = true;
-    internal void OnChildrenPropChanged()
+    //HACK need a more robust solution
+    protected bool ComponentInitialized;
+    internal void OnPropChanged([CallerMemberName] string memberName = "")
+    {
+      Layout.Changed.Value = true;
+      if (ComponentInitialized) CUIDebug.Capture(this, CUIDebugEventType.OnPropChanged, memberName);
+    }
+    internal void OnDecorPropChanged([CallerMemberName] string memberName = "")
+    {
+      Layout.DecorChanged.Value = true;
+      if (ComponentInitialized) CUIDebug.Capture(this, CUIDebugEventType.OnDecorPropChanged, memberName);
+    }
+    internal void OnAbsolutePropChanged([CallerMemberName] string memberName = "")
+    {
+      Layout.AbsoluteChanged.Value = true;
+      if (ComponentInitialized) CUIDebug.Capture(this, CUIDebugEventType.OnAbsolutePropChanged, memberName);
+    }
+    internal void OnChildrenPropChanged([CallerMemberName] string memberName = "")
     {
       foreach (CUIComponent child in Children)
       {
         child.Layout.Changed.Value = true;
       }
+      if (ComponentInitialized) CUIDebug.Capture(this, CUIDebugEventType.OnChildrenPropChanged, memberName);
     }
 
     #endregion
@@ -411,6 +426,8 @@ namespace CrabUI
       SwipeHandle = new CUISwipeHandle(this);
       LeftResizeHandle = new CUIResizeHandle(this, CUIAnchorType.LeftBottom);
       RightResizeHandle = new CUIResizeHandle(this, CUIAnchorType.RightBottom);
+
+      ComponentInitialized = true;
     }
 
     public CUIComponent(float? x, float? y, float? w, float? h) : this()

@@ -18,7 +18,8 @@ namespace CrabUI
 {
   public enum CUIDebugEventType
   {
-    LayoutUpdate, UpdateDecor, ResizeToContent, CheckChildBoundaries
+    LayoutUpdate, UpdateDecor, ResizeToContent, CheckChildBoundaries,
+    OnPropChanged, OnDecorPropChanged, OnAbsolutePropChanged, OnChildrenPropChanged
   }
   public class CUIDebugEvent
   {
@@ -51,6 +52,7 @@ namespace CrabUI
         {
           Visible = true; IgnoreEvents = false;
           Text = $"{value.EventType} {value.Component} {value.Info}";
+          UpdateTimer = 1f;
         }
       }
     }
@@ -60,12 +62,25 @@ namespace CrabUI
 
     public string Text = "";
 
+    public float UpdateTimer;
+
+    public Color GetColor()
+    {
+      return ToolBox.GradientLerp(UpdateTimer,
+        Color.MidnightBlue,
+        Color.Green
+      );
+    }
+
 
     protected override void Draw(SpriteBatch spriteBatch)
     {
+      BackgroundColor = GetColor();
+
       base.Draw(spriteBatch);
 
       GUIStyle.Font.Value.DrawString(spriteBatch, Text, Real.Position, Color.White, rotation: 0, origin: Vector2.Zero, 0.9f, se: SpriteEffects.None, layerDepth: 0.1f);
+      UpdateTimer -= 0.01f;
     }
 
 

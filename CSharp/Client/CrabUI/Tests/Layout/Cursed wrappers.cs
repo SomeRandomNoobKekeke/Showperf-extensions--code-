@@ -21,32 +21,50 @@ namespace CrabUI
         HideChildrenOutsideFrame = false,
       });
 
-
       CUIVerticalList v = new CUIVerticalList(0, 0, 1, 1)
       {
         HideChildrenOutsideFrame = false,
         BackgroundColor = Color.Red,
       };
-
       f.Append(v);
 
-      CUIHorizontalList h = new CUIHorizontalList()
+
+      CUIHorizontalList h = new CUIHorizontalList(0, 0, 1, null)
       {
         FitContent = new CUIBool2(false, true),
         HideChildrenOutsideFrame = false,
+        BackgroundColor = Color.Blue,
       };
-      h.BackgroundColor = Color.Blue;
       v.Append(h);
 
       h.Append(new CUIButton("123"));
 
-      CUIComponent wrapper = new CUIComponent()
-      {
-        FitContent = new CUIBool2(true, true)
-      };
 
-      wrapper.Append(new CUIButton("123"));
-      h.Append(wrapper);
+      CUIDropDown dd = new CUIDropDown();
+
+      dd.Add(321);
+      dd.Select(321);
+
+      h.Append(dd);
+
+
+      h = new CUIHorizontalList(0, 0, 1, null)
+      {
+        FitContent = new CUIBool2(false, true),
+        HideChildrenOutsideFrame = false,
+        BackgroundColor = Color.Blue,
+      };
+      v.Append(h);
+
+      h.Append(new CUIButton("123"));
+
+
+      dd = new CUIDropDown();
+
+      dd.Add(321);
+      dd.Select(321);
+
+      h.Append(dd);
     }
 
   }
