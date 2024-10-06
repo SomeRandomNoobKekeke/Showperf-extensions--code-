@@ -21,11 +21,11 @@ namespace CrabUI
 #if !CUIDEBUG
     [Conditional("DONT")]
 #endif
-    public static void Capture(CUIComponent c, CUIDebugEventType t, string i)
+    public static void Capture(CUIComponent host, CUIComponent target, string method, string sprop, string tprop, string value)
     {
-      if (c.IgnoreDebug || CUIDebugWindow.Main == null) return;
+      if (target == null || target.IgnoreDebug || !target.Debug || CUIDebugWindow.Main == null) return;
 
-      CUIDebugWindow.Main.Capture(new CUIDebugEvent(c, t, i));
+      CUIDebugWindow.Main.Capture(new CUIDebugEvent(host, target, method, sprop, tprop, value));
     }
 
 #if !CUIDEBUG

@@ -46,8 +46,6 @@ namespace CrabUI
         }
       }
     }
-
-    public bool DecorChanged { get; set; }
     private bool absoluteChanged; public bool AbsoluteChanged
     {
       get => absoluteChanged;
@@ -60,14 +58,13 @@ namespace CrabUI
         }
       }
     }
+    public bool DecorChanged { get; set; }
 
     internal virtual void Update()
     {
       if (Changed)
       {
         // do something
-
-        CUIDebug.Capture(Host, CUIDebugEventType.LayoutUpdate, $"{Host.Real}");
         Changed = false;
       }
     }
@@ -86,7 +83,6 @@ namespace CrabUI
       if (Host.FitContent.X || Host.FitContent.Y)
       {
         // do something
-        CUIDebug.Capture(Host, CUIDebugEventType.ResizeToContent, $"{Host.AbsoluteMin} {Host.Absolute}");
       }
 
       AbsoluteChanged = false;

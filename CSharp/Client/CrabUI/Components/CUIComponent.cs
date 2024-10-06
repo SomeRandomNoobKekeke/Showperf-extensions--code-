@@ -18,7 +18,28 @@ namespace CrabUI
     public static int MaxID = 0;
     public static Dictionary<int, CUIComponent> ComponentsById = new Dictionary<int, CUIComponent>();
     public int ID;
-    public bool Debug;
+    private bool debug; public bool Debug
+    {
+      get => debug;
+      set
+      {
+        debug = value;
+        foreach (CUIComponent c in Children) { c.Debug = value; }
+      }
+    }
+    public bool DebugHighlight;
+
+    private bool ignoreDebug; public bool IgnoreDebug
+    {
+      get => ignoreDebug;
+      set
+      {
+        ignoreDebug = value;
+        foreach (CUIComponent c in Children) { c.IgnoreDebug = value; }
+      }
+    }
+
+
     public Stopwatch sw = new Stopwatch();
 
     public static Vector2 GameScreenSize => new Vector2(GameMain.GraphicsWidth, GameMain.GraphicsHeight);
@@ -121,7 +142,7 @@ namespace CrabUI
       set { ignoreEvents = value; foreach (var child in Children) child.IgnoreEvents = value; }
     }
 
-    public bool IgnoreDebug;
+
     private bool visible = true; public bool Visible
     {
       get => visible;
@@ -163,17 +184,26 @@ namespace CrabUI
     internal void OnPropChanged([CallerMemberName] string memberName = "")
     {
       Layout.Changed = true;
-      if (ComponentInitialized) CUIDebug.Capture(this, CUIDebugEventType.OnPropChanged, memberName);
+      if (ComponentInitialized)
+      {
+        CUIDebug.Capture(null, this, "OnPropChanged", memberName, "Layout.Changed", "true");
+      }
     }
     internal void OnDecorPropChanged([CallerMemberName] string memberName = "")
     {
       Layout.DecorChanged = true;
-      if (ComponentInitialized) CUIDebug.Capture(this, CUIDebugEventType.OnDecorPropChanged, memberName);
+      if (ComponentInitialized)
+      {
+        CUIDebug.Capture(null, this, "OnDecorPropChanged", memberName, "Layout.DecorChanged", "true");
+      }
     }
     internal void OnAbsolutePropChanged([CallerMemberName] string memberName = "")
     {
       Layout.AbsoluteChanged = true;
-      if (ComponentInitialized) CUIDebug.Capture(this, CUIDebugEventType.OnAbsolutePropChanged, memberName);
+      if (ComponentInitialized)
+      {
+        CUIDebug.Capture(null, this, "OnAbsolutePropChanged", memberName, "Layout.AbsoluteChanged", "true");
+      }
     }
     internal void OnChildrenPropChanged([CallerMemberName] string memberName = "")
     {
@@ -181,7 +211,6 @@ namespace CrabUI
       {
         child.Layout.Changed = true;
       }
-      if (ComponentInitialized) CUIDebug.Capture(this, CUIDebugEventType.OnChildrenPropChanged, memberName);
     }
 
     #endregion
@@ -235,40 +264,93 @@ namespace CrabUI
     public object Data;
     public CUIAnchor Anchor = new CUIAnchor(CUIAnchorType.LeftTop);
 
+    // Ugly, but otherwise it'll be undebugable
     private CUINullRect absolute; public CUINullRect Absolute
     {
       get => absolute;
-      set { absolute = value; OnPropChanged(); OnAbsolutePropChanged(); }
+      set => SetAbsolute(value);
+    }
+    internal void SetAbsolute(CUINullRect value, [CallerMemberName] string memberName = "")
+    {
+      absolute = value;
+      if (ComponentInitialized)
+      {
+        CUIDebug.Capture(null, this, "SetAbsolute", memberName, "Absolute", Absolute.ToString());
+      }
+      OnPropChanged(); OnAbsolutePropChanged();
     }
 
     private CUINullRect absoluteMin; public CUINullRect AbsoluteMin
     {
       get => absoluteMin;
-      set { absoluteMin = value; OnPropChanged(); OnAbsolutePropChanged(); }
+      set => SetAbsoluteMin(value);
     }
-
+    internal void SetAbsoluteMin(CUINullRect value, [CallerMemberName] string memberName = "")
+    {
+      absoluteMin = value;
+      if (ComponentInitialized)
+      {
+        CUIDebug.Capture(null, this, "SetAbsoluteMin", memberName, "AbsoluteMin", AbsoluteMin.ToString());
+      }
+      OnPropChanged(); OnAbsolutePropChanged();
+    }
     private CUINullRect absoluteMax; public CUINullRect AbsoluteMax
     {
       get => absoluteMax;
-      set { absoluteMax = value; OnPropChanged(); OnAbsolutePropChanged(); }
+      set => SetAbsoluteMax(value);
     }
-
+    internal void SetAbsoluteMax(CUINullRect value, [CallerMemberName] string memberName = "")
+    {
+      absoluteMax = value;
+      if (ComponentInitialized)
+      {
+        CUIDebug.Capture(null, this, "SetAbsoluteMax", memberName, "AbsoluteMax", AbsoluteMax.ToString());
+      }
+      OnPropChanged(); OnAbsolutePropChanged();
+    }
     private CUINullRect relative; public CUINullRect Relative
     {
       get => relative;
-      set { relative = value; OnPropChanged(); }
+      set => SetRelative(value);
+    }
+    internal void SetRelative(CUINullRect value, [CallerMemberName] string memberName = "")
+    {
+      relative = value;
+      if (ComponentInitialized)
+      {
+        CUIDebug.Capture(null, this, "SetRelative", memberName, "Relative", Relative.ToString());
+      }
+      OnPropChanged();
     }
 
     private CUINullRect relativeMin; public CUINullRect RelativeMin
     {
       get => relativeMin;
-      set { relativeMin = value; OnPropChanged(); }
+      set => SetRelativeMin(value);
+    }
+    internal void SetRelativeMin(CUINullRect value, [CallerMemberName] string memberName = "")
+    {
+      relativeMin = value;
+      if (ComponentInitialized)
+      {
+        CUIDebug.Capture(null, this, "SetRelativeMin", memberName, "RelativeMin", RelativeMin.ToString());
+      }
+      OnPropChanged();
     }
 
     private CUINullRect relativeMax; public CUINullRect RelativeMax
     {
       get => relativeMax;
-      set { relativeMax = value; OnPropChanged(); }
+      set => SetRelativeMax(value);
+    }
+    internal void SetRelativeMax(CUINullRect value, [CallerMemberName] string memberName = "")
+    {
+      relativeMax = value;
+      if (ComponentInitialized)
+      {
+        CUIDebug.Capture(null, this, "SetRelativeMax", memberName, "RelativeMax", RelativeMax.ToString());
+      }
+      OnPropChanged();
     }
 
 
@@ -361,7 +443,7 @@ namespace CrabUI
       if (state == null) return;
 
       ShouldPassPropsToChildren = state.ShouldPassPropsToChildren;
-      ZIndex = state.ZIndex;
+      zIndex = state.ZIndex; // TODO think how to uncurse this
       IgnoreEvents = state.IgnoreEvents;
       Visible = state.Visible;
       ChildrenOffset = state.ChildrenOffset;
@@ -385,8 +467,6 @@ namespace CrabUI
       Padding = state.Padding;
     }
 
-
-
     #endregion
     #region Methods --------------------------------------------------------
 
@@ -400,7 +480,13 @@ namespace CrabUI
       RightResizeHandle.Draw(spriteBatch);
     }
 
-    protected virtual void DrawFront(SpriteBatch spriteBatch) { }
+    protected virtual void DrawFront(SpriteBatch spriteBatch)
+    {
+      if (DebugHighlight)
+      {
+        GUI.DrawRectangle(spriteBatch, Real.Position, Real.Size, Color.Cyan * 0.5f, isFilled: true);
+      }
+    }
 
 
     #endregion
@@ -415,12 +501,13 @@ namespace CrabUI
 
       Layout = new CUILayoutSimple();
 
-      Absolute = new CUINullRect();
-      AbsoluteMin = new CUINullRect();
-      AbsoluteMax = new CUINullRect();
-      Relative = new CUINullRect();
-      RelativeMin = new CUINullRect();
-      RelativeMax = new CUINullRect();
+
+      // Absolute = new CUINullRect();
+      // AbsoluteMin = new CUINullRect();
+      // AbsoluteMax = new CUINullRect();
+      // Relative = new CUINullRect();
+      // RelativeMin = new CUINullRect();
+      // RelativeMax = new CUINullRect();
 
       DragHandle = new CUIDragHandle(this);
       SwipeHandle = new CUISwipeHandle(this);

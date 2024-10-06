@@ -22,7 +22,7 @@ namespace CrabUI
     public long UpdateTime;
     public double UpdateInterval = 1.0 / 300.0;
     public event Action OnUpdate;
-
+    public event Action OnTreeChanged;
 
     public CUIDragHandle GrabbedDragHandle;
     public CUIResizeHandle GrabbedResizeHandle;
@@ -78,18 +78,29 @@ namespace CrabUI
 
         if (TreeChanged)
         {
+          OnTreeChanged?.Invoke();
+
           FlattenTree();
           TreeChanged = false;
         }
 
+        CUIDebug.Capture(this, this, "Update", "", "HandleMouse", "");
         HandleMouse();
 
-        RunReverse(c => c.Layout.ResizeToContent());
+        RunReverse(c =>
+        {
+          CUIDebug.Capture(c, this, "Update", "", "c.Layout.ResizeToContent()", "");
+          c.Layout.ResizeToContent();
+        });
+
         RunStraigth(c =>
         {
+          CUIDebug.Capture(c, this, "Update", "", "c.Layout.Update()", "");
           c.Layout.Update();
+          CUIDebug.Capture(c, this, "Update", "", "c.Layout.UpdateDecor()", "");
           c.Layout.UpdateDecor();
         });
+
 
 
         //HACK BaroDev(wide)
@@ -117,6 +128,8 @@ namespace CrabUI
       spriteBatch.GraphicsDevice.ScissorRectangle = SRect;
       spriteBatch.Begin(SpriteSortMode.Deferred, samplerState: GUI.SamplerState, rasterizerState: GameMain.ScissorTestEnable);
     }
+
+    //TODO lock flat, new components are blinking
     protected override void Draw(SpriteBatch spriteBatch)
     {
       Rectangle OriginalSRect = spriteBatch.GraphicsDevice.ScissorRectangle;
@@ -343,11 +356,6 @@ namespace CrabUI
     {
       RemoveAllChildren();
       initFunc(this);
-    }
-
-    public void OpenDebugWindow()
-    {
-      Append(new CUIDebugWindow(0, 0.3f, 0.2f, 0.6f));
     }
 
     public CUIMainComponent() : base()

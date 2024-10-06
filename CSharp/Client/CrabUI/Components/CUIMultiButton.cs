@@ -12,9 +12,9 @@ namespace CrabUI
 {
   public class CUIMultiButton : CUIComponent
   {
-    public event Action<CUIButton> OnSelect;
+    public event Action<CUIButton, int> OnSelect;
 
-    //TODO this could store any component and no just buttons
+    //TODO this could store any component and not just buttons
     public List<CUIButton> Buttons = new List<CUIButton>();
 
     public CUIButton Selected;
@@ -25,7 +25,8 @@ namespace CrabUI
       b.OnMouseDown += (m) => SelectNext(b);
       b.Relative = new CUINullRect(0, 0, 1f, 1f);
 
-      b.MousePressedColor = b.MouseOverColor; //HACK remove this kostyl
+      b.MouseOverColor = b.MousePressedColor; //HACK remove this kostyl
+      b.ConsumeDragAndDrop = ConsumeDragAndDrop;
 
       return b;
     }
@@ -47,9 +48,10 @@ namespace CrabUI
       if (Buttons.Count == 0) return;
 
       RemoveAllChildren();
-      Selected = Buttons[i % Buttons.Count];
+      int realIndex = i % Buttons.Count;
+      Selected = Buttons[realIndex];
       Append(Selected);
-      OnSelect?.Invoke(Selected);
+      OnSelect?.Invoke(Selected, realIndex);
     }
 
     // internal override Vector2 AmIOkWithThisSize(Vector2 size)

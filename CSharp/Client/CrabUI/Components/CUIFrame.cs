@@ -22,6 +22,8 @@ namespace CrabUI
 
       LeftResizeHandle.Draw(spriteBatch);
       RightResizeHandle.Draw(spriteBatch);
+
+      base.DrawFront(spriteBatch);
     }
 
     public CUIFrame() : base()

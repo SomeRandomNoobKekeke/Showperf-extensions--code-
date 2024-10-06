@@ -9,6 +9,10 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace CrabUI
 {
+  // TODO think, mb make this generic and also act like a normal list
+  // Because otherwise you'll have to store list of children somewhere outside which is cringe
+
+  //TODO add scrollbar
   public class CUIVerticalList : CUIComponent
   {
     public bool Scrollable { get; set; }

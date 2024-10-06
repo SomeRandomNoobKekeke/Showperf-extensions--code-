@@ -66,7 +66,7 @@ namespace ShowPerfExtensions
 
 
       //CUI.Load(CUITest.CursedWrappers);
-      CUI.OpenDebugWindow();
+      CUIDebugWindow.Open();
 
       PatchAll();
       addCommands();

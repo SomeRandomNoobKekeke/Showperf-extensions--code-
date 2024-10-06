@@ -44,16 +44,47 @@ namespace CrabUI
 
           if (!c.FillEmptySpace.X)
           {
-            if (c.Relative.Width.HasValue) w = c.Relative.Width.Value * Host.Real.Width;
-            if (c.Absolute.Width.HasValue) w = c.Absolute.Width.Value;
+            if (c.Relative.Width.HasValue)
+            {
+              w = c.Relative.Width.Value * Host.Real.Width;
+              CUIDebug.Capture(Host, c, "Layout.Update", "RelativeMin.Height", "w", w.ToString());
+            }
+            if (c.Absolute.Width.HasValue)
+            {
+              w = c.Absolute.Width.Value;
+              CUIDebug.Capture(Host, c, "Layout.Update", "Absolute.Width", "w", w.ToString());
+            }
 
-            if (c.RelativeMin.Width.HasValue) w = Math.Max(w, c.RelativeMin.Width.Value * Host.Real.Width);
-            if (c.AbsoluteMin.Width.HasValue) w = Math.Max(w, c.AbsoluteMin.Width.Value);
+            if (c.RelativeMin.Width.HasValue)
+            {
+              w = Math.Max(w, c.RelativeMin.Width.Value * Host.Real.Width);
+              CUIDebug.Capture(Host, c, "Layout.Update", "RelativeMin.Width", "w", w.ToString());
+            }
+            if (c.AbsoluteMin.Width.HasValue)
+            {
+              w = Math.Max(w, c.AbsoluteMin.Width.Value);
+              CUIDebug.Capture(Host, c, "Layout.Update", "AbsoluteMin.Width", "w", w.ToString());
+            }
 
-            if (c.RelativeMax.Width.HasValue) w = Math.Min(w, c.RelativeMax.Width.Value * Host.Real.Width);
-            if (c.AbsoluteMax.Width.HasValue) w = Math.Min(w, c.AbsoluteMax.Width.Value);
+            if (c.RelativeMax.Width.HasValue)
+            {
+              w = Math.Min(w, c.RelativeMax.Width.Value * Host.Real.Width);
+              CUIDebug.Capture(Host, c, "Layout.Update", "RelativeMax.Width", "w", w.ToString());
+            }
+            if (c.AbsoluteMax.Width.HasValue)
+            {
+              w = Math.Min(w, c.AbsoluteMax.Width.Value);
+              CUIDebug.Capture(Host, c, "Layout.Update", "AbsoluteMax.Width", "w", w.ToString());
+            }
 
-            s = c.AmIOkWithThisSize(new Vector2(w, h));
+            s = new Vector2(w, h);
+            Vector2 okSize = c.AmIOkWithThisSize(s);
+            if (s != okSize)
+            {
+              CUIDebug.Capture(Host, c, "Layout.Update", "AmIOkWithThisSize", "s", okSize.ToString());
+            }
+
+            s = okSize;
 
             TotalWidth += s.X;
           }
@@ -66,7 +97,11 @@ namespace CrabUI
 
         float dif = Host.Real.Width - TotalWidth;
 
-        Resizible.ForEach(c => c.Size = c.Component.AmIOkWithThisSize(new Vector2(dif / Resizible.Count, c.Size.Y)));
+        Resizible.ForEach(c =>
+        {
+          c.Size = c.Component.AmIOkWithThisSize(new Vector2(dif / Resizible.Count, c.Size.Y));
+          CUIDebug.Capture(Host, c.Component, "Layout.Update", "Resizible.ForEach", "c.Size", c.Size.ToString());
+        });
 
         Host.ChildrenSizeCalculated();
 
@@ -105,7 +140,8 @@ namespace CrabUI
           }
         }
 
-        Host.AbsoluteMin = Host.AbsoluteMin with { Width = tw };
+        Host.SetAbsolute(Host.Absolute with { Width = tw });
+        CUIDebug.Capture(null, Host, "ResizeToContent", "tw", "Absolute.Width", tw.ToString());
       }
 
       if (Host.FitContent.Y)
@@ -120,7 +156,8 @@ namespace CrabUI
           th = Math.Max(th, h);
         }
 
-        Host.Absolute = Host.Absolute with { Height = th };
+        Host.SetAbsoluteMin(Host.AbsoluteMin with { Height = th });
+        CUIDebug.Capture(null, Host, "ResizeToContent", "th", "AbsoluteMin.Height", th.ToString());
       }
 
       base.ResizeToContent();

@@ -17,12 +17,27 @@ namespace CrabUI
     public Color OnHoverColor;
     public Color OffColor;
     public Color OffHoverColor;
+    private string onText; public string OnText
+    {
+      get => onText;
+      set { onText = value; Text = state ? OnText : OffText; }
+    }
+    private string offText; public string OffText
+    {
+      get => offText;
+      set { offText = value; Text = state ? OnText : OffText; }
+    }
 
     public event Action<bool> OnStateChange;
     private bool state; public bool State
     {
       get => state;
-      set { state = value; OnStateChange?.Invoke(state); }
+      set
+      {
+        state = value;
+        Text = state ? OnText : OffText;
+        OnStateChange?.Invoke(state);
+      }
     }
 
     protected override void Draw(SpriteBatch spriteBatch)
@@ -40,8 +55,11 @@ namespace CrabUI
 
       base.Draw(spriteBatch);
     }
-    public CUIToggleButton(string text) : base(text)
+    public CUIToggleButton(string text = "") : base(text)
     {
+      OnText = text;
+      OffText = text;
+
       ConsumeMouseClicks = true;
       ConsumeDragAndDrop = true;
 

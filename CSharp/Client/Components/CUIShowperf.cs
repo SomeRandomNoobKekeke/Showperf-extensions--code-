@@ -54,6 +54,8 @@ namespace ShowPerfExtensions
 
       public void CreateGUI()
       {
+
+
         Append(Header = new CUIVerticalList()
         {
           BackgroundColor = Color.Black * 0.5f,
@@ -100,7 +102,7 @@ namespace ShowPerfExtensions
         m.Add(new CUIButton("Sum")).Data = CaptureWindowMode.Sum;
         // m.Add(new CUIButton("Spike")).Data = CaptureWindowMode.Spike;
 
-        m.OnSelect += (b) => Window.Mode = (CaptureWindowMode)b.Data;
+        m.OnSelect += (b, i) => Window.Mode = (CaptureWindowMode)b.Data;
         m.Select(0);
 
         this["buttons1"].Append(m);
@@ -159,6 +161,8 @@ namespace ShowPerfExtensions
 
         Pages.Open(TickList);
 
+
+        Debug = true;
       }
 
       public CUIShowperf() : base()
