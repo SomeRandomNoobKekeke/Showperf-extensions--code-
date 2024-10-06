@@ -174,7 +174,7 @@ namespace ShowPerfExtensions
         OnDClick += m =>
         {
           m.ClickConsumed = true;
-          this.ApplyState(State["init"]);
+          this.ApplyState(States["init"]);
         };
       }
       public CUIShowperf(float x, float y, float w, float h) : this()

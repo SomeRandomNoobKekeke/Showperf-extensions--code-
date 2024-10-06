@@ -308,6 +308,7 @@ namespace CrabUI
       }
       OnPropChanged(); OnAbsolutePropChanged();
     }
+    //TODO make sure i don't call Relative setters directly
     private CUINullRect relative; public CUINullRect Relative
     {
       get => relative;
@@ -431,7 +432,7 @@ namespace CrabUI
     #endregion
 
     #region State --------------------------------------------------------
-    public Dictionary<string, CUIComponent> State = new Dictionary<string, CUIComponent>();
+    public Dictionary<string, CUIComponent> States = new Dictionary<string, CUIComponent>();
     public CUIComponent Clone()
     {
       CUIComponent clone = new CUIComponent();

@@ -57,7 +57,7 @@ namespace ShowPerfExtensions
 
 
 
-      Showperf.State["init"] = Showperf.Clone();
+      Showperf.States["init"] = Showperf.Clone();
 
       CUI.Append(Showperf);
       CUI.OnUpdate += () => Showperf.Update();

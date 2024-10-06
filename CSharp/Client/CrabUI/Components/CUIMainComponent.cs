@@ -84,20 +84,20 @@ namespace CrabUI
           TreeChanged = false;
         }
 
-        CUIDebug.Capture(this, this, "Update", "", "HandleMouse", "");
+        //CUIDebug.Capture(this, this, "Update", "", "HandleMouse", "");
         HandleMouse();
 
         RunReverse(c =>
         {
-          CUIDebug.Capture(c, this, "Update", "", "c.Layout.ResizeToContent()", "");
+          //CUIDebug.Capture(c, this, "Update", "", "c.Layout.ResizeToContent()", "");
           c.Layout.ResizeToContent();
         });
 
         RunStraigth(c =>
         {
-          CUIDebug.Capture(c, this, "Update", "", "c.Layout.Update()", "");
+          //CUIDebug.Capture(c, this, "Update", "", "c.Layout.Update()", "");
           c.Layout.Update();
-          CUIDebug.Capture(c, this, "Update", "", "c.Layout.UpdateDecor()", "");
+          //CUIDebug.Capture(c, this, "Update", "", "c.Layout.UpdateDecor()", "");
           c.Layout.UpdateDecor();
         });
 

@@ -34,7 +34,7 @@ namespace CrabUI
     {
       if (EventsComponent == null) return;
 
-      if (target > 200) return;
+      if (target > 1000) return;
 
       if (Events.Count < target + 1)
       {
@@ -69,10 +69,13 @@ namespace CrabUI
       {
         CUIToggleButton b = new CUIToggleButton(c.ToString());
         b.State = c.Debug;
+        b.IgnoreDebug = true;
         b.TextAling = new CUIAnchor(CUIAnchorType.LeftTop);
         b.OnMouseDown += (m) =>
         {
           c.Debug = !c.Debug;
+          Events.Clear();
+          EventsComponent.RemoveAllChildren();
           MakeIDList();
         };
 
@@ -103,22 +106,26 @@ namespace CrabUI
       this["handle"] = new CUIComponent()
       {
         Absolute = new CUINullRect(null, null, null, 20),
+        IgnoreDebug = true,
       };
 
       Append(Header = new CUIMultiButton()
       {
         Absolute = new CUINullRect(null, null, null, 20),
-        ConsumeDragAndDrop = false
+        ConsumeDragAndDrop = false,
+        IgnoreDebug = true,
       });
       Header.Add(new CUIButton("Debug events")
       {
         InactiveColor = new Color(0, 0, 0, 128),
-        MousePressedColor = new Color(64, 64, 0, 128),
+        MousePressedColor = new Color(0, 255, 255, 64),
+        IgnoreDebug = true,
       });
       Header.Add(new CUIButton("Debugged components")
       {
         InactiveColor = new Color(0, 0, 0, 128),
-        MousePressedColor = new Color(64, 64, 0, 128),
+        MousePressedColor = new Color(0, 255, 255, 64),
+        IgnoreDebug = true,
       });
 
 
@@ -126,16 +133,19 @@ namespace CrabUI
       {
         FillEmptySpace = new CUIBool2(false, true),
         BackgroundColor = new Color(0, 0, 32, 128),
+        IgnoreDebug = true,
       });
 
       EventsComponent = new CUIVerticalList(0, 0, 1, 1)
       {
         Scrollable = true,
+        IgnoreDebug = true,
       };
 
       DebugIDsComponent = new CUIVerticalList(0, 0, 1, 1)
       {
         Scrollable = true,
+        IgnoreDebug = true,
       };
 
       Header.OnSelect += (b, i) =>
