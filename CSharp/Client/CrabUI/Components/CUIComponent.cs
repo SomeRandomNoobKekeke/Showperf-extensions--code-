@@ -162,24 +162,24 @@ namespace CrabUI
     protected bool ComponentInitialized;
     internal void OnPropChanged([CallerMemberName] string memberName = "")
     {
-      Layout.Changed.Value = true;
+      Layout.Changed = true;
       if (ComponentInitialized) CUIDebug.Capture(this, CUIDebugEventType.OnPropChanged, memberName);
     }
     internal void OnDecorPropChanged([CallerMemberName] string memberName = "")
     {
-      Layout.DecorChanged.Value = true;
+      Layout.DecorChanged = true;
       if (ComponentInitialized) CUIDebug.Capture(this, CUIDebugEventType.OnDecorPropChanged, memberName);
     }
     internal void OnAbsolutePropChanged([CallerMemberName] string memberName = "")
     {
-      Layout.AbsoluteChanged.Value = true;
+      Layout.AbsoluteChanged = true;
       if (ComponentInitialized) CUIDebug.Capture(this, CUIDebugEventType.OnAbsolutePropChanged, memberName);
     }
     internal void OnChildrenPropChanged([CallerMemberName] string memberName = "")
     {
       foreach (CUIComponent child in Children)
       {
-        child.Layout.Changed.Value = true;
+        child.Layout.Changed = true;
       }
       if (ComponentInitialized) CUIDebug.Capture(this, CUIDebugEventType.OnChildrenPropChanged, memberName);
     }

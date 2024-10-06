@@ -13,113 +13,71 @@ namespace CrabUI
 {
   public class CUILayout
   {
-    #region Cringe
-    public class State
-    {
-      public CUILayout Layout;
-      public CUIComponent Host => Layout.Host;
-      protected bool _value; public virtual bool Value
-      {
-        get => _value;
-        set
-        {
-          _value = value;
-          PropagateUp();
-          PropagateDown();
-        }
-      }
-
-      public virtual void PropagateUp() { }
-      public virtual void PropagateDown() { }
-
-      public State(CUILayout layout) { Layout = layout; }
-    }
-
-    public class ChangedState : State
-    {
-      public override bool Value
-      {
-        get => _value;
-        set
-        {
-          _value = value;
-          if (value && Host != null)
-          {
-            Host.Layout.DecorChanged.Value = true;
-            if (Host.Parent != null) Host.Parent.Layout.Changed.Value = true;
-            foreach (CUIComponent child in Host.Children) child.Layout.Changed.PropagateDown();
-          }
-        }
-      }
-      public override void PropagateDown()
-      {
-        _value = true;
-        if (Host != null)
-        {
-          Host.Layout.DecorChanged.Value = true;
-          foreach (CUIComponent child in Host.Children)
-          {
-            child.Layout.Changed.PropagateDown();
-          }
-        }
-      }
-
-      public ChangedState(CUILayout layout) : base(layout) { _value = true; }
-    }
-
-    public class DecorChangedState : State
-    {
-      public override bool Value
-      {
-        get => _value;
-        set => _value = value;
-      }
-      public DecorChangedState(CUILayout layout) : base(layout) { _value = true; }
-    }
-
-    public class AbsoluteChangedState : State
-    {
-      public override bool Value
-      {
-        get => _value;
-        set
-        {
-          _value = value;
-          if (value && Host != null && Host.Parent != null)
-          {
-            Host.Parent.Layout.AbsoluteChanged.Value = true;
-          }
-        }
-      }
-      public AbsoluteChangedState(CUILayout layout) : base(layout) { _value = true; }
-    }
-    #endregion
-
-
-
     internal CUIComponent Host;
 
-    public ChangedState Changed;
-    public DecorChangedState DecorChanged;
-    public AbsoluteChangedState AbsoluteChanged;
+
+
+    //NOTE: This looks ugly, but no matter how i try to isolate this logic it gets only uglier
+    // i've been stuck here for too long so i'll just do this
+    // and each update pattern in fact used only once, so i think no big deal
+    private void propagateChangedDown()
+    {
+      changed = true;
+      DecorChanged = true;
+      foreach (CUIComponent child in Host.Children)
+      {
+        child.Layout.propagateChangedDown();
+      }
+    }
+    private bool changed; public bool Changed
+    {
+      get => changed;
+      set
+      {
+        changed = value;
+        if (value)
+        {
+          DecorChanged = true;
+          if (Host.Parent != null) Host.Parent.Layout.changed = true;
+          foreach (CUIComponent child in Host.Children)
+          {
+            child.Layout.propagateChangedDown();
+          }
+        }
+      }
+    }
+
+    public bool DecorChanged { get; set; }
+    private bool absoluteChanged; public bool AbsoluteChanged
+    {
+      get => absoluteChanged;
+      set
+      {
+        absoluteChanged = value;
+        if (value && Host.Parent != null)
+        {
+          Host.Parent.Layout.AbsoluteChanged = true;
+        }
+      }
+    }
 
     internal virtual void Update()
     {
-      if (Changed.Value)
+      if (Changed)
       {
         // do something
 
         CUIDebug.Capture(Host, CUIDebugEventType.LayoutUpdate, $"{Host.Real}");
-        Changed.Value = false;
+        Changed = false;
       }
     }
 
     internal virtual void UpdateDecor()
     {
-      if (DecorChanged.Value)
+      if (DecorChanged)
       {
         Host.UpdatePseudoChildren();
-        DecorChanged.Value = false;
+        DecorChanged = false;
       }
     }
 
@@ -131,7 +89,7 @@ namespace CrabUI
         CUIDebug.Capture(Host, CUIDebugEventType.ResizeToContent, $"{Host.AbsoluteMin} {Host.Absolute}");
       }
 
-      AbsoluteChanged.Value = false;
+      AbsoluteChanged = false;
     }
 
 
@@ -165,9 +123,6 @@ namespace CrabUI
     public CUILayout(CUIComponent host = null)
     {
       Host = host;
-      Changed = new ChangedState(this);
-      DecorChanged = new DecorChangedState(this);
-      AbsoluteChanged = new AbsoluteChangedState(this);
     }
   }
 }

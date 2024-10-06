@@ -14,7 +14,7 @@ namespace CrabUI
   {
     internal override void Update()
     {
-      if (Changed.Value)
+      if (Changed)
       {
         foreach (CUIComponent c in Host.Children)
         {

@@ -29,7 +29,7 @@ namespace CrabUI
 
     internal override void Update()
     {
-      if (Changed.Value)
+      if (Changed)
       {
         Sizes.Clear();
         Resizible.Clear();
