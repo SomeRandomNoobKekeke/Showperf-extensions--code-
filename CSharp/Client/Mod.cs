@@ -65,7 +65,7 @@ namespace ShowPerfExtensions
       Showperf.Capture.Toggle(CName.MapEntityDrawing);
 
 
-      CUI.Load(CUITest.CUIDropDown);
+      CUI.Load(CUITest.Culling);
       CUIDebugWindow.Open();
       //CUI.Debug = true;
 

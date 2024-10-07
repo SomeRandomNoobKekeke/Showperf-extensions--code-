@@ -36,8 +36,6 @@ namespace CrabUI
 
         WrappedForThisSize = size;
 
-        Info(minSize);
-
         return new Vector2(Math.Max(size.X, minSize.X), Math.Max(size.Y, minSize.Y));
       }
       else

@@ -108,16 +108,16 @@ namespace CrabUI
         float y = 0;
         foreach (CUIComponentSize c in Sizes)
         {
-          c.Component.SetReal(
-            CheckChildBoundaries(
-              Host.Real.Left + Host.ChildrenOffset.X,
-              Host.Real.Top + Host.ChildrenOffset.Y + y,
-              c.Size.X,
-              c.Size.Y
-            )
+          CUIRect real = CheckChildBoundaries(
+            Host.Real.Left + Host.ChildrenOffset.X,
+            Host.Real.Top + Host.ChildrenOffset.Y + y,
+            c.Size.X,
+            c.Size.Y
           );
 
-          y += c.Size.Y;
+          c.Component.SetReal(real);
+
+          y += real.Height;
         }
       }
 
@@ -154,7 +154,6 @@ namespace CrabUI
 
       if (AbsoluteChanged && Host.FitContent.Y)
       {
-        Host.Info(Host.Children.Count);
         float th = 0;
         foreach (CUIComponent c in Host.Children)
         {
@@ -166,10 +165,7 @@ namespace CrabUI
             if (c.AbsoluteMax.Height.HasValue) h = Math.Min(h, c.AbsoluteMax.Height.Value);
             th += h;
           }
-          c.PrintLayout();
         }
-
-
 
         CUIDebug.Capture(null, Host, "ResizeToContent", "th", "Absolute.Height", th.ToString());
         Host.SetAbsolute(Host.Absolute with { Height = th });

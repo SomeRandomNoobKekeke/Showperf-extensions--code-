@@ -46,11 +46,15 @@ namespace CrabUI
     {
       return Left < x && x < Right && Top < y && y < Bottom;
     }
-
     public bool Contains(Vector2 pos)
     {
       return Left < pos.X && pos.X < Right && Top < pos.Y && pos.Y < Bottom;
     }
+    public bool Intersect(CUIRect r)
+    {
+      return r.Right >= Left && r.Left <= Right && r.Bottom >= Top && r.Top <= Bottom;
+    }
+
     public CUIRect(Vector2 size) : this(0, 0, size.X, size.Y) { }
     public CUIRect(Vector2 position, Vector2 size) : this(position.X, position.Y, size.X, size.Y) { }
     public CUIRect(float x, float y, float w, float h)

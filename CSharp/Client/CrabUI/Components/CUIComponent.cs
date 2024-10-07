@@ -149,6 +149,8 @@ namespace CrabUI
       set { visible = value; foreach (var child in Children) child.Visible = value; }
     }
 
+    internal bool CulledOut;
+
 
     #endregion
     #region Layout --------------------------------------------------------

@@ -72,6 +72,14 @@ namespace CrabUI
     {
       if (Changed)
       {
+        if (Host.HideChildrenOutsideFrame)
+        {
+          foreach (CUIComponent c in Host.Children)
+          {
+            c.CulledOut = !c.Real.Intersect(Host.Real);
+          }
+        }
+
         // do something
         Changed = false;
       }
