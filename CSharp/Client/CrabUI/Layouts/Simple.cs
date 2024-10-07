@@ -68,7 +68,7 @@ namespace CrabUI
           (x, y) = c.Anchor.GetChildPos(Host.Real, new Vector2(x, y), new Vector2(w, h));
 
 
-          c.Real = CheckChildBoundaries(x + Host.ChildrenOffset.X, y + Host.ChildrenOffset.Y, w, h);
+          c.SetReal(CheckChildBoundaries(x + Host.ChildrenOffset.X, y + Host.ChildrenOffset.Y, w, h));
 
           //if (c.Debug) CUI.log(c); // TODO make special method for such calls in CUI
         }
@@ -80,7 +80,7 @@ namespace CrabUI
 
     internal override void ResizeToContent()
     {
-      if (Host.FitContent.X)
+      if (AbsoluteChanged && Host.FitContent.X)
       {
         float rightmostRight = 0;
         foreach (CUIComponent c in Host.Children)
@@ -99,10 +99,10 @@ namespace CrabUI
           rightmostRight = Math.Max(rightmostRight, x + w);
         }
 
-        Host.AbsoluteMin = Host.AbsoluteMin with { Width = rightmostRight };
+        Host.SetAbsoluteMin(Host.AbsoluteMin with { Width = rightmostRight });
       }
 
-      if (Host.FitContent.Y)
+      if (AbsoluteChanged && Host.FitContent.Y)
       {
         float bottommostBottom = 0;
         foreach (CUIComponent c in Host.Children)
@@ -121,7 +121,7 @@ namespace CrabUI
           bottommostBottom = Math.Max(bottommostBottom, y + h);
         }
 
-        Host.AbsoluteMin = Host.AbsoluteMin with { Height = bottommostBottom };
+        Host.SetAbsoluteMin(Host.AbsoluteMin with { Height = bottommostBottom });
       }
 
       base.ResizeToContent();

@@ -15,8 +15,6 @@ namespace CrabUI
   {
     internal CUIComponent Host;
 
-
-
     //NOTE: This looks ugly, but no matter how i try to isolate this logic it gets only uglier
     // i've been stuck here for too long so i'll just do this
     // and each update pattern in fact used only once, so i think no big deal
@@ -29,7 +27,7 @@ namespace CrabUI
         child.Layout.propagateChangedDown();
       }
     }
-    private bool changed; public bool Changed
+    private bool changed = true; public bool Changed
     {
       get => changed;
       set
@@ -46,19 +44,29 @@ namespace CrabUI
         }
       }
     }
-    private bool absoluteChanged; public bool AbsoluteChanged
+
+    private void propagateAbsoluteChangedUp()
+    {
+      absoluteChanged = true;
+      Host.Parent?.Layout.propagateAbsoluteChangedUp();
+    }
+    private bool absoluteChanged = true; public bool AbsoluteChanged
     {
       get => absoluteChanged;
       set
       {
-        absoluteChanged = value;
-        if (value && Host.Parent != null)
-        {
-          Host.Parent.Layout.AbsoluteChanged = true;
-        }
+        if (value) Host.Parent?.Layout.propagateAbsoluteChangedUp();
+        else absoluteChanged = false;
       }
     }
-    public bool DecorChanged { get; set; }
+    public bool decorChanged = true; public bool DecorChanged
+    {
+      get => decorChanged;
+      set
+      {
+        decorChanged = value;
+      }
+    }
 
     internal virtual void Update()
     {
@@ -80,7 +88,7 @@ namespace CrabUI
 
     internal virtual void ResizeToContent()
     {
-      if (Host.FitContent.X || Host.FitContent.Y)
+      if (AbsoluteChanged && (Host.FitContent.X || Host.FitContent.Y))
       {
         // do something
       }

@@ -373,37 +373,41 @@ namespace CrabUI
     private CUIRect real; public virtual CUIRect Real
     {
       get => real;
-      set
+      set => SetReal(value);
+    }
+
+    internal void SetReal(CUIRect value, [CallerMemberName] string memberName = "")
+    {
+      real = value;
+      CUIDebug.Capture(null, this, "SetReal", memberName, "real", real.ToString());
+
+      BorderBox = new CUIRect(
+        real.Left - BorderThickness,
+        real.Top - BorderThickness,
+        real.Width + BorderThickness * 2,
+        real.Height + BorderThickness * 2
+      );
+
+      if (HideChildrenOutsideFrame)
       {
-        real = value;
-        BorderBox = new CUIRect(
-          real.Left - BorderThickness,
-          real.Top - BorderThickness,
-          real.Width + BorderThickness * 2,
-          real.Height + BorderThickness * 2
+        //HACK Remove these + 1
+        Rectangle SRect = new Rectangle(
+          (int)real.Left + 1,
+          (int)real.Top + 1,
+          (int)real.Width - 2,
+          (int)real.Height - 2
         );
 
-        if (HideChildrenOutsideFrame)
+        if (Parent?.ScissorRect != null)
         {
-          //HACK Remove these + 1
-          Rectangle SRect = new Rectangle(
-            (int)real.Left + 1,
-            (int)real.Top + 1,
-            (int)real.Width - 2,
-            (int)real.Height - 2
-          );
-
-          if (Parent?.ScissorRect != null)
-          {
-            ScissorRect = Rectangle.Intersect(Parent.ScissorRect.Value, SRect);
-          }
-          else
-          {
-            ScissorRect = SRect;
-          }
+          ScissorRect = Rectangle.Intersect(Parent.ScissorRect.Value, SRect);
         }
-        else ScissorRect = Parent?.ScissorRect;
+        else
+        {
+          ScissorRect = SRect;
+        }
       }
+      else ScissorRect = Parent?.ScissorRect;
     }
 
     #endregion

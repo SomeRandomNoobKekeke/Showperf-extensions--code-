@@ -23,11 +23,11 @@ namespace CrabUI
     public CUIVerticalList EventsComponent;
     public CUIVerticalList DebugIDsComponent;
     public CUIPages Pages;
-
     public CUIMultiButton Header;
 
     public List<CUIDebugEventComponent> Events = new List<CUIDebugEventComponent>();
     public int target;
+
 
 
     public void Capture(CUIDebugEvent e)
@@ -41,6 +41,10 @@ namespace CrabUI
         CUIDebugEventComponent ec = new CUIDebugEventComponent(e);
         Events.Add(ec);
         EventsComponent.Append(ec);
+
+        //FIXME why it doesn't work?
+        // ec.OnMouseEnter += (m) => ec.Value.Target.DebugHighlight = true;
+        // ec.OnMouseLeave += (m) => ec.Value.Target.DebugHighlight = false;
       }
       else
       {
@@ -52,8 +56,9 @@ namespace CrabUI
 
     public void Flush()
     {
-      target = 0;
-      Events.ForEach(e => e.Flush());
+      //target = 0;
+      //TODO mb i should add two modes instead of just commenting it out
+      //Events.ForEach(e => e.Flush());
     }
 
     public void MakeIDList()
@@ -74,8 +79,6 @@ namespace CrabUI
         b.OnMouseDown += (m) =>
         {
           c.Debug = !c.Debug;
-          Events.Clear();
-          EventsComponent.RemoveAllChildren();
           MakeIDList();
         };
 
@@ -150,7 +153,12 @@ namespace CrabUI
 
       Header.OnSelect += (b, i) =>
       {
-        if (i == 0) Pages.Open(EventsComponent);
+        if (i == 0)
+        {
+          Events.Clear();
+          EventsComponent.RemoveAllChildren();
+          Pages.Open(EventsComponent);
+        }
         else Pages.Open(DebugIDsComponent);
       };
       Header.Select(0);

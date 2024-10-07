@@ -32,16 +32,22 @@ namespace CrabUI
       l.Append(new CUITextBlock("be be be be be be be be be be be be be be be be be be")
       {
         TextScale = 1.5f,
+        Wrap = true,
         TextAling = new CUIAnchor(CUIAnchorType.CenterCenter),
         BackgroundColor = Color.Red * 0.25f,
+        BorderColor = Color.Lime,
+        BorderThickness = 2,
         FillEmptySpace = new CUIBool2(true, true),
       });
 
       l.Append(new CUITextBlock("be be be be be be be be be be be be be be be be be be")
       {
         TextScale = 1.5f,
+        Wrap = true,
         TextAling = new CUIAnchor(CUIAnchorType.CenterCenter),
         BackgroundColor = Color.Red * 0.25f,
+        BorderColor = Color.Lime,
+        BorderThickness = 2,
         FillEmptySpace = new CUIBool2(true, true),
       });
 

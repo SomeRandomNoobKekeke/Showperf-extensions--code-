@@ -18,20 +18,32 @@ namespace CrabUI
     }
     public bool Wrap;
     private string WrappedText = "";
-
+    private Vector2? WrappedForThisSize;
 
 
     internal override Vector2 AmIOkWithThisSize(Vector2 size)
     {
-      if (Wrap) WrappedText = Font.WrapText(Text, size.X / TextScale - Padding.X * 2);
-      else WrappedText = Text;
+      if (!WrappedForThisSize.HasValue || size != WrappedForThisSize.Value)
+      {
 
-      RealTextSize = Font.MeasureString(WrappedText) * TextScale;
+        if (Wrap) WrappedText = Font.WrapText(Text, size.X / TextScale - Padding.X * 2);
+        else WrappedText = Text;
 
-      Vector2 minSize = RealTextSize + Padding * 2;
-      AbsoluteMin = AbsoluteMin with { Size = minSize };
+        RealTextSize = Font.MeasureString(WrappedText) * TextScale;
 
-      return new Vector2(Math.Max(size.X, minSize.X), Math.Max(size.Y, minSize.Y));
+        Vector2 minSize = RealTextSize + Padding * 2;
+        SetAbsoluteMin(AbsoluteMin with { Size = minSize });
+
+        WrappedForThisSize = size;
+
+        Info(minSize);
+
+        return new Vector2(Math.Max(size.X, minSize.X), Math.Max(size.Y, minSize.Y));
+      }
+      else
+      {
+        return size;
+      }
     }
 
     public CUIAnchor TextAling = new CUIAnchor(CUIAnchorType.LeftTop);

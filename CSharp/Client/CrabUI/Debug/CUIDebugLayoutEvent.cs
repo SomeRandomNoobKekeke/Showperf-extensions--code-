@@ -124,11 +124,18 @@ namespace CrabUI
         Color.Cyan * 0.5f
       );
     }
+    public Color GetColor2(float d)
+    {
+      return ToolBox.GradientLerp(d,
+        Color.Black * 0.5f,
+        Color.Lime * 0.5f
+      );
+    }
 
 
     protected override void Draw(SpriteBatch spriteBatch)
     {
-      //BackgroundColor = GetColor();
+      BackgroundColor = GetColor2(UpdateTimer);
 
       base.Draw(spriteBatch);
 
@@ -136,7 +143,7 @@ namespace CrabUI
 
       GUIStyle.Font.Value.DrawString(spriteBatch, Line2, Real.Position + new Vector2(0, 20), Color.White, rotation: 0, origin: Vector2.Zero, 0.9f, se: SpriteEffects.None, layerDepth: 0.1f);
 
-      //UpdateTimer -= 0.01f;
+      UpdateTimer -= 0.002f;
     }
 
 
@@ -146,6 +153,8 @@ namespace CrabUI
       IgnoreDebug = true;
       BackgroundColor = Color.Green;
       Absolute = new CUINullRect(null, null, null, 40);
+
+
     }
   }
 }
