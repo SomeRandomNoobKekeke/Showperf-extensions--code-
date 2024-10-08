@@ -27,7 +27,7 @@ namespace CrabUI
         child.Layout.propagateChangedDown();
       }
     }
-    private bool changed = true; public bool Changed
+    protected bool changed = true; public bool Changed
     {
       get => changed;
       set
@@ -50,7 +50,7 @@ namespace CrabUI
       absoluteChanged = true;
       Host.Parent?.Layout.propagateAbsoluteChangedUp();
     }
-    private bool absoluteChanged = true; public bool AbsoluteChanged
+    protected bool absoluteChanged = true; public bool AbsoluteChanged
     {
       get => absoluteChanged;
       set
@@ -62,7 +62,7 @@ namespace CrabUI
         // else absoluteChanged = false;
       }
     }
-    public bool decorChanged = true; public bool DecorChanged
+    protected bool decorChanged = true; public bool DecorChanged
     {
       get => decorChanged;
       set
@@ -79,7 +79,7 @@ namespace CrabUI
         {
           foreach (CUIComponent c in Host.Children)
           {
-            c.CulledOut = !c.Real.Intersect(Host.Real);
+            c.CulledOut = !c.UnCullable && !c.Real.Intersect(Host.Real);
           }
         }
 

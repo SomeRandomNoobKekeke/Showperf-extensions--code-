@@ -21,7 +21,7 @@ namespace CrabUI
         text = value;
         NeedReWrapping = true;
         OnPropChanged();
-        //OnAbsolutePropChanged();
+        OnAbsolutePropChanged();
         OnTextChanged?.Invoke();
       }
     }

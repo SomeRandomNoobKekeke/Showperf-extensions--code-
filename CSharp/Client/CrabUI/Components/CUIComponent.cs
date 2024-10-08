@@ -75,6 +75,8 @@ namespace CrabUI
       set => Append(value, name);
     }
 
+    public T Get<T>(string name) where T : CUIComponent => NamedComponents.GetValueOrDefault(name) as T;
+
     public CUIComponent Append(CUIComponent c, string name = null)
     {
       if (c == null) return c;

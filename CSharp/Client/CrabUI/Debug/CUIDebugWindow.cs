@@ -23,10 +23,11 @@ namespace CrabUI
     public CUIVerticalList EventsComponent;
     public CUIVerticalList DebugIDsComponent;
     public CUIPages Pages;
-    public CUIMultiButton Header;
+    public CUIMultiButton PickIDButton;
 
     public List<CUIDebugEventComponent> Events = new List<CUIDebugEventComponent>();
     public int target;
+    public bool Loop { get; set; } = true;
 
 
 
@@ -43,8 +44,8 @@ namespace CrabUI
         EventsComponent.Append(ec);
 
         //FIXME why it doesn't work?
-        // ec.OnMouseEnter += (m) => ec.Value.Target.DebugHighlight = true;
-        // ec.OnMouseLeave += (m) => ec.Value.Target.DebugHighlight = false;
+        ec.OnMouseEnter += (m) => ec.Value.Target.DebugHighlight = true;
+        ec.OnMouseLeave += (m) => ec.Value.Target.DebugHighlight = false;
       }
       else
       {
@@ -56,7 +57,8 @@ namespace CrabUI
 
     public void Flush()
     {
-      target = 0;
+      if (Loop) target = 0;
+
       //TODO mb i should add two modes instead of just commenting it out
       //Events.ForEach(e => e.Flush());
     }
@@ -109,28 +111,39 @@ namespace CrabUI
       this["handle"] = new CUIComponent()
       {
         Absolute = new CUINullRect(null, null, null, 20),
-        IgnoreDebug = true,
       };
 
-      Append(Header = new CUIMultiButton()
+      this["controls"] = new CUIComponent()
       {
-        Absolute = new CUINullRect(null, null, null, 20),
-        ConsumeDragAndDrop = false,
-        IgnoreDebug = true,
-      });
-      Header.Add(new CUIButton("Debug events")
-      {
-        InactiveColor = new Color(0, 0, 0, 128),
-        MousePressedColor = new Color(0, 255, 255, 64),
-        IgnoreDebug = true,
-      });
-      Header.Add(new CUIButton("Debugged components")
-      {
-        InactiveColor = new Color(0, 0, 0, 128),
-        MousePressedColor = new Color(0, 255, 255, 64),
-        IgnoreDebug = true,
-      });
+        FitContent = new CUIBool2(false, true),
+      };
 
+      this["controls"]["loop"] = new CUIToggleButton("loop")
+      {
+        Relative = new CUINullRect(0, 0, 0.5f, null),
+        AddOnStateChange = (state) =>
+        {
+          Loop = state;
+          Events.Clear();
+          EventsComponent.RemoveAllChildren();
+        },
+      };
+
+      this["controls"].Append(PickIDButton = new CUIMultiButton()
+      {
+        Relative = new CUINullRect(0.5f, 0, 0.5f, null),
+        ConsumeDragAndDrop = false,
+      });
+      PickIDButton.Add(new CUIButton("Debug events")
+      {
+        InactiveColor = new Color(0, 0, 0, 128),
+        MousePressedColor = new Color(0, 255, 255, 64),
+      });
+      PickIDButton.Add(new CUIButton("Debugged components")
+      {
+        InactiveColor = new Color(0, 0, 0, 128),
+        MousePressedColor = new Color(0, 255, 255, 64),
+      });
 
       Append(Pages = new CUIPages()
       {
@@ -151,17 +164,19 @@ namespace CrabUI
         IgnoreDebug = true,
       };
 
-      Header.OnSelect += (b, i) =>
-      {
-        if (i == 0)
+      PickIDButton.OnSelect += (b, i) =>
         {
-          // Events.Clear();
-          // EventsComponent.RemoveAllChildren();
-          Pages.Open(EventsComponent);
-        }
-        else Pages.Open(DebugIDsComponent);
-      };
-      Header.Select(0);
+          if (i == 0)
+          {
+            // Events.Clear();
+            // EventsComponent.RemoveAllChildren();
+            Pages.Open(EventsComponent);
+          }
+          else Pages.Open(DebugIDsComponent);
+        };
+      PickIDButton.Select(0);
+
+      this["controls"].Get<CUIToggleButton>("loop").State = true;
 
       IgnoreDebug = true;
     }

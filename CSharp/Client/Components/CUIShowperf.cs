@@ -58,7 +58,6 @@ namespace ShowPerfExtensions
         {
           BackgroundColor = Color.Black * 0.5f,
           FitContent = new CUIBool2(false, true),
-          debug = true,
         };
 
         this["header"].Append(CategoryLine = new CUITextBlock("CategoryLine"));
@@ -68,7 +67,6 @@ namespace ShowPerfExtensions
         this["buttons1"] = new CUIComponent()
         {
           FitContent = new CUIBool2(false, true),
-          debug = true,
         };
 
 
@@ -125,7 +123,6 @@ namespace ShowPerfExtensions
         Pages = (CUIPages)Append(new CUIPages()
         {
           FillEmptySpace = new CUIBool2(false, true),
-          Debug = true,
         });
 
 

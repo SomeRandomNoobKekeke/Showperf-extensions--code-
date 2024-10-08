@@ -75,7 +75,7 @@ namespace CrabUI
       if (totalTime - LastUpdateTime >= UpdateInterval)
       {
         if (OKurwa++ == 0) CUIDebug.Flush();
-        if (OKurwa == 3) OKurwa = 0;
+        if (OKurwa == 1) OKurwa = 0;
 
         if (TreeChanged)
         {
@@ -141,7 +141,7 @@ namespace CrabUI
       {
         RunStraigth(c =>
         {
-          if (!c.Visible || (!c.UnCullable && c.CulledOut)) return;
+          if (!c.Visible || c.CulledOut) return;
           if (c.Parent != null && c.Parent.ScissorRect.HasValue && SRect != c.Parent.ScissorRect.Value)
           {
             SRect = c.Parent.ScissorRect.Value;
