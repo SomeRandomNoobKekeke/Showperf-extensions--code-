@@ -53,7 +53,7 @@ namespace CrabUI
     private CUIComponent? parent; public CUIComponent? Parent
     {
       get => parent;
-      set { parent = value; TreeChanged = true; OnPropChanged(); }
+      set { parent = value; TreeChanged = true; OnPropChanged(); OnAbsolutePropChanged(); }
     }
     private bool treeChanged = true; public bool TreeChanged
     {

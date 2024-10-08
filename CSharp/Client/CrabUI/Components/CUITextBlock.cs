@@ -11,21 +11,28 @@ namespace CrabUI
 {
   public class CUITextBlock : CUIComponent
   {
+    public event Action OnTextChanged;
     private string text = ""; public string Text
     {
       get => text;
-      set { text = value; OnPropChanged(); }
+      set
+      {
+        text = value;
+        NeedReWrapping = true;
+        OnPropChanged();
+        //OnAbsolutePropChanged();
+        OnTextChanged?.Invoke();
+      }
     }
     public bool Wrap;
-    private string WrappedText = "";
-    private Vector2? WrappedForThisSize;
-
+    protected string WrappedText = "";
+    protected Vector2? WrappedForThisSize;
+    protected bool NeedReWrapping;
 
     internal override Vector2 AmIOkWithThisSize(Vector2 size)
     {
-      if (!WrappedForThisSize.HasValue || size != WrappedForThisSize.Value)
+      if (!WrappedForThisSize.HasValue || size != WrappedForThisSize.Value || NeedReWrapping)
       {
-
         if (Wrap) WrappedText = Font.WrapText(Text, size.X / TextScale - Padding.X * 2);
         else WrappedText = Text;
 
@@ -35,6 +42,7 @@ namespace CrabUI
         SetAbsoluteMin(AbsoluteMin with { Size = minSize });
 
         WrappedForThisSize = size;
+        NeedReWrapping = false;
 
         return new Vector2(Math.Max(size.X, minSize.X), Math.Max(size.Y, minSize.Y));
       }

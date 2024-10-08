@@ -55,8 +55,11 @@ namespace CrabUI
       get => absoluteChanged;
       set
       {
+        //HACK this looks excessive, but without this dropdown won't work
+        absoluteChanged = value;
         if (value) Host.Parent?.Layout.propagateAbsoluteChangedUp();
-        else absoluteChanged = false;
+        // if (value) Host.Parent?.Layout.propagateAbsoluteChangedUp();
+        // else absoluteChanged = false;
       }
     }
     public bool decorChanged = true; public bool DecorChanged
@@ -108,16 +111,6 @@ namespace CrabUI
     //TODO idk
     protected CUIRect CheckChildBoundaries(float x, float y, float w, float h)
     {
-      // x < Host.Left
-      if (Host.ChildrenBoundaries.Left.HasValue && x < Host.Real.Left + Host.ChildrenBoundaries.Left.Value)
-      {
-        x = Host.Real.Left + Host.ChildrenBoundaries.Left.Value;
-      }
-      // y < Host.Top
-      if (Host.ChildrenBoundaries.Top.HasValue && y < Host.Real.Top + Host.ChildrenBoundaries.Top.Value)
-      {
-        y = Host.Real.Top + Host.ChildrenBoundaries.Top.Value;
-      }
       // x + w > Host.Right
       if (Host.ChildrenBoundaries.Width.HasValue && x + w > Host.Real.Left + Host.ChildrenBoundaries.Width.Value)
       {
@@ -128,6 +121,17 @@ namespace CrabUI
       {
         y = Host.Real.Top + Host.ChildrenBoundaries.Height.Value - h;
       }
+      // x < Host.Left
+      if (Host.ChildrenBoundaries.Left.HasValue && x < Host.Real.Left + Host.ChildrenBoundaries.Left.Value)
+      {
+        x = Host.Real.Left + Host.ChildrenBoundaries.Left.Value;
+      }
+      // y < Host.Top
+      if (Host.ChildrenBoundaries.Top.HasValue && y < Host.Real.Top + Host.ChildrenBoundaries.Top.Value)
+      {
+        y = Host.Real.Top + Host.ChildrenBoundaries.Top.Value;
+      }
+
 
       return new CUIRect(x, y, w, h);
     }

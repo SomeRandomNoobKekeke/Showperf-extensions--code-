@@ -103,12 +103,12 @@ namespace CrabUI
 
 
         //HACK BaroDev(wide)
-        RunStraigth(c =>
-        {
-          c.Layout.Changed = false;
-          c.Layout.DecorChanged = false;
-          c.Layout.AbsoluteChanged = false;
-        });
+        // RunStraigth(c =>
+        // {
+        //   c.Layout.Changed = false;
+        //   c.Layout.DecorChanged = false;
+        //   c.Layout.AbsoluteChanged = false;
+        // });
 
 
 

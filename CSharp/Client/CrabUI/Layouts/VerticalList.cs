@@ -79,10 +79,7 @@ namespace CrabUI
 
             s = new Vector2(w, h);
             Vector2 okSize = c.AmIOkWithThisSize(s);
-            if (s != okSize)
-            {
-              CUIDebug.Capture(Host, c, "Layout.Update", "AmIOkWithThisSize", "s", okSize.ToString());
-            }
+            CUIDebug.Capture(Host, c, "Layout.Update", "AmIOkWithThisSize", "s", okSize.ToString());
 
             s = okSize;
 
@@ -132,18 +129,9 @@ namespace CrabUI
         foreach (CUIComponent c in Host.Children)
         {
           float w = 0;
-          if (c.Absolute.Width.HasValue)
-          {
-            w = c.Absolute.Width.Value;
-          }
-          if (c.AbsoluteMin.Width.HasValue)
-          {
-            w = Math.Max(w, c.AbsoluteMin.Width.Value);
-          }
-          if (c.AbsoluteMax.Width.HasValue)
-          {
-            w = Math.Min(w, c.AbsoluteMax.Width.Value);
-          }
+          if (c.Absolute.Width.HasValue) w = c.Absolute.Width.Value;
+          if (c.AbsoluteMin.Width.HasValue) w = Math.Max(w, c.AbsoluteMin.Width.Value);
+          if (c.AbsoluteMax.Width.HasValue) w = Math.Min(w, c.AbsoluteMax.Width.Value);
 
           tw = Math.Max(tw, w);
         }

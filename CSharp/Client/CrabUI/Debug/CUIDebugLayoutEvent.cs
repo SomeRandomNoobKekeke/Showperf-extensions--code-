@@ -56,7 +56,7 @@ namespace CrabUI
         else
         {
           Visible = true; IgnoreEvents = false;
-          UpdateTimer = 1f;
+          LastUpdate = Timing.TotalTime;
           MakeText();
           AssignColor();
         }
@@ -111,6 +111,7 @@ namespace CrabUI
     public string Line2 = "";
 
     public float UpdateTimer;
+    public double LastUpdate;
 
     public Color GetColor(float d)
     {
@@ -126,24 +127,22 @@ namespace CrabUI
     }
     public Color GetColor2(float d)
     {
-      return ToolBox.GradientLerp(d,
-        Color.Black * 0.5f,
-        Color.Lime * 0.5f
+      return ToolBox.GradientLerp(Math.Min(0.8f, d),
+        CapturedIDs[Value.Target.ID],
+        Color.Black * 0.5f
       );
     }
 
 
     protected override void Draw(SpriteBatch spriteBatch)
     {
-      BackgroundColor = GetColor2(UpdateTimer);
+      BackgroundColor = GetColor2((float)(Timing.TotalTime - LastUpdate));
 
       base.Draw(spriteBatch);
 
       GUIStyle.Font.Value.DrawString(spriteBatch, Line1, Real.Position, Color.White, rotation: 0, origin: Vector2.Zero, 0.9f, se: SpriteEffects.None, layerDepth: 0.1f);
 
       GUIStyle.Font.Value.DrawString(spriteBatch, Line2, Real.Position + new Vector2(0, 20), Color.White, rotation: 0, origin: Vector2.Zero, 0.9f, se: SpriteEffects.None, layerDepth: 0.1f);
-
-      UpdateTimer -= 0.002f;
     }
 
 

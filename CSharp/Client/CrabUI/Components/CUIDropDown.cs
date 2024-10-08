@@ -10,15 +10,51 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace CrabUI
 {
-
-  //FIXME i'm broked 
+  //FIXME i'm broken
   public class CUIDropDown : CUIButton
   {
+    #region ------------------ CUIDropDownOption ------------------
+    public class Option : CUITextBlock
+    {
+      public CUIDropDown Host;
+      //TODO mb Value should be object
+      public string Value;
+      public Color HoverColor;
+
+      protected override void Draw(SpriteBatch spriteBatch)
+      {
+        BackgroundColor = Color.Transparent;
+        if (MouseOver) BackgroundColor = HoverColor;
+        base.Draw(spriteBatch);
+      }
+
+      public Option(string text, string value, CUIDropDown host) : base(text)
+      {
+        Host = host;
+        Value = value;
+
+        HoverColor = CUIPallete.Default.Tertiary.OffHover;
+        TextColor = CUIPallete.Default.Tertiary.Text;
+
+        Relative = new CUINullRect(0, null, 1, null);
+
+        OnMouseDown += (CUIMouse m) =>
+        {
+          Host.Select(this);
+          m.ClickConsumed = true;
+        };
+        OnMouseDown += (CUIMouse m) => SoundPlayer.PlayUISound(Host.ClickSound);
+
+        OnTextChanged += () => { if (this == Host.Selected) Host.Text = Text; };
+      }
+    }
+    #endregion
+    #region ------------------ CUIDropDownBox ------------------
     public class CUIDropDownBox : CUIVerticalList
     {
       public CUIDropDown Host;
 
-      public List<CUIDropDownOption> Options = new List<CUIDropDownOption>();
+      public List<Option> Options = new List<Option>();
 
       private bool opened; public bool Opened
       {
@@ -37,12 +73,13 @@ namespace CrabUI
       public void Toggle() => Opened = !Opened;
 
 
-      //HACK mmm... sneaky text objects
-      public CUIDropDownOption Add(object text, object value = null)
+
+      public Option Add(object text, object value = null) => Add(text.ToString(), value?.ToString());
+      public Option Add(string text, string value = null)
       {
         value ??= text;
 
-        CUIDropDownOption o = new CUIDropDownOption(text.ToString(), value.ToString(), Host);
+        Option o = new Option(text, value, Host);
 
         Options.Add(o);
         Append(o);
@@ -73,50 +110,21 @@ namespace CrabUI
 
         CUI.Main.OnMouseDown += (m) => Close();
 
+
         Close();
       }
     }
+    #endregion
+    #region ------------------ CUIDropDown ------------------
 
 
-    public class CUIDropDownOption : CUITextBlock
-    {
-      public CUIDropDown Host;
-      //TODO mb Value should be object
-      public string Value;
-      public Color HoverColor;
-
-      protected override void Draw(SpriteBatch spriteBatch)
-      {
-        BackgroundColor = Color.Transparent;
-        if (MouseOver) BackgroundColor = HoverColor;
-        base.Draw(spriteBatch);
-      }
-
-      public CUIDropDownOption(string text, string value, CUIDropDown host) : base(text)
-      {
-        Host = host;
-        Value = value;
-
-        HoverColor = CUIPallete.Default.Tertiary.OffHover;
-        TextColor = CUIPallete.Default.Tertiary.Text;
-
-        Relative = new CUINullRect(0, null, 1, null);
-
-        OnMouseDown += (CUIMouse m) =>
-        {
-          Host.Select(this);
-          m.ClickConsumed = true;
-        };
-        OnMouseDown += (CUIMouse m) => SoundPlayer.PlayUISound(Host.ClickSound);
-      }
-    }
     public GUISoundType ClickSound { get; set; } = GUISoundType.Select;
 
 
     public CUIDropDownBox Box;
-    public CUIDropDownOption Selected;
+    public Option Selected;
 
-    public CUIDropDownOption Add(object text, object value = null) => Box.Add(text, value);
+    public Option Add(object text, object value = null) => Box.Add(text, value);
     public void Open() => Box.Open();
     public void Close() => Box.Close();
     public void Toggle() => Box.Toggle();
@@ -124,12 +132,18 @@ namespace CrabUI
     public event Action<string> OnSelect;
 
     public void Select(object value) => Select(Box.Options.Find(o => o.Value == value.ToString()));
-    public void Select(CUIDropDownOption option)
+    public void Select(Option option)
     {
       if (option == null) return;
       Selected = option;
       OnSelect?.Invoke(Selected.Value);
       Text = option.Text;
+    }
+
+    internal override Vector2 AmIOkWithThisSize(Vector2 size)
+    {
+      Vector2 s = base.AmIOkWithThisSize(size);
+      return new Vector2(size.X, s.Y);
     }
 
 
@@ -139,7 +153,7 @@ namespace CrabUI
 
       Box = new CUIDropDownBox(this);
       Append(Box);
-      OnMouseDown += (CUIMouse m) => Toggle();
+      OnMouseDown += (m) => Toggle();
       Close();
     }
 
@@ -149,5 +163,7 @@ namespace CrabUI
     {
       Relative = new CUINullRect(x, y, w, h);
     }
+
+    #endregion
   }
 }
