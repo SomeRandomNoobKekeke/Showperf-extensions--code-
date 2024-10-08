@@ -4,3 +4,6 @@ sprites
 max right
 cursor
 Shadow dom + shadow Layout
+
+lock draw
+use int for positions and sizes 

@@ -50,6 +50,7 @@ namespace CrabUI
     {
       BackgroundColor = Color.Transparent;
       BorderColor = Color.Transparent;
+      UnCullable = true;
     }
 
     public CUIMapContent(float? x, float? y, float? w, float? h) : this()

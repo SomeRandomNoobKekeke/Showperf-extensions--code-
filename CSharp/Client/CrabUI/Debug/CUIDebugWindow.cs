@@ -155,8 +155,8 @@ namespace CrabUI
       {
         if (i == 0)
         {
-          Events.Clear();
-          EventsComponent.RemoveAllChildren();
+          // Events.Clear();
+          // EventsComponent.RemoveAllChildren();
           Pages.Open(EventsComponent);
         }
         else Pages.Open(DebugIDsComponent);

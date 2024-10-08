@@ -12,6 +12,7 @@ namespace CrabUI
   public class CUITextBlock : CUIComponent
   {
     public event Action OnTextChanged;
+    public Action AddOnTextChanged { set { OnTextChanged += value; } }
     private string text = ""; public string Text
     {
       get => text;

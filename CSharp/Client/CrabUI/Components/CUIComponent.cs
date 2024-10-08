@@ -18,7 +18,7 @@ namespace CrabUI
     public static int MaxID = 0;
     public static Dictionary<int, CUIComponent> ComponentsById = new Dictionary<int, CUIComponent>();
     public int ID;
-    private bool debug; public bool Debug
+    public bool debug; public bool Debug
     {
       get => debug;
       set
@@ -39,7 +39,6 @@ namespace CrabUI
       }
     }
 
-
     public Stopwatch sw = new Stopwatch();
 
     public static Vector2 GameScreenSize => new Vector2(GameMain.GraphicsWidth, GameMain.GraphicsHeight);
@@ -55,6 +54,8 @@ namespace CrabUI
       get => parent;
       set { parent = value; TreeChanged = true; OnPropChanged(); OnAbsolutePropChanged(); }
     }
+    //TODO do i need OnAbsolutePropChanged(); here?
+
     private bool treeChanged = true; public bool TreeChanged
     {
       get => treeChanged;
@@ -149,6 +150,7 @@ namespace CrabUI
       set { visible = value; foreach (var child in Children) child.Visible = value; }
     }
 
+    public bool UnCullable; // >:(
     internal bool CulledOut;
 
 
@@ -167,12 +169,18 @@ namespace CrabUI
     private Vector2 childrenOffset; public Vector2 ChildrenOffset
     {
       get => childrenOffset;
-      set
-      {
-        childrenOffset = value;
-        OnChildrenPropChanged();
-      }
+      set => SetChildrenOffset(value);
     }
+    internal void SetChildrenOffset(Vector2 value, [CallerMemberName] string memberName = "")
+    {
+      childrenOffset = value;
+      // if (ComponentInitialized)
+      // {
+      //   CUIDebug.Capture(null, this, "SetChildrenOffset", memberName, "childrenOffset", childrenOffset.ToString());
+      // }
+      OnChildrenPropChanged();
+    }
+
     internal virtual void UpdatePseudoChildren()
     {
       LeftResizeHandle.Update();
@@ -229,14 +237,24 @@ namespace CrabUI
 
 
     // Without wrappers they will throw FieldAccessException
+    public event Action OnUpdate; internal void InvokeOnUpdate() => OnUpdate?.Invoke();
+    public Action AddOnUpdate { set { OnUpdate += value; } }
     public event Action<CUIMouse> OnMouseLeave; internal void InvokeOnMouseLeave(CUIMouse m) => OnMouseLeave?.Invoke(m);
+    public Action<CUIMouse> AddOnMouseLeave { set { OnMouseLeave += value; } }
     public event Action<CUIMouse> OnMouseEnter; internal void InvokeOnMouseEnter(CUIMouse m) => OnMouseEnter?.Invoke(m);
+    public Action<CUIMouse> AddOnMouseEnter { set { OnMouseEnter += value; } }
     public event Action<CUIMouse> OnMouseDown; internal void InvokeOnMouseDown(CUIMouse m) => OnMouseDown?.Invoke(m);
+    public Action<CUIMouse> AddOnMouseDown { set { OnMouseDown += value; } }
     public event Action<CUIMouse> OnMouseUp; internal void InvokeOnMouseUp(CUIMouse m) => OnMouseUp?.Invoke(m);
+    public Action<CUIMouse> AddOnMouseUp { set { OnMouseUp += value; } }
     public event Action<CUIMouse> OnDClick; internal void InvokeOnDClick(CUIMouse m) => OnDClick?.Invoke(m);
+    public Action<CUIMouse> AddOnDClick { set { OnDClick += value; } }
     public event Action<float> OnScroll; internal void InvokeOnScroll(float scroll) => OnScroll?.Invoke(scroll);
+    public Action<float> AddOnScroll { set { OnScroll += value; } }
     public event Action<float, float> OnDrag; internal void InvokeOnDrag(float x, float y) => OnDrag?.Invoke(x, y);
+    public Action<float, float> AddOnDrag { set { OnDrag += value; } }
     public event Action<float, float> OnSwipe; internal void InvokeOnSwipe(float x, float y) => OnSwipe?.Invoke(x, y);
+    public Action<float, float> AddOnSwipe { set { OnSwipe += value; } }
 
     public CUIDragHandle DragHandle;
     public bool Draggable
@@ -549,7 +567,7 @@ namespace CrabUI
       CUI.log($"{this} {msg ?? "null"}", Color.Yellow);
     }
 
-    public void PrintLayout() => Info($"{Real} {Anchor.Type} A:{Absolute} R:{Relative} AMin:{AbsoluteMin} RMin:{RelativeMin} AMax:{AbsoluteMax} RMax:{RelativeMax}");
+    public void PrintLayout() => Info($"{Real} {Anchor.Type} Z:{ZIndex} A:{Absolute} R:{Relative} AMin:{AbsoluteMin} RMin:{RelativeMin} AMax:{AbsoluteMax} RMax:{RelativeMax}");
 
   }
 }

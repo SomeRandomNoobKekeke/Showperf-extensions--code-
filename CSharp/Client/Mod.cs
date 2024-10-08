@@ -30,7 +30,7 @@ namespace ShowPerfExtensions
 
     public static CaptureWindow Window;
     public static CUIShowperf Showperf;
-    public CUIMainComponent CUI;
+    public static CUIMainComponent CUI;
 
 
     public static void EnsureCategory(int cat) => Window.EnsureCategory(cat);

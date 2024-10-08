@@ -29,6 +29,7 @@ namespace CrabUI
     }
 
     public event Action<bool> OnStateChange;
+    public Action<bool> AddOnStateChange { set { OnStateChange += value; } }
     private bool state; public bool State
     {
       get => state;

@@ -21,8 +21,8 @@ namespace CrabUI
     public long DrawTime;
     public long UpdateTime;
     public double UpdateInterval = 1.0 / 300.0;
-    public event Action OnUpdate;
     public event Action OnTreeChanged;
+    public Action AddOnTreeChanged { set { OnTreeChanged += value; } }
 
     public CUIDragHandle GrabbedDragHandle;
     public CUIResizeHandle GrabbedResizeHandle;
@@ -68,13 +68,14 @@ namespace CrabUI
 
     #region Update
 
+    private int OKurwa = 0;
     private double LastUpdateTime;
     public void Update(double totalTime)
     {
-
       if (totalTime - LastUpdateTime >= UpdateInterval)
       {
-        CUIDebug.Flush();
+        if (OKurwa++ == 0) CUIDebug.Flush();
+        if (OKurwa == 3) OKurwa = 0;
 
         if (TreeChanged)
         {
@@ -83,6 +84,8 @@ namespace CrabUI
           FlattenTree();
           TreeChanged = false;
         }
+
+
 
         CUIDebug.Capture(null, this, "Update", "", "HandleMouse", "");
         HandleMouse();
@@ -102,6 +105,7 @@ namespace CrabUI
 
 
 
+
         //HACK BaroDev(wide)
         // RunStraigth(c =>
         // {
@@ -111,8 +115,7 @@ namespace CrabUI
         // });
 
 
-
-        OnUpdate?.Invoke();
+        RunStraigth(c => c.InvokeOnUpdate());
 
         LastUpdateTime = totalTime;
       }
@@ -138,7 +141,7 @@ namespace CrabUI
       {
         RunStraigth(c =>
         {
-          if (!c.Visible || c.CulledOut) return;
+          if (!c.Visible || (!c.UnCullable && c.CulledOut)) return;
           if (c.Parent != null && c.Parent.ScissorRect.HasValue && SRect != c.Parent.ScissorRect.Value)
           {
             SRect = c.Parent.ScissorRect.Value;

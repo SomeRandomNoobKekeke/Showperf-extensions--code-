@@ -54,65 +54,50 @@ namespace ShowPerfExtensions
 
       public void CreateGUI()
       {
-
-
-        Append(Header = new CUIVerticalList()
+        this["header"] = new CUIVerticalList()
         {
           BackgroundColor = Color.Black * 0.5f,
           FitContent = new CUIBool2(false, true),
-        });
+          debug = true,
+        };
 
-        Header.Append(CategoryLine = new CUITextBlock("CategoryLine"));
-        Header.Append(SumLine = new CUITextBlock("SumLine"));
+        this["header"].Append(CategoryLine = new CUITextBlock("CategoryLine"));
+        this["header"].Append(SumLine = new CUITextBlock("SumLine"));
 
 
-        this["buttons1"] = new CUIHorizontalList()
+        this["buttons1"] = new CUIComponent()
         {
           FitContent = new CUIBool2(false, true),
-          HideChildrenOutsideFrame = false,
-
+          debug = true,
         };
 
-        this["buttons2"] = new CUIHorizontalList()
+
+
+        this["buttons1"]["ById"] = new CUIToggleButton("By Id")
         {
-          BackgroundColor = Color.Yellow,
-          Absolute = new CUINullRect(0, 0, null, 30),
+          Relative = new CUINullRect(0, 0, 0.5f, null),
+          AddOnStateChange = (state) => Capture.SetByID(CName.MapEntityDrawing, state),
         };
-        this["buttons3"] = new CUIHorizontalList()
-        {
-          FitContent = new CUIBool2(false, true),
-          HideChildrenOutsideFrame = false,
-        };
-
-
-        ById = new CUIToggleButton("By Id")
-        {
-          FillEmptySpace = new CUIBool2(true, false),
-        };
-        ById.OnStateChange += (state) => Capture.SetByID(CName.MapEntityDrawing, state);
-        this["buttons1"].Append(ById);
 
         CUIMultiButton m = new CUIMultiButton()
         {
           FillEmptySpace = new CUIBool2(true, false),
+          Relative = new CUINullRect(0.5f, 0, 0.5f, null),
+          AddOnSelect = (b, i) => Window.Mode = (CaptureWindowMode)b.Data,
         };
 
-        m.BackgroundColor = Color.Red;
         m.Add(new CUIButton("Mean")).Data = CaptureWindowMode.Mean;
         m.Add(new CUIButton("Sum")).Data = CaptureWindowMode.Sum;
         // m.Add(new CUIButton("Spike")).Data = CaptureWindowMode.Spike;
 
-        m.OnSelect += (b, i) => Window.Mode = (CaptureWindowMode)b.Data;
         m.Select(0);
 
-        this["buttons1"].Append(m);
-
-
+        this["buttons1"]["mode"] = m;
 
 
         SubTypeDD = new CUIDropDown()
         {
-          AbsoluteMin = new CUINullRect(null, null, null, 40),
+          AddOnSelect = (v) => CaptureFrom = Enum.Parse<SubType>(v),
         };
 
         foreach (SubType st in Enum.GetValues(typeof(SubType)))
@@ -120,27 +105,40 @@ namespace ShowPerfExtensions
           SubTypeDD.Add(st);
         }
 
-        SubTypeDD.OnSelect += (v) => CaptureFrom = Enum.Parse<SubType>(v);
         SubTypeDD.Select(SubType.All);
-        this["buttons3"].Append(SubTypeDD);
+        this["SubTypeDD"] = SubTypeDD;
 
 
 
 
-        CUIComponent bb = Append(new CUIButton("Click"));
-        bb.OnMouseDown += (CUIMouse m) =>
+
+        this["bb"] = new CUIButton("Click")
         {
-          if (Pages.IsOpened(TickList)) { Pages.Open(Map); return; }
-          if (Pages.IsOpened(Map)) { Pages.Open(TickList); return; }
+          AddOnMouseDown = (CUIMouse m) =>
+          {
+            if (Pages.IsOpened(TickList)) { Pages.Open(Map); return; }
+            if (Pages.IsOpened(Map)) { Pages.Open(TickList); return; }
+          },
         };
-        Pages = (CUIPages)Append(new CUIPages());
-        Pages.FillEmptySpace = new CUIBool2(false, true);
+
+
+        Pages = (CUIPages)Append(new CUIPages()
+        {
+          FillEmptySpace = new CUIBool2(false, true),
+          Debug = true,
+        });
 
 
 
 
-        TickList = new CUITickList();
-        TickList.Relative = new CUINullRect(0, 0, 1, 1);
+
+        TickList = new CUITickList()
+        {
+          Relative = new CUINullRect(0, 0, 1, 1),
+          Debug = true,
+        };
+
+
 
         Map = new CUIMap(0, 0, 1, 1)
         {
@@ -162,7 +160,7 @@ namespace ShowPerfExtensions
         Pages.Open(TickList);
 
 
-        Debug = true;
+
       }
 
       public CUIShowperf() : base()

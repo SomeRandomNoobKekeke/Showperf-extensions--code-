@@ -42,6 +42,8 @@ namespace CrabUI
           float w = 0;
           Vector2 s = new Vector2(w, h);
 
+
+          //FIXME FillEmptySpace jumping when parent shrinks below their min size
           if (!c.FillEmptySpace.X)
           {
             if (c.Relative.Width.HasValue)
@@ -95,7 +97,7 @@ namespace CrabUI
           if (c.FillEmptySpace.X) Resizible.Add(size);
         }
 
-        float dif = Host.Real.Width - TotalWidth;
+        float dif = Math.Max(0, Host.Real.Width - TotalWidth);
 
         Resizible.ForEach(c =>
         {

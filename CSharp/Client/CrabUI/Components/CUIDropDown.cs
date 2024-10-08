@@ -130,6 +130,7 @@ namespace CrabUI
     public void Toggle() => Box.Toggle();
 
     public event Action<string> OnSelect;
+    public Action<string> AddOnSelect { set { OnSelect += value; } }
 
     public void Select(object value) => Select(Box.Options.Find(o => o.Value == value.ToString()));
     public void Select(Option option)

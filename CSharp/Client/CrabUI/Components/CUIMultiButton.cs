@@ -13,6 +13,7 @@ namespace CrabUI
   public class CUIMultiButton : CUIComponent
   {
     public event Action<CUIButton, int> OnSelect;
+    public Action<CUIButton, int> AddOnSelect { set { OnSelect += value; } }
 
     //TODO this could store any component and not just buttons
     public List<CUIButton> Buttons = new List<CUIButton>();
