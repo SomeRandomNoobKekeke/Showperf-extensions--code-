@@ -72,7 +72,6 @@ namespace CrabUI
 
       RunRecursiveOn(CUI.Main, (component, depth) =>
       {
-        CUI.log(component);
         l.Add(component);
       });
 

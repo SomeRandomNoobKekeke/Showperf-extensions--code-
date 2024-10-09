@@ -54,21 +54,16 @@ namespace ShowPerfExtensions
         Showperf.Absolute.Size
       );
 
-
-
-
       Showperf.States["init"] = Showperf.Clone();
 
       CUI.Append(Showperf);
       CUI.OnUpdate += () => Showperf.Update();
-
       Showperf.Capture.Toggle(CName.MapEntityDrawing);
 
+      //CUI.Load(CUITest.CUIDropDown);
 
-      //CUI.Load(CUITest.UpdatePropagation);
-      //CUIDebugWindow.Open();
-      //CUIDebugWindow.Main.Loop = false;
-      //CUI.Debug = true;
+      CUIDebugWindow.Open();
+
 
       PatchAll();
       addCommands();

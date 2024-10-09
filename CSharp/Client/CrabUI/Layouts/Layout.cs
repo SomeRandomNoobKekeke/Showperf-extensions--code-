@@ -35,16 +35,16 @@ namespace CrabUI
         changed = value;
         if (value)
         {
-          // This seems cleaner, but has devastating fps impact
-          // if (Host.Parent != null) Host.Parent.Layout.propagateChangedDown();
-          // else propagateChangedDown();
+          //TODO Test performance of this cheap solution
+          if (Host.Parent != null) Host.Parent.Layout.propagateChangedDown();
+          else propagateChangedDown();
 
-          DecorChanged = true;
-          if (Host.Parent != null) Host.Parent.Layout.changed = true;
-          foreach (CUIComponent child in Host.Children)
-          {
-            child.Layout.propagateChangedDown();
-          }
+          // DecorChanged = true;
+          // if (Host.Parent != null) Host.Parent.Layout.changed = true;
+          // foreach (CUIComponent child in Host.Children)
+          // {
+          //   child.Layout.propagateChangedDown();
+          // }
         }
       }
     }
@@ -60,10 +60,12 @@ namespace CrabUI
       set
       {
         //HACK this looks excessive, but without this dropdown won't work
-        absoluteChanged = value;
-        if (value) Host.Parent?.Layout.propagateAbsoluteChangedUp();
+        // absoluteChanged = value;
         // if (value) Host.Parent?.Layout.propagateAbsoluteChangedUp();
-        // else absoluteChanged = false;
+
+        //TODO is this enough?
+        if (!value) absoluteChanged = false;
+        if (value && Host.Parent != null) Host.Parent.Layout.absoluteChanged = true;
       }
     }
     protected bool decorChanged = true; public bool DecorChanged

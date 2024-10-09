@@ -22,7 +22,7 @@ namespace CrabUI
     public static Vector2 GameScreenSize => new Vector2(GameMain.GraphicsWidth, GameMain.GraphicsHeight);
     public static Rectangle GameScreenRect => new Rectangle(0, 0, GameMain.GraphicsWidth, GameMain.GraphicsHeight);
     public static GUIButton dummyComponent = new GUIButton(new RectTransform(new Point(0, 0)));
-    protected static void RunRecursiveOn(CUIComponent component, Action<CUIComponent, int> action, int depth = 0)
+    public static void RunRecursiveOn(CUIComponent component, Action<CUIComponent, int> action, int depth = 0)
     {
       action(component, depth);
       foreach (CUIComponent child in component.Children)
