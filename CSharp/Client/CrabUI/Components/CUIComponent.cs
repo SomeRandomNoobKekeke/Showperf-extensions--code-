@@ -287,16 +287,16 @@ namespace CrabUI
     // Without wrappers they will throw FieldAccessException
     public event Action OnUpdate; internal void InvokeOnUpdate() => OnUpdate?.Invoke();
     public Action AddOnUpdate { set { OnUpdate += value; } }
-    public event Action<CUIMouse> OnMouseLeave; internal void InvokeOnMouseLeave(CUIMouse m) => OnMouseLeave?.Invoke(m);
-    public Action<CUIMouse> AddOnMouseLeave { set { OnMouseLeave += value; } }
-    public event Action<CUIMouse> OnMouseEnter; internal void InvokeOnMouseEnter(CUIMouse m) => OnMouseEnter?.Invoke(m);
-    public Action<CUIMouse> AddOnMouseEnter { set { OnMouseEnter += value; } }
-    public event Action<CUIMouse> OnMouseDown; internal void InvokeOnMouseDown(CUIMouse m) => OnMouseDown?.Invoke(m);
-    public Action<CUIMouse> AddOnMouseDown { set { OnMouseDown += value; } }
-    public event Action<CUIMouse> OnMouseUp; internal void InvokeOnMouseUp(CUIMouse m) => OnMouseUp?.Invoke(m);
-    public Action<CUIMouse> AddOnMouseUp { set { OnMouseUp += value; } }
-    public event Action<CUIMouse> OnDClick; internal void InvokeOnDClick(CUIMouse m) => OnDClick?.Invoke(m);
-    public Action<CUIMouse> AddOnDClick { set { OnDClick += value; } }
+    public event Action<CUIInput> OnMouseLeave; internal void InvokeOnMouseLeave(CUIInput e) => OnMouseLeave?.Invoke(e);
+    public Action<CUIInput> AddOnMouseLeave { set { OnMouseLeave += value; } }
+    public event Action<CUIInput> OnMouseEnter; internal void InvokeOnMouseEnter(CUIInput e) => OnMouseEnter?.Invoke(e);
+    public Action<CUIInput> AddOnMouseEnter { set { OnMouseEnter += value; } }
+    public event Action<CUIInput> OnMouseDown; internal void InvokeOnMouseDown(CUIInput e) => OnMouseDown?.Invoke(e);
+    public Action<CUIInput> AddOnMouseDown { set { OnMouseDown += value; } }
+    public event Action<CUIInput> OnMouseUp; internal void InvokeOnMouseUp(CUIInput e) => OnMouseUp?.Invoke(e);
+    public Action<CUIInput> AddOnMouseUp { set { OnMouseUp += value; } }
+    public event Action<CUIInput> OnDClick; internal void InvokeOnDClick(CUIInput e) => OnDClick?.Invoke(e);
+    public Action<CUIInput> AddOnDClick { set { OnDClick += value; } }
     public event Action<float> OnScroll; internal void InvokeOnScroll(float scroll) => OnScroll?.Invoke(scroll);
     public Action<float> AddOnScroll { set { OnScroll += value; } }
     public event Action<float, float> OnDrag; internal void InvokeOnDrag(float x, float y) => OnDrag?.Invoke(x, y);

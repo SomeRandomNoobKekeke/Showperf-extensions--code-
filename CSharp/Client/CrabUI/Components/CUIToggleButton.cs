@@ -73,8 +73,8 @@ namespace CrabUI
       TextAling.Type = CUIAnchorType.CenterCenter;
       Padding = new Vector2(4, 2);
 
-      OnMouseDown += (CUIMouse m) => SoundPlayer.PlayUISound(ClickSound);
-      OnMouseDown += (CUIMouse m) => State = !State;
+      OnMouseDown += (e) => SoundPlayer.PlayUISound(ClickSound);
+      OnMouseDown += (e) => State = !State;
     }
 
     public CUIToggleButton(string text, float? width, float? height) : this(text)

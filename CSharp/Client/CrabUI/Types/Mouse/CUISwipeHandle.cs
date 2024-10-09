@@ -17,11 +17,11 @@ namespace CrabUI
     public bool Swipeable;
     public Vector2 PrevPosition;
     public CUIMouseEvent Trigger = CUIMouseEvent.Down;
-    public bool ShouldStart(CUIMouse mouse)
+    public bool ShouldStart(CUIInput input)
     {
       return Swipeable && (
-        (Trigger == CUIMouseEvent.Down && mouse.Down) ||
-        (Trigger == CUIMouseEvent.DClick && mouse.DoubleClick)
+        (Trigger == CUIMouseEvent.Down && input.MouseDown) ||
+        (Trigger == CUIMouseEvent.DClick && input.DoubleClick)
       );
     }
 
@@ -37,10 +37,10 @@ namespace CrabUI
       CUI.Main.OnSwipeEnd(this);
     }
 
-    public void Swipe(CUIMouse mouse)
+    public void Swipe(CUIInput input)
     {
-      Host.ChildrenOffset += mouse.PositionDif;
-      Host.InvokeOnSwipe(mouse.PositionDif.X, mouse.PositionDif.Y);
+      Host.ChildrenOffset += input.MousePositionDif;
+      Host.InvokeOnSwipe(input.MousePositionDif.X, input.MousePositionDif.Y);
     }
 
     public CUISwipeHandle(CUIComponent host)

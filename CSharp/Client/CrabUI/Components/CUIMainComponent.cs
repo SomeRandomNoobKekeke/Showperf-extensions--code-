@@ -28,7 +28,7 @@ namespace CrabUI
     public CUIResizeHandle GrabbedResizeHandle;
     public CUISwipeHandle GrabbedSwipeHandle;
     public CUIComponent MouseOn;
-    public CUIMouse Mouse = new CUIMouse();
+    public CUIInput Input = new CUIInput();
 
 
     private Stopwatch sw;
@@ -88,7 +88,7 @@ namespace CrabUI
 
 
         CUIDebug.Capture(null, this, "Update", "", "HandleMouse", "");
-        HandleMouse();
+        HandleMouse(totalTime);
 
         CUIDebug.Capture(null, this, "Update", "", "RunReverse", "");
         RunReverse(c =>
@@ -180,24 +180,24 @@ namespace CrabUI
     public void OnSwipeEnd(CUISwipeHandle h) { if (h == GrabbedSwipeHandle) GrabbedSwipeHandle = null; }
 
 
-    private void HandleMouse()
+    private void HandleMouse(double totalTime)
     {
-      Mouse.Scan();
+      Input.Scan(totalTime);
 
-      if (!Mouse.SomethingHappened) return;
+      if (!Input.SomethingHappened) return;
 
-      if (!Mouse.Held)
+      if (!Input.MouseHeld)
       {
         GrabbedDragHandle?.EndDrag();
         GrabbedResizeHandle?.EndResize();
         GrabbedSwipeHandle?.EndSwipe();
       }
 
-      if (Mouse.Moved)
+      if (Input.MouseMoved)
       {
-        GrabbedDragHandle?.DragTo(Mouse.Position);
-        GrabbedResizeHandle?.Resize(Mouse.Position);
-        GrabbedSwipeHandle?.Swipe(Mouse);
+        GrabbedDragHandle?.DragTo(Input.MousePosition);
+        GrabbedResizeHandle?.Resize(Input.MousePosition);
+        GrabbedSwipeHandle?.Swipe(Input);
       }
 
       //TODO think where should i put it?
@@ -218,10 +218,10 @@ namespace CrabUI
       {
         RunStraigth(c =>
         {
-          bool ok = !c.IgnoreEvents && c.Real.Contains(Mouse.Position);
+          bool ok = !c.IgnoreEvents && c.Real.Contains(Input.MousePosition);
 
           if (c.Parent != null && c.Parent.ScissorRect.HasValue &&
-              !c.Parent.ScissorRect.Value.Contains(Mouse.CurrentState.Position))
+              !c.Parent.ScissorRect.Value.Contains(Input.CurrentMouseState.Position))
           {
             ok = false;
           }
@@ -238,8 +238,8 @@ namespace CrabUI
       //Enter / Leave
       if (CurrentMouseOn != MouseOn)
       {
-        MouseOn?.InvokeOnMouseLeave(Mouse);
-        CurrentMouseOn?.InvokeOnMouseEnter(Mouse);
+        MouseOn?.InvokeOnMouseLeave(Input);
+        CurrentMouseOn?.InvokeOnMouseEnter(Input);
 
         MouseOn = CurrentMouseOn;
       }
@@ -247,17 +247,17 @@ namespace CrabUI
       // Resize
       for (int i = MouseOnList.Count - 1; i >= 0; i--)
       {
-        if (MouseOnList[i].RightResizeHandle.ShouldStart(Mouse))
+        if (MouseOnList[i].RightResizeHandle.ShouldStart(Input))
         {
           GrabbedResizeHandle = MouseOnList[i].RightResizeHandle;
-          GrabbedResizeHandle.BeginResize(Mouse.Position);
+          GrabbedResizeHandle.BeginResize(Input.MousePosition);
           break;
         }
 
-        if (MouseOnList[i].LeftResizeHandle.ShouldStart(Mouse))
+        if (MouseOnList[i].LeftResizeHandle.ShouldStart(Input))
         {
           GrabbedResizeHandle = MouseOnList[i].LeftResizeHandle;
-          GrabbedResizeHandle.BeginResize(Mouse.Position);
+          GrabbedResizeHandle.BeginResize(Input.MousePosition);
           break;
         }
       }
@@ -266,7 +266,7 @@ namespace CrabUI
       //Scroll
       for (int i = MouseOnList.Count - 1; i >= 0; i--)
       {
-        if (Mouse.Scrolled) MouseOnList[i].InvokeOnScroll(Mouse.Scroll);
+        if (Input.Scrolled) MouseOnList[i].InvokeOnScroll(Input.Scroll);
 
         if (MouseOnList[i].ConsumeMouseScroll) break;
       }
@@ -275,24 +275,24 @@ namespace CrabUI
       for (int i = MouseOnList.Count - 1; i >= 0; i--)
       {
         //TODO mb this should be applied  separately
-        MouseOnList[i].MousePressed = Mouse.Held;
+        MouseOnList[i].MousePressed = Input.MouseHeld;
         MouseOnList[i].MouseOver = true;
 
-        if (Mouse.Down) MouseOnList[i].InvokeOnMouseDown(Mouse);
-        if (Mouse.Up) MouseOnList[i].InvokeOnMouseUp(Mouse);
-        if (Mouse.DoubleClick) MouseOnList[i].InvokeOnDClick(Mouse);
+        if (Input.MouseDown) MouseOnList[i].InvokeOnMouseDown(Input);
+        if (Input.MouseUp) MouseOnList[i].InvokeOnMouseUp(Input);
+        if (Input.DoubleClick) MouseOnList[i].InvokeOnDClick(Input);
 
         if (MouseOnList[i].ConsumeMouseClicks) break;
       }
-      if (Mouse.ClickConsumed) return;
+      if (Input.ClickConsumed) return;
 
       // Swipe
       for (int i = MouseOnList.Count - 1; i >= 0; i--)
       {
-        if (MouseOnList[i].SwipeHandle.ShouldStart(Mouse))
+        if (MouseOnList[i].SwipeHandle.ShouldStart(Input))
         {
           GrabbedSwipeHandle = MouseOnList[i].SwipeHandle;
-          GrabbedSwipeHandle.BeginSwipe(Mouse.Position);
+          GrabbedSwipeHandle.BeginSwipe(Input.MousePosition);
           break;
         }
 
@@ -303,10 +303,10 @@ namespace CrabUI
       // Drag
       for (int i = MouseOnList.Count - 1; i >= 0; i--)
       {
-        if (MouseOnList[i].DragHandle.ShouldStart(Mouse))
+        if (MouseOnList[i].DragHandle.ShouldStart(Input))
         {
           GrabbedDragHandle = MouseOnList[i].DragHandle;
-          GrabbedDragHandle.BeginDrag(Mouse.Position);
+          GrabbedDragHandle.BeginDrag(Input.MousePosition);
           break;
         }
 

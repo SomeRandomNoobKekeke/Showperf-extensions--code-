@@ -106,13 +106,9 @@ namespace ShowPerfExtensions
         SubTypeDD.Select(SubType.All);
         this["SubTypeDD"] = SubTypeDD;
 
-
-
-
-
         this["bb"] = new CUIButton("Click")
         {
-          AddOnMouseDown = (CUIMouse m) =>
+          AddOnMouseDown = (e) =>
           {
             if (Pages.IsOpened(TickList)) { Pages.Open(Map); return; }
             if (Pages.IsOpened(Map)) { Pages.Open(TickList); return; }

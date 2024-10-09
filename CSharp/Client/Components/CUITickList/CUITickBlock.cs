@@ -68,10 +68,6 @@ namespace ShowPerfExtensions
           BackgroundColor = Color.Transparent;
           BorderColor = Color.Transparent;
           UnCullable = true;
-
-          //TODO this should use slide as it doesn't trigger size recalc every nanosec
-          // Draggable = true;
-          // OnDrag += (x, y) => TickList.Scroll = y;
         }
       }
     }

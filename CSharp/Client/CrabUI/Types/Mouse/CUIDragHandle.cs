@@ -19,11 +19,11 @@ namespace CrabUI
     public Vector2 StartPosition;
     public CUIMouseEvent Trigger = CUIMouseEvent.Down;
 
-    public bool ShouldStart(CUIMouse mouse)
+    public bool ShouldStart(CUIInput input)
     {
       return Draggable && (
-        (Trigger == CUIMouseEvent.Down && mouse.Down) ||
-        (Trigger == CUIMouseEvent.DClick && mouse.DoubleClick)
+        (Trigger == CUIMouseEvent.Down && input.MouseDown) ||
+        (Trigger == CUIMouseEvent.DClick && input.DoubleClick)
       );
     }
     public void BeginDrag(Vector2 cursorPos)

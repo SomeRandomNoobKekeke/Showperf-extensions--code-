@@ -125,6 +125,11 @@ namespace ShowPerfExtensions
         Swipeable = true;
 
         BottomGap = TickBlock.StringHeight * 2;
+
+        OnMouseDown += m =>
+        {
+
+        };
       }
     }
   }

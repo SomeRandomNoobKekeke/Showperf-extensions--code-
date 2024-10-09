@@ -28,11 +28,11 @@ namespace CrabUI
 
     public CUIMouseEvent Trigger = CUIMouseEvent.Down;
 
-    public bool ShouldStart(CUIMouse mouse)
+    public bool ShouldStart(CUIInput input)
     {
-      return Visible && Real.Contains(mouse.Position) && (
-        (Trigger == CUIMouseEvent.Down && mouse.Down) ||
-        (Trigger == CUIMouseEvent.DClick && mouse.DoubleClick)
+      return Visible && Real.Contains(input.MousePosition) && (
+        (Trigger == CUIMouseEvent.Down && input.MouseDown) ||
+        (Trigger == CUIMouseEvent.DClick && input.DoubleClick)
       );
     }
 

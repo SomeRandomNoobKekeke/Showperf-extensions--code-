@@ -38,12 +38,12 @@ namespace CrabUI
 
         Relative = new CUINullRect(0, null, 1, null);
 
-        OnMouseDown += (CUIMouse m) =>
+        OnMouseDown += (e) =>
         {
           Host.Select(this);
-          m.ClickConsumed = true;
+          e.ClickConsumed = true;
         };
-        OnMouseDown += (CUIMouse m) => SoundPlayer.PlayUISound(Host.ClickSound);
+        OnMouseDown += (e) => SoundPlayer.PlayUISound(Host.ClickSound);
 
         OnTextChanged += () => { if (this == Host.Selected) Host.Text = Text; };
       }
