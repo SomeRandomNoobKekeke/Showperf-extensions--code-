@@ -48,7 +48,6 @@ namespace CrabUI
     {
       Flat.Clear();
       Layers.Clear();
-      // Leaves.Clear();
 
       RunRecursiveOn(this, (component, depth) =>
       {
@@ -63,7 +62,7 @@ namespace CrabUI
         Flat.AddRange(layer.Value);
       }
 
-      // RunRecursiveOn(this, (component, depth) => Flat.Add(component));
+      //RunRecursiveOn(this, (component, depth) => Flat.Add(component));
     }
 
     #region Update
@@ -84,7 +83,6 @@ namespace CrabUI
           FlattenTree();
           TreeChanged = false;
         }
-        Info(Flat.Count);
 
 
         CUIDebug.Capture(null, this, "Update", "", "HandleMouse", "");

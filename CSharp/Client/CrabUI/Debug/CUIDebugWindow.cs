@@ -70,7 +70,11 @@ namespace CrabUI
 
       List<CUIComponent> l = new List<CUIComponent>();
 
-      RunRecursiveOn(CUI.Main, (component, depth) => l.Add(component));
+      RunRecursiveOn(CUI.Main, (component, depth) =>
+      {
+        CUI.log(component);
+        l.Add(component);
+      });
 
       foreach (CUIComponent c in l)
       {

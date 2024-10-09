@@ -65,8 +65,8 @@ namespace ShowPerfExtensions
       Showperf.Capture.Toggle(CName.MapEntityDrawing);
 
 
-      CUI.Load(CUITest.UpdatePropagation);
-      CUIDebugWindow.Open();
+      //CUI.Load(CUITest.UpdatePropagation);
+      //CUIDebugWindow.Open();
       //CUIDebugWindow.Main.Loop = false;
       //CUI.Debug = true;
 
