@@ -75,7 +75,7 @@ namespace CrabUI
       if (totalTime - LastUpdateTime >= UpdateInterval)
       {
         if (OKurwa++ == 0) CUIDebug.Flush();
-        if (OKurwa == 5) OKurwa = 0;
+        if (OKurwa == 1) OKurwa = 0;
 
         if (TreeChanged)
         {
@@ -84,7 +84,7 @@ namespace CrabUI
           FlattenTree();
           TreeChanged = false;
         }
-
+        Info(Flat.Count);
 
 
         CUIDebug.Capture(null, this, "Update", "", "HandleMouse", "");

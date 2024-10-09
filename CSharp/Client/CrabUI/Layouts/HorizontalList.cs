@@ -42,14 +42,12 @@ namespace CrabUI
           float w = 0;
           Vector2 s = new Vector2(w, h);
 
-
-          //FIXME FillEmptySpace jumping when parent shrinks below their min size
           if (!c.FillEmptySpace.X)
           {
             if (c.Relative.Width.HasValue)
             {
               w = c.Relative.Width.Value * Host.Real.Width;
-              CUIDebug.Capture(Host, c, "Layout.Update", "RelativeMin.Height", "w", w.ToString());
+              CUIDebug.Capture(Host, c, "Layout.Update", "Relative.Width", "w", w.ToString());
             }
             if (c.Absolute.Width.HasValue)
             {

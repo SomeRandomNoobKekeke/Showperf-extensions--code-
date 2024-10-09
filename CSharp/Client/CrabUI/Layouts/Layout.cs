@@ -35,8 +35,16 @@ namespace CrabUI
         changed = value;
         if (value)
         {
-          if (Host.Parent != null) Host.Parent.Layout.propagateChangedDown();
-          else propagateChangedDown();
+          // This seems cleaner, but has devastating fps impact
+          // if (Host.Parent != null) Host.Parent.Layout.propagateChangedDown();
+          // else propagateChangedDown();
+
+          DecorChanged = true;
+          if (Host.Parent != null) Host.Parent.Layout.changed = true;
+          foreach (CUIComponent child in Host.Children)
+          {
+            child.Layout.propagateChangedDown();
+          }
         }
       }
     }

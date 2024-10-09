@@ -170,6 +170,7 @@ namespace CrabUI
           {
             // Events.Clear();
             // EventsComponent.RemoveAllChildren();
+            MakeIDList();
             Pages.Open(EventsComponent);
           }
           else Pages.Open(DebugIDsComponent);
