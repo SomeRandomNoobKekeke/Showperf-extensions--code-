@@ -111,7 +111,7 @@ namespace ShowPerfExtensions
 
 
 
-        this["bb"] = new CUIButton("All")
+        this["bb"] = new CUIButton("Click")
         {
           AddOnMouseDown = (CUIMouse m) =>
           {

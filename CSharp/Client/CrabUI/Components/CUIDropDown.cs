@@ -141,12 +141,12 @@ namespace CrabUI
       Text = option.Text;
     }
 
+    //HACK :AwareDev:
     internal override Vector2 AmIOkWithThisSize(Vector2 size)
     {
-      Vector2 s = base.AmIOkWithThisSize(size);
-      return new Vector2(size.X, s.Y);
+      Vector2 mySize = base.AmIOkWithThisSize(size);
+      return new Vector2(Math.Max(Box.AbsoluteMin.Width ?? 0, size.X), mySize.Y);
     }
-
 
     public CUIDropDown() : base("CUIDropDown")
     {
