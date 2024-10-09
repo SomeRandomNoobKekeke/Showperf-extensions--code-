@@ -10,15 +10,17 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace CrabUI
 {
+  //TODO implement keyboard events
   public class CUIInput
   {
     public static double DoubleClickInterval = 0.2;
     public static float ScrollSpeed = 0.6f;
 
+    public MouseState CurrentMouseState;
+    public KeyboardState CurrentKeyboardState;
+
     private double PrevMouseDownTiming;
     private int PrevScrollWheelValue;
-
-    public MouseState CurrentMouseState;
     private MouseState PrevMouseState;
     private Vector2 PrevMousePosition;
 
@@ -38,6 +40,12 @@ namespace CrabUI
     public bool ClickConsumed;
 
     public void Scan(double totalTime)
+    {
+      ScanMouse(totalTime);
+      ScanKeyboard(totalTime);
+    }
+
+    public void ScanMouse(double totalTime)
     {
       ClickConsumed = false;
 
@@ -71,6 +79,11 @@ namespace CrabUI
       SomethingHappened = MouseUp || MouseDown || MouseMoved || Scrolled;
 
       PrevMouseState = CurrentMouseState;
+    }
+
+    public void ScanKeyboard(double totalTime)
+    {
+      CurrentKeyboardState = Keyboard.GetState();
     }
   }
 }

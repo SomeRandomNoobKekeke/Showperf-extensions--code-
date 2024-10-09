@@ -20,11 +20,19 @@ namespace ShowPerfExtensions
     {
       private CUITickBlock TickBlock;
       public List<UpdateTicks> Values = new List<UpdateTicks>();
-      public HashSet<string> Tracked = new HashSet<string>();
+
       public double Sum;
       public double Linearity;
       public double Slope;
       public double TopValue;
+      public HashSet<string> Tracked = new HashSet<string>();
+      public bool ToggleTracking(string name)
+      {
+        bool wasTracked = Tracked.Contains(name);
+        if (wasTracked) Tracked.Remove(name);
+        else Tracked.Add(name);
+        return wasTracked;
+      }
 
       public void Clear()
       {
@@ -126,9 +134,26 @@ namespace ShowPerfExtensions
 
         BottomGap = TickBlock.StringHeight * 2;
 
-        OnMouseDown += m =>
+        OnDClick += e =>
         {
+          if (e.CurrentKeyboardState.IsKeyDown(Keys.LeftShift))
+          {
+            Tracked.Clear();
+            e.ClickConsumed = true;
+          }
+        };
 
+        OnMouseDown += e =>
+        {
+          if (e.CurrentKeyboardState.IsKeyDown(Keys.LeftShift))
+          {
+            int i = (int)Math.Floor((e.MousePosition.Y - Real.Top - Scroll) / TickBlock.StringHeight);
+            log(e.MousePosition.Y - Real.Top - Scroll);
+            if (i >= 0 && i < Values.Count - 1)
+            {
+              ToggleTracking(Values[i].Name);
+            }
+          }
         };
       }
     }
