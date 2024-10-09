@@ -361,7 +361,11 @@ namespace CrabUI
     private bool visible = true; public bool Visible
     {
       get => visible;
-      set { visible = value; foreach (var child in Children) child.Visible = value; }
+      set
+      {
+        visible = value;
+        foreach (var child in Children) child.Visible = value;
+      }
     }
 
     private CUIBool2 fillEmptySpace; public CUIBool2 FillEmptySpace
@@ -512,8 +516,8 @@ namespace CrabUI
 
       ShouldPassPropsToChildren = state.ShouldPassPropsToChildren;
       zIndex = state.ZIndex; // TODO think how to uncurse this
-      IgnoreEvents = state.IgnoreEvents;
-      Visible = state.Visible;
+      //IgnoreEvents = state.IgnoreEvents;  // TODO think how to uncurse this
+      //Visible = state.Visible;  // TODO think how to uncurse this
       ChildrenOffset = state.ChildrenOffset;
       Draggable = state.Draggable;
       LeftResizeHandle.Visible = state.LeftResizeHandle.Visible;

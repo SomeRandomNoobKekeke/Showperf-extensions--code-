@@ -148,7 +148,6 @@ namespace ShowPerfExtensions
           if (e.CurrentKeyboardState.IsKeyDown(Keys.LeftShift))
           {
             int i = (int)Math.Floor((e.MousePosition.Y - Real.Top - Scroll) / TickBlock.StringHeight);
-            log(e.MousePosition.Y - Real.Top - Scroll);
             if (i >= 0 && i < Values.Count - 1)
             {
               ToggleTracking(Values[i].Name);

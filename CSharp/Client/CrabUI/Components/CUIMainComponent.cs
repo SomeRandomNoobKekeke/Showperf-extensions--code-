@@ -282,7 +282,7 @@ namespace CrabUI
         if (Input.MouseUp) MouseOnList[i].InvokeOnMouseUp(Input);
         if (Input.DoubleClick) MouseOnList[i].InvokeOnDClick(Input);
 
-        if (MouseOnList[i].ConsumeMouseClicks) break;
+        if (MouseOnList[i].ConsumeMouseClicks || Input.ClickConsumed) break;
       }
       if (Input.ClickConsumed) return;
 

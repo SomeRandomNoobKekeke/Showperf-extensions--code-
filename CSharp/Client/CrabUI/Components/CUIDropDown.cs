@@ -41,7 +41,6 @@ namespace CrabUI
         OnMouseDown += (e) =>
         {
           Host.Select(this);
-          e.ClickConsumed = true;
         };
         OnMouseDown += (e) => SoundPlayer.PlayUISound(Host.ClickSound);
 
@@ -106,10 +105,16 @@ namespace CrabUI
         BackgroundColor = CUIPallete.Default.Tertiary.Off;
         BorderColor = CUIPallete.Default.Tertiary.Border;
 
-        OnMouseDown += (m) => Close();
+        OnMouseDown += (e) =>
+        {
+          Close();
+        };
 
-        CUI.Main.OnMouseDown += (m) => Close();
-
+        CUI.Main.OnMouseDown += (e) => OnMouseDown += (e) =>
+        {
+          Close();
+          e.ClickConsumed = true;
+        };
 
         Close();
       }
