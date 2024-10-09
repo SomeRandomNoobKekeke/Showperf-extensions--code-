@@ -1,4 +1,5 @@
 #define CUIDEBUG
+#define SHOWPERF
 
 using System;
 using System.Collections.Generic;
@@ -32,5 +33,22 @@ namespace CrabUI
     [Conditional("DONT")]
 #endif
     public static void Flush() => CUIDebugWindow.Main?.Flush();
+
+
+    public static int CUIShowperfCategory = 1000;
+#if (!SHOWPERF || !CUIDEBUG)
+    [Conditional("DONT")]
+#endif
+    public static void CaptureTicks(double ticks, string name, int hash) => ShowPerfExtensions.Mod.Capture(ticks, CUIShowperfCategory, name, hash);
+
+#if (!SHOWPERF || !CUIDEBUG)
+    [Conditional("DONT")]
+#endif
+    public static void CaptureTicks(double ticks, string name) => ShowPerfExtensions.Mod.Capture(ticks, CUIShowperfCategory, name);
+
+#if (!SHOWPERF || !CUIDEBUG)
+    [Conditional("DONT")]
+#endif
+    public static void EnsureCategory() => ShowPerfExtensions.Mod.EnsureCategory(CUIShowperfCategory);
   }
 }

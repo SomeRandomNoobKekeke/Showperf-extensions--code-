@@ -75,7 +75,6 @@ namespace ShowPerfExtensions
         {
           Relative = new CUINullRect(0, 0, 0.5f, null),
           AddOnStateChange = (state) => Capture.SetByID(CName.MapEntityDrawing, state),
-          ConsumeDragAndDrop = false,
         };
 
         CUIMultiButton m = new CUIMultiButton()

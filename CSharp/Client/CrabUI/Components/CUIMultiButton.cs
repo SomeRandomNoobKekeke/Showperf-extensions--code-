@@ -65,6 +65,7 @@ namespace CrabUI
     public CUIMultiButton() : base()
     {
       FitContent = new CUIBool2(true, true);
+      ConsumeDragAndDrop = true;
     }
 
     public CUIMultiButton(float? width, float? height) : this(null, null, width, height) { }

@@ -183,14 +183,14 @@ namespace CrabUI
       IgnoreDebug = true;
     }
 
-    public static void Open()
+    public static CUIDebugWindow Open()
     {
-      if (CUI.Main == null) return;
+      if (CUI.Main == null) return null;
 
       CUIDebugWindow w = new CUIDebugWindow(0, 0.3f, 0.3f, 0.6f);
       CUI.Main.Append(w);
       CUI.Main.OnTreeChanged += () => w.MakeIDList();
-
+      return w;
     }
 
     public CUIDebugWindow(float? x, float? y, float? w, float? h) : this()

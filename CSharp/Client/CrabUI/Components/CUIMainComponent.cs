@@ -71,6 +71,8 @@ namespace CrabUI
     private double LastUpdateTime;
     public void Update(double totalTime)
     {
+      sw.Restart();
+
       if (totalTime - LastUpdateTime >= UpdateInterval)
       {
         if (OKurwa++ == 0) CUIDebug.Flush();
@@ -117,6 +119,10 @@ namespace CrabUI
 
         LastUpdateTime = totalTime;
       }
+
+      sw.Stop();
+      CUIDebug.EnsureCategory();
+      CUIDebug.CaptureTicks(sw.ElapsedTicks, "CUI.Update");
     }
 
     #endregion
@@ -132,6 +138,8 @@ namespace CrabUI
     //TODO lock flat, new components are blinking
     protected override void Draw(SpriteBatch spriteBatch)
     {
+      sw.Restart();
+
       Rectangle OriginalSRect = spriteBatch.GraphicsDevice.ScissorRectangle;
       Rectangle SRect = OriginalSRect;
 
@@ -158,6 +166,10 @@ namespace CrabUI
         if (!c.Visible || c.CulledOut) return;
         c.DrawFront(spriteBatch);
       });
+
+      sw.Stop();
+      CUIDebug.EnsureCategory();
+      CUIDebug.CaptureTicks(sw.ElapsedTicks, "CUI.Draw");
     }
     #endregion
     // https://youtu.be/xuFgUmYCS8E?feature=shared&t=72

@@ -14,7 +14,7 @@ namespace CrabUI
   // mb i should also limit updates to 60 fps
   public class CUIMouse
   {
-    public static double DoubleClickInterval = 0.18;
+    public static double DoubleClickInterval = 0.2;
     public static float ScrollSpeed = 0.6f;
 
     private double PrevMouseDownTiming;
