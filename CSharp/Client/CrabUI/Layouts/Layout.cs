@@ -59,10 +59,6 @@ namespace CrabUI
       get => absoluteChanged;
       set
       {
-        //HACK this looks excessive, but without this dropdown won't work
-        // absoluteChanged = value;
-        // if (value) Host.Parent?.Layout.propagateAbsoluteChangedUp();
-
         //TODO is this enough?
         if (!value) absoluteChanged = false;
         if (value && Host.Parent != null) Host.Parent.Layout.absoluteChanged = true;

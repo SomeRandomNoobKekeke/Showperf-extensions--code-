@@ -141,9 +141,27 @@ namespace CrabUI
     private CUIComponent? parent; public CUIComponent? Parent
     {
       get => parent;
-      set { parent = value; TreeChanged = true; OnPropChanged(); }
+      set => SetParent(value);
     }
-    //TODO do i need OnAbsolutePropChanged(); here?
+    internal void SetParent(CUIComponent? value, [CallerMemberName] string memberName = "")
+    {
+      if (parent != null)
+      {
+        OnPropChanged();
+        TreeChanged = true;
+      }
+      parent = value;
+      if (ComponentInitialized)
+      {
+        CUIDebug.Capture(null, this, "SetParent", memberName, "parent", $"{parent}");
+      }
+      if (parent != null)
+      {
+        OnPropChanged();
+        TreeChanged = true;
+      }
+    }
+
 
     private bool treeChanged = true; public bool TreeChanged
     {
@@ -155,7 +173,9 @@ namespace CrabUI
     {
       if (c == null) return c;
 
-      c.Parent = this;
+      Children.Add(c);
+      c.SetParent(this);
+
       PassPropsToChild(c);
 
       if (name != null)
@@ -163,7 +183,6 @@ namespace CrabUI
         NamedComponents[name] = c;
         c.AKA = name;
       }
-      Children.Add(c);
 
       return c;
     }
@@ -177,17 +196,15 @@ namespace CrabUI
         NamedComponents.Remove(c.AKA);
         //c.AKA = null;
       }
-      c.Parent = null;
-      TreeChanged = true;
+      c.SetParent(null);
       Children.Remove(c);
     }
 
     public void RemoveAllChildren()
     {
-      foreach (CUIComponent c in Children) { c.Parent = null; }
+      foreach (CUIComponent c in Children) { c.SetParent(null); }
       NamedComponents.Clear();
       Children.Clear();
-      TreeChanged = true;
     }
 
     public bool ShouldPassPropsToChildren = true;

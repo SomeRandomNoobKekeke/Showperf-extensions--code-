@@ -58,8 +58,6 @@ namespace CrabUI
     public void Flush()
     {
       if (Loop) target = 0;
-
-      //TODO mb i should add two modes instead of just commenting it out
       //Events.ForEach(e => e.Flush());
     }
 
