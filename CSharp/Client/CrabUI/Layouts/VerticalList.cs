@@ -97,7 +97,6 @@ namespace CrabUI
         Resizible.ForEach(c =>
         {
           c.Size = c.Component.AmIOkWithThisSize(new Vector2(c.Size.X, dif / Resizible.Count));
-          //c.Component.Layout.changed = true; //HACK rethink
           CUIDebug.Capture(Host, c.Component, "Layout.Update", "Resizible.ForEach", "c.Size", c.Size.ToString());
         });
 

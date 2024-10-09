@@ -123,6 +123,7 @@ namespace ShowPerfExtensions
         Pages = (CUIPages)Append(new CUIPages()
         {
           FillEmptySpace = new CUIBool2(false, true),
+          debug = true,
         });
 
 
@@ -157,7 +158,7 @@ namespace ShowPerfExtensions
         Pages.Open(TickList);
 
 
-
+        Debug = true;
       }
 
       public CUIShowperf() : base()

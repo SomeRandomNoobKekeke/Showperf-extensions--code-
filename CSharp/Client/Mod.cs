@@ -67,6 +67,7 @@ namespace ShowPerfExtensions
 
       //CUI.Load(CUITest.CUIDropDown);
       CUIDebugWindow.Open();
+      CUIDebugWindow.Main.Loop = false;
       //CUI.Debug = true;
 
       PatchAll();

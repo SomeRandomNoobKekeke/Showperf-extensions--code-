@@ -35,12 +35,8 @@ namespace CrabUI
         changed = value;
         if (value)
         {
-          DecorChanged = true;
-          if (Host.Parent != null) Host.Parent.Layout.changed = true;
-          foreach (CUIComponent child in Host.Children)
-          {
-            child.Layout.propagateChangedDown();
-          }
+          if (Host.Parent != null) Host.Parent.Layout.propagateChangedDown();
+          else propagateChangedDown();
         }
       }
     }
@@ -83,7 +79,6 @@ namespace CrabUI
           }
         }
 
-        // do something
         Changed = false;
       }
     }

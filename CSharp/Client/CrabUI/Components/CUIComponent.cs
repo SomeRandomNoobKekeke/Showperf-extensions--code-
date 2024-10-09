@@ -141,7 +141,7 @@ namespace CrabUI
     private CUIComponent? parent; public CUIComponent? Parent
     {
       get => parent;
-      set { parent = value; TreeChanged = true; OnPropChanged(); OnAbsolutePropChanged(); }
+      set { parent = value; TreeChanged = true; OnPropChanged(); }
     }
     //TODO do i need OnAbsolutePropChanged(); here?
 
