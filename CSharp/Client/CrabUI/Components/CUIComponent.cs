@@ -15,9 +15,94 @@ namespace CrabUI
 {
   public partial class CUIComponent
   {
+    #region Static --------------------------------------------------------
+
     public static int MaxID = 0;
     public static Dictionary<int, CUIComponent> ComponentsById = new Dictionary<int, CUIComponent>();
+    public static Vector2 GameScreenSize => new Vector2(GameMain.GraphicsWidth, GameMain.GraphicsHeight);
+    public static Rectangle GameScreenRect => new Rectangle(0, 0, GameMain.GraphicsWidth, GameMain.GraphicsHeight);
+    public static GUIButton dummyComponent = new GUIButton(new RectTransform(new Point(0, 0)));
+    protected static void RunRecursiveOn(CUIComponent component, Action<CUIComponent, int> action, int depth = 0)
+    {
+      action(component, depth);
+      foreach (CUIComponent child in component.Children)
+      {
+        RunRecursiveOn(child, action, depth + 1);
+      }
+    }
+
+    #endregion
+    #region Virtual --------------------------------------------------------
+
+    internal virtual CUINullRect ChildrenBoundaries => new CUINullRect(null, null, null, null);
+    internal virtual CUINullRect ChildOffsetBounds => new CUINullRect(null, null, null, null);
+    internal virtual void UpdatePseudoChildren()
+    {
+      LeftResizeHandle.Update();
+      RightResizeHandle.Update();
+    }
+    internal virtual Vector2 AmIOkWithThisSize(Vector2 size) => size;
+    internal virtual void ChildrenSizeCalculated() { }
+    public virtual partial void ApplyState(CUIComponent state);
+    protected virtual partial void Draw(SpriteBatch spriteBatch);
+    protected virtual partial void DrawFront(SpriteBatch spriteBatch);
+
+    #endregion
+    #region Meta --------------------------------------------------------
+
     public int ID;
+    public bool DebugHighlight;
+    internal bool CulledOut;
+    //HACK need a more robust solution
+    protected bool ComponentInitialized;
+
+    public override string ToString() => $"{this.GetType().Name}:{ID}:{AKA}";
+
+    protected CUIRect BorderBox;
+    protected Rectangle? ScissorRect;
+    private CUIRect real; public CUIRect Real
+    {
+      get => real;
+      set => SetReal(value);
+    }
+
+    internal void SetReal(CUIRect value, [CallerMemberName] string memberName = "")
+    {
+      real = value;
+      CUIDebug.Capture(null, this, "SetReal", memberName, "real", real.ToString());
+
+      BorderBox = new CUIRect(
+        real.Left - BorderThickness,
+        real.Top - BorderThickness,
+        real.Width + BorderThickness * 2,
+        real.Height + BorderThickness * 2
+      );
+
+      if (HideChildrenOutsideFrame)
+      {
+        //HACK Remove these + 1
+        Rectangle SRect = new Rectangle(
+          (int)real.Left + 1,
+          (int)real.Top + 1,
+          (int)real.Width - 2,
+          (int)real.Height - 2
+        );
+
+        if (Parent?.ScissorRect != null)
+        {
+          ScissorRect = Rectangle.Intersect(Parent.ScissorRect.Value, SRect);
+        }
+        else
+        {
+          ScissorRect = SRect;
+        }
+      }
+      else ScissorRect = Parent?.ScissorRect;
+    }
+
+    #endregion
+    #region Debug --------------------------------------------------------
+
     public bool debug; public bool Debug
     {
       get => debug;
@@ -27,7 +112,6 @@ namespace CrabUI
         foreach (CUIComponent c in Children) { c.Debug = value; }
       }
     }
-    public bool DebugHighlight;
 
     private bool ignoreDebug; public bool IgnoreDebug
     {
@@ -39,14 +123,19 @@ namespace CrabUI
       }
     }
 
-    public Stopwatch sw = new Stopwatch();
+    public void Info(object msg, [CallerFilePath] string source = "", [CallerLineNumber] int lineNumber = 0)
+    {
+      var fi = new FileInfo(source);
 
-    public static Vector2 GameScreenSize => new Vector2(GameMain.GraphicsWidth, GameMain.GraphicsHeight);
-    public static Rectangle GameScreenRect => new Rectangle(0, 0, GameMain.GraphicsWidth, GameMain.GraphicsHeight);
-    public static GUIButton dummyComponent = new GUIButton(new RectTransform(new Point(0, 0)));
+      CUI.log($"{fi.Directory.Name}/{fi.Name}:{lineNumber}", Color.Yellow * 0.5f);
+      CUI.log($"{this} {msg ?? "null"}", Color.Yellow);
+    }
 
+    public void PrintLayout() => Info($"{Real} {Anchor.Type} Z:{ZIndex} A:{Absolute} R:{Relative} AMin:{AbsoluteMin} RMin:{RelativeMin} AMax:{AbsoluteMax} RMax:{RelativeMax}");
 
+    #endregion
     #region Tree --------------------------------------------------------
+
     public List<CUIComponent> Children = new List<CUIComponent>();
 
     private CUIComponent? parent; public CUIComponent? Parent
@@ -61,21 +150,6 @@ namespace CrabUI
       get => treeChanged;
       set { treeChanged = value; if (value && Parent != null) Parent.TreeChanged = true; }
     }
-
-    public Dictionary<string, CUIComponent> NamedComponents = new Dictionary<string, CUIComponent>();
-    public string AKA;
-
-
-    public CUIComponent Remember(CUIComponent c, string name) => NamedComponents[name] = c;
-    public CUIComponent Remember(CUIComponent c) => NamedComponents[c.AKA ?? ""] = c;
-
-    public CUIComponent this[string name]
-    {
-      get => NamedComponents.GetValueOrDefault(name);
-      set => Append(value, name);
-    }
-
-    public T Get<T>(string name) where T : CUIComponent => NamedComponents.GetValueOrDefault(name) as T;
 
     public CUIComponent Append(CUIComponent c, string name = null)
     {
@@ -125,40 +199,9 @@ namespace CrabUI
       if (IgnoreEvents) child.IgnoreEvents = true;
       if (!Visible) child.Visible = false;
     }
-    private int? zIndex; public int? ZIndex
-    {
-      get => zIndex;
-      set
-      {
-        zIndex = value;
-        OnPropChanged();
-        foreach (var child in Children)
-        {
-          //TODO think, should i propagate null?
-          if (zIndex.HasValue) child.ZIndex = zIndex.Value + 1;
-        }
-      }
-    }
-    private bool ignoreEvents; public bool IgnoreEvents
-    {
-      get => ignoreEvents;
-      set { ignoreEvents = value; foreach (var child in Children) child.IgnoreEvents = value; }
-    }
-
-
-    private bool visible = true; public bool Visible
-    {
-      get => visible;
-      set { visible = value; foreach (var child in Children) child.Visible = value; }
-    }
-
-    public bool UnCullable; // >:(
-    internal bool CulledOut;
-
 
     #endregion
     #region Layout --------------------------------------------------------
-
 
     private CUILayout layout; public CUILayout Layout
     {
@@ -166,8 +209,6 @@ namespace CrabUI
       set { layout = value; layout.Host = this; }
     }
 
-    internal virtual CUINullRect ChildrenBoundaries => new CUINullRect(null, null, null, null);
-    internal virtual CUINullRect ChildOffsetBounds => new CUINullRect(null, null, null, null);
     private Vector2 childrenOffset; public Vector2 ChildrenOffset
     {
       get => childrenOffset;
@@ -183,16 +224,6 @@ namespace CrabUI
       OnChildrenPropChanged();
     }
 
-    internal virtual void UpdatePseudoChildren()
-    {
-      LeftResizeHandle.Update();
-      RightResizeHandle.Update();
-    }
-
-    internal virtual Vector2 AmIOkWithThisSize(Vector2 size) => size;
-
-    //HACK need a more robust solution
-    protected bool ComponentInitialized;
     internal void OnPropChanged([CallerMemberName] string memberName = "")
     {
       Layout.Changed = true;
@@ -228,8 +259,6 @@ namespace CrabUI
     #endregion
     #region Events --------------------------------------------------------
 
-    internal virtual void ChildrenSizeCalculated() { }
-
     public bool MouseOver { get; set; }
     public bool MousePressed { get; set; }
     public bool ConsumeMouseClicks { get; set; }
@@ -258,6 +287,9 @@ namespace CrabUI
     public event Action<float, float> OnSwipe; internal void InvokeOnSwipe(float x, float y) => OnSwipe?.Invoke(x, y);
     public Action<float, float> AddOnSwipe { set { OnSwipe += value; } }
 
+    #endregion
+    #region Handles --------------------------------------------------------
+
     public CUIDragHandle DragHandle;
     public bool Draggable
     {
@@ -282,10 +314,53 @@ namespace CrabUI
 
     #endregion
     #region Props --------------------------------------------------------
+
     //TODO This is potentially cursed
     public object Data;
+    public bool UnCullable { get; set; } // >:(
+    public bool HideChildrenOutsideFrame { get; set; } = false;
     public CUIAnchor Anchor = new CUIAnchor(CUIAnchorType.LeftTop);
 
+    private int? zIndex; public int? ZIndex
+    {
+      get => zIndex;
+      set
+      {
+        zIndex = value;
+        OnPropChanged();
+        foreach (var child in Children)
+        {
+          //TODO think, should i propagate null?
+          if (zIndex.HasValue) child.ZIndex = zIndex.Value + 1;
+        }
+      }
+    }
+    private bool ignoreEvents; public bool IgnoreEvents
+    {
+      get => ignoreEvents;
+      set { ignoreEvents = value; foreach (var child in Children) child.IgnoreEvents = value; }
+    }
+
+    private bool visible = true; public bool Visible
+    {
+      get => visible;
+      set { visible = value; foreach (var child in Children) child.Visible = value; }
+    }
+
+    private CUIBool2 fillEmptySpace; public CUIBool2 FillEmptySpace
+    {
+      get => fillEmptySpace;
+      set { fillEmptySpace = value; OnPropChanged(); }
+    }
+
+    private CUIBool2 fitContent; public CUIBool2 FitContent
+    {
+      get => fitContent;
+      set { fitContent = value; OnPropChanged(); OnAbsolutePropChanged(); }
+    }
+
+
+    #region Absolute Props
     // Ugly, but otherwise it'll be undebugable
     private CUINullRect absolute; public CUINullRect Absolute
     {
@@ -330,6 +405,10 @@ namespace CrabUI
       }
       OnPropChanged(); OnAbsolutePropChanged();
     }
+
+    #endregion
+    #region Relative Props
+
     //TODO make sure i don't call Relative setters directly
     private CUINullRect relative; public CUINullRect Relative
     {
@@ -376,64 +455,10 @@ namespace CrabUI
       OnPropChanged();
     }
 
-
-    private CUIBool2 fillEmptySpace; public CUIBool2 FillEmptySpace
-    {
-      get => fillEmptySpace;
-      set { fillEmptySpace = value; OnPropChanged(); }
-    }
-
-    private CUIBool2 fitContent; public CUIBool2 FitContent
-    {
-      get => fitContent;
-      set { fitContent = value; OnPropChanged(); OnAbsolutePropChanged(); }
-    }
-
-    public bool HideChildrenOutsideFrame { get; set; } = false;
-    protected CUIRect BorderBox;
-    protected Rectangle? ScissorRect;
-    private CUIRect real; public virtual CUIRect Real
-    {
-      get => real;
-      set => SetReal(value);
-    }
-
-    internal void SetReal(CUIRect value, [CallerMemberName] string memberName = "")
-    {
-      real = value;
-      CUIDebug.Capture(null, this, "SetReal", memberName, "real", real.ToString());
-
-      BorderBox = new CUIRect(
-        real.Left - BorderThickness,
-        real.Top - BorderThickness,
-        real.Width + BorderThickness * 2,
-        real.Height + BorderThickness * 2
-      );
-
-      if (HideChildrenOutsideFrame)
-      {
-        //HACK Remove these + 1
-        Rectangle SRect = new Rectangle(
-          (int)real.Left + 1,
-          (int)real.Top + 1,
-          (int)real.Width - 2,
-          (int)real.Height - 2
-        );
-
-        if (Parent?.ScissorRect != null)
-        {
-          ScissorRect = Rectangle.Intersect(Parent.ScissorRect.Value, SRect);
-        }
-        else
-        {
-          ScissorRect = SRect;
-        }
-      }
-      else ScissorRect = Parent?.ScissorRect;
-    }
-
+    #endregion
     #endregion
     #region Graphic Props --------------------------------------------------------
+
     protected bool BackgroundVisible;
     private Color backgroundColor; public Color BackgroundColor
     {
@@ -456,8 +481,8 @@ namespace CrabUI
     }
 
     #endregion
-
     #region State --------------------------------------------------------
+
     public Dictionary<string, CUIComponent> States = new Dictionary<string, CUIComponent>();
     public CUIComponent Clone()
     {
@@ -465,7 +490,7 @@ namespace CrabUI
       clone.ApplyState(this);
       return clone;
     }
-    public virtual void ApplyState(CUIComponent state)
+    public virtual partial void ApplyState(CUIComponent state)
     {
       if (state == null) return;
 
@@ -495,9 +520,26 @@ namespace CrabUI
     }
 
     #endregion
-    #region Methods --------------------------------------------------------
+    #region AKA
 
-    protected virtual void Draw(SpriteBatch spriteBatch)
+    public string AKA;
+    public Dictionary<string, CUIComponent> NamedComponents = new Dictionary<string, CUIComponent>();
+
+    public CUIComponent Remember(CUIComponent c, string name) => NamedComponents[name] = c;
+    public CUIComponent Remember(CUIComponent c) => NamedComponents[c.AKA ?? ""] = c;
+
+    public CUIComponent this[string name]
+    {
+      get => NamedComponents.GetValueOrDefault(name);
+      set => Append(value, name);
+    }
+
+    public T Get<T>(string name) where T : CUIComponent => NamedComponents.GetValueOrDefault(name) as T;
+
+    #endregion
+    #region Draw --------------------------------------------------------
+
+    protected virtual partial void Draw(SpriteBatch spriteBatch)
     {
       if (BackgroundVisible) GUI.DrawRectangle(spriteBatch, Real.Position, Real.Size, BackgroundColor, isFilled: true);
 
@@ -507,7 +549,7 @@ namespace CrabUI
       RightResizeHandle.Draw(spriteBatch);
     }
 
-    protected virtual void DrawFront(SpriteBatch spriteBatch)
+    protected virtual partial void DrawFront(SpriteBatch spriteBatch)
     {
       if (DebugHighlight)
       {
@@ -528,14 +570,6 @@ namespace CrabUI
 
       Layout = new CUILayoutSimple();
 
-
-      // Absolute = new CUINullRect();
-      // AbsoluteMin = new CUINullRect();
-      // AbsoluteMax = new CUINullRect();
-      // Relative = new CUINullRect();
-      // RelativeMin = new CUINullRect();
-      // RelativeMax = new CUINullRect();
-
       DragHandle = new CUIDragHandle(this);
       SwipeHandle = new CUISwipeHandle(this);
       LeftResizeHandle = new CUIResizeHandle(this, CUIAnchorType.LeftBottom);
@@ -549,27 +583,5 @@ namespace CrabUI
       Relative = new CUINullRect(x, y, w, h);
     }
     #endregion
-
-    protected static void RunRecursiveOn(CUIComponent component, Action<CUIComponent, int> action, int depth = 0)
-    {
-      action(component, depth);
-      foreach (CUIComponent child in component.Children)
-      {
-        RunRecursiveOn(child, action, depth + 1);
-      }
-    }
-
-    public override string ToString() => $"{this.GetType().Name}:{ID}:{AKA}";
-
-    public void Info(object msg, [CallerFilePath] string source = "", [CallerLineNumber] int lineNumber = 0)
-    {
-      var fi = new FileInfo(source);
-
-      CUI.log($"{fi.Directory.Name}/{fi.Name}:{lineNumber}", Color.Yellow * 0.5f);
-      CUI.log($"{this} {msg ?? "null"}", Color.Yellow);
-    }
-
-    public void PrintLayout() => Info($"{Real} {Anchor.Type} Z:{ZIndex} A:{Absolute} R:{Relative} AMin:{AbsoluteMin} RMin:{RelativeMin} AMax:{AbsoluteMax} RMax:{RelativeMax}");
-
   }
 }
