@@ -25,11 +25,14 @@ namespace CrabUI
         OnTextChanged?.Invoke();
       }
     }
+    //TODO Uncringe
+    #region Cringe
     public bool Wrap;
     protected string WrappedText = "";
     protected Vector2? WrappedForThisSize;
+    protected Vector2 WrappedSize;
     protected bool NeedReWrapping;
-
+    #endregion
     internal override Vector2 AmIOkWithThisSize(Vector2 size)
     {
       if (!WrappedForThisSize.HasValue || size != WrappedForThisSize.Value || NeedReWrapping)
@@ -43,13 +46,14 @@ namespace CrabUI
         SetAbsoluteMin(AbsoluteMin with { Size = minSize });
 
         WrappedForThisSize = size;
+        WrappedSize = new Vector2(Math.Max(size.X, minSize.X), Math.Max(size.Y, minSize.Y));
         NeedReWrapping = false;
 
-        return new Vector2(Math.Max(size.X, minSize.X), Math.Max(size.Y, minSize.Y));
+        return WrappedSize;
       }
       else
       {
-        return size;
+        return WrappedSize;
       }
     }
 

@@ -359,9 +359,8 @@ namespace CrabUI
       set { fitContent = value; OnPropChanged(); OnAbsolutePropChanged(); }
     }
 
-
-    #region Absolute Props
     // Ugly, but otherwise it'll be undebugable
+    #region Absolute Props
     private CUINullRect absolute; public CUINullRect Absolute
     {
       get => absolute;
