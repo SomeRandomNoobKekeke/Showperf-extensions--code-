@@ -32,29 +32,48 @@ namespace CrabUI
     protected Vector2? WrappedForThisSize;
     protected Vector2 WrappedSize;
     protected bool NeedReWrapping;
+
+    protected void DoWrapFor(Vector2 size)
+    {
+      if (Wrap) WrappedText = Font.WrapText(Text, size.X / TextScale - Padding.X * 2);
+      else WrappedText = Text;
+
+      RealTextSize = Font.MeasureString(WrappedText) * TextScale;
+
+      bool FirstTimeHuh = AbsoluteMin.Width == null || AbsoluteMin.Height == null;
+
+      Vector2 minSize = RealTextSize + Padding * 2;
+      SetAbsoluteMin(AbsoluteMin with { Size = minSize });
+
+      WrappedForThisSize = size;
+      WrappedSize = new Vector2(Math.Max(size.X, minSize.X), Math.Max(size.Y, minSize.Y));
+
+      // WHY??? Coz Font.MeasureString adds an extra line for wrapped text with w=0
+      if (FirstTimeHuh)
+      {
+        if (Wrap) WrappedText = Font.WrapText(Text, WrappedSize.X / TextScale - Padding.X * 2);
+        else WrappedText = Text;
+
+        RealTextSize = Font.MeasureString(WrappedText) * TextScale;
+
+        minSize = RealTextSize + Padding * 2;
+        SetAbsoluteMin(AbsoluteMin with { Size = minSize });
+      }
+
+      WrappedForThisSize = size;
+      WrappedSize = new Vector2(Math.Max(size.X, minSize.X), Math.Max(size.Y, minSize.Y));
+      NeedReWrapping = false;
+    }
+
     #endregion
     internal override Vector2 AmIOkWithThisSize(Vector2 size)
     {
       if (!WrappedForThisSize.HasValue || size != WrappedForThisSize.Value || NeedReWrapping)
       {
-        if (Wrap) WrappedText = Font.WrapText(Text, size.X / TextScale - Padding.X * 2);
-        else WrappedText = Text;
-
-        RealTextSize = Font.MeasureString(WrappedText) * TextScale;
-
-        Vector2 minSize = RealTextSize + Padding * 2;
-        SetAbsoluteMin(AbsoluteMin with { Size = minSize });
-
-        WrappedForThisSize = size;
-        WrappedSize = new Vector2(Math.Max(size.X, minSize.X), Math.Max(size.Y, minSize.Y));
-        NeedReWrapping = false;
-
-        return WrappedSize;
+        DoWrapFor(size);
       }
-      else
-      {
-        return WrappedSize;
-      }
+
+      return WrappedSize;
     }
 
     public CUIAnchor TextAling = new CUIAnchor(CUIAnchorType.LeftTop);
@@ -72,6 +91,10 @@ namespace CrabUI
     internal override void UpdatePseudoChildren()
     {
       TextDrawPos = TextAling.GetChildPos(Real, Vector2.Zero, RealTextSize) + Padding * TextAling.Direction;
+      if (ComponentInitialized)
+      {
+        CUIDebug.Capture(null, this, "UpdatePseudoChildren", "", "TextDrawPos", TextDrawPos.ToString());
+      }
     }
 
     protected override void Draw(SpriteBatch spriteBatch)
@@ -97,7 +120,7 @@ namespace CrabUI
     {
       Relative = new CUINullRect(null, null, width, height);
     }
-    public CUITextBlock(string text, float? x= null, float? y=null, float? w=null, float? h=null) : this(text)
+    public CUITextBlock(string text, float? x = null, float? y = null, float? w = null, float? h = null) : this(text)
     {
       Relative = new CUINullRect(x, y, w, h);
     }

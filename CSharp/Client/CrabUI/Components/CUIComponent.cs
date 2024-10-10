@@ -332,6 +332,8 @@ namespace CrabUI
     public event Action<float, float> OnSwipe; internal void InvokeOnSwipe(float x, float y) => OnSwipe?.Invoke(x, y);
     public Action<float, float> AddOnSwipe { set { OnSwipe += value; } }
 
+    public void Click() { OnMouseDown?.Invoke(CUI.Input); }
+
     #endregion
     #region Handles --------------------------------------------------------
 
@@ -363,6 +365,9 @@ namespace CrabUI
     //TODO This is potentially cursed
     public object Data;
     public bool UnCullable { get; set; } // >:(
+    public bool IgnoreParentVisibility { get; set; } // >:(
+    public bool IgnoreParentEventIgnorance { get; set; } // >:(
+    public bool IgnoreParentZIndex { get; set; } // >:(
     public bool HideChildrenOutsideFrame { get; set; } = false;
     public CUIAnchor Anchor = new CUIAnchor(CUIAnchorType.LeftTop);
 
@@ -376,14 +381,24 @@ namespace CrabUI
         foreach (var child in Children)
         {
           //TODO think, should i propagate null?
-          if (zIndex.HasValue) child.ZIndex = zIndex.Value + 1;
+          if (zIndex.HasValue && !child.IgnoreParentZIndex)
+          {
+            child.ZIndex = zIndex.Value + 1;
+          }
         }
       }
     }
     private bool ignoreEvents; public bool IgnoreEvents
     {
       get => ignoreEvents;
-      set { ignoreEvents = value; foreach (var child in Children) child.IgnoreEvents = value; }
+      set
+      {
+        ignoreEvents = value;
+        foreach (var child in Children)
+        {
+          if (!child.IgnoreParentEventIgnorance) child.IgnoreEvents = value;
+        }
+      }
     }
 
     private bool visible = true; public bool Visible
@@ -392,7 +407,10 @@ namespace CrabUI
       set
       {
         visible = value;
-        foreach (var child in Children) child.Visible = value;
+        foreach (var child in Children)
+        {
+          if (!child.IgnoreParentVisibility) child.Visible = value;
+        }
       }
     }
 

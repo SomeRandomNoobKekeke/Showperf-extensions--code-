@@ -39,12 +39,12 @@ namespace CrabUI
 #if (!SHOWPERF || !CUIDEBUG)
     [Conditional("DONT")]
 #endif
-    public static void CaptureTicks(double ticks, string name, int hash) => ShowPerfExtensions.Mod.Capture(ticks, CUIShowperfCategory, name, hash);
+    public static void CaptureTicks(double ticks, string name, int hash) => ShowPerfExtensions.Mod.CaptureTicks(ticks, CUIShowperfCategory, name, hash);
 
 #if (!SHOWPERF || !CUIDEBUG)
     [Conditional("DONT")]
 #endif
-    public static void CaptureTicks(double ticks, string name) => ShowPerfExtensions.Mod.Capture(ticks, CUIShowperfCategory, name);
+    public static void CaptureTicks(double ticks, string name) => ShowPerfExtensions.Mod.CaptureTicks(ticks, CUIShowperfCategory, name);
 
 #if (!SHOWPERF || !CUIDEBUG)
     [Conditional("DONT")]

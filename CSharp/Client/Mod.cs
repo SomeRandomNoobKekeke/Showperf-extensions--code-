@@ -34,8 +34,8 @@ namespace ShowPerfExtensions
 
 
     public static void EnsureCategory(int cat) => Window.EnsureCategory(cat);
-    public static void Capture(double ticks, int category, string name, int hash) => Window.AddTicks(new UpdateTicks(ticks, category, name, hash));
-    public static void Capture(double ticks, int category, string name) => Window.AddTicks(new UpdateTicks(ticks, category, name));
+    public static void CaptureTicks(double ticks, int category, string name, int hash) => Window.AddTicks(new UpdateTicks(ticks, category, name, hash));
+    public static void CaptureTicks(double ticks, int category, string name) => Window.AddTicks(new UpdateTicks(ticks, category, name));
 
     public void Initialize()
     {
@@ -55,12 +55,30 @@ namespace ShowPerfExtensions
       );
 
       Showperf.States["init"] = Showperf.Clone();
-
-      CUIMain.Append(Showperf);
       CUIMain.OnUpdate += () => Showperf.Update();
-      Showperf.Capture.Toggle(CName.MapEntityDrawing);
+
+
+      CUIMain["showperfButton"] = new CUIButton("SHOWPERF")
+      {
+        Anchor = new CUIAnchor(CUIAnchorType.RightCenter),
+        Font = GUIStyle.MonospacedFont,
+        TextScale = 0.8f,
+        Wrap = true,
+        AddOnMouseDown = (e) =>
+        {
+          CUIMain["showperfButton"].Hide();
+          Showperf.Open();
+        },
+        InactiveColor = new Color(0, 0, 32, 128),
+        MouseOverColor = new Color(0, 0, 64, 128),
+        MousePressedColor = new Color(0, 0, 128, 128),
+      };
+
+      Showperf.OnClose += () => CUIMain["showperfButton"].Reveal();
 
       //CUIMain.Load(CUITest.CUIDropDown);
+
+      Capture.MapEntityDrawing.IsActive = true;
 
       PatchAll();
       addCommands();

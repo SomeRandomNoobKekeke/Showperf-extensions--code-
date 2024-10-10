@@ -135,10 +135,12 @@ namespace CrabUI
         AddOnStateChange = (state) =>
         {
           Loop = state;
-          Events.Clear();
-          EventsComponent.RemoveAllChildren();
+          Events?.Clear();
+          EventsComponent?.RemoveAllChildren();
         },
+        State = Loop,
       };
+
 
       this["controls"].Append(PickIDButton = new CUIMultiButton()
       {
@@ -176,16 +178,16 @@ namespace CrabUI
       };
 
       PickIDButton.OnSelect += (b, i) =>
-      {
-        if (i == 0)
         {
-          // Events.Clear();
-          // EventsComponent.RemoveAllChildren();
-          MakeIDList();
-          Pages.Open(EventsComponent);
-        }
-        else Pages.Open(DebugIDsComponent);
-      };
+          if (i == 0)
+          {
+            // Events.Clear();
+            // EventsComponent.RemoveAllChildren();
+            MakeIDList();
+            Pages.Open(EventsComponent);
+          }
+          else Pages.Open(DebugIDsComponent);
+        };
       PickIDButton.Select(0);
 
       this["controls"].Get<CUIToggleButton>("loop").State = true;
@@ -197,7 +199,10 @@ namespace CrabUI
     {
       if (CUI.Main == null) return null;
 
-      CUIDebugWindow w = new CUIDebugWindow(0, 0.3f, 0.3f, 0.6f);
+      CUIDebugWindow w = new CUIDebugWindow()
+      {
+        Absolute = new CUINullRect(10, 370, 500, 370),
+      };
       CUI.Main.Append(w);
       CUIDebugWindow.Main = w;
       CUI.Main.OnTreeChanged += () => w.MakeIDList();

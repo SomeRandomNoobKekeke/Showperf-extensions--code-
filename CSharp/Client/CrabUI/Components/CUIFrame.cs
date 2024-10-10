@@ -26,18 +26,22 @@ namespace CrabUI
       base.DrawFront(spriteBatch);
     }
 
-    public CUIFrame Open()
+    public event Action OnOpen;
+    public event Action OnClose;
+
+    public void Open()
     {
-      if (CUI.Main == null) return null;
+      if (CUI.Main == null && Parent != CUI.Main) return;
       CUI.Main.Append(this);
-      return this;
+      Revealed = true;
+      OnOpen?.Invoke();
     }
 
-    public CUIFrame Close()
+    public void Close()
     {
       RemoveSelf();
       Revealed = false;
-      return this;
+      OnClose?.Invoke();
     }
 
     public CUIFrame() : base()

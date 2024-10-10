@@ -26,47 +26,63 @@ namespace ShowPerfExtensions
 
     public class CaptureState
     {
-      public bool IsActive;
+      public CName Category;
       public string Description;
-      public bool ByID = true;
+      private bool isActive; public bool IsActive
+      {
+        get => isActive;
+        set
+        {
+          isActive = value;
+          ByID = Capture.ById;
+          if (isActive) Capture.Active.Add(this);
+          else Capture.Active.Remove(this);
+        }
+      }
+      public bool byID; public bool ByID
+      {
+        get => byID;
+        set
+        {
+          byID = value;
+          Window.Reset();
+        }
+      }
+
+      public CaptureState(CName cat)
+      {
+        Category = cat;
+      }
     }
 
-    public class CaptureManager
+    public static class Capture
     {
-      public Dictionary<CName, CaptureState> Capture = new Dictionary<CName, CaptureState>()
-      {
-        {CName.None , new CaptureState()},
-        {CName.All , new CaptureState()},
-        {CName.MapEntitysUpdate , new CaptureState()},
-        {CName.MapEntityDrawing , new CaptureState(){ByID = false}},
-        {CName.CharactersUpdate , new CaptureState()},
-        {CName.LevelObjectsDrawing , new CaptureState()},
-        {CName.LevelMisc ,new CaptureState()},
-        {CName.ItemComponentsUpdate , new CaptureState()},
-      };
-      public CaptureState this[CName name]
-      {
-        get => Capture[name];
-        set => Capture[name] = value;
-      }
-      public HashSet<CName> Active = new HashSet<CName>();
+      public static CaptureState None = new CaptureState(CName.None);
+      public static CaptureState All = new CaptureState(CName.All);
+      public static CaptureState MapEntitysUpdate = new CaptureState(CName.MapEntitysUpdate);
+      public static CaptureState MapEntityDrawing = new CaptureState(CName.MapEntityDrawing);
+      public static CaptureState CharactersUpdate = new CaptureState(CName.CharactersUpdate);
+      public static CaptureState LevelObjectsDrawing = new CaptureState(CName.LevelObjectsDrawing);
+      public static CaptureState LevelMisc = new CaptureState(CName.LevelMisc);
+      public static CaptureState ItemComponentsUpdate = new CaptureState(CName.ItemComponentsUpdate);
 
-      public void Toggle(CName name)
+
+      public static HashSet<CaptureState> Active = new HashSet<CaptureState>();
+
+      public static bool byId; public static bool ById
       {
-        if (Capture[name].IsActive) Active.Remove(name); else Active.Add(name);
-        Capture[name].IsActive = !Capture[name].IsActive;
+        get => byId;
+        set
+        {
+          byId = value;
+          foreach (CaptureState s in Active)
+          {
+            s.byID = value;
+          }
+          Window.Reset();
+        }
       }
-      public void ToggleByID(CName name)
-      {
-        Capture[name].ByID = !Capture[name].ByID;
-        Window.Reset();
-      }
-      public void SetByID(CName name, bool value)
-      {
-        Capture[name].ByID = value;
-        Window.Reset();
-      }
-      public CaptureManager() { }
+
     }
   }
 }

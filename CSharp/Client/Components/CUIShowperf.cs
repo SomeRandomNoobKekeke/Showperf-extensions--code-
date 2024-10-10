@@ -16,15 +16,12 @@ namespace ShowPerfExtensions
   {
     public class CUIShowperf : CUIFrame
     {
-      public CaptureManager Capture = new CaptureManager();
-
       //TODO mb this should be in Window like all the other props
       private SubType captureFrom; public SubType CaptureFrom
       {
         get => captureFrom;
         set { captureFrom = value; Window.Reset(); }
       }
-
 
       public CUIVerticalList Header;
       public CUITextBlock CategoryLine;
@@ -46,7 +43,7 @@ namespace ShowPerfExtensions
 
       public void Update()
       {
-        if (Capture.Active.Count != 0)
+        if (Revealed && Capture.Active.Count != 0)
         {
           Window.Update();
           TickList.Update();
@@ -91,7 +88,7 @@ namespace ShowPerfExtensions
         this["buttons1"]["ById"] = ById = new CUIToggleButton("By Id")
         {
           FillEmptySpace = new CUIBool2(true, false),
-          AddOnStateChange = (state) => Capture.SetByID(CName.MapEntityDrawing, state),
+          AddOnStateChange = (state) => Capture.ById = state,
         };
 
 

@@ -17,6 +17,8 @@ namespace CrabUI
   public static partial class CUI
   {
     public static CUIMainComponent Main => CUIMainComponent.Main;
+    public static CUIInput Input = new CUIInput();
+
     public static void log(object msg, Color? cl = null)
     {
       cl ??= Color.Yellow;
