@@ -87,7 +87,6 @@ namespace CrabUI
     {
       Swipeable = true;
       ConsumeMouseClicks = true;
-      OnDClick += (m) => ChildrenOffset = Vector2.Zero;
       HideChildrenOutsideFrame = true;
 
       this.Append(Map = new CUIMapContent());

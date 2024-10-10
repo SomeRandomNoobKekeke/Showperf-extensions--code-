@@ -84,13 +84,16 @@ namespace ShowPerfExtensions
       {
         this["handle"] = new CUIComponent()
         {
-          Absolute = new CUINullRect(h: 20),
+          Absolute = new CUINullRect(h: 18),
           BorderColor = Color.Transparent,
         };
 
         this["handle"]["closebutton"] = new CUIButton("X")
         {
           Anchor = new CUIAnchor(CUIAnchorType.RightCenter),
+          Absolute = new CUINullRect(w: 15, h: 18),
+          Padding = new Vector2(0, 0),
+          Font = GUIStyle.MonospacedFont,
           InactiveColor = new Color(32, 0, 0),
           MouseOverColor = new Color(64, 0, 0),
           MousePressedColor = new Color(128, 0, 0),
@@ -180,6 +183,7 @@ namespace ShowPerfExtensions
         {
           BackgroundColor = Color.Transparent,
           BorderColor = Color.Transparent,
+          AddOnDClick = (e) => Map.ChildrenOffset = Vector2.Zero,
         };
 
         FillMap();
