@@ -81,7 +81,7 @@ namespace CrabUI
     {
       Relative = new CUINullRect(null, null, width, height);
     }
-    public CUIToggleButton(string text, float? x, float? y, float? w, float? h) : this(text)
+    public CUIToggleButton(string text, float? x= null, float? y=null, float? w=null, float? h=null) : this(text)
     {
       Relative = new CUINullRect(x, y, w, h);
     }

@@ -23,7 +23,7 @@ namespace CrabUI
         Real.Height * 1.1f
       );
 
-      public CUITestLooseFrame(float? x, float? y, float? w, float? h) : base(x, y, w, h)
+      public CUITestLooseFrame(float? x= null, float? y=null, float? w=null, float? h=null) : base(x, y, w, h)
       {
         BackgroundColor = Color.Black * 0.2f;
         // HideChildrenOutsideFrame = false;

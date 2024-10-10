@@ -71,10 +71,12 @@ namespace CrabUI
     private double LastUpdateTime;
     public void Update(double totalTime)
     {
-      sw.Restart();
+
 
       if (totalTime - LastUpdateTime >= UpdateInterval)
       {
+        sw.Restart();
+
         if (OKurwa++ == 0) CUIDebug.Flush();
         if (OKurwa == 1) OKurwa = 0;
 
@@ -103,16 +105,9 @@ namespace CrabUI
           c.Layout.UpdateDecor();
         });
 
-
-
-
-        //HACK BaroDev(wide)
-        // RunStraigth(c =>
-        // {
-        //   c.Layout.Changed = false;
-        //   c.Layout.DecorChanged = false;
-        //   c.Layout.AbsoluteChanged = false;
-        // });
+        sw.Stop();
+        CUIDebug.EnsureCategory();
+        CUIDebug.CaptureTicks(sw.ElapsedTicks, "CUI.Update");
 
 
         RunStraigth(c => c.InvokeOnUpdate());
@@ -120,9 +115,7 @@ namespace CrabUI
         LastUpdateTime = totalTime;
       }
 
-      sw.Stop();
-      CUIDebug.EnsureCategory();
-      CUIDebug.CaptureTicks(sw.ElapsedTicks, "CUI.Update");
+
     }
 
     #endregion

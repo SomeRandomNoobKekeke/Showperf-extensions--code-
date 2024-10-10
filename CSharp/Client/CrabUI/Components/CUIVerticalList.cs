@@ -69,7 +69,7 @@ namespace CrabUI
       // BorderColor = Color.Transparent;
     }
 
-    public CUIVerticalList(float? x, float? y, float? w, float? h) : this()
+    public CUIVerticalList(float? x= null, float? y=null, float? w=null, float? h=null) : this()
     {
       Relative = new CUINullRect(x, y, w, h);
     }

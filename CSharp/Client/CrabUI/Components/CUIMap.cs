@@ -53,7 +53,7 @@ namespace CrabUI
       UnCullable = true;
     }
 
-    public CUIMapContent(float? x, float? y, float? w, float? h) : this()
+    public CUIMapContent(float? x = null, float? y = null, float? w = null, float? h = null) : this()
     {
       Relative = new CUINullRect(x, y, w, h);
     }
@@ -82,7 +82,7 @@ namespace CrabUI
 
     }
 
-    public CUIMap(float? x, float? y, float? w, float? h) : this()
+    public CUIMap(float? x = null, float? y = null, float? w = null, float? h = null) : this()
     {
       Relative = new CUINullRect(x, y, w, h);
     }

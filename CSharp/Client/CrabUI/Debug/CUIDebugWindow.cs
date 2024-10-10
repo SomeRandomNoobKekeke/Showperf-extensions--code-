@@ -104,14 +104,26 @@ namespace CrabUI
 
     public CUIDebugWindow() : base()
     {
-      Main = this;
-
       this.ZIndex = 1000;
       this.Layout = new CUILayoutVerticalList(this);
 
       this["handle"] = new CUIComponent()
       {
         Absolute = new CUINullRect(null, null, null, 20),
+      };
+
+      this["handle"]["closebutton"] = new CUIButton("X")
+      {
+        Anchor = new CUIAnchor(CUIAnchorType.RightCenter),
+        InactiveColor = new Color(32, 0, 0),
+        MouseOverColor = new Color(64, 0, 0),
+        MousePressedColor = new Color(128, 0, 0),
+        AddOnMouseDown = (e) =>
+        {
+          RemoveSelf();
+          Revealed = false;
+          CUIDebugWindow.Main = null;
+        },
       };
 
       this["controls"] = new CUIComponent()
@@ -166,16 +178,16 @@ namespace CrabUI
       };
 
       PickIDButton.OnSelect += (b, i) =>
+      {
+        if (i == 0)
         {
-          if (i == 0)
-          {
-            // Events.Clear();
-            // EventsComponent.RemoveAllChildren();
-            MakeIDList();
-            Pages.Open(EventsComponent);
-          }
-          else Pages.Open(DebugIDsComponent);
-        };
+          // Events.Clear();
+          // EventsComponent.RemoveAllChildren();
+          MakeIDList();
+          Pages.Open(EventsComponent);
+        }
+        else Pages.Open(DebugIDsComponent);
+      };
       PickIDButton.Select(0);
 
       this["controls"].Get<CUIToggleButton>("loop").State = true;
@@ -189,11 +201,12 @@ namespace CrabUI
 
       CUIDebugWindow w = new CUIDebugWindow(0, 0.3f, 0.3f, 0.6f);
       CUI.Main.Append(w);
+      CUIDebugWindow.Main = w;
       CUI.Main.OnTreeChanged += () => w.MakeIDList();
       return w;
     }
 
-    public CUIDebugWindow(float? x, float? y, float? w, float? h) : this()
+    public CUIDebugWindow(float? x = null, float? y = null, float? w = null, float? h = null) : this()
     {
       Relative = new CUINullRect(x, y, w, h);
     }

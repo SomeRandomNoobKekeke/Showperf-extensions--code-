@@ -48,18 +48,14 @@ namespace CrabUI
       set
       {
         _value = value;
-        if (value == null)
+
+        Revealed = value != null;
+        if (value != null)
         {
-          Visible = false; IgnoreEvents = true;
-          MakeText();
-        }
-        else
-        {
-          Visible = true; IgnoreEvents = false;
           LastUpdate = Timing.TotalTime;
-          MakeText();
           AssignColor();
         }
+        MakeText();
       }
     }
 

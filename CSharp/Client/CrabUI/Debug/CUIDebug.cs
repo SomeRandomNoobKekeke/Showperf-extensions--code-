@@ -1,5 +1,5 @@
-#define CUIDEBUG
-#define SHOWPERF
+// #define CUIDEBUG
+// #define SHOWPERF
 
 using System;
 using System.Collections.Generic;

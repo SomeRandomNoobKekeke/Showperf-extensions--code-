@@ -36,6 +36,7 @@ namespace ShowPerfExtensions
 
       public CUIDropDown SubTypeDD;
       public CUIToggleButton ById;
+      public CUIMultiButton ModeButton;
       public CUIToggleButton Accumulate;
 
       public bool ShouldCapture(Entity e)
@@ -64,37 +65,35 @@ namespace ShowPerfExtensions
         this["header"].Append(SumLine = new CUITextBlock("SumLine"));
 
 
-        this["buttons1"] = new CUIComponent()
+        this["buttons1"] = new CUIHorizontalList()
         {
           FitContent = new CUIBool2(false, true),
+          HideChildrenOutsideFrame = false,
         };
 
 
-
-        this["buttons1"]["ById"] = new CUIToggleButton("By Id")
+        this["buttons1"]["ById"] = ById = new CUIToggleButton("By Id")
         {
-          Relative = new CUINullRect(0, 0, 0.5f, null),
+          FillEmptySpace = new CUIBool2(true, false),
           AddOnStateChange = (state) => Capture.SetByID(CName.MapEntityDrawing, state),
         };
 
-        CUIMultiButton m = new CUIMultiButton()
+
+        this["buttons1"]["mode"] = ModeButton = new CUIMultiButton()
         {
           FillEmptySpace = new CUIBool2(true, false),
-          Relative = new CUINullRect(0.5f, 0, 0.5f, null),
           AddOnSelect = (b, i) => Window.Mode = (CaptureWindowMode)b.Data,
         };
 
-        m.Add(new CUIButton("Mean")).Data = CaptureWindowMode.Mean;
-        m.Add(new CUIButton("Sum")).Data = CaptureWindowMode.Sum;
-        // m.Add(new CUIButton("Spike")).Data = CaptureWindowMode.Spike;
+        ModeButton.Add(new CUIButton("Mean") { Data = CaptureWindowMode.Mean });
+        ModeButton.Add(new CUIButton("Sum") { Data = CaptureWindowMode.Sum });
 
-        m.Select(0);
-
-        this["buttons1"]["mode"] = m;
+        ModeButton.Select(0);
 
 
-        SubTypeDD = new CUIDropDown()
+        this["buttons1"]["SubTypeDD"] = SubTypeDD = new CUIDropDown()
         {
+          FillEmptySpace = new CUIBool2(true, false),
           AddOnSelect = (v) => CaptureFrom = Enum.Parse<SubType>(v),
         };
 
@@ -104,7 +103,6 @@ namespace ShowPerfExtensions
         }
 
         SubTypeDD.Select(SubType.All);
-        this["SubTypeDD"] = SubTypeDD;
 
         this["bb"] = new CUIButton("Click")
         {
@@ -116,23 +114,12 @@ namespace ShowPerfExtensions
         };
 
 
-        Pages = (CUIPages)Append(new CUIPages()
+        this["pages"] = Pages = new CUIPages()
         {
           FillEmptySpace = new CUIBool2(false, true),
-          debug = true,
-        });
-
-
-
-
-
-        TickList = new CUITickList()
-        {
-          Relative = new CUINullRect(0, 0, 1, 1),
-          Debug = true,
         };
 
-
+        TickList = new CUITickList(0, 0, 1, 1);
 
         Map = new CUIMap(0, 0, 1, 1)
         {
@@ -152,9 +139,6 @@ namespace ShowPerfExtensions
         Map.Connect(b2, b3, Color.Lime);
 
         Pages.Open(TickList);
-
-
-        Debug = true;
       }
 
       public CUIShowperf() : base()

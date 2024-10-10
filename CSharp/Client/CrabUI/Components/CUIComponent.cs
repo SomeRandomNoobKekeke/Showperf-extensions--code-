@@ -131,7 +131,14 @@ namespace CrabUI
       CUI.log($"{this} {msg ?? "null"}", Color.Yellow);
     }
 
-    public void PrintLayout() => Info($"{Real} {Anchor.Type} Z:{ZIndex} A:{Absolute} R:{Relative} AMin:{AbsoluteMin} RMin:{RelativeMin} AMax:{AbsoluteMax} RMax:{RelativeMax}");
+    public void PrintLayout([CallerFilePath] string source = "", [CallerLineNumber] int lineNumber = 0)
+    {
+      Info(
+        $"{Real} {Anchor.Type} Z:{ZIndex} A:{Absolute} R:{Relative} AMin:{AbsoluteMin} RMin:{RelativeMin} AMax:{AbsoluteMax} RMax:{RelativeMax}",
+        source,
+        lineNumber
+      );
+    }
 
     #endregion
     #region Tree --------------------------------------------------------
@@ -187,6 +194,7 @@ namespace CrabUI
       return c;
     }
 
+    public void RemoveSelf() => Parent?.RemoveChild(this);
     public void RemoveChild(CUIComponent c)
     {
       if (c == null || !Children.Contains(c)) return;
@@ -199,6 +207,8 @@ namespace CrabUI
       c.SetParent(null);
       Children.Remove(c);
     }
+
+
 
     public void RemoveAllChildren()
     {
@@ -365,6 +375,19 @@ namespace CrabUI
       {
         visible = value;
         foreach (var child in Children) child.Visible = value;
+      }
+    }
+
+    public void Hide() { Visible = false; IgnoreEvents = true; }
+    public void Reveal() { Visible = true; IgnoreEvents = false; }
+
+    private bool revealed = true; public bool Revealed
+    {
+      get => revealed;
+      set
+      {
+        revealed = value;
+        if (revealed) Reveal(); else Hide();
       }
     }
 
@@ -598,7 +621,7 @@ namespace CrabUI
       ComponentInitialized = true;
     }
 
-    public CUIComponent(float? x, float? y, float? w, float? h) : this()
+    public CUIComponent(float? x = null, float? y = null, float? w = null, float? h = null) : this()
     {
       Relative = new CUINullRect(x, y, w, h);
     }
