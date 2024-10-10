@@ -32,6 +32,7 @@ namespace CrabUI
         Border = new Color(128, 128, 128, 255),
         Text = new Color(255, 255, 255, 255),
         Off = new Color(0, 0, 0, 128),
+        Disabled = new Color(128, 128, 128, 255),
       },
       Secondary = new CUIColorPreset()
       {
@@ -41,6 +42,7 @@ namespace CrabUI
         OffHover = new Color(0, 0, 64, 255),
         On = new Color(0, 0, 255, 255),
         OnHover = new Color(0, 0, 196, 255),
+        Disabled = new Color(64, 64, 64, 255),
       },
       Tertiary = new CUIColorPreset()
       {
@@ -50,6 +52,7 @@ namespace CrabUI
         OffHover = new Color(32, 0, 64, 255),
         On = new Color(255, 0, 255, 255),
         OnHover = new Color(196, 0, 196, 255),
+        Disabled = new Color(32, 32, 32, 255),
       },
     };
 

@@ -24,13 +24,21 @@ namespace ShowPerfExtensions
         {
           Absolute = new CUINullRect(x: x, y: y);
           CState = cs;
-          State = cs.IsActive;
-          OnStateChange += (state) =>
+
+          if (cs != null)
           {
-            CState.IsActive = state;
-            Showperf.SetCategoryText();
-          };
-          Buttons[cs] = this;
+            State = cs.IsActive;
+            OnStateChange += (state) =>
+            {
+              CState.IsActive = state;
+              Showperf.SetCategoryText();
+            };
+            Buttons[cs] = this;
+          }
+          else
+          {
+            Disabled = true;
+          }
         }
       }
 
@@ -194,7 +202,7 @@ namespace ShowPerfExtensions
       public void FillMap()
       {
         Map.Add(new MapButton(0, 0, "bebe", Capture.MapEntityDrawing));
-
+        Map.Add(new MapButton(0, 50, "bkokokoebe", null));
         // Map.Connect(0, 1);
         // Map.Connect(1, 2, Color.Lime);
       }

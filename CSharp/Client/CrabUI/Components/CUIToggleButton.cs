@@ -13,6 +13,9 @@ namespace CrabUI
   public class CUIToggleButton : CUITextBlock
   {
     public GUISoundType ClickSound { get; set; } = GUISoundType.Select;
+    public bool Disabled { get; set; }
+
+    public Color DisabledColor;
     public Color OnColor;
     public Color OnHoverColor;
     public Color OffColor;
@@ -43,15 +46,22 @@ namespace CrabUI
 
     protected override void Draw(SpriteBatch spriteBatch)
     {
-      if (State)
+      if (Disabled)
       {
-        if (MouseOver) BackgroundColor = OnHoverColor;
-        else BackgroundColor = OnColor;
+        BackgroundColor = DisabledColor;
       }
       else
       {
-        if (MouseOver) BackgroundColor = OffHoverColor;
-        else BackgroundColor = OffColor;
+        if (State)
+        {
+          if (MouseOver) BackgroundColor = OnHoverColor;
+          else BackgroundColor = OnColor;
+        }
+        else
+        {
+          if (MouseOver) BackgroundColor = OffHoverColor;
+          else BackgroundColor = OffColor;
+        }
       }
 
       base.Draw(spriteBatch);
@@ -69,12 +79,20 @@ namespace CrabUI
       OffColor = CUIPallete.Default.Secondary.Off;
       OffHoverColor = CUIPallete.Default.Secondary.OffHover;
       BorderColor = CUIPallete.Default.Secondary.Border;
+      DisabledColor = CUIPallete.Default.Secondary.Disabled;
 
       TextAling.Type = CUIAnchorType.CenterCenter;
       Padding = new Vector2(4, 2);
 
-      OnMouseDown += (e) => SoundPlayer.PlayUISound(ClickSound);
-      OnMouseDown += (e) => State = !State;
+      OnMouseDown += (e) =>
+      {
+        if (!Disabled)
+        {
+          State = !State;
+          SoundPlayer.PlayUISound(ClickSound);
+        }
+      };
+
     }
 
     public CUIToggleButton(string text, float? width, float? height) : this(text)
