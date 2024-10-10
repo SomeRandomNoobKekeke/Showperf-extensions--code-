@@ -194,6 +194,24 @@ namespace CrabUI
       return c;
     }
 
+    public CUIComponent Prepend(CUIComponent c, string name = null)
+    {
+      if (c == null) return c;
+
+      Children.Insert(0, c);
+      c.SetParent(this);
+
+      PassPropsToChild(c);
+
+      if (name != null)
+      {
+        NamedComponents[name] = c;
+        c.AKA = name;
+      }
+
+      return c;
+    }
+
     public void RemoveSelf() => Parent?.RemoveChild(this);
     public void RemoveChild(CUIComponent c)
     {

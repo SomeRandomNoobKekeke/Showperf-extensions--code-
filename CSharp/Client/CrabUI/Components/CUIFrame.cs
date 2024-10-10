@@ -26,6 +26,20 @@ namespace CrabUI
       base.DrawFront(spriteBatch);
     }
 
+    public CUIFrame Open()
+    {
+      if (CUI.Main == null) return null;
+      CUI.Main.Append(this);
+      return this;
+    }
+
+    public CUIFrame Close()
+    {
+      RemoveSelf();
+      Revealed = false;
+      return this;
+    }
+
     public CUIFrame() : base()
     {
       HideChildrenOutsideFrame = true;

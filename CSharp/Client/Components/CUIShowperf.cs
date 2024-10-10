@@ -55,9 +55,25 @@ namespace ShowPerfExtensions
 
       public void CreateGUI()
       {
+        this["handle"] = new CUIComponent()
+        {
+          Absolute = new CUINullRect(h: 20),
+          BorderColor = Color.Transparent,
+        };
+
+        this["handle"]["closebutton"] = new CUIButton("X")
+        {
+          Anchor = new CUIAnchor(CUIAnchorType.RightCenter),
+          InactiveColor = new Color(32, 0, 0),
+          MouseOverColor = new Color(64, 0, 0),
+          MousePressedColor = new Color(128, 0, 0),
+          AddOnMouseDown = (e) => Close(),
+        };
+
         this["header"] = new CUIVerticalList()
         {
           BackgroundColor = Color.Black * 0.5f,
+          BorderColor = CUIPallete.Default.Secondary.Border,
           FitContent = new CUIBool2(false, true),
         };
 
@@ -104,7 +120,7 @@ namespace ShowPerfExtensions
 
         SubTypeDD.Select(SubType.All);
 
-        this["bb"] = new CUIButton("Click")
+        this["CaptureButton"] = new CUIButton("Capture")
         {
           AddOnMouseDown = (e) =>
           {
