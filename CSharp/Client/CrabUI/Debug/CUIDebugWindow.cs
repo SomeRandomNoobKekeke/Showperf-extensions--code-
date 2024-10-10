@@ -35,7 +35,7 @@ namespace CrabUI
     {
       if (EventsComponent == null) return;
 
-      if (target > 1000) return;
+      if (target > 200) return;
 
       if (Events.Count < target + 1)
       {
@@ -120,9 +120,7 @@ namespace CrabUI
         MousePressedColor = new Color(128, 0, 0),
         AddOnMouseDown = (e) =>
         {
-          RemoveSelf();
-          Revealed = false;
-          CUIDebugWindow.Main = null;
+          CUIDebugWindow.Close();
         },
       };
 
@@ -204,6 +202,15 @@ namespace CrabUI
       CUIDebugWindow.Main = w;
       CUI.Main.OnTreeChanged += () => w.MakeIDList();
       return w;
+    }
+
+    public static void Close()
+    {
+      if (CUIDebugWindow.Main == null) return;
+
+      CUIDebugWindow.Main.RemoveSelf();
+      CUIDebugWindow.Main.Revealed = false;
+      CUIDebugWindow.Main = null;
     }
 
     public CUIDebugWindow(float? x = null, float? y = null, float? w = null, float? h = null) : this()

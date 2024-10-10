@@ -61,8 +61,7 @@ namespace CrabUI
         set
         {
           opened = value;
-          if (opened) { Visible = true; IgnoreEvents = false; }
-          if (!opened) { Visible = false; IgnoreEvents = true; }
+          Revealed = value;
         }
       }
 
@@ -113,7 +112,7 @@ namespace CrabUI
         CUI.Main.OnMouseDown += (e) => OnMouseDown += (e) =>
         {
           Close();
-          e.ClickConsumed = true;
+          //e.ClickConsumed = true;
         };
 
         Close();

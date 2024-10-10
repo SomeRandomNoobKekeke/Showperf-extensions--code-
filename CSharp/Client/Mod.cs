@@ -30,7 +30,7 @@ namespace ShowPerfExtensions
 
     public static CaptureWindow Window;
     public static CUIShowperf Showperf;
-    public static CUIMainComponent CUI;
+    public static CUIMainComponent CUIMain;
 
 
     public static void EnsureCategory(int cat) => Window.EnsureCategory(cat);
@@ -43,27 +43,24 @@ namespace ShowPerfExtensions
 
       GameMain.PerformanceCounter.DrawTimeGraph = new Graph(1000);
       Window = new CaptureWindow(duration: 3, fps: 30);
-      CUI = new CUIMainComponent();
+      CUIMain = new CUIMainComponent();
       Showperf = new CUIShowperf()
       {
         Absolute = new CUINullRect(null, null, 350, 600),
       };
 
       Showperf.Absolute = new CUINullRect(
-        CUIAnchor.GetChildPos(CUI.Real, CUIAnchorType.RightCenter, new Vector2(-1, 0), Showperf.Absolute.Size),
+        CUIAnchor.GetChildPos(CUIMain.Real, CUIAnchorType.RightCenter, new Vector2(-1, 0), Showperf.Absolute.Size),
         Showperf.Absolute.Size
       );
 
       Showperf.States["init"] = Showperf.Clone();
 
-      CUI.Append(Showperf);
-      CUI.OnUpdate += () => Showperf.Update();
+      CUIMain.Append(Showperf);
+      CUIMain.OnUpdate += () => Showperf.Update();
       Showperf.Capture.Toggle(CName.MapEntityDrawing);
 
-      //CUI.Load(CUITest.CUIDropDown);
-
-      CUIDebugWindow.Open();
-
+      //CUIMain.Load(CUITest.CUIDropDown);
 
       PatchAll();
       addCommands();
@@ -77,6 +74,7 @@ namespace ShowPerfExtensions
     public void Dispose()
     {
       removeCommands();
+      CUI.Dispose();
       info($"{ModName} Disposed");
     }
   }

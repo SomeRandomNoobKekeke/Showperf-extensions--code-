@@ -1,4 +1,4 @@
-// #define CUIDEBUG
+#define CUIDEBUG
 // #define SHOWPERF
 
 using System;

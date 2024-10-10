@@ -10,7 +10,6 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Graphics;
 using System.Diagnostics;
-using HarmonyLib;
 
 namespace CrabUI
 {
@@ -32,7 +31,7 @@ namespace CrabUI
 
 
     private Stopwatch sw;
-    private Harmony harmony;
+
     private List<CUIComponent> Flat = new List<CUIComponent>();
     private List<CUIComponent> Leaves = new List<CUIComponent>();
     private SortedList<int, List<CUIComponent>> Layers = new SortedList<int, List<CUIComponent>>();
@@ -71,8 +70,6 @@ namespace CrabUI
     private double LastUpdateTime;
     public void Update(double totalTime)
     {
-
-
       if (totalTime - LastUpdateTime >= UpdateInterval)
       {
         sw.Restart();
@@ -129,7 +126,7 @@ namespace CrabUI
     }
 
     //TODO lock flat, new components are blinking
-    protected override void Draw(SpriteBatch spriteBatch)
+    public new void Draw(SpriteBatch spriteBatch)
     {
       sw.Restart();
 
@@ -312,50 +309,7 @@ namespace CrabUI
     #endregion
     #region HandleMouse End
     #endregion
-    private void patchAll()
-    {
-      harmony.Patch(
-        original: typeof(GUI).GetMethod("Draw", AccessTools.all),
-        prefix: new HarmonyMethod(typeof(CUIMainComponent).GetMethod("CUIDraw", AccessTools.all))
-      );
 
-      harmony.Patch(
-        original: typeof(GameMain).GetMethod("Update", AccessTools.all),
-        postfix: new HarmonyMethod(typeof(CUIMainComponent).GetMethod("CUIUpdate", AccessTools.all))
-      );
-
-      harmony.Patch(
-        original: typeof(GUI).GetMethod("UpdateMouseOn", AccessTools.all),
-        postfix: new HarmonyMethod(typeof(CUIMainComponent).GetMethod("CUIBlockClicks", AccessTools.all))
-      );
-
-      harmony.Patch(
-        original: typeof(Camera).GetMethod("MoveCamera", AccessTools.all),
-        prefix: new HarmonyMethod(typeof(CUIMainComponent).GetMethod("CUIBlockScroll", AccessTools.all))
-      );
-    }
-
-    private static void CUIUpdate(GameTime gameTime)
-    {
-      try { Main.Update(gameTime.TotalGameTime.TotalSeconds); }
-      catch (Exception e) { CUI.log($"CUI: {e}", Color.Yellow); }
-    }
-
-    private static void CUIDraw(SpriteBatch spriteBatch)
-    {
-      try { Main.Draw(spriteBatch); }
-      catch (Exception e) { CUI.log($"CUI: {e}", Color.Yellow); }
-    }
-
-    private static void CUIBlockClicks(ref GUIComponent __result)
-    {
-      if (GUI.MouseOn == null && Main.MouseOn != null && Main.MouseOn != Main) GUI.MouseOn = dummyComponent;
-    }
-
-    private static void CUIBlockScroll(float deltaTime, ref bool allowMove, ref bool allowZoom, bool allowInput, bool? followSub)
-    {
-      if (GUI.MouseOn == dummyComponent) allowZoom = false;
-    }
 
     public void Load(Action<CUIMainComponent> initFunc)
     {
@@ -371,13 +325,8 @@ namespace CrabUI
       ShouldPassPropsToChildren = false;
       sw = new Stopwatch();
 
-      harmony = new Harmony("crabui");
-
-      if (Main == null)
-      {
-        Main = this;
-        patchAll();
-      }
+      Main = this;
+      CUI.Initialize();
     }
   }
 }
