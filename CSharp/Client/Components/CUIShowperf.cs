@@ -16,6 +16,24 @@ namespace ShowPerfExtensions
   {
     public class CUIShowperf : CUIFrame
     {
+      public class MapButton : CUIToggleButton
+      {
+        public static Dictionary<CaptureState, MapButton> Buttons = new Dictionary<CaptureState, MapButton>();
+        public CaptureState CState;
+        public MapButton(int x, int y, string name, CaptureState cs) : base(name)
+        {
+          Absolute = new CUINullRect(x: x, y: y);
+          CState = cs;
+          State = cs.IsActive;
+          OnStateChange += (state) =>
+          {
+            CState.IsActive = state;
+            Showperf.SetCategoryText();
+          };
+          Buttons[cs] = this;
+        }
+      }
+
       //TODO mb this should be in Window like all the other props
       private SubType captureFrom; public SubType CaptureFrom
       {
@@ -24,6 +42,7 @@ namespace ShowPerfExtensions
       }
 
       public CUIVerticalList Header;
+      //TODO CategoryLine and SumLine probably should be in TickList
       public CUITextBlock CategoryLine;
       public CUITextBlock SumLine;
 
@@ -35,6 +54,17 @@ namespace ShowPerfExtensions
       public CUIToggleButton ById;
       public CUIMultiButton ModeButton;
       public CUIToggleButton Accumulate;
+      public void Clear()
+      {
+        TickList.Clear();
+        CategoryLine.Text = "";
+        SumLine.Text = "";
+      }
+      public void SetCategoryText()
+      {
+        string s = String.Join(", ", Capture.Active.ToList().Select(cs => MapButton.Buttons[cs].Text));
+        CategoryLine.Text = s;
+      }
 
       public bool ShouldCapture(Entity e)
       {
@@ -43,7 +73,7 @@ namespace ShowPerfExtensions
 
       public void Update()
       {
-        if (Revealed && Capture.Active.Count != 0)
+        if (Revealed)
         {
           Window.Update();
           TickList.Update();
@@ -67,25 +97,6 @@ namespace ShowPerfExtensions
           AddOnMouseDown = (e) => Close(),
         };
 
-        this["header"] = new CUIVerticalList()
-        {
-          BackgroundColor = Color.Black * 0.5f,
-          BorderColor = CUIPallete.Default.Secondary.Border,
-          FitContent = new CUIBool2(false, true),
-        };
-
-        this["header"].Append(CategoryLine = new CUITextBlock("CategoryLine")
-        {
-          Ghost = true,
-          Font = GUIStyle.MonospacedFont,
-          TextScale = 0.75f,
-        });
-        this["header"].Append(SumLine = new CUITextBlock("SumLine")
-        {
-          Ghost = true,
-          Font = GUIStyle.MonospacedFont,
-          TextScale = 0.75f,
-        });
 
 
         this["buttons1"] = new CUIHorizontalList()
@@ -136,32 +147,52 @@ namespace ShowPerfExtensions
           },
         };
 
+        this["header"] = new CUIVerticalList()
+        {
+          BackgroundColor = Color.Black * 0.75f,
+          BorderColor = CUIPallete.Default.Secondary.Border,
+          FitContent = new CUIBool2(false, true),
+        };
+
+        this["header"].Append(CategoryLine = new CUITextBlock("CategoryLine")
+        {
+          Ghost = true,
+          Font = GUIStyle.MonospacedFont,
+          TextScale = 0.75f,
+        });
+        this["header"].Append(SumLine = new CUITextBlock("SumLine")
+        {
+          Ghost = true,
+          Font = GUIStyle.MonospacedFont,
+          TextScale = 0.75f,
+        });
+
+
 
         this["pages"] = Pages = new CUIPages()
         {
           FillEmptySpace = new CUIBool2(false, true),
+          BackgroundColor = Color.Black * 0.75f,
         };
 
         TickList = new CUITickList(0, 0, 1, 1);
-
         Map = new CUIMap(0, 0, 1, 1)
         {
-          BorderColor = Color.Transparent
+          BackgroundColor = Color.Transparent,
+          BorderColor = Color.Transparent,
         };
 
+        FillMap();
 
-        CUIButton b1 = (CUIButton)Map.Add(new CUIButton("kokoko"));
-        CUIButton b2 = (CUIButton)Map.Add(new CUIButton("kokoko"));
-        CUIButton b3 = (CUIButton)Map.Add(new CUIButton("kokoko"));
+        Pages.Open(Map);
+      }
 
-        b1.Absolute = new CUINullRect(0, 0, null, null);
-        b2.Absolute = new CUINullRect(200, 100, null, null);
-        b3.Absolute = new CUINullRect(0, 200, null, null);
+      public void FillMap()
+      {
+        Map.Add(new MapButton(0, 0, "bebe", Capture.MapEntityDrawing));
 
-        Map.Connect(b1, b2);
-        Map.Connect(b2, b3, Color.Lime);
-
-        Pages.Open(TickList);
+        // Map.Connect(0, 1);
+        // Map.Connect(1, 2, Color.Lime);
       }
 
       public CUIShowperf() : base()
@@ -169,6 +200,7 @@ namespace ShowPerfExtensions
         Layout = new CUILayoutVerticalList();
 
         CreateGUI();
+        SetCategoryText();
 
         OnDClick += m =>
         {

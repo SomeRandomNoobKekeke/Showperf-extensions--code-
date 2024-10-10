@@ -62,11 +62,25 @@ namespace CrabUI
   public class CUIMap : CUIComponent
   {
     public CUIMapContent Map;
-
     public CUIComponent Add(CUIComponent c) => Map.Append(c);
+    public CUIComponent Add(string name, CUIComponent c)
+    {
+      if (name != null) Remember(c, name);
+      return Map.Append(c);
+    }
+
     public void Connect(CUIComponent start, CUIComponent end, Color? color = null)
     {
       Map.Connect(start, end, color);
+    }
+    public void Connect(int start, int end, Color? color = null)
+    {
+      CUIComponent startComponent = Map.Children.ElementAtOrDefault(start);
+      CUIComponent endComponent = Map.Children.ElementAtOrDefault(end);
+      if (startComponent != null && endComponent != null)
+      {
+        Connect(startComponent, endComponent, color);
+      }
     }
 
     public CUIMap() : base()
@@ -76,10 +90,7 @@ namespace CrabUI
       OnDClick += (m) => ChildrenOffset = Vector2.Zero;
       HideChildrenOutsideFrame = true;
 
-
-
       this.Append(Map = new CUIMapContent());
-
     }
 
     public CUIMap(float? x = null, float? y = null, float? w = null, float? h = null) : this()

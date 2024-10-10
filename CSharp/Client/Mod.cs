@@ -43,6 +43,9 @@ namespace ShowPerfExtensions
 
       GameMain.PerformanceCounter.DrawTimeGraph = new Graph(1000);
       Window = new CaptureWindow(duration: 3, fps: 30);
+
+      Capture.MapEntityDrawing.IsActive = true;
+
       CUIMain = new CUIMainComponent();
       Showperf = new CUIShowperf()
       {
@@ -80,7 +83,7 @@ namespace ShowPerfExtensions
 
       //CUIMain.Load(CUITest.CUIDropDown);
 
-      Capture.MapEntityDrawing.IsActive = true;
+
 
       PatchAll();
       addCommands();

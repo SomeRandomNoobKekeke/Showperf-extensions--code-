@@ -28,6 +28,7 @@ namespace ShowPerfExtensions
     {
       public CName Category;
       public string Description;
+      public void ToggleIsActive() => IsActive = !IsActive;
       private bool isActive; public bool IsActive
       {
         get => isActive;
@@ -39,6 +40,7 @@ namespace ShowPerfExtensions
           else Capture.Active.Remove(this);
         }
       }
+      public void ToggleByID() => ByID = !ByID;
       public bool byID; public bool ByID
       {
         get => byID;

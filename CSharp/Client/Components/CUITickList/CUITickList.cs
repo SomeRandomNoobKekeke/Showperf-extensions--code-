@@ -128,7 +128,6 @@ namespace ShowPerfExtensions
         Append(TickBlock = new CUITickBlock(this));
         ConsumeDragAndDrop = true;
 
-        BackgroundColor = Color.Black * 0.75f;
         BorderColor = Color.Transparent;
         Scrollable = true;
         Swipeable = true;
