@@ -76,6 +76,8 @@ namespace ShowPerfExtensions
 
       Showperf.OnClose += () => CUIMain["showperfButton"].Reveal();
 
+      CUIMain["showperfButton"].Click();
+
       //CUIMain.Load(CUITest.CUIDropDown);
 
       Capture.MapEntityDrawing.IsActive = true;

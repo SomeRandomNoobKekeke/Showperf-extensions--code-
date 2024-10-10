@@ -64,16 +64,14 @@ namespace CrabUI
 
     #region Update
 
-    private int OKurwa = 0;
+
     private double LastUpdateTime;
     public void Update(double totalTime)
     {
       if (totalTime - LastUpdateTime >= UpdateInterval)
       {
         sw.Restart();
-
-        if (OKurwa++ == 0) CUIDebug.Flush();
-        if (OKurwa == 1) OKurwa = 0;
+        CUIDebug.Flush();
 
         if (TreeChanged)
         {

@@ -19,15 +19,27 @@ namespace CrabUI
       set
       {
         text = value;
-        NeedReWrapping = true;
-        OnPropChanged();
-        OnAbsolutePropChanged();
         OnTextChanged?.Invoke();
+
+        if (!Ghost)
+        {
+          NeedReWrapping = true;
+          OnPropChanged();
+          OnAbsolutePropChanged();
+        }
+        else
+        {
+          WrappedText = text;
+          // OnDecorPropChanged();
+        }
       }
     }
     //TODO Uncringe
     #region Cringe
     public bool Wrap;
+    #region MegaCringe
+    public bool Ghost;
+    #endregion
     protected string WrappedText = "";
     protected Vector2? WrappedForThisSize;
     protected Vector2 WrappedSize;
@@ -72,7 +84,6 @@ namespace CrabUI
       {
         DoWrapFor(size);
       }
-
       return WrappedSize;
     }
 

@@ -74,8 +74,18 @@ namespace ShowPerfExtensions
           FitContent = new CUIBool2(false, true),
         };
 
-        this["header"].Append(CategoryLine = new CUITextBlock("CategoryLine"));
-        this["header"].Append(SumLine = new CUITextBlock("SumLine"));
+        this["header"].Append(CategoryLine = new CUITextBlock("CategoryLine")
+        {
+          Ghost = true,
+          Font = GUIStyle.MonospacedFont,
+          TextScale = 0.75f,
+        });
+        this["header"].Append(SumLine = new CUITextBlock("SumLine")
+        {
+          Ghost = true,
+          Font = GUIStyle.MonospacedFont,
+          TextScale = 0.75f,
+        });
 
 
         this["buttons1"] = new CUIHorizontalList()

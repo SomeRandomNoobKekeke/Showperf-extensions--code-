@@ -112,6 +112,7 @@ namespace ShowPerfExtensions
         }
 
         TickBlock.Update();
+        Showperf.SumLine.Text = $"Sum:{ConverToUnits(Sum)}{UnitsName} Linearity:{String.Format("{0:0.000000}", Linearity)}";
       }
 
       internal override CUINullRect ChildOffsetBounds => new CUINullRect(
