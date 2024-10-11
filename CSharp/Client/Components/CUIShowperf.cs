@@ -94,23 +94,43 @@ namespace ShowPerfExtensions
 
       public void CreateGUI()
       {
-        this["handle"] = new CUIComponent()
+        this["handle"] = new CUIHorizontalList(CUIDirection.Reverse)
         {
-          Absolute = new CUINullRect(h: 18),
+          FitContent = new CUIBool2(false, true),
           BorderColor = Color.Transparent,
         };
 
+
         this["handle"]["closebutton"] = new CUIButton("X")
         {
-          Anchor = new CUIAnchor(CUIAnchorType.RightCenter),
-          Absolute = new CUINullRect(w: 15, h: 18),
-          Padding = new Vector2(0, 0),
+          Relative = new CUINullRect(w: 0.1f),
           Font = GUIStyle.MonospacedFont,
           InactiveColor = new Color(32, 0, 0),
           MouseOverColor = new Color(64, 0, 0),
           MousePressedColor = new Color(128, 0, 0),
           AddOnMouseDown = (e) => Close(),
         };
+
+        this["handle"]["savestate"] = new CUIToggleButton("lock")
+        {
+          OnText = "unlock",
+          OffText = "lock",
+          AddOnStateChange = (state) =>
+          {
+            if (state)
+            {
+              States["old"] = States["init"];
+              States["init"] = Clone();
+            }
+            else
+            {
+              States["init"] = States["old"];
+              States["old"] = null;
+            }
+          },
+        };
+
+
 
 
 

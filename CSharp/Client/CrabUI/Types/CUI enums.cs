@@ -17,6 +17,12 @@ namespace CrabUI
     End,
   }
 
+  public enum CUIDirection
+  {
+    Straight,
+    Reverse,
+  }
+
   public enum CUIMouseEvent
   {
     Down, DClick

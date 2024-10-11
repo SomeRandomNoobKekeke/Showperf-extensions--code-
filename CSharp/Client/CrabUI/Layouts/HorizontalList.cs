@@ -13,6 +13,7 @@ namespace CrabUI
   public class CUILayoutHorizontalList : CUILayout
   {
     internal float TotalWidth;
+    public CUIDirection Direction;
 
     private class CUIComponentSize
     {
@@ -105,21 +106,45 @@ namespace CrabUI
 
         Host.ChildrenSizeCalculated();
 
-        float x = 0;
-        foreach (CUIComponentSize c in Sizes)
+        if (Direction == CUIDirection.Straight)
         {
-          Vector2 shift = c.Component.Fixed ? Vector2.Zero : Host.ChildrenOffset;
+          float x = 0;
+          foreach (CUIComponentSize c in Sizes)
+          {
+            Vector2 shift = c.Component.Fixed ? Vector2.Zero : Host.ChildrenOffset;
 
-          c.Component.SetReal(
-            CheckChildBoundaries(
-              Host.Real.Left + shift.X + x,
-              Host.Real.Top + shift.Y,
-              c.Size.X,
-              c.Size.Y
-            )
-          );
+            c.Component.SetReal(
+              CheckChildBoundaries(
+                Host.Real.Left + shift.X + x,
+                Host.Real.Top + shift.Y,
+                c.Size.X,
+                c.Size.Y
+              )
+            );
 
-          x += c.Size.X;
+            x += c.Size.X;
+          }
+        }
+
+        //TODO test
+        if (Direction == CUIDirection.Reverse)
+        {
+          float x = Host.Real.Width;
+          foreach (CUIComponentSize c in Sizes)
+          {
+            x -= c.Size.X;
+
+            Vector2 shift = c.Component.Fixed ? Vector2.Zero : Host.ChildrenOffset;
+
+            c.Component.SetReal(
+              CheckChildBoundaries(
+                Host.Real.Left + shift.X + x,
+                Host.Real.Top + shift.Y,
+                c.Size.X,
+                c.Size.Y
+              )
+            );
+          }
         }
 
       }
@@ -167,9 +192,9 @@ namespace CrabUI
       base.ResizeToContent();
     }
 
-    public CUILayoutHorizontalList(CUIComponent host = null) : base(host)
+    public CUILayoutHorizontalList(CUIDirection d = CUIDirection.Straight, CUIComponent host = null) : base(host)
     {
-
+      Direction = d;
     }
   }
 }

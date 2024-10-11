@@ -105,7 +105,7 @@ namespace CrabUI
     public CUIDebugWindow() : base()
     {
       this.ZIndex = 1000;
-      this.Layout = new CUILayoutVerticalList(this);
+      this.Layout = new CUILayoutVerticalList(host: this);
 
       this["handle"] = new CUIComponent()
       {

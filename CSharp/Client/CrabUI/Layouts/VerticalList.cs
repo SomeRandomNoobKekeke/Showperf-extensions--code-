@@ -13,6 +13,7 @@ namespace CrabUI
   public class CUILayoutVerticalList : CUILayout
   {
     internal float TotalHeight;
+    public CUIDirection Direction;
 
     private class CUIComponentSize
     {
@@ -102,22 +103,46 @@ namespace CrabUI
 
         Host.ChildrenSizeCalculated();
 
-        float y = 0;
-        foreach (CUIComponentSize c in Sizes)
+        if (Direction == CUIDirection.Straight)
         {
-          Vector2 shift = c.Component.Fixed ? Vector2.Zero : Host.ChildrenOffset;
+          float y = 0;
+          foreach (CUIComponentSize c in Sizes)
+          {
+            Vector2 shift = c.Component.Fixed ? Vector2.Zero : Host.ChildrenOffset;
 
-          CUIRect real = CheckChildBoundaries(
-            Host.Real.Left + shift.X,
-            Host.Real.Top + shift.Y + y,
-            c.Size.X,
-            c.Size.Y
-          );
+            CUIRect real = CheckChildBoundaries(
+              Host.Real.Left + shift.X,
+              Host.Real.Top + shift.Y + y,
+              c.Size.X,
+              c.Size.Y
+            );
 
-          c.Component.SetReal(real);
+            c.Component.SetReal(real);
 
-          y += real.Height;
+            y += c.Size.Y;
+          }
         }
+        //TODO test
+        if (Direction == CUIDirection.Reverse)
+        {
+          float y = Host.Real.Height;
+          foreach (CUIComponentSize c in Sizes)
+          {
+            y -= c.Size.Y;
+
+            Vector2 shift = c.Component.Fixed ? Vector2.Zero : Host.ChildrenOffset;
+
+            CUIRect real = CheckChildBoundaries(
+              Host.Real.Left + shift.X,
+              Host.Real.Top + shift.Y + y,
+              c.Size.X,
+              c.Size.Y
+            );
+
+            c.Component.SetReal(real);
+          }
+        }
+
       }
 
       base.Update();
@@ -166,9 +191,9 @@ namespace CrabUI
 
 
 
-    public CUILayoutVerticalList(CUIComponent host = null) : base(host)
+    public CUILayoutVerticalList(CUIDirection d = CUIDirection.Straight, CUIComponent host = null) : base(host)
     {
-
+      Direction = d;
     }
   }
 }
