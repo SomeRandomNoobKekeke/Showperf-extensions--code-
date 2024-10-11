@@ -204,7 +204,7 @@ namespace CrabUI
       {
         RunStraigth(c =>
         {
-          bool ok = c != Main && !c.IgnoreEvents && c.Real.Contains(CUI.Input.MousePosition);
+          bool ok = !c.IgnoreEvents && c.Real.Contains(CUI.Input.MousePosition);
 
           if (c.Parent != null && c.Parent.ScissorRect.HasValue &&
               !c.Parent.ScissorRect.Value.Contains(CUI.Input.CurrentMouseState.Position))
@@ -258,13 +258,6 @@ namespace CrabUI
       }
 
       //Clicks
-
-      //TODO rethink and test, i'm sure this broke something
-      // this is added just so CUIDropdown could close itself
-      // call main component regardless, it's also excluded from MouseOnList
-      if (CUI.Input.MouseDown) Main.InvokeOnMouseDown(CUI.Input);
-      if (CUI.Input.MouseUp) Main.InvokeOnMouseUp(CUI.Input);
-      if (CUI.Input.DoubleClick) Main.InvokeOnDClick(CUI.Input);
       for (int i = MouseOnList.Count - 1; i >= 0; i--)
       {
         //TODO mb this should be applied  separately
