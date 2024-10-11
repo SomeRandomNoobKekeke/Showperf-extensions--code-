@@ -53,7 +53,7 @@ namespace ShowPerfExtensions
       };
 
       Showperf.Absolute = new CUINullRect(
-        CUIAnchor.GetChildPos(CUIMain.Real, CUIAnchorType.RightCenter, new Vector2(-1, 0), Showperf.Absolute.Size),
+        CUIAnchor.GetChildPos(CUIMain.Real, CUIAnchorType.RightTop, new Vector2(-1, 40), Showperf.Absolute.Size),
         Showperf.Absolute.Size
       );
 

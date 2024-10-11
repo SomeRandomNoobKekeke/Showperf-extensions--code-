@@ -22,7 +22,7 @@ namespace CrabUI
 
     public Vector2 Size => new Vector2(Width, Height);
     public Vector2 Position => new Vector2(Left, Top);
-    public Vector2 Center => new Vector2(Left + Width / 2, Top + Height / 2); // xd
+    public Vector2 Center => new Vector2(Left + Width / 2, Top + Height / 2);
     public Rectangle Box => new Rectangle((int)Left, (int)Top, (int)Width, (int)Height);
 
     public Vector2 LeftTop => new Vector2(Left, Top);
@@ -86,6 +86,11 @@ namespace CrabUI
       get => new Vector2(Left ?? 0, Top ?? 0);
       set { Left = value.X; Top = value.Y; }
     }
+
+    public Vector2 Center => new Vector2(
+      (Left ?? 0) + (Width ?? 0) / 2,
+      (Top ?? 0) + (Height ?? 0) / 2
+    );
 
     public CUINullRect(Vector2 position, Vector2 size) : this(position.X, position.Y, size.X, size.Y) { }
 

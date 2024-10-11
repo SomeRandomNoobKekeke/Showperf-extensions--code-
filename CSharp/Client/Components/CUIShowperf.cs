@@ -16,31 +16,21 @@ namespace ShowPerfExtensions
   {
     public class CUIShowperf : CUIFrame
     {
-      public class MapButton : CUIToggleButton
+      //TODO think, what's the correct way to prevent looping here?
+      public void OnMapButtonClicked(MapButton b)
       {
-        public static Dictionary<CaptureState, MapButton> Buttons = new Dictionary<CaptureState, MapButton>();
-        public CaptureState CState;
-        public MapButton(int x, int y, string name, CaptureState cs) : base(name)
-        {
-          Absolute = new CUINullRect(x: x, y: y);
-          CState = cs;
-
-          if (cs != null)
-          {
-            State = cs.IsActive;
-            OnStateChange += (state) =>
-            {
-              CState.IsActive = state;
-              Showperf.SetCategoryText();
-            };
-            Buttons[cs] = this;
-          }
-          else
-          {
-            Disabled = true;
-          }
-        }
+        if (b.CState != null && b.CState.IsActive != b.State) b.CState.IsActive = b.State;
       }
+
+      public void OnCaptureIsActiveChange(CaptureState cs)
+      {
+        if (MapButton.Buttons.ContainsKey(cs) && MapButton.Buttons[cs].State != cs.IsActive)
+        {
+          MapButton.Buttons[cs].State = cs.IsActive;
+        }
+        SetCategoryText();
+      }
+
 
       //TODO mb this should be in Window like all the other props
       private SubType captureFrom; public SubType CaptureFrom
@@ -56,7 +46,7 @@ namespace ShowPerfExtensions
 
       public CUIPages Pages;
       public CUITickList TickList;
-      public CUIMap Map;
+      public CUICaptureMap Map;
 
       public CUIDropDown SubTypeDD;
       public CUIToggleButton ById;
@@ -112,11 +102,11 @@ namespace ShowPerfExtensions
         };
 
         //TODO mb this should be multibutton, but multibutton is bugged
-        this["handle"]["savestate"] = new CUIToggleButton("locked")
+        this["handle"]["savestate"] = new CUIToggleButton("Locked")
         {
-          Absolute = new CUINullRect(w: 60),
-          OnText = "locked",
-          OffText = "unlocked",
+          Absolute = new CUINullRect(w: 65),
+          OnText = "Locked",
+          OffText = "Unlocked",
           AddOnStateChange = (state) =>
           {
             if (state)
@@ -142,7 +132,14 @@ namespace ShowPerfExtensions
         this["buttons1"]["ById"] = ById = new CUIToggleButton("By Id")
         {
           FillEmptySpace = new CUIBool2(true, false),
-          AddOnStateChange = (state) => Capture.ById = state,
+          AddOnStateChange = (state) =>
+          {
+            foreach (CaptureState s in Capture.Active)
+            {
+              s.byID = state;
+            }
+            Window.Reset();
+          },
         };
 
 
@@ -209,34 +206,10 @@ namespace ShowPerfExtensions
         };
 
         TickList = new CUITickList(0, 0, 1, 1);
-        Map = new CUIMap(0, 0, 1, 1)
-        {
-          BackgroundColor = Color.Transparent,
-          BorderColor = Color.Transparent,
-          AddOnDClick = (e) => Map.ChildrenOffset = Vector2.Zero,
-        };
-
-        FillMap();
+        Map = new CUICaptureMap(0, 0, 1, 1);
+        Map.Fill();
 
         Pages.Open(Map);
-      }
-
-      public void FillMap()
-      {
-        Map.Append(new CUITextBlock("Client") { Fixed = true, });
-
-        Map.ConnectTo(Map.Add(new MapButton(10, 20, "GameScreen", null)),
-          Map.Add("Update", new MapButton(10, 50, "Update", null)),
-          Map.Add("Draw", new MapButton(80, 50, "Draw", null))
-        );
-        Map.Connect(Map["Draw"],
-          Map.Add(new MapButton(80, 90, "MapEntityDrawing", Capture.MapEntityDrawing))
-        );
-
-        // Map.Add(new MapButton(0, 0, "bebe", Capture.MapEntityDrawing));
-        // Map.Connect(Map.Add(new MapButton(0, 50, "bkokokoebe", null)));
-        // Map.Connect(Map.Add(new MapButton(0, 100, "jujuj", null)));
-        // Map.Connect(1, 2, Color.Lime);
       }
 
       public CUIShowperf() : base()
@@ -244,7 +217,10 @@ namespace ShowPerfExtensions
         Layout = new CUILayoutVerticalList();
 
         CreateGUI();
+
+        Capture.OnIsActiveChange += (cs) => OnCaptureIsActiveChange(cs);
         SetCategoryText();
+
 
         OnDClick += m =>
         {

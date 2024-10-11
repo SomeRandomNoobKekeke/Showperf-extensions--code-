@@ -612,7 +612,12 @@ namespace CrabUI
     public string AKA;
     public Dictionary<string, CUIComponent> NamedComponents = new Dictionary<string, CUIComponent>();
 
-    public CUIComponent Remember(CUIComponent c, string name) => NamedComponents[name] = c;
+    public CUIComponent Remember(CUIComponent c, string name)
+    {
+      NamedComponents[name] = c;
+      c.AKA = name;
+      return c;
+    }
     public CUIComponent Remember(CUIComponent c) => NamedComponents[c.AKA ?? ""] = c;
 
     public CUIComponent this[string name]

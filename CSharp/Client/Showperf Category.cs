@@ -12,9 +12,11 @@ namespace ShowPerfExtensions
   {
     public enum CName
     {
-      None,
-      All,
-      MapEntitysUpdate,
+      ItemUpdate,
+      StructureUpdate,
+      HullUpdate,
+      GapUpdate,
+      WholeSubmarineUpdate,
       CharactersUpdate,
       MapEntityDrawing,
       LevelObjectsDrawing,
@@ -35,9 +37,10 @@ namespace ShowPerfExtensions
         set
         {
           isActive = value;
-          ByID = Capture.ById;
           if (isActive) Capture.Active.Add(this);
           else Capture.Active.Remove(this);
+          Capture.InvokeOnIsActiveChange(this);
+          Window.Reset();
         }
       }
       public void ToggleByID() => ByID = !ByID;
@@ -59,30 +62,50 @@ namespace ShowPerfExtensions
 
     public static class Capture
     {
-      public static CaptureState None = new CaptureState(CName.None);
-      public static CaptureState All = new CaptureState(CName.All);
-      public static CaptureState MapEntitysUpdate = new CaptureState(CName.MapEntitysUpdate);
+      public static CaptureState ItemUpdate = new CaptureState(CName.ItemUpdate);
+      public static CaptureState StructureUpdate = new CaptureState(CName.StructureUpdate);
+      public static CaptureState HullUpdate = new CaptureState(CName.HullUpdate);
+      public static CaptureState GapUpdate = new CaptureState(CName.GapUpdate);
+      public static CaptureState WholeSubmarineUpdate = new CaptureState(CName.WholeSubmarineUpdate);
       public static CaptureState MapEntityDrawing = new CaptureState(CName.MapEntityDrawing);
-      public static CaptureState CharactersUpdate = new CaptureState(CName.CharactersUpdate);
+      public static CaptureState CharactersUpdate = new CaptureState(CName.CharactersUpdate)
+      {
+        ByID = true,
+      };
       public static CaptureState LevelObjectsDrawing = new CaptureState(CName.LevelObjectsDrawing);
       public static CaptureState LevelMisc = new CaptureState(CName.LevelMisc);
       public static CaptureState ItemComponentsUpdate = new CaptureState(CName.ItemComponentsUpdate);
 
+      public static event Action<CaptureState> OnIsActiveChange;
+      public static void InvokeOnIsActiveChange(CaptureState cs) => OnIsActiveChange?.Invoke(cs);
 
       public static HashSet<CaptureState> Active = new HashSet<CaptureState>();
 
-      public static bool byId; public static bool ById
+
+
+      //TODO think, where should i put those funny relations?
+      static Capture()
       {
-        get => byId;
-        set
+        OnIsActiveChange += (CaptureState cs) =>
         {
-          byId = value;
-          foreach (CaptureState s in Active)
+          if (cs == WholeSubmarineUpdate && cs.IsActive)
           {
-            s.byID = value;
+            ItemUpdate.IsActive = false;
+            StructureUpdate.IsActive = false;
+            HullUpdate.IsActive = false;
+            GapUpdate.IsActive = false;
           }
-          Window.Reset();
-        }
+
+          if (
+            (cs == ItemUpdate && cs.IsActive) ||
+            (cs == StructureUpdate && cs.IsActive) ||
+            (cs == HullUpdate && cs.IsActive) ||
+            (cs == GapUpdate && cs.IsActive)
+          )
+          {
+            WholeSubmarineUpdate.IsActive = false;
+          }
+        };
       }
 
     }

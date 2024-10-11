@@ -32,7 +32,7 @@ namespace CrabUI
 
     public event Action<bool> OnStateChange;
     public Action<bool> AddOnStateChange { set { OnStateChange += value; } }
-    private bool state; public bool State
+    protected bool state; public bool State
     {
       get => state;
       set
@@ -72,6 +72,7 @@ namespace CrabUI
 
       ConsumeMouseClicks = true;
       ConsumeDragAndDrop = true;
+      ConsumeSwipe = true;
 
       OnColor = CUIPallete.Default.Secondary.On;
       OnHoverColor = CUIPallete.Default.Secondary.OnHover;

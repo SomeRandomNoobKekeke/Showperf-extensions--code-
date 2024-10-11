@@ -37,7 +37,7 @@ namespace CrabUI
     {
       ConsumeMouseClicks = true;
       ConsumeDragAndDrop = true;
-      //ConsumeSwipe = true;
+      ConsumeSwipe = true;
 
       InactiveColor = CUIPallete.Default.Secondary.Off;
       MouseOverColor = CUIPallete.Default.Secondary.OffHover;

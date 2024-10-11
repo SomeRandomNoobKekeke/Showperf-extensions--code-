@@ -91,6 +91,7 @@ namespace CrabUI
         Visible = false;
         IgnoreEvents = true;
         IgnoreParentVisibility = true;
+        IgnoreParentEventIgnorance = true;
 
         Relative = new CUINullRect(0, 1, 1, null);
         FitContent = new CUIBool2(true, true);

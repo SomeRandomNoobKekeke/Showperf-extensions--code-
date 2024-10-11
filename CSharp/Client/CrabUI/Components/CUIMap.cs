@@ -20,7 +20,7 @@ namespace CrabUI
 
       public CUIMapLink(CUIComponent start, CUIComponent end, Color? lineColor = null, float lineWidth = 2f)
       {
-        LineColor = lineColor ?? Color.White * 0.25f;
+        LineColor = lineColor ?? new Color(128, 128, 128);
         LineWidth = lineWidth;
         Start = start;
         End = end;
@@ -34,7 +34,7 @@ namespace CrabUI
     public void Connect(CUIComponent start, CUIComponent end, Color? color = null)
     {
       //TODO too sneaky
-      if (color == null && (!start.Disabled || !end.Disabled)) color = Color.Cyan * 0.5f;
+      if (color == null && (!start.Disabled || !end.Disabled)) color = new Color(0, 0, 255);
       Connections.Add(new CUIMapLink(start, end, color));
     }
 
