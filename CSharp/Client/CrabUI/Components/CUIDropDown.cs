@@ -113,7 +113,6 @@ namespace CrabUI
         CUI.Main.OnMouseDown += (e) =>
         {
           Close();
-          //e.ClickConsumed = true;
         };
 
         Close();

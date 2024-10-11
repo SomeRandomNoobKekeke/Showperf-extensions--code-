@@ -231,6 +231,10 @@ namespace ShowPerfExtensions
           Map.Add("Update", new MapButton(10, 50, "Update", null)),
           Map.Add("Draw", new MapButton(80, 50, "Draw", null))
         );
+        Map.Connect(Map["Draw"],
+          Map.Add(new MapButton(80, 90, "MapEntityDrawing", Capture.MapEntityDrawing))
+        );
+
         // Map.Add(new MapButton(0, 0, "bebe", Capture.MapEntityDrawing));
         // Map.Connect(Map.Add(new MapButton(0, 50, "bkokokoebe", null)));
         // Map.Connect(Map.Add(new MapButton(0, 100, "jujuj", null)));
