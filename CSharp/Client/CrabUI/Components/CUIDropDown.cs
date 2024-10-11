@@ -10,7 +10,6 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace CrabUI
 {
-  //FIXME i'm broken
   public class CUIDropDown : CUIButton
   {
     #region ------------------ CUIDropDownOption ------------------

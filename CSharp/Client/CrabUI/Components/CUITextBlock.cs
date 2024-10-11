@@ -45,7 +45,7 @@ namespace CrabUI
     protected Vector2 WrappedSize;
     protected bool NeedReWrapping;
 
-    // TODO this will overwrite absoluteMin, it shouldn't  
+    //FIXME find a solution that doesn't overwrite absolute min 
     protected void DoWrapFor(Vector2 size)
     {
       if (Wrap) WrappedText = Font.WrapText(Text, size.X / TextScale - Padding.X * 2);

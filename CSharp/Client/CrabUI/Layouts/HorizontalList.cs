@@ -80,10 +80,7 @@ namespace CrabUI
 
             s = new Vector2(w, h);
             Vector2 okSize = c.AmIOkWithThisSize(s);
-            if (s != okSize)
-            {
-              CUIDebug.Capture(Host, c, "Layout.Update", "AmIOkWithThisSize", "s", okSize.ToString());
-            }
+            CUIDebug.Capture(Host, c, "Layout.Update", "AmIOkWithThisSize", "s", okSize.ToString());
 
             s = okSize;
 

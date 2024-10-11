@@ -93,7 +93,7 @@ namespace CrabUI
           if (c.FillEmptySpace.Y) Resizible.Add(size);
         }
 
-        float dif = Host.Real.Height - TotalHeight;
+        float dif = Math.Max(0, Host.Real.Height - TotalHeight);
 
         Resizible.ForEach(c =>
         {
@@ -110,14 +110,14 @@ namespace CrabUI
           {
             Vector2 shift = c.Component.Fixed ? Vector2.Zero : Host.ChildrenOffset;
 
-            CUIRect real = CheckChildBoundaries(
-              Host.Real.Left + shift.X,
-              Host.Real.Top + shift.Y + y,
-              c.Size.X,
-              c.Size.Y
+            c.Component.SetReal(
+              CheckChildBoundaries(
+                Host.Real.Left + shift.X,
+                Host.Real.Top + shift.Y + y,
+                c.Size.X,
+                c.Size.Y
+              )
             );
-
-            c.Component.SetReal(real);
 
             y += c.Size.Y;
           }
@@ -132,14 +132,14 @@ namespace CrabUI
 
             Vector2 shift = c.Component.Fixed ? Vector2.Zero : Host.ChildrenOffset;
 
-            CUIRect real = CheckChildBoundaries(
-              Host.Real.Left + shift.X,
-              Host.Real.Top + shift.Y + y,
-              c.Size.X,
-              c.Size.Y
+            c.Component.SetReal(
+              CheckChildBoundaries(
+                Host.Real.Left + shift.X,
+                Host.Real.Top + shift.Y + y,
+                c.Size.X,
+                c.Size.Y
+              )
             );
-
-            c.Component.SetReal(real);
           }
         }
 

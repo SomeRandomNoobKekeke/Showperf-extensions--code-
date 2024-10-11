@@ -111,10 +111,12 @@ namespace ShowPerfExtensions
           AddOnMouseDown = (e) => Close(),
         };
 
-        this["handle"]["savestate"] = new CUIToggleButton("lock")
+        //TODO mb this should be multibutton, but multibutton is bugged
+        this["handle"]["savestate"] = new CUIToggleButton("locked")
         {
-          OnText = "unlock",
-          OffText = "lock",
+          Absolute = new CUINullRect(w: 60),
+          OnText = "locked",
+          OffText = "unlocked",
           AddOnStateChange = (state) =>
           {
             if (state)
@@ -129,10 +131,6 @@ namespace ShowPerfExtensions
             }
           },
         };
-
-
-
-
 
         this["buttons1"] = new CUIHorizontalList()
         {
