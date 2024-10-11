@@ -83,8 +83,6 @@ namespace ShowPerfExtensions
 
       //CUIMain.Load(CUITest.CUIDropDown);
 
-
-
       PatchAll();
       addCommands();
 

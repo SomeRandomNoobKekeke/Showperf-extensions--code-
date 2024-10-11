@@ -108,10 +108,12 @@ namespace CrabUI
         float x = 0;
         foreach (CUIComponentSize c in Sizes)
         {
+          Vector2 shift = c.Component.Fixed ? Vector2.Zero : Host.ChildrenOffset;
+
           c.Component.SetReal(
             CheckChildBoundaries(
-              Host.Real.Left + Host.ChildrenOffset.X + x,
-              Host.Real.Top + Host.ChildrenOffset.Y,
+              Host.Real.Left + shift.X + x,
+              Host.Real.Top + shift.Y,
               c.Size.X,
               c.Size.Y
             )

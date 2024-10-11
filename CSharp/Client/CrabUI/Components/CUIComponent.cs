@@ -364,11 +364,17 @@ namespace CrabUI
 
     //TODO This is potentially cursed
     public object Data;
+    public bool HideChildrenOutsideFrame { get; set; } = false;
+
+
+    //TODO rethink
+    #region Stupid Props
     public bool UnCullable { get; set; } // >:(
     public bool IgnoreParentVisibility { get; set; } // >:(
     public bool IgnoreParentEventIgnorance { get; set; } // >:(
     public bool IgnoreParentZIndex { get; set; } // >:(
-    public bool HideChildrenOutsideFrame { get; set; } = false;
+    public bool Fixed { get; set; } // >:(
+    #endregion
     public CUIAnchor Anchor = new CUIAnchor(CUIAnchorType.LeftTop);
 
     private int? zIndex; public int? ZIndex
@@ -538,6 +544,8 @@ namespace CrabUI
     #endregion
     #region Graphic Props --------------------------------------------------------
 
+    //HACK this is meant for buttons, but i want to access it on generic components in CUIMap
+    public bool Disabled { get; set; }
     protected bool BackgroundVisible;
     private Color backgroundColor; public Color BackgroundColor
     {

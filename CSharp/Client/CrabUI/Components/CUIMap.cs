@@ -20,7 +20,7 @@ namespace CrabUI
 
       public CUIMapLink(CUIComponent start, CUIComponent end, Color? lineColor = null, float lineWidth = 2f)
       {
-        LineColor = lineColor ?? Color.White;
+        LineColor = lineColor ?? Color.White * 0.25f;
         LineWidth = lineWidth;
         Start = start;
         End = end;
@@ -33,6 +33,8 @@ namespace CrabUI
 
     public void Connect(CUIComponent start, CUIComponent end, Color? color = null)
     {
+      //TODO too sneaky
+      if (color == null && (!start.Disabled || !end.Disabled)) color = Color.Cyan * 0.5f;
       Connections.Add(new CUIMapLink(start, end, color));
     }
 
@@ -69,18 +71,35 @@ namespace CrabUI
       return Map.Append(c);
     }
 
-    public void Connect(CUIComponent start, CUIComponent end, Color? color = null)
+
+    public CUIComponent Connect(CUIComponent startComponent, CUIComponent endComponent, Color? color = null)
     {
-      Map.Connect(start, end, color);
-    }
-    public void Connect(int start, int end, Color? color = null)
-    {
-      CUIComponent startComponent = Map.Children.ElementAtOrDefault(start);
-      CUIComponent endComponent = Map.Children.ElementAtOrDefault(end);
       if (startComponent != null && endComponent != null)
       {
-        Connect(startComponent, endComponent, color);
+        Map.Connect(startComponent, endComponent, color);
       }
+      return startComponent;
+    }
+    public CUIComponent Connect(CUIComponent startComponent, int end = -2, Color? color = null)
+    {
+      end = MathUtils.PositiveModulo(end, Map.Children.Count);
+      CUIComponent endComponent = Map.Children.ElementAtOrDefault(end);
+      return Connect(startComponent, endComponent, color);
+    }
+    public CUIComponent Connect(int start, int end, Color? color = null)
+    {
+      start = MathUtils.PositiveModulo(start, Map.Children.Count);
+      end = MathUtils.PositiveModulo(end, Map.Children.Count);
+
+      CUIComponent startComponent = Map.Children.ElementAtOrDefault(start);
+      CUIComponent endComponent = Map.Children.ElementAtOrDefault(end);
+      return Connect(startComponent, endComponent, color);
+    }
+
+    public CUIComponent ConnectTo(CUIComponent Host, params CUIComponent[] children)
+    {
+      foreach (CUIComponent child in children) { Connect(Host, child); }
+      return Host;
     }
 
     public CUIMap() : base()

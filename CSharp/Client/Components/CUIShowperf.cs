@@ -70,7 +70,11 @@ namespace ShowPerfExtensions
       }
       public void SetCategoryText()
       {
-        string s = String.Join(", ", Capture.Active.ToList().Select(cs => MapButton.Buttons[cs].Text));
+        string s = String.Join(", ", Capture.Active.ToList()
+        .Select(cs => MapButton.Buttons.ContainsKey(cs) ?
+          MapButton.Buttons[cs].Text :
+          cs.Category.ToString()
+        ));
         CategoryLine.Text = s;
       }
 
@@ -201,9 +205,15 @@ namespace ShowPerfExtensions
 
       public void FillMap()
       {
-        Map.Add(new MapButton(0, 0, "bebe", Capture.MapEntityDrawing));
-        Map.Add(new MapButton(0, 50, "bkokokoebe", null));
-        // Map.Connect(0, 1);
+        Map.Append(new CUITextBlock("Client") { Fixed = true, });
+
+        Map.ConnectTo(Map.Add(new MapButton(10, 20, "GameScreen", null)),
+          Map.Add("Update", new MapButton(10, 50, "Update", null)),
+          Map.Add("Draw", new MapButton(80, 50, "Draw", null))
+        );
+        // Map.Add(new MapButton(0, 0, "bebe", Capture.MapEntityDrawing));
+        // Map.Connect(Map.Add(new MapButton(0, 50, "bkokokoebe", null)));
+        // Map.Connect(Map.Add(new MapButton(0, 100, "jujuj", null)));
         // Map.Connect(1, 2, Color.Lime);
       }
 
