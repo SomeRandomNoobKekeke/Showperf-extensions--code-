@@ -29,7 +29,7 @@ namespace CrabUI
     public void BeginDrag(Vector2 cursorPos)
     {
       Grabbed = true;
-      GrabOffset = cursorPos - Host.Real.Position;
+      GrabOffset = cursorPos - Host.Anchor.PosIn(Host.Real);
       StartPosition = Host.Real.Position;
     }
 
@@ -41,8 +41,6 @@ namespace CrabUI
 
     public void DragTo(Vector2 to)
     {
-      //TODO use anchors
-      // Vector2 pos = Host.Anchor.PosIn(new CUIRect(to - GrabOffset, Host.Real.Size)) - Host.Anchor.PosIn(Host.Parent.Real);
       Vector2 pos = to - GrabOffset - Host.Parent.Real.Position;
       Host.SetAbsolute(Host.Absolute with { Position = pos });
       Host.InvokeOnDrag(pos.X, pos.Y);
