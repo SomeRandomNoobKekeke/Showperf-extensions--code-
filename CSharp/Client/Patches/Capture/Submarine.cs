@@ -41,7 +41,7 @@ namespace ShowPerfExtensions
         e.Draw(spriteBatch, editing, false);
 
         ticks = sw.ElapsedTicks;
-        if (Showperf.ShouldCapture(e))
+        if (Window.ShouldCapture(e))
         {
           if (Capture.MapEntityDrawing.ByID || e.Prefab == null)
           {
@@ -110,7 +110,7 @@ namespace ShowPerfExtensions
         e.Draw(spriteBatch, editing, true);
 
         ticks = sw.ElapsedTicks;
-        if (Showperf.ShouldCapture(e))
+        if (Window.ShouldCapture(e))
         {
           if (Capture.MapEntityDrawing.ByID || e.Prefab == null)
           {

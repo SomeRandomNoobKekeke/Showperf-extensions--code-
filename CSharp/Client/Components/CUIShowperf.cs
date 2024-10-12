@@ -16,29 +16,6 @@ namespace ShowPerfExtensions
   {
     public class CUIShowperf : CUIFrame
     {
-      //TODO think, what's the correct way to prevent looping here?
-      public void OnMapButtonClicked(MapButton b)
-      {
-        if (b.CState != null && b.CState.IsActive != b.State) b.CState.IsActive = b.State;
-      }
-
-      public void OnCaptureIsActiveChange(CaptureState cs)
-      {
-        if (MapButton.Buttons.ContainsKey(cs) && MapButton.Buttons[cs].State != cs.IsActive)
-        {
-          MapButton.Buttons[cs].State = cs.IsActive;
-        }
-        SetCategoryText();
-      }
-
-
-      //TODO mb this should be in Window like all the other props
-      private SubType captureFrom; public SubType CaptureFrom
-      {
-        get => captureFrom;
-        set { captureFrom = value; Window.Reset(); }
-      }
-
       public CUIVerticalList Header;
       //TODO CategoryLine and SumLine probably should be in TickList
       public CUITextBlock CategoryLine;
@@ -66,11 +43,6 @@ namespace ShowPerfExtensions
           cs.Category.ToString()
         ));
         CategoryLine.Text = s;
-      }
-
-      public bool ShouldCapture(Entity e)
-      {
-        return CaptureFrom == SubType.All || (int)e.Submarine.Info.Type == (int)CaptureFrom;
       }
 
       public void Update()
@@ -134,11 +106,7 @@ namespace ShowPerfExtensions
           FillEmptySpace = new CUIBool2(true, false),
           AddOnStateChange = (state) =>
           {
-            foreach (CaptureState s in Capture.Active)
-            {
-              s.byID = state;
-            }
-            Window.Reset();
+            Capture.GlobalByID = state;
           },
         };
 
@@ -158,7 +126,7 @@ namespace ShowPerfExtensions
         this["buttons1"]["SubTypeDD"] = SubTypeDD = new CUIDropDown()
         {
           FillEmptySpace = new CUIBool2(true, false),
-          AddOnSelect = (v) => CaptureFrom = Enum.Parse<SubType>(v),
+          AddOnSelect = (v) => Window.CaptureFrom = Enum.Parse<SubType>(v),
         };
 
         foreach (SubType st in Enum.GetValues(typeof(SubType)))
@@ -209,7 +177,47 @@ namespace ShowPerfExtensions
         Map = new CUICaptureMap(0, 0, 1, 1);
         Map.Fill();
 
-        Pages.Open(Map);
+        Pages.Open(TickList);
+      }
+
+      public void OnMapButtonClicked(MapButton b)
+      {
+        if (b.CState != null) b.CState.IsActive = b.State;
+      }
+
+      public void OnCaptureStateChange(CaptureState cs)
+      {
+        Clear();
+        if (MapButton.Buttons.ContainsKey(cs))
+        {
+          MapButton.Buttons[cs].SetState(cs.IsActive);
+        }
+
+        ById.SetState(cs.ByID);
+        SetCategoryText();
+      }
+      public void OnGlobalCaptureStateChange()
+      {
+        Clear();
+        foreach (CaptureState cs in Capture.Active)
+        {
+          if (MapButton.Buttons.ContainsKey(cs))
+          {
+            MapButton.Buttons[cs].SetState(cs.IsActive);
+          }
+        }
+        ById.SetState(Capture.GlobalByID);
+        SetCategoryText();
+      }
+
+      public void OnWindowCaptureFromChanged(SubType s)
+      {
+        SubTypeDD.Select(s, silent: true);
+      }
+
+      public void OnWindowModeChanged(CaptureWindowMode m)
+      {
+        ModeButton.Select(m, silent: true);
       }
 
       public CUIShowperf() : base()
@@ -218,9 +226,11 @@ namespace ShowPerfExtensions
 
         CreateGUI();
 
-        Capture.OnIsActiveChange += (cs) => OnCaptureIsActiveChange(cs);
+        Capture.OnStateChange += (cs) => OnCaptureStateChange(cs);
+        Capture.OnGlobalStateChange += () => OnGlobalCaptureStateChange();
         SetCategoryText();
-
+        Window.OnCaptureFromChanged += (s) => OnWindowCaptureFromChanged(s);
+        Window.OnModeChanged += (m) => OnWindowModeChanged(m);
 
         OnDClick += m =>
         {

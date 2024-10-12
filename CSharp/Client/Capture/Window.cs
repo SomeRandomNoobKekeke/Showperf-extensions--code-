@@ -18,11 +18,13 @@ namespace ShowPerfExtensions
   public partial class Mod : IAssemblyPlugin
   {
     public enum CaptureWindowMode { Sum, Mean, Spike }
+    public enum SubType { Player, Outpost, OutpostModule, Wreck, BeaconStation, EnemySubmarine, Ruin, All }
 
     public class CaptureWindow : IDisposable
     {
       public double FrameDuration;
       public bool Frozen = false;
+      public bool Reseted;
 
       private int frames; public int Frames
       {
@@ -58,11 +60,36 @@ namespace ShowPerfExtensions
         }
       }
 
+      public event Action<CaptureWindowMode> OnModeChanged;
       private CaptureWindowMode mode = CaptureWindowMode.Mean; public CaptureWindowMode Mode
       {
         get => mode;
-        set { mode = value; Reset(); }
+        set
+        {
+          mode = value;
+          Reset();
+          OnModeChanged?.Invoke(mode);
+        }
       }
+
+      public event Action<SubType> OnCaptureFromChanged;
+
+      private SubType captureFrom; public SubType CaptureFrom
+      {
+        get => captureFrom;
+        set
+        {
+          captureFrom = value;
+          Reset();
+          OnCaptureFromChanged?.Invoke(captureFrom);
+        }
+      }
+
+      public bool ShouldCapture(Entity e)
+      {
+        return CaptureFrom == SubType.All || (int)e.Submarine.Info.Type == (int)CaptureFrom;
+      }
+
       public Slice FirstSlice;
       public Slice TotalTicks = new Slice();
       public Queue<Slice> PartialSums;
@@ -80,6 +107,7 @@ namespace ShowPerfExtensions
 
       public void Rotate()
       {
+        Reseted = false;
         if (Mode == CaptureWindowMode.Sum)
         {
           TotalTicks.Add(FirstSlice);
@@ -126,8 +154,13 @@ namespace ShowPerfExtensions
         catch (Exception e) { err(e); }
       }
 
+
+
       public void Reset()
       {
+        if (Reseted) return;
+        Reseted = true;
+
         PartialSums ??= new Queue<Slice>(Frames);
         PartialSums.Clear();
         TotalTicks.Clear();

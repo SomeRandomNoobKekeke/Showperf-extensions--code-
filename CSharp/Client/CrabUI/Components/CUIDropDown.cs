@@ -136,13 +136,16 @@ namespace CrabUI
     public event Action<string> OnSelect;
     public Action<string> AddOnSelect { set { OnSelect += value; } }
 
-    public void Select(object value) => Select(Box.Options.Find(o => o.Value == value.ToString()));
-    public void Select(Option option)
+    public void Select(object value, bool silent = false)
+    {
+      Select(Box.Options.Find(o => o.Value == value.ToString()), silent);
+    }
+    public void Select(Option option, bool silent = false)
     {
       if (option == null) return;
       Selected = option;
-      OnSelect?.Invoke(Selected.Value);
       Text = option.Text;
+      if (!silent) OnSelect?.Invoke(Selected.Value);
     }
 
     //HACK :AwareDev:

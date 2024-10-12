@@ -38,13 +38,21 @@ namespace CrabUI
       if (i != -1) Select(i + 1);
     }
 
-    public void Select(CUIButton b)
+
+    public void Select(object data, bool silent = false)
+    {
+      //TODO investigate why simple == doesnt work
+      //TODO and what would happen if data is another CUIButton
+      CUIButton btn = Buttons.Find(b => b.Data.GetHashCode() == data.GetHashCode());
+      if (btn != null) Select(btn, silent);
+    }
+    public void Select(CUIButton b, bool silent = false)
     {
       int i = Buttons.IndexOf(b);
-      if (i != -1) Select(i);
+      if (i != -1) Select(i, silent);
     }
 
-    public void Select(int i)
+    public void Select(int i, bool silent = false)
     {
       if (Buttons.Count == 0) return;
 
@@ -52,7 +60,8 @@ namespace CrabUI
       int realIndex = i % Buttons.Count;
       Selected = Buttons[realIndex];
       Append(Selected);
-      OnSelect?.Invoke(Selected, realIndex);
+
+      if (!silent) OnSelect?.Invoke(Selected, realIndex);
     }
 
     // internal override Vector2 AmIOkWithThisSize(Vector2 size)

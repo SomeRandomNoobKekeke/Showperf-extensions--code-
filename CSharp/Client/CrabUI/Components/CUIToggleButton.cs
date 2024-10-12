@@ -37,10 +37,15 @@ namespace CrabUI
       get => state;
       set
       {
-        state = value;
-        Text = state ? OnText : OffText;
+        SetState(value);
         OnStateChange?.Invoke(state);
       }
+    }
+    // To let you set state silently
+    public void SetState(bool value)
+    {
+      state = value;
+      Text = state ? OnText : OffText;
     }
 
     protected override void Draw(SpriteBatch spriteBatch)

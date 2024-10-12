@@ -98,7 +98,7 @@ namespace ShowPerfExtensions
 
 
           ticks = sw.ElapsedTicks;
-          if (Showperf.ShouldCapture(character))
+          if (Window.ShouldCapture(character))
           {
             if (Capture.CharactersUpdate.ByID)
             {

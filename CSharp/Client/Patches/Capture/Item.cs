@@ -57,7 +57,7 @@ namespace ShowPerfExtensions
       }
 
       ticks = sw.ElapsedTicks;
-      if (Showperf.ShouldCapture(_))
+      if (Window.ShouldCapture(_))
       {
         if (Capture.ItemComponentsUpdate.ByID)
         {
@@ -147,7 +147,7 @@ namespace ShowPerfExtensions
         }
 
         ticks = sw.ElapsedTicks;
-        if (Showperf.ShouldCapture(_))
+        if (Window.ShouldCapture(_))
         {
           if (Capture.ItemComponentsUpdate.ByID)
           {

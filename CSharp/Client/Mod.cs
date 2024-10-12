@@ -26,7 +26,7 @@ namespace ShowPerfExtensions
     public bool debug = true;
 
 
-    public enum SubType { Player, Outpost, OutpostModule, Wreck, BeaconStation, EnemySubmarine, Ruin, All }
+
 
     public static CaptureWindow Window;
     public static CUIShowperf Showperf;
@@ -79,12 +79,12 @@ namespace ShowPerfExtensions
 
       Showperf.OnClose += () => CUIMain["showperfButton"].Reveal();
 
-      CUIMain["showperfButton"].Click();
-
+      // CUIMain["showperfButton"].Click();
       //CUIMain.Load(CUITest.CUIDropDown);
 
       PatchAll();
       addCommands();
+
 
       info($"{ModName} Initialized");
     }

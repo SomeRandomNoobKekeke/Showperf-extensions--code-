@@ -19,6 +19,9 @@ namespace ShowPerfExtensions
 {
   public partial class Mod : IAssemblyPlugin
   {
+    //TODO this is dead end, there's no way to expand it, find better view
+    // mb add zoom?
+    //TODO also this should be in xml
     public partial class CUICaptureMap : CUIMap
     {
 
@@ -83,12 +86,12 @@ namespace ShowPerfExtensions
         Add("GameScreen", new MapButton(50, 20, "GameScreen"));
         Add("Update", new MapButton(20, 50, "Update"));
         Add("Draw", new MapButton(175, 20, "Draw"));
-        Add("SubmarineBend", new MapBend(265, 25, true));
-        Add("Submarine", new MapButton(245, 45, "Submarine"));
-        Add("DrawFront", new MapButton(215, 65, "DrawFront"));
-        Add("DrawBack", new MapButton(285, 65, "DrawBack"));
-        Add("MapEntityDrawing", new MapButton(230, 85, "MapEntityDrawing", Capture.MapEntityDrawing));
-        Add("LevelObjectManagerBend", new MapBend(215, 120, true));
+        Add("SubmarineBend", new MapBend(270, 27, true));
+        Add("Submarine", new MapButton(247, 38, "Submarine"));
+        Add("DrawFront", new MapButton(215, 59, "DrawFront"));
+        Add("DrawBack", new MapButton(283, 59, "DrawBack"));
+        Add("MapEntityDrawing", new MapButton(229, 81, "MapEntityDrawing", Capture.MapEntityDrawing));
+        Add("LevelObjectManagerBend", new MapBend(215, 122, true));
         Add("LevelObjectManager", new MapButton(235, 115, "LevelObjectManager"));
         Add("DrawObjects", new MapButton(258, 147, "DrawObjects", Capture.LevelObjectsDrawing));
         Add("MapEntity.UpdateAll", new MapButton(7, 108, "MapEntity.UpdateAll"));
@@ -110,7 +113,7 @@ namespace ShowPerfExtensions
         Add("ItemComponentsUpdate", new MapButton(17, 280, "ItemComponentsUpdate", Capture.ItemComponentsUpdate));
         Add("LevelRendererInBend", new MapBend(205, 150, true));
         Add("LevelRenderer", new MapButton(245, 185, "LevelRenderer"));
-        Add("DrawBackground", new MapButton(238, 212, "DrawBackground", Capture.LevelMisc));
+        Add("DrawBackground", new MapButton(238, 211, "DrawBackground", Capture.LevelMisc));
         Add("Character.UpdateAll", new MapButton(70, 75, "Character.UpdateAll", Capture.CharactersUpdate));
 
         ConnectTo(this["GameScreen"],

@@ -69,7 +69,7 @@ namespace ShowPerfExtensions
             sw2.Restart();
             hull.Update(deltaTime * MapEntity.MapEntityUpdateInterval, cam);
             ticks = sw2.ElapsedTicks;
-            if (Showperf.ShouldCapture(hull))
+            if (Window.ShouldCapture(hull))
             {
               Window.AddTicks(new UpdateTicks(ticks, Capture.HullUpdate.Category, $"{hull}"));
             }
@@ -95,7 +95,7 @@ namespace ShowPerfExtensions
             sw2.Restart();
             structure.Update(deltaTime * MapEntity.MapEntityUpdateInterval, cam);
             ticks = sw2.ElapsedTicks;
-            if (Showperf.ShouldCapture(structure))
+            if (Window.ShouldCapture(structure))
             {
               if (Capture.StructureUpdate.ByID)
               {
@@ -129,7 +129,7 @@ namespace ShowPerfExtensions
           gap.Update(deltaTime, cam);
           ticks = sw2.ElapsedTicks;
 
-          if (Showperf.ShouldCapture(gap))
+          if (Window.ShouldCapture(gap))
           {
             Window.AddTicks(new UpdateTicks(ticks, Capture.GapUpdate.Category, $"Gap({gap.ID})"));
           }
@@ -175,7 +175,7 @@ namespace ShowPerfExtensions
 
 
               ticks = sw2.ElapsedTicks;
-              if (Showperf.ShouldCapture(item))
+              if (Window.ShouldCapture(item))
               {
                 if (Capture.ItemUpdate.ByID)
                 {
@@ -222,7 +222,7 @@ namespace ShowPerfExtensions
           item.Update(deltaTime, cam);
 
           ticks = sw2.ElapsedTicks;
-          if (Showperf.ShouldCapture(item))
+          if (Window.ShouldCapture(item))
           {
             if (Capture.ItemUpdate.ByID)
             {
