@@ -47,10 +47,17 @@ namespace ShowPerfExtensions
 
       public void Update()
       {
-        if (Revealed)
+        try
         {
-          Window.Update();
-          TickList.Update();
+          if (Revealed)
+          {
+            Window.Update();
+            TickList.Update();
+          }
+        }
+        catch (Exception e)
+        {
+          log($"ShowPerf Extensions: {e}");
         }
       }
 

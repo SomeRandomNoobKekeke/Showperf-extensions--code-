@@ -87,7 +87,10 @@ namespace ShowPerfExtensions
 
       public bool ShouldCapture(Entity e)
       {
-        return CaptureFrom == SubType.All || (int)e.Submarine.Info.Type == (int)CaptureFrom;
+        if (CaptureFrom == SubType.All) return true;
+        if (e == null) return false;
+        if (e.Submarine == null || e.Submarine.Info == null) return false;
+        return (int)e.Submarine.Info.Type == (int)CaptureFrom;
       }
 
       public Slice FirstSlice;
