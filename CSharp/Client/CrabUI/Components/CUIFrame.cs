@@ -11,12 +11,12 @@ namespace CrabUI
 {
   public class CUIFrame : CUIComponent
   {
-    protected override void Draw(SpriteBatch spriteBatch)
+    public override void Draw(SpriteBatch spriteBatch)
     {
       if (BackgroundVisible) GUI.DrawRectangle(spriteBatch, Real.Position, Real.Size, BackgroundColor, isFilled: true);
     }
 
-    protected override void DrawFront(SpriteBatch spriteBatch)
+    public override void DrawFront(SpriteBatch spriteBatch)
     {
       if (BorderVisible) GUI.DrawRectangle(spriteBatch, BorderBox.Position, BorderBox.Size, BorderColor, thickness: BorderThickness);
 

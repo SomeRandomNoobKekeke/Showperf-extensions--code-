@@ -130,7 +130,7 @@ namespace CrabUI
     }
 
 
-    protected override void Draw(SpriteBatch spriteBatch)
+    public override void Draw(SpriteBatch spriteBatch)
     {
       BackgroundColor = GetColor2((float)(Timing.TotalTime - LastUpdate));
 

@@ -38,7 +38,7 @@ namespace CrabUI
       Connections.Add(new CUIMapLink(start, end, color));
     }
 
-    protected override void Draw(SpriteBatch spriteBatch)
+    public override void Draw(SpriteBatch spriteBatch)
     {
       base.Draw(spriteBatch);
 

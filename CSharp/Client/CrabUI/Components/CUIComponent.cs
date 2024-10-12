@@ -44,8 +44,8 @@ namespace CrabUI
     internal virtual Vector2 AmIOkWithThisSize(Vector2 size) => size;
     internal virtual void ChildrenSizeCalculated() { }
     public virtual partial void ApplyState(CUIComponent state);
-    protected virtual partial void Draw(SpriteBatch spriteBatch);
-    protected virtual partial void DrawFront(SpriteBatch spriteBatch);
+    public virtual partial void Draw(SpriteBatch spriteBatch);
+    public virtual partial void DrawFront(SpriteBatch spriteBatch);
 
     #endregion
     #region Meta --------------------------------------------------------
@@ -58,8 +58,8 @@ namespace CrabUI
 
     public override string ToString() => $"{this.GetType().Name}:{ID}:{AKA}";
 
-    protected CUIRect BorderBox;
-    protected Rectangle? ScissorRect;
+    public CUIRect BorderBox;
+    public Rectangle? ScissorRect;
     private CUIRect real; public CUIRect Real
     {
       get => real;
@@ -631,7 +631,7 @@ namespace CrabUI
     #endregion
     #region Draw --------------------------------------------------------
 
-    protected virtual partial void Draw(SpriteBatch spriteBatch)
+    public virtual partial void Draw(SpriteBatch spriteBatch)
     {
       if (BackgroundVisible) GUI.DrawRectangle(spriteBatch, Real.Position, Real.Size, BackgroundColor, isFilled: true);
 
@@ -641,7 +641,7 @@ namespace CrabUI
       RightResizeHandle.Draw(spriteBatch);
     }
 
-    protected virtual partial void DrawFront(SpriteBatch spriteBatch)
+    public virtual partial void DrawFront(SpriteBatch spriteBatch)
     {
       if (DebugHighlight)
       {

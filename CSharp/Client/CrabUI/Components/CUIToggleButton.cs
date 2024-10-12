@@ -48,7 +48,7 @@ namespace CrabUI
       Text = state ? OnText : OffText;
     }
 
-    protected override void Draw(SpriteBatch spriteBatch)
+    public override void Draw(SpriteBatch spriteBatch)
     {
       if (Disabled)
       {

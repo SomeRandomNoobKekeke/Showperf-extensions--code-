@@ -20,7 +20,7 @@ namespace CrabUI
       public string Value;
       public Color HoverColor;
 
-      protected override void Draw(SpriteBatch spriteBatch)
+      public override void Draw(SpriteBatch spriteBatch)
       {
         BackgroundColor = Color.Transparent;
         if (MouseOver) BackgroundColor = HoverColor;

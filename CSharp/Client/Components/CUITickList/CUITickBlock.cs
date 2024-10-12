@@ -42,7 +42,7 @@ namespace ShowPerfExtensions
           VisibleRangeEnd = Math.Max(0, Math.Min(VisibleRangeEnd, TickList.Values.Count));
         }
 
-        protected override void Draw(SpriteBatch spriteBatch)
+        public override void Draw(SpriteBatch spriteBatch)
         {
           float y = 0;
 
