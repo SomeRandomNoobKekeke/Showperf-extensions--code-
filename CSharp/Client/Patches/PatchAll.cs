@@ -56,10 +56,10 @@ namespace ShowPerfExtensions
 
     public void PatchTechnical()
     {
-      // harmony.Patch(
-      //   original: typeof(LuaGame).GetMethod("IsCustomCommandPermitted"),
-      //   postfix: new HarmonyMethod(typeof(Mod).GetMethod("permitCommands"))
-      // );
+      harmony.Patch(
+        original: typeof(LuaGame).GetMethod("IsCustomCommandPermitted"),
+        postfix: new HarmonyMethod(typeof(Mod).GetMethod("permitCommands"))
+      );
     }
 
   }
