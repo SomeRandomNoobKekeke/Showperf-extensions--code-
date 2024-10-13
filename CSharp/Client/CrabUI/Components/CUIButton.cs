@@ -7,7 +7,7 @@ using Barotrauma;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Graphics;
-
+using System.Xml.Linq;
 namespace CrabUI
 {
   public class CUIButton : CUITextBlock
@@ -62,6 +62,11 @@ namespace CrabUI
     public CUIButton(string text, float? x = null, float? y = null, float? w = null, float? h = null) : this(text)
     {
       Relative = new CUINullRect(x, y, w, h);
+    }
+
+    public override void ToXML(XElement e)
+    {
+      base.ToXML(e);
     }
   }
 }

@@ -6,7 +6,7 @@ using Barotrauma;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Graphics;
-
+using System.Xml.Linq;
 namespace CrabUI
 {
   public class CUITextBlock : CUIComponent
@@ -135,6 +135,11 @@ namespace CrabUI
     public CUITextBlock(string text, float? x = null, float? y = null, float? w = null, float? h = null) : this(text)
     {
       Relative = new CUINullRect(x, y, w, h);
+    }
+
+    public override void ToXML(XElement e)
+    {
+      e.Add(new XAttribute("Text", Text));
     }
   }
 }

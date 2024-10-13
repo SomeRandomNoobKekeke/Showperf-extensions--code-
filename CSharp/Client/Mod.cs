@@ -81,7 +81,12 @@ namespace ShowPerfExtensions
 
       // CUIMain["showperfButton"].Click();
       // Showperf.Pages.Open(Showperf.Map);
-      //CUIMain.Load(CUITest.CUIDropDown);
+
+
+
+      CUIMain.Load(CUITest.Serialize);
+
+
 
       PatchAll();
       addCommands();
