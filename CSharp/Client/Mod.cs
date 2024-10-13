@@ -49,11 +49,11 @@ namespace ShowPerfExtensions
       CUIMain = new CUIMainComponent();
       Showperf = new CUIShowperf()
       {
-        Absolute = new CUINullRect(null, null, 350, 600),
+        Absolute = new CUINullRect(null, null, 350, 550),
       };
 
       Showperf.Absolute = new CUINullRect(
-        CUIAnchor.GetChildPos(CUIMain.Real, CUIAnchorType.RightTop, new Vector2(-1, 40), Showperf.Absolute.Size),
+        CUIAnchor.GetChildPos(CUIMain.Real, CUIAnchorType.RightCenter, new Vector2(-1, 0), Showperf.Absolute.Size),
         Showperf.Absolute.Size
       );
 
@@ -79,8 +79,8 @@ namespace ShowPerfExtensions
 
       Showperf.OnClose += () => CUIMain["showperfButton"].Reveal();
 
-      CUIMain["showperfButton"].Click();
-      Showperf.Pages.Open(Showperf.Map);
+      // CUIMain["showperfButton"].Click();
+      // Showperf.Pages.Open(Showperf.Map);
       //CUIMain.Load(CUITest.CUIDropDown);
 
       PatchAll();
