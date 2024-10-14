@@ -54,11 +54,6 @@ namespace CrabUI
       BorderColor = Color.Transparent;
       UnCullable = true;
     }
-
-    public CUIMapContent(float? x = null, float? y = null, float? w = null, float? h = null) : this()
-    {
-      Relative = new CUINullRect(x, y, w, h);
-    }
   }
 
   public class CUIMap : CUIComponent
@@ -109,11 +104,6 @@ namespace CrabUI
       HideChildrenOutsideFrame = true;
 
       this.Append(Map = new CUIMapContent());
-    }
-
-    public CUIMap(float? x = null, float? y = null, float? w = null, float? h = null) : this()
-    {
-      Relative = new CUINullRect(x, y, w, h);
     }
   }
 

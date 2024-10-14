@@ -75,26 +75,19 @@ namespace CrabUI
 
       foreach (CUIComponent c in l)
       {
-        CUIToggleButton b = new CUIToggleButton(c.ToString());
-        b.State = c.Debug;
-        b.IgnoreDebug = true;
-        b.TextAling = new CUIAnchor(CUIAnchorType.LeftTop);
-        b.OnMouseDown += (m) =>
+        CUIToggleButton b = new CUIToggleButton(c.ToString())
         {
-          c.Debug = !c.Debug;
-          MakeIDList();
+          State = c.Debug,
+          IgnoreDebug = true,
+          TextAling = new CUIAnchor(CUIAnchorType.LeftTop),
+          AddOnMouseDown = (m) =>
+          {
+            c.Debug = !c.Debug;
+            MakeIDList();
+          },
+          AddOnMouseEnter = (m) => c.DebugHighlight = true,
+          AddOnMouseLeave = (m) => c.DebugHighlight = false,
         };
-
-        b.OnMouseEnter += (m) =>
-        {
-          c.DebugHighlight = true;
-        };
-
-        b.OnMouseLeave += (m) =>
-        {
-          c.DebugHighlight = false;
-        };
-
 
         DebugIDsComponent.Append(b);
       }
@@ -165,14 +158,16 @@ namespace CrabUI
         IgnoreDebug = true,
       });
 
-      EventsComponent = new CUIVerticalList(0, 0, 1, 1)
+      EventsComponent = new CUIVerticalList()
       {
+        Relative = new CUINullRect(0, 0, 1, 1),
         Scrollable = true,
         IgnoreDebug = true,
       };
 
-      DebugIDsComponent = new CUIVerticalList(0, 0, 1, 1)
+      DebugIDsComponent = new CUIVerticalList()
       {
+        Relative = new CUINullRect(0, 0, 1, 1),
         Scrollable = true,
         IgnoreDebug = true,
       };

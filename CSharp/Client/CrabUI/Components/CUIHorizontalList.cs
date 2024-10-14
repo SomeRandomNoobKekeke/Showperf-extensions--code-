@@ -17,6 +17,11 @@ namespace CrabUI
     public float RightGap = 0f;
 
     private CUILayoutHorizontalList listLayout;
+    public CUIDirection Direction
+    {
+      get => listLayout.Direction;
+      set => listLayout.Direction = value;
+    }
 
     public float Scroll
     {
@@ -54,22 +59,17 @@ namespace CrabUI
       ChildrenOffset = new Vector2(x, y);
     }
 
-    public CUIHorizontalList(CUIDirection direction = CUIDirection.Straight) : base()
+    public CUIHorizontalList() : base()
     {
       HideChildrenOutsideFrame = true;
 
-      listLayout = new CUILayoutHorizontalList(direction);
+      listLayout = new CUILayoutHorizontalList();
       Layout = listLayout;
 
       OnScroll += (float s) => Scroll += s;
 
       BackgroundColor = Color.Transparent;
       // BorderColor = Color.Transparent;
-    }
-
-    public CUIHorizontalList(float? x, float? y, float? w, float? h) : this()
-    {
-      Relative = new CUINullRect(x, y, w, h);
     }
   }
 }

@@ -18,7 +18,10 @@ namespace CrabUI
     {
       CUIComponent f = new CUIFrame(0.6f, 0.2f, 0.2f, 0.6f);
 
-      CUIComponent l = f.Append(new CUIVerticalList(0f, 0f, 1f, 0.9f));
+      CUIComponent l = f.Append(new CUIVerticalList()
+      {
+        Relative = new CUINullRect(0f, 0f, 1f, 0.9f),
+      });
       l.BackgroundColor = Color.Blue * 0.25f;
 
 

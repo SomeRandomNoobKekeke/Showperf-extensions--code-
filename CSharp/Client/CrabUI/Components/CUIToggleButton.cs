@@ -70,11 +70,9 @@ namespace CrabUI
 
       base.Draw(spriteBatch);
     }
-    public CUIToggleButton(string text = "") : base(text)
-    {
-      OnText = text;
-      OffText = text;
 
+    public CUIToggleButton() : base()
+    {
       ConsumeMouseClicks = true;
       ConsumeDragAndDrop = true;
       ConsumeSwipe = true;
@@ -97,16 +95,14 @@ namespace CrabUI
           SoundPlayer.PlayUISound(ClickSound);
         }
       };
-
     }
 
-    public CUIToggleButton(string text, float? width, float? height) : this(text)
+    public CUIToggleButton(string text) : this()
     {
-      Relative = new CUINullRect(null, null, width, height);
+      OnText = text;
+      OffText = text;
+      Text = text;
     }
-    public CUIToggleButton(string text, float? x = null, float? y = null, float? w = null, float? h = null) : this(text)
-    {
-      Relative = new CUINullRect(x, y, w, h);
-    }
+
   }
 }

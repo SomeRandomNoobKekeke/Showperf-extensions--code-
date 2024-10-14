@@ -27,10 +27,11 @@ namespace CrabUI
         base.Draw(spriteBatch);
       }
 
-      public Option(string text, string value, CUIDropDown host) : base(text)
+      public Option(string text, string value, CUIDropDown host) : base()
       {
         Host = host;
         Value = value;
+        Text = text;
 
         HoverColor = CUIPallete.Default.Tertiary.OffHover;
         TextColor = CUIPallete.Default.Tertiary.Text;
@@ -155,21 +156,15 @@ namespace CrabUI
       return new Vector2(Math.Max(Box.AbsoluteMin.Width ?? 0, size.X), mySize.Y);
     }
 
-    public CUIDropDown() : base("CUIDropDown")
+    public CUIDropDown() : base()
     {
+      Text = "CUIDropDown";
       FitContent = new CUIBool2(true, false);
 
       Box = new CUIDropDownBox(this);
       Append(Box);
       OnMouseDown += (m) => Toggle();
       Close();
-    }
-
-    public CUIDropDown(float? width, float? height) : this(null, null, width, height) { }
-
-    public CUIDropDown(float? x = null, float? y = null, float? w = null, float? h = null) : this()
-    {
-      Relative = new CUINullRect(x, y, w, h);
     }
 
     #endregion

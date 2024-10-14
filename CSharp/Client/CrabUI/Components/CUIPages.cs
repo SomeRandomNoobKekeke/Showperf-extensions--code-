@@ -28,10 +28,5 @@ namespace CrabUI
       BorderColor = Color.Transparent;
       HideChildrenOutsideFrame = false;
     }
-
-    public CUIPages(float? x= null, float? y=null, float? w=null, float? h=null) : this()
-    {
-      Relative = new CUINullRect(x, y, w, h);
-    }
   }
 }

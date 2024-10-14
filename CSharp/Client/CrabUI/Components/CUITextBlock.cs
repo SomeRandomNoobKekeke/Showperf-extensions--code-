@@ -18,7 +18,7 @@ namespace CrabUI
       get => text;
       set
       {
-        text = value;
+        text = value ?? "";
         OnTextChanged?.Invoke();
 
         if (!Ghost)
@@ -118,23 +118,18 @@ namespace CrabUI
       Font.Value.DrawString(spriteBatch, WrappedText, TextDrawPos, TextColor, rotation: 0, origin: Vector2.Zero, TextScale, se: SpriteEffects.None, layerDepth: 0.1f);
     }
 
-    public CUITextBlock(string text = "")
+    public CUITextBlock()
     {
       Padding = new Vector2(4, 0);
-      Text = text;
 
       BackgroundColor = Color.Transparent;
       BorderColor = Color.Transparent;
       TextColor = CUIPallete.Default.Secondary.Text;
     }
 
-    public CUITextBlock(string text, float? width, float? height) : this(text)
+    public CUITextBlock(string text) : this()
     {
-      Relative = new CUINullRect(null, null, width, height);
-    }
-    public CUITextBlock(string text, float? x = null, float? y = null, float? w = null, float? h = null) : this(text)
-    {
-      Relative = new CUINullRect(x, y, w, h);
+      Text = text;
     }
 
     public override void ToXML(XElement e)

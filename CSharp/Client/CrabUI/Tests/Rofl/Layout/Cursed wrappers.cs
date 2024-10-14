@@ -21,16 +21,18 @@ namespace CrabUI
         HideChildrenOutsideFrame = false,
       });
 
-      CUIVerticalList v = new CUIVerticalList(0, 0, 1, 1)
+      CUIVerticalList v = new CUIVerticalList()
       {
+        Relative = new CUINullRect(0, 0, 1, 1),
         HideChildrenOutsideFrame = false,
         BackgroundColor = Color.Red,
       };
       f.Append(v);
 
 
-      CUIHorizontalList h = new CUIHorizontalList(0, 0, 1, null)
+      CUIHorizontalList h = new CUIHorizontalList()
       {
+        Relative = new CUINullRect(0, 0, 1, null),
         FitContent = new CUIBool2(false, true),
         HideChildrenOutsideFrame = false,
         BackgroundColor = Color.Blue,
@@ -48,8 +50,9 @@ namespace CrabUI
       h.Append(dd);
 
 
-      h = new CUIHorizontalList(0, 0, 1, null)
+      h = new CUIHorizontalList()
       {
+        Relative = new CUINullRect(0, 0, 1, null),
         FitContent = new CUIBool2(false, true),
         HideChildrenOutsideFrame = false,
         BackgroundColor = Color.Blue,

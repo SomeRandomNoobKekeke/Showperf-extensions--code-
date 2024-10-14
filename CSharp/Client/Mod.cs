@@ -84,7 +84,7 @@ namespace ShowPerfExtensions
 
 
 
-      CUIMain.Load(CUITest.Serialize);
+      //CUIMain.Load(CUITest.Serialize);
 
 
 

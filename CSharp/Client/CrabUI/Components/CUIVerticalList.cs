@@ -20,7 +20,13 @@ namespace CrabUI
     public float TopGap = 0;
     public float BottomGap = 10f;
 
+    // TODO why i have to have 2 vars of same thing? this smells like a bad solution
     protected CUILayoutVerticalList listLayout;
+    public CUIDirection Direction
+    {
+      get => listLayout.Direction;
+      set => listLayout.Direction = value;
+    }
 
     public float Scroll
     {
@@ -56,11 +62,11 @@ namespace CrabUI
       ChildrenOffset = new Vector2(x, y);
     }
 
-    public CUIVerticalList(CUIDirection direction = CUIDirection.Straight) : base()
+    public CUIVerticalList() : base()
     {
       HideChildrenOutsideFrame = true;
 
-      listLayout = new CUILayoutVerticalList(direction);
+      listLayout = new CUILayoutVerticalList();
       Layout = listLayout;
 
       OnScroll += (float s) => Scroll += s;
@@ -69,9 +75,5 @@ namespace CrabUI
       // BorderColor = Color.Transparent;
     }
 
-    public CUIVerticalList(float? x, float? y, float? w, float? h) : this()
-    {
-      Relative = new CUINullRect(x, y, w, h);
-    }
   }
 }

@@ -18,8 +18,9 @@ namespace CrabUI
     {
       CUIComponent f = CUI.Append(new CUIFrame(0.6f, 0.2f, 0.3f, 0.6f));
 
-      CUIVerticalList l = new CUIVerticalList(0.2f, 0.2f, null, 0.4f)
+      CUIVerticalList l = new CUIVerticalList()
       {
+        Relative = new CUINullRect(0.2f, 0.2f, null, 0.4f),
         FitContent = new CUIBool2(true, false),
         // Absolute = new CUINullRect(0, 0, 100, 100),
         BackgroundColor = Color.Green,

@@ -12,6 +12,7 @@ namespace CrabUI
 {
   public class CUIButton : CUITextBlock
   {
+    public static CUIButton Default = new CUIButton();
     public GUISoundType ClickSound { get; set; } = GUISoundType.Select;
 
     public Color DisabledColor;
@@ -33,7 +34,7 @@ namespace CrabUI
       }
       base.Draw(spriteBatch);
     }
-    public CUIButton(string text = "") : base(text)
+    public CUIButton() : base()
     {
       ConsumeMouseClicks = true;
       ConsumeDragAndDrop = true;
@@ -54,14 +55,9 @@ namespace CrabUI
       };
     }
 
-    public CUIButton(string text, float? width, float? height) : this(text)
+    public CUIButton(string text) : this()
     {
-      Relative = new CUINullRect(null, null, width, height);
-    }
-
-    public CUIButton(string text, float? x = null, float? y = null, float? w = null, float? h = null) : this(text)
-    {
-      Relative = new CUINullRect(x, y, w, h);
+      Text = text;
     }
 
     public override void ToXML(XElement e)

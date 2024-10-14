@@ -18,8 +18,9 @@ namespace CrabUI
     {
       CUIComponent f = CUI.Append(new CUIFrame(0.6f, 0.2f, 0.3f, 0.6f));
 
-      f["list"] = new CUIVerticalList(0, 0, 1, 1)
+      f["list"] = new CUIVerticalList()
       {
+        Relative = new CUINullRect(0, 0, 1, 1),
         Scrollable = true,
         //HideChildrenOutsideFrame = false,
       };
@@ -32,7 +33,7 @@ namespace CrabUI
           BackgroundColor = Color.Blue,
         });
 
-        l["h"] = new CUIHorizontalList(0, 0, 1, 1);
+        l["h"] = new CUIHorizontalList() { Relative = new CUINullRect(0, 0, 1, 1), };
         l["h"]["Left"] = new CUIButton($"{i} Left")
         {
           Relative = new CUINullRect(w: 0.5f),

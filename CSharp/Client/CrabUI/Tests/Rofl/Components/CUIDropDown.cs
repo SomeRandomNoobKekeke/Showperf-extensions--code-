@@ -21,7 +21,10 @@ namespace CrabUI
         BackgroundColor = Color.Green,
       };
 
-      CUIDropDown dd = new CUIDropDown(0.2f, 0.2f, null, null);
+      CUIDropDown dd = new CUIDropDown()
+      {
+        Relative = new CUINullRect(x: 0.2f, y: 0.2f)
+      };
       dd.Add("1");
       dd.Add("22");
       CUIDropDown.Option o1 = (CUIDropDown.Option)dd.Add("333");
@@ -40,7 +43,7 @@ namespace CrabUI
         BackgroundColor = Color.Green,
       };
 
-      controls["list"] = new CUIVerticalList(0, 0, 1, 1);
+      controls["list"] = new CUIVerticalList() { Relative = new CUINullRect(0, 0, 1, 1) };
       controls["list"]["b1"] = new CUIButton("change text");
       controls["list"]["b1"].OnMouseDown += (m) => o1.Text = o1.Text == "333" ? "23409123409182394" : "333";
       controls["list"]["b2"] = new CUIButton("change text");

@@ -63,8 +63,9 @@ namespace ShowPerfExtensions
 
       public void CreateGUI()
       {
-        this["handle"] = new CUIHorizontalList(CUIDirection.Reverse)
+        this["handle"] = new CUIHorizontalList()
         {
+          Direction = CUIDirection.Reverse,
           FitContent = new CUIBool2(false, true),
           BorderColor = Color.Transparent,
         };
@@ -81,7 +82,7 @@ namespace ShowPerfExtensions
         };
 
         //TODO mb this should be multibutton, but multibutton is bugged
-        this["handle"]["savestate"] = new CUIToggleButton("Locked")
+        this["handle"]["savestate"] = new CUIToggleButton()
         {
           Absolute = new CUINullRect(w: 65),
           OnText = "Locked",

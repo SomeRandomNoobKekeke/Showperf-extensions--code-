@@ -21,9 +21,11 @@ namespace CrabUI
         //HideChildrenOutsideFrame = false,
       });
 
-      f["list"] = new CUIVerticalList(0, 0, 1, 1)
+      f["list"] = new CUIVerticalList()
       {
+        Relative = new CUINullRect(0, 0, 1, 1),
         Scrollable = true,
+
         //HideChildrenOutsideFrame = false,
       };
 

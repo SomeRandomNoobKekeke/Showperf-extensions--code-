@@ -19,9 +19,9 @@ namespace CrabUI
   public partial class CUIComponent
   {
     #region Static --------------------------------------------------------
-
     public static int MaxID = 0;
-    public static Dictionary<int, CUIComponent> ComponentsById = new Dictionary<int, CUIComponent>();
+    public static CUIComponent Default;
+    public static Dictionary<int, CUIComponent> ComponentsById;
     public static Vector2 GameScreenSize => new Vector2(GameMain.GraphicsWidth, GameMain.GraphicsHeight);
     public static Rectangle GameScreenRect => new Rectangle(0, 0, GameMain.GraphicsWidth, GameMain.GraphicsHeight);
     public static GUIButton dummyComponent = new GUIButton(new RectTransform(new Point(0, 0)));
@@ -32,6 +32,12 @@ namespace CrabUI
       {
         RunRecursiveOn(child, action, depth + 1);
       }
+    }
+
+    static CUIComponent()
+    {
+      ComponentsById = new Dictionary<int, CUIComponent>();
+      Default = new CUIComponent();
     }
 
     #endregion

@@ -76,12 +76,5 @@ namespace CrabUI
       FitContent = new CUIBool2(true, true);
       ConsumeDragAndDrop = true;
     }
-
-    public CUIMultiButton(float? width, float? height) : this(null, null, width, height) { }
-
-    public CUIMultiButton(float? x = null, float? y = null, float? w = null, float? h = null) : this()
-    {
-      Relative = new CUINullRect(x, y, w, h);
-    }
   }
 }

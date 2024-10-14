@@ -16,9 +16,13 @@ namespace CrabUI
   {
     public static void ClickSounds(CUIMainComponent CUI)
     {
-      CUIComponent f = new CUIFrame(0.6f, 0.2f, 0.2f, 0.6f);
-      CUIComponent l = f.Append(new CUIVerticalList(0f, 0f, 1f, 1f)
+      CUIComponent f = new CUIFrame()
       {
+        Relative = new CUINullRect(0.6f, 0.2f, 0.2f, 0.6f),
+      };
+      CUIComponent l = f.Append(new CUIVerticalList()
+      {
+        Relative = new CUINullRect(0, 0, 1, 1),
         Scrollable = true
       });
 
