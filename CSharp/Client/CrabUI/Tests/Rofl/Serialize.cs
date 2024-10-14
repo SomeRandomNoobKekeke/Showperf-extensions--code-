@@ -61,7 +61,7 @@ namespace CrabUI
 
       Main.Append(f);
 
-      //CUI.log(CUIComponent.Serialize(f));
+      CUI.log(f.Serialize());
     }
   }
 }

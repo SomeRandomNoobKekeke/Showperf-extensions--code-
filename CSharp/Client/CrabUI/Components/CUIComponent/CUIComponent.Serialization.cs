@@ -81,9 +81,9 @@ namespace CrabUI
       return e;
     }
 
-    public static string Serialize(CUIComponent component)
+    public string Serialize()
     {
-      XElement e = component.ToXMLRec();
+      XElement e = this.ToXMLRec();
       return e.ToString();
     }
     public static CUIComponent Deserialize(string raw)

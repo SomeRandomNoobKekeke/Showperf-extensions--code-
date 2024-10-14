@@ -11,6 +11,7 @@ namespace CrabUI
 {
   public class CUIPages : CUIComponent
   {
+    public static CUIPages Default = new CUIPages();
     public CUIComponent OpenedPage;
 
     public bool IsOpened(CUIComponent p) => OpenedPage == p;

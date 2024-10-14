@@ -11,6 +11,7 @@ namespace CrabUI
 {
   public class CUITextBlock : CUIComponent
   {
+    public static CUITextBlock Default = new CUITextBlock();
     public event Action OnTextChanged;
     public Action AddOnTextChanged { set { OnTextChanged += value; } }
     private string text = ""; public string Text
@@ -134,7 +135,12 @@ namespace CrabUI
 
     public override void ToXML(XElement e)
     {
-      e.Add(new XAttribute("Text", Text));
+      if (Text != Default.Text) e.Add(new XAttribute("Text", Text));
+      if (Wrap != Default.Wrap) e.Add(new XAttribute("Wrap", Wrap));
+      if (Ghost != Default.Ghost) e.Add(new XAttribute("Ghost", Ghost));
+
+      Info($"{TextAling.Type} {Default.TextAling.Type}");
+      if (TextAling.Type != Default.TextAling.Type) e.Add(new XAttribute("TextAling", TextAling.Type));
     }
   }
 }

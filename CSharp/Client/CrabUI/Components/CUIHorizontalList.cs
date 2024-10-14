@@ -11,6 +11,7 @@ namespace CrabUI
 {
   public class CUIHorizontalList : CUIComponent
   {
+    public static CUIHorizontalList Default = new CUIHorizontalList();
     public bool Scrollable { get; set; }
 
     public float LeftGap = 0f;

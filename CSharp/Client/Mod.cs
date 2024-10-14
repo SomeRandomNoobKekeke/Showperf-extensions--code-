@@ -86,7 +86,7 @@ namespace ShowPerfExtensions
 
       //CUIMain.Load(CUITest.Serialize);
 
-
+      log(CUIButton.Default.Serialize());
 
       PatchAll();
       addCommands();

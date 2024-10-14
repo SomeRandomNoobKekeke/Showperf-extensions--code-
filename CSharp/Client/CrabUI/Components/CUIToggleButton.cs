@@ -12,6 +12,7 @@ namespace CrabUI
 {
   public class CUIToggleButton : CUITextBlock
   {
+    public static CUIToggleButton Default = new CUIToggleButton();
     public GUISoundType ClickSound { get; set; } = GUISoundType.Select;
 
     public Color DisabledColor;

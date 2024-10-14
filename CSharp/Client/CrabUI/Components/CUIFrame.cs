@@ -11,6 +11,7 @@ namespace CrabUI
 {
   public class CUIFrame : CUIComponent
   {
+    public static CUIFrame Default = new CUIFrame();
     public override void Draw(SpriteBatch spriteBatch)
     {
       if (BackgroundVisible) GUI.DrawRectangle(spriteBatch, Real.Position, Real.Size, BackgroundColor, isFilled: true);
