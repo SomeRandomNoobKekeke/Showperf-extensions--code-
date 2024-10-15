@@ -89,6 +89,7 @@ namespace ShowPerfExtensions
       CUIButton b = new CUIButton()
       {
         Text = "kokoko",
+        Relative = new CUINullRect(0, 0, 1, 1),
       };
 
       log(b.Serialize());

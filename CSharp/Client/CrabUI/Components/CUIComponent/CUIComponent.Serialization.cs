@@ -98,12 +98,22 @@ namespace CrabUI
       }
     }
 
+
+    //TODO think, what would happen if value is null and != def?
     public void SetAttribute(string name, XElement e)
     {
+      object def = CUI.GetDefault(this);
       object value = CUI.GetNestedValue(this, name);
-      object defValue = CUI.GetNestedValue(CUI.GetDefault(this), name);
 
-      e.SetAttributeValue(name, value.Equals(defValue) ? null : value);
+      if (def == null)
+      {
+        e?.SetAttributeValue(name, value);
+        return;
+      }
+
+      object defValue = CUI.GetNestedValue(def, name);
+
+      e?.SetAttributeValue(name, Object.Equals(value, defValue) ? null : value);
     }
 
     private XElement ToXMLRec()
