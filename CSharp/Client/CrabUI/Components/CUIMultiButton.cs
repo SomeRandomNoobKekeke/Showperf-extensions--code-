@@ -43,6 +43,7 @@ namespace CrabUI
     public void Select(object data, bool silent = false)
     {
       //TODO investigate why simple == doesnt work
+      // a ok, because there's some boxing going on
       //TODO and what would happen if data is another CUIButton
       CUIButton btn = Buttons.Find(b => b.Data.GetHashCode() == data.GetHashCode());
       if (btn != null) Select(btn, silent);

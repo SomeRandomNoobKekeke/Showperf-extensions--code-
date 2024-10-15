@@ -36,6 +36,7 @@ namespace CrabUI
     }
     public CUIButton() : base()
     {
+      Text = "CUIButton";
       ConsumeMouseClicks = true;
       ConsumeDragAndDrop = true;
       ConsumeSwipe = true;
@@ -46,7 +47,7 @@ namespace CrabUI
       BorderColor = CUIPallete.Default.Secondary.Border;
       DisabledColor = CUIPallete.Default.Secondary.Disabled;
 
-      TextAling.Type = CUIAnchorType.CenterCenter;
+      TextAlign.Type = CUIAnchorType.CenterCenter;
       Padding = new Vector2(4, 2);
 
       OnMouseDown += (e) =>
@@ -63,6 +64,8 @@ namespace CrabUI
     public override void ToXML(XElement e)
     {
       base.ToXML(e);
+
+      e.SetAttributeValue("TextAlign", Default.TextAlign.Type != TextAlign.Type ? TextAlign.Type : null);
     }
   }
 }

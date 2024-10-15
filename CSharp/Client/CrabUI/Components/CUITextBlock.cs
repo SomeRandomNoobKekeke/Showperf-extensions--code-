@@ -89,7 +89,7 @@ namespace CrabUI
       return WrappedSize;
     }
 
-    public CUIAnchor TextAling = new CUIAnchor(CUIAnchorType.LeftTop);
+    public CUIAnchor TextAlign = new CUIAnchor(CUIAnchorType.LeftTop);
     public Color TextColor;
     public GUIFont Font = GUIStyle.Font;
     private float textScale = 0.9f; public float TextScale
@@ -103,7 +103,7 @@ namespace CrabUI
 
     internal override void UpdatePseudoChildren()
     {
-      TextDrawPos = TextAling.GetChildPos(Real, Vector2.Zero, RealTextSize) + Padding * TextAling.Direction;
+      TextDrawPos = TextAlign.GetChildPos(Real, Vector2.Zero, RealTextSize) + Padding * TextAlign.Direction;
       if (ComponentInitialized)
       {
         CUIDebug.Capture(null, this, "UpdatePseudoChildren", "", "TextDrawPos", TextDrawPos.ToString());
@@ -135,12 +135,12 @@ namespace CrabUI
 
     public override void ToXML(XElement e)
     {
-      if (Text != Default.Text) e.Add(new XAttribute("Text", Text));
-      if (Wrap != Default.Wrap) e.Add(new XAttribute("Wrap", Wrap));
-      if (Ghost != Default.Ghost) e.Add(new XAttribute("Ghost", Ghost));
+      base.ToXML(e);
 
-      Info($"{TextAling.Type} {Default.TextAling.Type}");
-      if (TextAling.Type != Default.TextAling.Type) e.Add(new XAttribute("TextAling", TextAling.Type));
+      e.SetAttributeValue("Text", Default.Text != Text ? Text : null);
+      e.SetAttributeValue("Wrap", Default.Wrap != Wrap ? Wrap : null);
+      e.SetAttributeValue("Ghost", Default.Ghost != Ghost ? Ghost : null);
+      e.SetAttributeValue("TextAlign", Default.TextAlign.Type != TextAlign.Type ? TextAlign.Type : null);
     }
   }
 }

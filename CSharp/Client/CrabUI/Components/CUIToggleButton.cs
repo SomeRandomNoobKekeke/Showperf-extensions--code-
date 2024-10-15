@@ -85,7 +85,7 @@ namespace CrabUI
       BorderColor = CUIPallete.Default.Secondary.Border;
       DisabledColor = CUIPallete.Default.Secondary.Disabled;
 
-      TextAling.Type = CUIAnchorType.CenterCenter;
+      TextAlign.Type = CUIAnchorType.CenterCenter;
       Padding = new Vector2(4, 2);
 
       OnMouseDown += (e) =>

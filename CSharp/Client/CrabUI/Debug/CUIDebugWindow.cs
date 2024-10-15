@@ -43,7 +43,6 @@ namespace CrabUI
         Events.Add(ec);
         EventsComponent.Append(ec);
 
-        //FIXME why it doesn't work?
         ec.OnMouseEnter += (m) => ec.Value.Target.DebugHighlight = true;
         ec.OnMouseLeave += (m) => ec.Value.Target.DebugHighlight = false;
       }
@@ -79,7 +78,7 @@ namespace CrabUI
         {
           State = c.Debug,
           IgnoreDebug = true,
-          TextAling = new CUIAnchor(CUIAnchorType.LeftTop),
+          TextAlign = new CUIAnchor(CUIAnchorType.LeftTop),
           AddOnMouseDown = (m) =>
           {
             c.Debug = !c.Debug;

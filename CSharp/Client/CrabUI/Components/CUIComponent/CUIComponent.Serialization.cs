@@ -13,6 +13,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 using System.Xml;
 using System.Xml.Linq;
+using HarmonyLib;
 
 namespace CrabUI
 {
@@ -65,7 +66,29 @@ namespace CrabUI
 
     public virtual void ToXML(XElement e)
     {
-      //e.Add(new XAttribute("name", "Tom"));
+
+    }
+
+    public void bebeb()
+    {
+      try
+      {
+        object value = CUI.GetNestedValue(this, "TextAlign.Type");
+        //object defValue = CUI.GetNestedValue(CUI.GetDefault(this), "Text");
+
+        Info(value);
+      }
+      catch (Exception e)
+      {
+        Info(e);
+      }
+    }
+
+
+
+    public void SetAttribute(XElement e, string name)
+    {
+
     }
 
     private XElement ToXMLRec()

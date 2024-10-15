@@ -41,5 +41,43 @@ namespace CrabUI
 
       return null;
     }
+
+    public static object GetDefault(object obj)
+    {
+      FieldInfo defField = obj.GetType().GetField("Default", BindingFlags.Static | BindingFlags.Public);
+      if (defField == null) return null;
+      return defField.GetValue(null);
+    }
+
+    public static object GetNestedValue(object obj, string nestedName)
+    {
+      string[] names = nestedName.Split('.');
+
+      log(obj.GetType().GetField("TextAlign"));
+
+      foreach (string name in names)
+      {
+
+        FieldInfo fi = obj.GetType().GetField(name, AccessTools.all);
+        PropertyInfo pi = obj.GetType().GetProperty(name, AccessTools.all);
+
+
+        if (fi != null)
+        {
+          obj = fi.GetValue(obj);
+          continue;
+        }
+
+        if (pi != null)
+        {
+          obj = pi.GetValue(obj);
+          continue;
+        }
+
+        return null;
+      }
+
+      return obj;
+    }
   }
 }

@@ -10,7 +10,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace CrabUI
 {
-  public enum CUITextAling
+  public enum CUITextAlign
   {
     Start,
     Center,
