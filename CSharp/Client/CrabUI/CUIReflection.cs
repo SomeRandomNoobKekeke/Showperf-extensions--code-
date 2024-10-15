@@ -14,6 +14,12 @@ using HarmonyLib;
 
 namespace CrabUI
 {
+  //not used yet
+  public class CUISerializeAttribute : System.Attribute
+  {
+    public CUISerializeAttribute() { }
+  }
+
   public static partial class CUI
   {
     public static Type GetComponentTypeByName(string name)
@@ -53,14 +59,10 @@ namespace CrabUI
     {
       string[] names = nestedName.Split('.');
 
-      log(obj.GetType().GetField("TextAlign"));
-
       foreach (string name in names)
       {
-
         FieldInfo fi = obj.GetType().GetField(name, AccessTools.all);
         PropertyInfo pi = obj.GetType().GetProperty(name, AccessTools.all);
-
 
         if (fi != null)
         {

@@ -66,29 +66,44 @@ namespace CrabUI
 
     public virtual void ToXML(XElement e)
     {
-
-    }
-
-    public void bebeb()
-    {
       try
       {
-        object value = CUI.GetNestedValue(this, "TextAlign.Type");
-        //object defValue = CUI.GetNestedValue(CUI.GetDefault(this), "Text");
+        SetAttribute("HideChildrenOutsideFrame", e);
+        SetAttribute("UnCullable", e);
+        SetAttribute("IgnoreParentVisibility", e);
+        SetAttribute("IgnoreParentEventIgnorance", e);
+        SetAttribute("IgnoreParentZIndex", e);
+        SetAttribute("Fixed", e);
+        SetAttribute("Anchor.Type", e);
+        SetAttribute("ZIndex", e);
+        SetAttribute("Visible", e);
 
-        Info(value);
+        SetAttribute("FillEmptySpace", e);
+        SetAttribute("FitContent", e);
+        SetAttribute("Absolute", e);
+        SetAttribute("AbsoluteMin", e);
+        SetAttribute("AbsoluteMax", e);
+        SetAttribute("Relative", e);
+        SetAttribute("RelativeMin", e);
+        SetAttribute("RelativeMax", e);
+
+        SetAttribute("Disabled", e);
+        SetAttribute("BackgroundColor", e);
+        SetAttribute("BorderColor", e);
+        SetAttribute("Padding", e);
       }
-      catch (Exception e)
+      catch (Exception ex)
       {
-        Info(e);
+        Info(ex);
       }
     }
 
-
-
-    public void SetAttribute(XElement e, string name)
+    public void SetAttribute(string name, XElement e)
     {
+      object value = CUI.GetNestedValue(this, name);
+      object defValue = CUI.GetNestedValue(CUI.GetDefault(this), name);
 
+      e.SetAttributeValue(name, value.Equals(defValue) ? null : value);
     }
 
     private XElement ToXMLRec()

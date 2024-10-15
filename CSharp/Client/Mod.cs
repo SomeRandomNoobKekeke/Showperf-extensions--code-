@@ -86,9 +86,12 @@ namespace ShowPerfExtensions
 
       //CUIMain.Load(CUITest.Serialize);
 
-      CUIButton b = new CUIButton();
+      CUIButton b = new CUIButton()
+      {
+        Text = "kokoko",
+      };
 
-      b.bebeb();
+      log(b.Serialize());
 
       PatchAll();
       addCommands();

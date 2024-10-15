@@ -31,7 +31,6 @@ namespace CrabUI
     public bool IgnoreParentZIndex { get; set; } // >:(
     public bool Fixed { get; set; } // >:(
     #endregion
-
     public CUIAnchor Anchor = new CUIAnchor(CUIAnchorType.LeftTop);
 
     private int? zIndex; public int? ZIndex

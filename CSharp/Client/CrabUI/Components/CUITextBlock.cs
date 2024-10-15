@@ -137,10 +137,10 @@ namespace CrabUI
     {
       base.ToXML(e);
 
-      e.SetAttributeValue("Text", Default.Text != Text ? Text : null);
-      e.SetAttributeValue("Wrap", Default.Wrap != Wrap ? Wrap : null);
-      e.SetAttributeValue("Ghost", Default.Ghost != Ghost ? Ghost : null);
-      e.SetAttributeValue("TextAlign", Default.TextAlign.Type != TextAlign.Type ? TextAlign.Type : null);
+      SetAttribute("Text", e);
+      SetAttribute("Wrap", e);
+      SetAttribute("Ghost", e);
+      SetAttribute("TextAlign.Type", e);
     }
   }
 }
