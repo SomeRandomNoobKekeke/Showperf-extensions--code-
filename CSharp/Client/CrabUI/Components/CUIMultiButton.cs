@@ -12,7 +12,6 @@ namespace CrabUI
 {
   public class CUIMultiButton : CUIComponent
   {
-    public static CUIMultiButton Default = new CUIMultiButton();
     public event Action<CUIButton, int> OnSelect;
     public Action<CUIButton, int> AddOnSelect { set { OnSelect += value; } }
 

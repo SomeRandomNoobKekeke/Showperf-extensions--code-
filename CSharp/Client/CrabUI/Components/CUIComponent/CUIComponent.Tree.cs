@@ -112,7 +112,7 @@ namespace CrabUI
       Children.Clear();
     }
 
-    public bool ShouldPassPropsToChildren = true;
+
     private void PassPropsToChild(CUIComponent child)
     {
       if (!ShouldPassPropsToChildren) return;

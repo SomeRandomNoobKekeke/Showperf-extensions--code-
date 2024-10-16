@@ -21,7 +21,7 @@ namespace CrabUI
     //TODO This is potentially cursed
     public object Data;
     public bool HideChildrenOutsideFrame;
-
+    public bool ShouldPassPropsToChildren = true;
 
     //TODO rethink
     #region Stupid Props
@@ -103,6 +103,7 @@ namespace CrabUI
 
     // Ugly, but otherwise it'll be undebugable
     #region Absolute Props
+
     private CUINullRect absolute; public CUINullRect Absolute
     {
       get => absolute;
@@ -151,7 +152,8 @@ namespace CrabUI
     #region Relative Props
 
     //TODO make sure i don't call Relative setters directly
-    private CUINullRect relative; public CUINullRect Relative
+    [CUISerializable]
+    protected CUINullRect relative; public CUINullRect Relative
     {
       get => relative;
       set => SetRelative(value);

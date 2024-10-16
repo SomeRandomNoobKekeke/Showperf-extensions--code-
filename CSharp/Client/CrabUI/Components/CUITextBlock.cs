@@ -11,10 +11,10 @@ namespace CrabUI
 {
   public class CUITextBlock : CUIComponent
   {
-    public static CUITextBlock Default = new CUITextBlock();
     public event Action OnTextChanged;
     public Action AddOnTextChanged { set { OnTextChanged += value; } }
-    private string text = ""; public string Text
+    [CUISerializable]
+    protected string text = ""; public string Text
     {
       get => text;
       set
@@ -37,6 +37,7 @@ namespace CrabUI
     }
     //TODO Uncringe
     #region Cringe
+    [CUISerializable]
     public bool Wrap;
     #region MegaCringe
     public bool Ghost;
@@ -133,14 +134,6 @@ namespace CrabUI
       Text = text;
     }
 
-    public override void ToXML(XElement e)
-    {
-      base.ToXML(e);
 
-      SetAttribute("Text", e);
-      SetAttribute("Wrap", e);
-      SetAttribute("Ghost", e);
-      SetAttribute("TextAlign.Type", e);
-    }
   }
 }

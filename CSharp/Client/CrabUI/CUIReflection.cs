@@ -14,12 +14,6 @@ using HarmonyLib;
 
 namespace CrabUI
 {
-  //not used yet
-  public class CUISerializeAttribute : System.Attribute
-  {
-    public CUISerializeAttribute() { }
-  }
-
   public static partial class CUI
   {
     public static Type GetComponentTypeByName(string name)

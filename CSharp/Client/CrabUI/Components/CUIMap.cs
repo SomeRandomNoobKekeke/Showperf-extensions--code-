@@ -58,7 +58,6 @@ namespace CrabUI
 
   public class CUIMap : CUIComponent
   {
-    public static CUIMap Default = new CUIMap();
     public CUIMapContent Map;
     public CUIComponent Add(CUIComponent c) => Map.Append(c);
     public CUIComponent Add(string name, CUIComponent c)

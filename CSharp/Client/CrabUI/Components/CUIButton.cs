@@ -12,7 +12,6 @@ namespace CrabUI
 {
   public class CUIButton : CUITextBlock
   {
-    public static CUIButton Default = new CUIButton();
     public GUISoundType ClickSound { get; set; } = GUISoundType.Select;
 
     public Color DisabledColor;
@@ -61,11 +60,6 @@ namespace CrabUI
       Text = text;
     }
 
-    public override void ToXML(XElement e)
-    {
-      base.ToXML(e);
 
-      e.SetAttributeValue("TextAlign", Default.TextAlign.Type != TextAlign.Type ? TextAlign.Type : null);
-    }
   }
 }

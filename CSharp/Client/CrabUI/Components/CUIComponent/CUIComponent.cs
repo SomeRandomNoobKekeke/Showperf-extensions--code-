@@ -20,8 +20,7 @@ namespace CrabUI
   {
     #region Static --------------------------------------------------------
     public static int MaxID = 0;
-    public static CUIComponent Default;
-    public static Dictionary<int, CUIComponent> ComponentsById;
+    public static Dictionary<int, CUIComponent> ComponentsById = new Dictionary<int, CUIComponent>();
     public static Vector2 GameScreenSize => new Vector2(GameMain.GraphicsWidth, GameMain.GraphicsHeight);
     public static Rectangle GameScreenRect => new Rectangle(0, 0, GameMain.GraphicsWidth, GameMain.GraphicsHeight);
     public static GUIButton dummyComponent = new GUIButton(new RectTransform(new Point(0, 0)));
@@ -34,11 +33,8 @@ namespace CrabUI
       }
     }
 
-    static CUIComponent()
-    {
-      ComponentsById = new Dictionary<int, CUIComponent>();
-      Default = new CUIComponent();
-    }
+    public static Dictionary<Type, CUITypeMetaData> TypeMetaData = new Dictionary<Type, CUITypeMetaData>();
+
 
     #endregion
     #region Virtual --------------------------------------------------------

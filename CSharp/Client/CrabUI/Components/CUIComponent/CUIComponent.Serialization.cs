@@ -17,6 +17,32 @@ using HarmonyLib;
 
 namespace CrabUI
 {
+  public class CUISerializableAttribute : System.Attribute
+  {
+    public CUISerializableAttribute() { }
+  }
+
+  public class CUITypeMetaData
+  {
+    public object Default;
+    public List<string> Props = new List<string>();
+
+    public CUITypeMetaData(Type type)
+    {
+      CUI.log($"----------- {type}", Color.Lime);
+      Default = Activator.CreateInstance(type);
+
+      foreach (var mi in type.GetMembers(AccessTools.all))
+      {
+        if (Attribute.IsDefined(mi, typeof(CUISerializableAttribute)))
+        {
+          Props.Add(mi.Name);
+          CUI.log($"{mi.Name}", Color.Lime);
+        }
+      }
+    }
+  }
+
   public partial class CUIComponent
   {
     #region State --------------------------------------------------------
@@ -59,61 +85,24 @@ namespace CrabUI
 
     #endregion
     #region XML --------------------------------------------------------
-    public virtual void FromXML(XElement element)
+    public void FromXML(XElement element)
     {
 
     }
 
-    public virtual void ToXML(XElement e)
+    public void ToXML(XElement e)
     {
-      try
+      Type type = GetType();
+
+      if (!TypeMetaData.ContainsKey(type))
       {
-        SetAttribute("HideChildrenOutsideFrame", e);
-        SetAttribute("UnCullable", e);
-        SetAttribute("IgnoreParentVisibility", e);
-        SetAttribute("IgnoreParentEventIgnorance", e);
-        SetAttribute("IgnoreParentZIndex", e);
-        SetAttribute("Fixed", e);
-        SetAttribute("Anchor.Type", e);
-        SetAttribute("ZIndex", e);
-        SetAttribute("Visible", e);
-
-        SetAttribute("FillEmptySpace", e);
-        SetAttribute("FitContent", e);
-        SetAttribute("Absolute", e);
-        SetAttribute("AbsoluteMin", e);
-        SetAttribute("AbsoluteMax", e);
-        SetAttribute("Relative", e);
-        SetAttribute("RelativeMin", e);
-        SetAttribute("RelativeMax", e);
-
-        SetAttribute("Disabled", e);
-        SetAttribute("BackgroundColor", e);
-        SetAttribute("BorderColor", e);
-        SetAttribute("Padding", e);
-      }
-      catch (Exception ex)
-      {
-        Info(ex);
-      }
-    }
-
-
-    //TODO think, what would happen if value is null and != def?
-    public void SetAttribute(string name, XElement e)
-    {
-      object def = CUI.GetDefault(this);
-      object value = CUI.GetNestedValue(this, name);
-
-      if (def == null)
-      {
-        e?.SetAttributeValue(name, value);
-        return;
+        TypeMetaData[type] = new CUITypeMetaData(type);
       }
 
-      object defValue = CUI.GetNestedValue(def, name);
-
-      e?.SetAttributeValue(name, Object.Equals(value, defValue) ? null : value);
+      foreach (string prop in TypeMetaData[type].Props)
+      {
+        SetAttribute(prop, e);
+      }
     }
 
     private XElement ToXMLRec()
@@ -137,6 +126,23 @@ namespace CrabUI
     public static CUIComponent Deserialize(string raw)
     {
       return null;
+    }
+
+    //TODO think, what would happen if value is null and != def?
+    public void SetAttribute(string name, XElement e)
+    {
+      object def = TypeMetaData[GetType()].Default;
+      object value = CUI.GetNestedValue(this, name);
+
+      if (def == null)
+      {
+        e?.SetAttributeValue(name, value);
+        return;
+      }
+
+      object defValue = CUI.GetNestedValue(def, name);
+
+      e?.SetAttributeValue(name, Object.Equals(value, defValue) ? null : value);
     }
 
     #endregion
