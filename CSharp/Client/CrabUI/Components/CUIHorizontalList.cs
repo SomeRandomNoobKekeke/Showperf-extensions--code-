@@ -29,36 +29,19 @@ namespace CrabUI
       set
       {
         if (!Scrollable) return;
-        ChildrenOffset = new Vector2(value, ChildrenOffset.Y);
+        ChildrenOffset = ChildrenOffset with { X = value };
       }
     }
 
-    internal override CUINullRect ChildrenBoundaries => new CUINullRect(null, 0, null, Real.Height);
+    internal override CUIBoundaries ChildrenBoundaries => new CUIBoundaries(minY: 0, maxY: Real.Height);
 
 
-    internal override CUINullRect ChildOffsetBounds => new CUINullRect(
-      0,
-      LeftGap,
-      0,
-      Math.Min(Real.Width - listLayout.TotalWidth - RightGap, 0)
+    internal override CUIBoundaries ChildOffsetBounds => new CUIBoundaries(
+      minY: 0,
+      maxY: 0,
+      minX: LeftGap,
+      maxX: Math.Min(Real.Width - listLayout.TotalWidth - RightGap, 0)
     );
-
-    //TODO test, i just copypasted code from vlist and didn't test at all, lol
-    internal override void ChildrenSizeCalculated()
-    {
-      CUINullRect bounds = ChildOffsetBounds;
-      float x = ChildrenOffset.X;
-      float y = ChildrenOffset.Y;
-
-      if (bounds.Left.HasValue) x = Math.Min(bounds.Left.Value, x);
-      if (bounds.Width.HasValue) x = Math.Max(bounds.Width.Value, x);
-
-      if (bounds.Top.HasValue) y = Math.Min(bounds.Top.Value, y);
-      if (bounds.Height.HasValue) y = Math.Max(bounds.Height.Value, y);
-
-      ChildrenOffset = new Vector2(x, y);
-    }
-
     public CUIHorizontalList() : base()
     {
       HideChildrenOutsideFrame = true;
@@ -66,7 +49,7 @@ namespace CrabUI
       listLayout = new CUILayoutHorizontalList();
       Layout = listLayout;
 
-      OnScroll += (float s) => Scroll += s;
+      OnScroll += (m) => Scroll += m.Scroll;
 
       BackgroundColor = Color.Transparent;
       // BorderColor = Color.Transparent;

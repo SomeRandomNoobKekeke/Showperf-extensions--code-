@@ -102,6 +102,7 @@ namespace CrabUI
     }
 
     // Ugly, but otherwise it'll be undebugable
+    //TODO make less ugly
     #region Absolute Props
 
     private CUINullRect absolute; public CUINullRect Absolute

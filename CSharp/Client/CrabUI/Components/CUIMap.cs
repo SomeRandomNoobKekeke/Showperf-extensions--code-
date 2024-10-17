@@ -29,8 +29,6 @@ namespace CrabUI
 
     private List<CUIMapLink> Connections = new List<CUIMapLink>();
 
-    internal override CUINullRect ChildrenBoundaries => new CUINullRect(null, null, null, null);
-
     public void Connect(CUIComponent start, CUIComponent end, Color? color = null)
     {
       //TODO too sneaky
@@ -102,6 +100,15 @@ namespace CrabUI
       Swipeable = true;
       ConsumeMouseClicks = true;
       HideChildrenOutsideFrame = true;
+
+      //TODO the main todo of this branch
+      OnScroll += (m) =>
+      {
+        Map.ChildrenOffset = Map.ChildrenOffset with
+        {
+          Z = Math.Max(0.1f, Map.ChildrenOffset.Z + m.Scroll / 1000)
+        };
+      };
 
       this.Append(Map = new CUIMapContent());
     }

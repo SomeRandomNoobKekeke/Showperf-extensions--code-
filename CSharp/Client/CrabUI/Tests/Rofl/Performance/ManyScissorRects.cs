@@ -16,14 +16,14 @@ namespace CrabUI
   {
     private class CUITestLooseFrame : CUIFrame
     {
-      internal override CUINullRect ChildrenBoundaries => new CUINullRect(
-        -Real.Width * 0.1f,
-        -Real.Height * 0.1f,
-        Real.Width * 1.1f,
-        Real.Height * 1.1f
+      internal override CUIBoundaries ChildrenBoundaries => new CUIBoundaries(
+        minX: -Real.Width * 0.1f,
+        maxX: +Real.Width * 1.1f,
+        minY: -Real.Height * 0.1f,
+        maxY: +Real.Height * 1.1f
       );
 
-      public CUITestLooseFrame(float? x= null, float? y=null, float? w=null, float? h=null) : base(x, y, w, h)
+      public CUITestLooseFrame(float? x = null, float? y = null, float? w = null, float? h = null) : base(x, y, w, h)
       {
         BackgroundColor = Color.Black * 0.2f;
         // HideChildrenOutsideFrame = false;

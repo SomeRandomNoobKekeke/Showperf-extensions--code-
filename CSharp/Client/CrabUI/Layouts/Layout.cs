@@ -13,7 +13,8 @@ namespace CrabUI
 {
   public class CUILayout
   {
-    internal CUIComponent Host;
+    public CUIComponent Host;
+
 
     //NOTE: This looks ugly, but no matter how i try to isolate this logic it gets only uglier
     // i've been stuck here for too long so i'll just do this
@@ -106,35 +107,6 @@ namespace CrabUI
       }
 
       AbsoluteChanged = false;
-    }
-
-
-    //TODO idk
-    protected CUIRect CheckChildBoundaries(float x, float y, float w, float h)
-    {
-      // x + w > Host.Right
-      if (Host.ChildrenBoundaries.Width.HasValue && x + w > Host.Real.Left + Host.ChildrenBoundaries.Width.Value)
-      {
-        x = Host.Real.Left + Host.ChildrenBoundaries.Width.Value - w;
-      }
-      // y + h > Host.Bottom
-      if (Host.ChildrenBoundaries.Height.HasValue && y + h > Host.Real.Top + Host.ChildrenBoundaries.Height.Value)
-      {
-        y = Host.Real.Top + Host.ChildrenBoundaries.Height.Value - h;
-      }
-      // x < Host.Left
-      if (Host.ChildrenBoundaries.Left.HasValue && x < Host.Real.Left + Host.ChildrenBoundaries.Left.Value)
-      {
-        x = Host.Real.Left + Host.ChildrenBoundaries.Left.Value;
-      }
-      // y < Host.Top
-      if (Host.ChildrenBoundaries.Top.HasValue && y < Host.Real.Top + Host.ChildrenBoundaries.Top.Value)
-      {
-        y = Host.Real.Top + Host.ChildrenBoundaries.Top.Value;
-      }
-
-
-      return new CUIRect(x, y, w, h);
     }
 
     public CUILayout(CUIComponent host = null)

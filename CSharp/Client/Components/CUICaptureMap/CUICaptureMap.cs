@@ -176,7 +176,7 @@ namespace ShowPerfExtensions
       {
         BackgroundColor = Color.Transparent;
         BorderColor = Color.Transparent;
-        OnDClick += (e) => ChildrenOffset = Vector2.Zero;
+        OnDClick += (e) => ChildrenOffset = new CUI3DOffset(0, 0, 0);
       }
 
       public CUICaptureMap(float? x = null, float? y = null, float? w = null, float? h = null) : this()

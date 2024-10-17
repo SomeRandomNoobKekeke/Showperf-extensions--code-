@@ -39,15 +39,17 @@ namespace CrabUI
     #endregion
     #region Virtual --------------------------------------------------------
 
-    internal virtual CUINullRect ChildrenBoundaries => new CUINullRect(null, null, null, null);
-    internal virtual CUINullRect ChildOffsetBounds => new CUINullRect(null, null, null, null);
+    internal virtual CUIBoundaries ChildrenBoundaries => new CUIBoundaries();
+    internal virtual CUIBoundaries ChildOffsetBounds => new CUIBoundaries();
     internal virtual void UpdatePseudoChildren()
     {
       LeftResizeHandle.Update();
       RightResizeHandle.Update();
     }
     internal virtual Vector2 AmIOkWithThisSize(Vector2 size) => size;
-    internal virtual void ChildrenSizeCalculated() { }
+
+    //Never used + cursed
+    //internal virtual void ChildrenSizeCalculated() { }
     public virtual partial void ApplyState(CUIComponent state);
     public virtual partial void Draw(SpriteBatch spriteBatch);
     public virtual partial void DrawFront(SpriteBatch spriteBatch);
@@ -57,6 +59,8 @@ namespace CrabUI
 
     public int ID;
     public bool DebugHighlight;
+    public float Scale = 1f;
+    //TODO should CulledOut be propagated to children?
     internal bool CulledOut;
     //HACK need a more robust solution
     protected bool ComponentInitialized;

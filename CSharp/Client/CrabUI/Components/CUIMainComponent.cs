@@ -37,7 +37,7 @@ namespace CrabUI
     private Vector2 GrabbedOffset;
 
 
-    internal override CUINullRect ChildrenBoundaries => new CUINullRect(0, 0, Real.Width, Real.Height);
+    internal override CUIBoundaries ChildrenBoundaries => new CUIBoundaries(0, Real.Width, 0, Real.Height);
     private void RunStraigth(Action<CUIComponent> a) { for (int i = 0; i < Flat.Count; i++) a(Flat[i]); }
     private void RunReverse(Action<CUIComponent> a) { for (int i = Flat.Count - 1; i >= 0; i--) a(Flat[i]); }
 
@@ -252,7 +252,7 @@ namespace CrabUI
       //Scroll
       for (int i = MouseOnList.Count - 1; i >= 0; i--)
       {
-        if (CUI.Input.Scrolled) MouseOnList[i].InvokeOnScroll(CUI.Input.Scroll);
+        if (CUI.Input.Scrolled) MouseOnList[i].InvokeOnScroll(CUI.Input);
 
         if (MouseOnList[i].ConsumeMouseScroll) break;
       }

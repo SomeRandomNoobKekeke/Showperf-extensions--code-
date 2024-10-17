@@ -26,19 +26,14 @@ namespace CrabUI
       set { layout = value; layout.Host = this; }
     }
 
-    private Vector2 childrenOffset; public Vector2 ChildrenOffset
+    private CUI3DOffset childrenOffset; public CUI3DOffset ChildrenOffset
     {
       get => childrenOffset;
-      set => SetChildrenOffset(value);
-    }
-    internal void SetChildrenOffset(Vector2 value, [CallerMemberName] string memberName = "")
-    {
-      childrenOffset = value;
-      // if (ComponentInitialized)
-      // {
-      //   CUIDebug.Capture(null, this, "SetChildrenOffset", memberName, "childrenOffset", childrenOffset.ToString());
-      // }
-      OnChildrenPropChanged();
+      set
+      {
+        childrenOffset = ChildOffsetBounds.Check(value);
+        OnChildrenPropChanged();
+      }
     }
 
     internal void OnPropChanged([CallerMemberName] string memberName = "")

@@ -41,8 +41,8 @@ namespace CrabUI
     public Action<CUIInput> AddOnMouseUp { set { OnMouseUp += value; } }
     public event Action<CUIInput> OnDClick; internal void InvokeOnDClick(CUIInput e) => OnDClick?.Invoke(e);
     public Action<CUIInput> AddOnDClick { set { OnDClick += value; } }
-    public event Action<float> OnScroll; internal void InvokeOnScroll(float scroll) => OnScroll?.Invoke(scroll);
-    public Action<float> AddOnScroll { set { OnScroll += value; } }
+    public event Action<CUIInput> OnScroll; internal void InvokeOnScroll(CUIInput e) => OnScroll?.Invoke(e);
+    public Action<CUIInput> AddOnScroll { set { OnScroll += value; } }
     public event Action<float, float> OnDrag; internal void InvokeOnDrag(float x, float y) => OnDrag?.Invoke(x, y);
     public Action<float, float> AddOnDrag { set { OnDrag += value; } }
     public event Action<float, float> OnSwipe; internal void InvokeOnSwipe(float x, float y) => OnSwipe?.Invoke(x, y);

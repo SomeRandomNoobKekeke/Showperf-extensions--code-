@@ -34,33 +34,19 @@ namespace CrabUI
       set
       {
         if (!Scrollable) return;
-        ChildrenOffset = new Vector2(ChildrenOffset.X, value);
+        ChildrenOffset = ChildrenOffset with { Y = value };
       }
     }
 
-    internal override CUINullRect ChildrenBoundaries => new CUINullRect(0, null, Real.Width, null);
-    // HACK w,h here means right and bottom, this is sneaky, rethink
-    internal override CUINullRect ChildOffsetBounds => new CUINullRect(
-      0,
-      TopGap,
-      0,
-      Math.Min(Real.Height - listLayout.TotalHeight - BottomGap, 0)
+    internal override CUIBoundaries ChildrenBoundaries => new CUIBoundaries(minX: 0, maxX: Real.Width);
+
+    internal override CUIBoundaries ChildOffsetBounds => new CUIBoundaries(
+      minX: 0,
+      maxX: 0,
+      maxY: TopGap,
+      minY: Math.Min(Real.Height - listLayout.TotalHeight - BottomGap, 0)
     );
 
-    internal override void ChildrenSizeCalculated()
-    {
-      CUINullRect bounds = ChildOffsetBounds;
-      float x = ChildrenOffset.X;
-      float y = ChildrenOffset.Y;
-
-      if (bounds.Left.HasValue) x = Math.Min(bounds.Left.Value, x);
-      if (bounds.Width.HasValue) x = Math.Max(bounds.Width.Value, x);
-
-      if (bounds.Top.HasValue) y = Math.Min(bounds.Top.Value, y);
-      if (bounds.Height.HasValue) y = Math.Max(bounds.Height.Value, y);
-
-      ChildrenOffset = new Vector2(x, y);
-    }
 
     public CUIVerticalList() : base()
     {
@@ -69,7 +55,10 @@ namespace CrabUI
       listLayout = new CUILayoutVerticalList();
       Layout = listLayout;
 
-      OnScroll += (float s) => Scroll += s;
+      OnScroll += (m) =>
+      {
+        Scroll += m.Scroll;
+      };
 
       BackgroundColor = Color.Transparent;
       // BorderColor = Color.Transparent;

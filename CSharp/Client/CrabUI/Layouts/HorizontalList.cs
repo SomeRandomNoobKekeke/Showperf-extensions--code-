@@ -101,29 +101,25 @@ namespace CrabUI
           CUIDebug.Capture(Host, c.Component, "Layout.Update", "Resizible.ForEach", "c.Size", c.Size.ToString());
         });
 
-        Host.ChildrenSizeCalculated();
+        //Host.ChildrenSizeCalculated();
+
+        CUI3DOffset offset = Host.ChildOffsetBounds.Check(Host.ChildrenOffset);
 
         if (Direction == CUIDirection.Straight)
         {
           float x = 0;
           foreach (CUIComponentSize c in Sizes)
           {
-            Vector2 shift = c.Component.Fixed ? Vector2.Zero : Host.ChildrenOffset;
+            CUIRect real = Host.ChildrenBoundaries.Check(x, 0, c.Size.X, c.Size.Y);
+            real = offset.Transform(real);
+            real = real.Shift(Host.Real.Position);
 
-            c.Component.SetReal(
-              CheckChildBoundaries(
-                Host.Real.Left + shift.X + x,
-                Host.Real.Top + shift.Y,
-                c.Size.X,
-                c.Size.Y
-              )
-            );
+            c.Component.SetReal(real);
 
             x += c.Size.X;
           }
         }
 
-        //TODO test
         if (Direction == CUIDirection.Reverse)
         {
           float x = Host.Real.Width;
@@ -131,16 +127,11 @@ namespace CrabUI
           {
             x -= c.Size.X;
 
-            Vector2 shift = c.Component.Fixed ? Vector2.Zero : Host.ChildrenOffset;
+            CUIRect real = Host.ChildrenBoundaries.Check(x, 0, c.Size.X, c.Size.Y);
+            real = offset.Transform(real);
+            real = real.Shift(Host.Real.Position);
 
-            c.Component.SetReal(
-              CheckChildBoundaries(
-                Host.Real.Left + shift.X + x,
-                Host.Real.Top + shift.Y,
-                c.Size.X,
-                c.Size.Y
-              )
-            );
+            c.Component.SetReal(real);
           }
         }
 

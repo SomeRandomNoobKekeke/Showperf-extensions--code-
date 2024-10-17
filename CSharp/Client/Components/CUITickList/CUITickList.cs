@@ -115,11 +115,11 @@ namespace ShowPerfExtensions
         Showperf.SumLine.Text = $"Sum:{ConverToUnits(Sum)}{UnitsName} Linearity:{String.Format("{0:0.000000}", Linearity)}";
       }
 
-      internal override CUINullRect ChildOffsetBounds => new CUINullRect(
-        0,
-        TopGap,
-        0,
-        Math.Min(Real.Height - Values.Count * TickBlock.StringHeight - BottomGap, 0)
+      internal override CUIBoundaries ChildOffsetBounds => new CUIBoundaries(
+        minX: 0,
+        maxX: 0,
+        maxY: TopGap,
+        minY: Math.Min(Real.Height - Values.Count * TickBlock.StringHeight - BottomGap, 0)
       );
 
 

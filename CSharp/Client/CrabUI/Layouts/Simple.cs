@@ -63,13 +63,25 @@ namespace CrabUI
           if (c.RelativeMax.Height.HasValue) h = Math.Min(h, c.RelativeMax.Height.Value * Host.Real.Height);
           if (c.AbsoluteMax.Height.HasValue) h = Math.Min(h, c.AbsoluteMax.Height.Value);
 
+
+          CUI3DOffset offset = Host.ChildOffsetBounds.Check(Host.ChildrenOffset);
+          c.Scale = offset.Scale;
+
           (w, h) = c.AmIOkWithThisSize(new Vector2(w, h));
+          (x, y) = c.Anchor.GetChildPos(new CUIRect(Vector2.Zero, Host.Real.Size), new Vector2(x, y), new Vector2(w, h));
 
-          (x, y) = c.Anchor.GetChildPos(Host.Real, new Vector2(x, y), new Vector2(w, h));
+          CUIRect real = Host.ChildrenBoundaries.Check(x, y, w, h);
+          //TODO guh...
+          real = real.Shift(Host.Real.Position);
 
-
-          Vector2 shift = c.Fixed ? Vector2.Zero : Host.ChildrenOffset;
-          c.SetReal(CheckChildBoundaries(x + shift.X, y + shift.Y, w, h));
+          if (c.Fixed)
+          {
+            c.SetReal(real);
+          }
+          else
+          {
+            c.SetReal(offset.Transform(real));
+          }
         }
       }
 

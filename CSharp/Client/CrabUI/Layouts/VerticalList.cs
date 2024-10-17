@@ -37,11 +37,15 @@ namespace CrabUI
 
         TotalHeight = 0;
 
+
+
         float w = Host.Real.Width;
         foreach (CUIComponent c in Host.Children)
         {
           float h = 0;
           Vector2 s = new Vector2(w, h);
+
+
 
           if (!c.FillEmptySpace.Y)
           {
@@ -101,28 +105,26 @@ namespace CrabUI
           CUIDebug.Capture(Host, c.Component, "Layout.Update", "Resizible.ForEach", "c.Size", c.Size.ToString());
         });
 
-        Host.ChildrenSizeCalculated();
+        //Host.ChildrenSizeCalculated();
+
+        CUI3DOffset offset = Host.ChildOffsetBounds.Check(Host.ChildrenOffset);
+
 
         if (Direction == CUIDirection.Straight)
         {
           float y = 0;
           foreach (CUIComponentSize c in Sizes)
           {
-            Vector2 shift = c.Component.Fixed ? Vector2.Zero : Host.ChildrenOffset;
+            CUIRect real = Host.ChildrenBoundaries.Check(0, y, c.Size.X, c.Size.Y);
+            real = offset.Transform(real);
+            real = real.Shift(Host.Real.Position);
 
-            c.Component.SetReal(
-              CheckChildBoundaries(
-                Host.Real.Left + shift.X,
-                Host.Real.Top + shift.Y + y,
-                c.Size.X,
-                c.Size.Y
-              )
-            );
+            c.Component.SetReal(real);
 
             y += c.Size.Y;
           }
         }
-        //TODO test
+
         if (Direction == CUIDirection.Reverse)
         {
           float y = Host.Real.Height;
@@ -130,19 +132,13 @@ namespace CrabUI
           {
             y -= c.Size.Y;
 
-            Vector2 shift = c.Component.Fixed ? Vector2.Zero : Host.ChildrenOffset;
+            CUIRect real = Host.ChildrenBoundaries.Check(0, y, c.Size.X, c.Size.Y);
+            real = offset.Transform(real);
+            real = real.Shift(Host.Real.Position);
 
-            c.Component.SetReal(
-              CheckChildBoundaries(
-                Host.Real.Left + shift.X,
-                Host.Real.Top + shift.Y + y,
-                c.Size.X,
-                c.Size.Y
-              )
-            );
+            c.Component.SetReal(real);
           }
         }
-
       }
 
       base.Update();
