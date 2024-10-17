@@ -104,7 +104,7 @@ namespace CrabUI
 
     internal override void UpdatePseudoChildren()
     {
-      TextDrawPos = TextAlign.GetChildPos(Real, Vector2.Zero, RealTextSize) + Padding * TextAlign.Direction;
+      TextDrawPos = TextAlign.GetChildPos(Real, Vector2.Zero, RealTextSize / Scale) + Padding * TextAlign.Direction;
       if (ComponentInitialized)
       {
         CUIDebug.Capture(null, this, "UpdatePseudoChildren", "", "TextDrawPos", TextDrawPos.ToString());
@@ -117,7 +117,7 @@ namespace CrabUI
 
       // Font.DrawString(spriteBatch, WrappedText, TextDrawPos, TextColor, rotation: 0, origin: Vector2.Zero, TextScale, spriteEffects: SpriteEffects.None, layerDepth: 0.1f);
 
-      Font.Value.DrawString(spriteBatch, WrappedText, TextDrawPos, TextColor, rotation: 0, origin: Vector2.Zero, TextScale, se: SpriteEffects.None, layerDepth: 0.1f);
+      Font.Value.DrawString(spriteBatch, WrappedText, TextDrawPos, TextColor, rotation: 0, origin: Vector2.Zero, TextScale / Scale, se: SpriteEffects.None, layerDepth: 0.1f);
     }
 
     public CUITextBlock()

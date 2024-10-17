@@ -29,11 +29,16 @@ namespace CrabUI
     private CUI3DOffset childrenOffset; public CUI3DOffset ChildrenOffset
     {
       get => childrenOffset;
-      set
+      set => SetChildrenOffset(value);
+    }
+    internal void SetChildrenOffset(CUI3DOffset value, [CallerMemberName] string memberName = "")
+    {
+      childrenOffset = ChildOffsetBounds.Check(value);
+      if (ComponentInitialized)
       {
-        childrenOffset = ChildOffsetBounds.Check(value);
-        OnChildrenPropChanged();
+        CUIDebug.Capture(null, this, "SetChildrenOffset", memberName, "ChildrenOffset", ChildrenOffset.ToString());
       }
+      OnChildrenPropChanged();
     }
 
     internal void OnPropChanged([CallerMemberName] string memberName = "")

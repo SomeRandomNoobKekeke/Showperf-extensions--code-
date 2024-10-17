@@ -39,9 +39,11 @@ namespace CrabUI
 
     public void Swipe(CUIInput input)
     {
-      Host.ChildrenOffset = Host.ChildrenOffset.Shift(
-        input.MousePositionDif.X,
-        input.MousePositionDif.Y
+      Host.SetChildrenOffset(
+        Host.ChildrenOffset.Shift(
+          input.MousePositionDif.X,
+          input.MousePositionDif.Y
+        )
       );
       Host.InvokeOnSwipe(input.MousePositionDif.X, input.MousePositionDif.Y);
     }

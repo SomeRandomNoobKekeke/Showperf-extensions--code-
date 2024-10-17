@@ -29,7 +29,10 @@ namespace CrabUI
       set
       {
         if (!Scrollable) return;
-        ChildrenOffset = ChildrenOffset with { X = value };
+        SetChildrenOffset(
+          ChildrenOffset with { X = value }
+        );
+
       }
     }
 

@@ -29,6 +29,9 @@ namespace CrabUI
 
     private List<CUIMapLink> Connections = new List<CUIMapLink>();
 
+    internal override CUIBoundaries ChildOffsetBounds => new CUIBoundaries(
+          minZ: 0
+        );
     public void Connect(CUIComponent start, CUIComponent end, Color? color = null)
     {
       //TODO too sneaky
@@ -56,6 +59,8 @@ namespace CrabUI
 
   public class CUIMap : CUIComponent
   {
+
+
     public CUIMapContent Map;
     public CUIComponent Add(CUIComponent c) => Map.Append(c);
     public CUIComponent Add(string name, CUIComponent c)
@@ -63,6 +68,8 @@ namespace CrabUI
       if (name != null) Remember(c, name);
       return Map.Append(c);
     }
+
+
 
 
     public CUIComponent Connect(CUIComponent startComponent, CUIComponent endComponent, Color? color = null)
@@ -104,10 +111,15 @@ namespace CrabUI
       //TODO the main todo of this branch
       OnScroll += (m) =>
       {
-        Map.ChildrenOffset = Map.ChildrenOffset with
-        {
-          Z = Math.Max(0.1f, Map.ChildrenOffset.Z + m.Scroll / 1000)
-        };
+        Map.SetChildrenOffset(
+          Map.ChildrenOffset.Zoom(
+            Map.ChildrenOffset.ToPlaneCoords(
+              m.MousePosition - Real.Position
+            ),
+            (-m.Scroll / 500f)
+          )
+        );
+
       };
 
       this.Append(Map = new CUIMapContent());
