@@ -42,7 +42,12 @@ namespace CrabUI
         }
       }
 
-      public LinksContainer() { UnCullable = true; }
+      public LinksContainer()
+      {
+        UnCullable = true;
+        BackgroundColor = Color.Transparent;
+        // BorderColor = Color.Transparent;
+      }
     }
 
     public LinksContainer linksContainer;
@@ -89,9 +94,7 @@ namespace CrabUI
       return Host;
     }
 
-    internal override CUIBoundaries ChildOffsetBounds => new CUIBoundaries(
-      minZ: 0
-    );
+
 
 
     public CUIMap() : base()
@@ -99,7 +102,7 @@ namespace CrabUI
       Swipeable = true;
       ConsumeMouseClicks = true;
       HideChildrenOutsideFrame = true;
-      BackgroundColor = Color.Lime;
+      BackgroundColor = Color.Transparent;
 
       //without container links won't be culled
       this["links"] = linksContainer = new LinksContainer();
@@ -109,9 +112,7 @@ namespace CrabUI
       {
         SetChildrenOffset(
           ChildrenOffset.Zoom(
-            ChildrenOffset.ToPlaneCoords(
-              m.MousePosition - Real.Position
-            ),
+            m.MousePosition - Real.Position,
             (-m.Scroll / 500f)
           )
         );

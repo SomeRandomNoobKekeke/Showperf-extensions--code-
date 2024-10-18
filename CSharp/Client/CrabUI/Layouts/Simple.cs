@@ -14,7 +14,7 @@ namespace CrabUI
   {
     internal override void Update()
     {
-      if (Changed)
+      if (Changed && Host.Children.Count > 0)
       {
 
         CUI3DOffset offset = Host.ChildOffsetBounds.Check(Host.ChildrenOffset);
@@ -22,8 +22,6 @@ namespace CrabUI
         foreach (CUIComponent c in Host.Children)
         {
           float x, y, w, h;
-
-
 
           x = 0;
           if (c.Relative.Left.HasValue) x = c.Relative.Left.Value * Host.Real.Width;
@@ -77,7 +75,7 @@ namespace CrabUI
           if (!c.Fixed)
           {
             real = offset.Transform(real);
-            c.Scale = offset.Scale;
+            c.Scale = offset.Z;
           }
           //TODO guh...
           real = real.Shift(Host.Real.Position);

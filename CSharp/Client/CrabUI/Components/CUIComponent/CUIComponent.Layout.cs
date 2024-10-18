@@ -26,7 +26,7 @@ namespace CrabUI
       set { layout = value; layout.Host = this; }
     }
 
-    private CUI3DOffset childrenOffset; public CUI3DOffset ChildrenOffset
+    private CUI3DOffset childrenOffset = new CUI3DOffset(); public CUI3DOffset ChildrenOffset
     {
       get => childrenOffset;
       set => SetChildrenOffset(value);

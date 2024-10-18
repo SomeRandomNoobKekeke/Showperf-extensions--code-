@@ -41,6 +41,8 @@ namespace ShowPerfExtensions
     {
       mod = this;
 
+
+
       GameMain.PerformanceCounter.DrawTimeGraph = new Graph(1000);
       Window = new CaptureWindow(duration: 3, fps: 30);
 
@@ -80,9 +82,7 @@ namespace ShowPerfExtensions
       Showperf.OnClose += () => CUIMain["showperfButton"].Reveal();
 
       CUIMain["showperfButton"].Click();
-      // Showperf.Pages.Open(Showperf.Map);
-
-
+      Showperf.Pages.Open(Showperf.Map);
 
       //CUIMain.Load(CUITest.ManyScissorRects);
 

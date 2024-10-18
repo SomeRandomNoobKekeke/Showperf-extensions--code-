@@ -17,6 +17,9 @@ namespace CrabUI
     public float? MaxX;
     public float? MinY;
     public float? MaxY;
+
+    //TODO minZ is hardcoded in CUI3DOffset, untangle this crap
+    // unusable for now
     public float? MinZ;
     public float? MaxZ;
 

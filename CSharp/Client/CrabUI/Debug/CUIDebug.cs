@@ -22,6 +22,28 @@ namespace CrabUI
 #if !CUIDEBUG
     [Conditional("DONT")]
 #endif
+    public static void Info(object msg, [CallerFilePath] string source = "", [CallerLineNumber] int lineNumber = 0)
+    {
+      var fi = new FileInfo(source);
+
+      CUI.log($"{fi.Directory.Name}/{fi.Name}:{lineNumber}", Color.Cyan * 0.5f);
+      CUI.log(msg, Color.Cyan);
+    }
+
+#if !CUIDEBUG
+    [Conditional("DONT")]
+#endif
+    public static void Err(object msg, [CallerFilePath] string source = "", [CallerLineNumber] int lineNumber = 0)
+    {
+      var fi = new FileInfo(source);
+
+      CUI.log($"{fi.Directory.Name}/{fi.Name}:{lineNumber}", Color.Orange * 0.5f);
+      CUI.log(msg, Color.Orange);
+    }
+
+#if !CUIDEBUG
+    [Conditional("DONT")]
+#endif
     public static void Capture(CUIComponent host, CUIComponent target, string method, string sprop, string tprop, string value)
     {
       if (target == null || target.IgnoreDebug || !target.Debug || CUIDebugWindow.Main == null) return;
