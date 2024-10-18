@@ -9,9 +9,11 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace CrabUI
 {
-  public class CUIMapContent : CUIComponent
+  public class CUIMap : CUIComponent
   {
-    private class CUIMapLink
+
+
+    public class CUIMapLink
     {
       public CUIComponent Start;
       public CUIComponent End;
@@ -26,49 +28,33 @@ namespace CrabUI
         End = end;
       }
     }
-
-    private List<CUIMapLink> Connections = new List<CUIMapLink>();
-
-    internal override CUIBoundaries ChildOffsetBounds => new CUIBoundaries(
-          minZ: 0
-        );
-    public void Connect(CUIComponent start, CUIComponent end, Color? color = null)
+    public class LinksContainer : CUIComponent
     {
-      //TODO too sneaky
-      if (color == null && (!start.Disabled || !end.Disabled)) color = new Color(0, 0, 255);
-      Connections.Add(new CUIMapLink(start, end, color));
-    }
+      public List<CUIMapLink> Connections = new List<CUIMapLink>();
 
-    public override void Draw(SpriteBatch spriteBatch)
-    {
-      base.Draw(spriteBatch);
-
-      foreach (CUIMapLink link in Connections)
+      public override void Draw(SpriteBatch spriteBatch)
       {
-        GUI.DrawLine(spriteBatch, link.Start.Real.Center, link.End.Real.Center, link.LineColor, width: link.LineWidth);
+        base.Draw(spriteBatch);
+
+        foreach (CUIMapLink link in Connections)
+        {
+          GUI.DrawLine(spriteBatch, link.Start.Real.Center, link.End.Real.Center, link.LineColor, width: link.LineWidth);
+        }
       }
+
+      public LinksContainer() { UnCullable = true; }
     }
 
-    public CUIMapContent() : base()
-    {
-      BackgroundColor = Color.Transparent;
-      BorderColor = Color.Transparent;
-      UnCullable = true;
-    }
-  }
-
-  public class CUIMap : CUIComponent
-  {
+    public LinksContainer linksContainer;
 
 
-    public CUIMapContent Map;
-    public CUIComponent Add(CUIComponent c) => Map.Append(c);
+
+    public CUIComponent Add(CUIComponent c) => Append(c);
     public CUIComponent Add(string name, CUIComponent c)
     {
       if (name != null) Remember(c, name);
-      return Map.Append(c);
+      return Append(c);
     }
-
 
 
 
@@ -76,23 +62,24 @@ namespace CrabUI
     {
       if (startComponent != null && endComponent != null)
       {
-        Map.Connect(startComponent, endComponent, color);
+        if (color == null && (!startComponent.Disabled || !endComponent.Disabled)) color = new Color(0, 0, 255);
+        linksContainer.Connections.Add(new CUIMapLink(startComponent, endComponent, color));
       }
       return startComponent;
     }
     public CUIComponent Connect(CUIComponent startComponent, int end = -2, Color? color = null)
     {
-      end = MathUtils.PositiveModulo(end, Map.Children.Count);
-      CUIComponent endComponent = Map.Children.ElementAtOrDefault(end);
+      end = MathUtils.PositiveModulo(end, Children.Count);
+      CUIComponent endComponent = Children.ElementAtOrDefault(end);
       return Connect(startComponent, endComponent, color);
     }
     public CUIComponent Connect(int start, int end, Color? color = null)
     {
-      start = MathUtils.PositiveModulo(start, Map.Children.Count);
-      end = MathUtils.PositiveModulo(end, Map.Children.Count);
+      start = MathUtils.PositiveModulo(start, Children.Count);
+      end = MathUtils.PositiveModulo(end, Children.Count);
 
-      CUIComponent startComponent = Map.Children.ElementAtOrDefault(start);
-      CUIComponent endComponent = Map.Children.ElementAtOrDefault(end);
+      CUIComponent startComponent = Children.ElementAtOrDefault(start);
+      CUIComponent endComponent = Children.ElementAtOrDefault(end);
       return Connect(startComponent, endComponent, color);
     }
 
@@ -102,27 +89,33 @@ namespace CrabUI
       return Host;
     }
 
+    internal override CUIBoundaries ChildOffsetBounds => new CUIBoundaries(
+      minZ: 0
+    );
+
+
     public CUIMap() : base()
     {
       Swipeable = true;
       ConsumeMouseClicks = true;
       HideChildrenOutsideFrame = true;
+      BackgroundColor = Color.Lime;
+
+      //without container links won't be culled
+      this["links"] = linksContainer = new LinksContainer();
 
       //TODO the main todo of this branch
       OnScroll += (m) =>
       {
-        Map.SetChildrenOffset(
-          Map.ChildrenOffset.Zoom(
-            Map.ChildrenOffset.ToPlaneCoords(
+        SetChildrenOffset(
+          ChildrenOffset.Zoom(
+            ChildrenOffset.ToPlaneCoords(
               m.MousePosition - Real.Position
             ),
             (-m.Scroll / 500f)
           )
         );
-
       };
-
-      this.Append(Map = new CUIMapContent());
     }
   }
 

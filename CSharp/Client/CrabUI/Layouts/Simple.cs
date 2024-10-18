@@ -23,7 +23,7 @@ namespace CrabUI
         {
           float x, y, w, h;
 
-          c.Scale = offset.Scale;
+
 
           x = 0;
           if (c.Relative.Left.HasValue) x = c.Relative.Left.Value * Host.Real.Width;
@@ -74,7 +74,11 @@ namespace CrabUI
 
           CUIRect real = Host.ChildrenBoundaries.Check(x, y, w, h);
 
-          if (!c.Fixed) real = offset.Transform(real);
+          if (!c.Fixed)
+          {
+            real = offset.Transform(real);
+            c.Scale = offset.Scale;
+          }
           //TODO guh...
           real = real.Shift(Host.Real.Position);
 

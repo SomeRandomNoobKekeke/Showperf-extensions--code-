@@ -22,34 +22,31 @@ namespace CrabUI
     public CUI3DOffset Shift(float x = 0, float y = 0)
     {
       return new CUI3DOffset(
-        X + x * (BaseZ + Z),
-        Y + y * (BaseZ + Z),
+        X + x * Scale,
+        Y + y * Scale,
         Z
       );
     }
 
     public Vector2 ToPlaneCoords(Vector2 v) => ToPlaneCoords(v.X, v.Y);
-    public Vector2 ToPlaneCoords(float x, float y) => new Vector2(x * Z, y * Z);
+    public Vector2 ToPlaneCoords(float x, float y) => new Vector2(x * Scale, y * Scale);
 
     public CUI3DOffset Zoom(Vector2 origin, float dZ) => Zoom(origin.X, origin.Y, dZ);
     public CUI3DOffset Zoom(float x, float y, float dZ)
     {
-      Vector2 v = new Vector2(X - x, Y - y);
-      v = v * dZ;
-
       return new CUI3DOffset(
-        x + v.X,
-        y + v.Y,
+        X,
+        Y,
         Z + dZ
       );
     }
     public CUIRect Transform(CUIRect rect)
     {
       return new CUIRect(
-        (rect.Left + X) / (BaseZ + Z),
-        (rect.Top + Y) / (BaseZ + Z),
-        rect.Width / (BaseZ + Z),
-        rect.Height / (BaseZ + Z)
+        (rect.Left + X) / Scale,
+        (rect.Top + Y) / Scale,
+        rect.Width / Scale,
+        rect.Height / Scale
       );
     }
 
