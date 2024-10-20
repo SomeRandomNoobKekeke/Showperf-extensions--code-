@@ -33,7 +33,7 @@ namespace CrabUI
       }
     }
 
-    public static Dictionary<Type, CUITypeMetaData> TypeMetaData = new Dictionary<Type, CUITypeMetaData>();
+
 
 
     #endregion

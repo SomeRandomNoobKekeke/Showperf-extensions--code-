@@ -84,7 +84,7 @@ namespace ShowPerfExtensions
       CUIMain["showperfButton"].Click();
       Showperf.Pages.Open(Showperf.Map);
 
-      //CUIMain.Load(CUITest.ManyScissorRects);
+      CUIMain.Load(CUITest.Serialize);
 
 
       PatchAll();

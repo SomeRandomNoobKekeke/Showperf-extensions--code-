@@ -20,6 +20,7 @@ namespace CrabUI
     //TODO unhardcode and move to CUIBoundaries
     public static float MinZ = 1f;
 
+    public CUI3DOffset Shift(Vector2 shift) => Shift(shift.X, shift.Y);
     public CUI3DOffset Shift(float x = 0, float y = 0)
     {
       return new CUI3DOffset(
@@ -33,7 +34,6 @@ namespace CrabUI
     public CUI3DOffset Zoom(float sx, float sy, float dZ)
     {
       float newZ = Math.Max(MinZ, Z + dZ);
-
       Vector2 s1 = new Vector2(sx * Z - X, sy * Z - Y);
       Vector2 s2 = new Vector2(sx * newZ - X, sy * newZ - Y);
       Vector2 d = s2 - s1;

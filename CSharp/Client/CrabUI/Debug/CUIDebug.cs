@@ -22,23 +22,35 @@ namespace CrabUI
 #if !CUIDEBUG
     [Conditional("DONT")]
 #endif
-    public static void Info(object msg, [CallerFilePath] string source = "", [CallerLineNumber] int lineNumber = 0)
+    public static void log(object msg, Color? cl = null)
     {
+      cl ??= Color.Yellow;
+      LuaCsLogger.LogMessage($"{msg ?? "null"}", cl * 0.8f, cl);
+    }
+
+
+#if !CUIDEBUG
+    [Conditional("DONT")]
+#endif
+    public static void Info(object msg, Color? cl = null, [CallerFilePath] string source = "", [CallerLineNumber] int lineNumber = 0)
+    {
+      cl ??= Color.Cyan;
       var fi = new FileInfo(source);
 
-      CUI.log($"{fi.Directory.Name}/{fi.Name}:{lineNumber}", Color.Cyan * 0.5f);
-      CUI.log(msg, Color.Cyan);
+      CUI.log($"{fi.Directory.Name}/{fi.Name}:{lineNumber}", cl * 0.5f);
+      CUI.log(msg, cl);
     }
 
 #if !CUIDEBUG
     [Conditional("DONT")]
 #endif
-    public static void Err(object msg, [CallerFilePath] string source = "", [CallerLineNumber] int lineNumber = 0)
+    public static void Err(object msg, Color? cl = null, [CallerFilePath] string source = "", [CallerLineNumber] int lineNumber = 0)
     {
+      cl ??= Color.Orange * 0.5f;
       var fi = new FileInfo(source);
 
-      CUI.log($"{fi.Directory.Name}/{fi.Name}:{lineNumber}", Color.Orange * 0.5f);
-      CUI.log(msg, Color.Orange);
+      CUI.log($"{fi.Directory.Name}/{fi.Name}:{lineNumber}", cl * 0.5f);
+      CUI.log(msg, cl);
     }
 
 #if !CUIDEBUG

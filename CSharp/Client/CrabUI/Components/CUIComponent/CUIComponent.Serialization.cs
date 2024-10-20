@@ -22,26 +22,6 @@ namespace CrabUI
     public CUISerializableAttribute() { }
   }
 
-  public class CUITypeMetaData
-  {
-    public object Default;
-    public List<string> Props = new List<string>();
-
-    public CUITypeMetaData(Type type)
-    {
-      CUI.log($"----------- {type}", Color.Lime);
-      Default = Activator.CreateInstance(type);
-
-      foreach (var mi in type.GetMembers(AccessTools.all))
-      {
-        if (Attribute.IsDefined(mi, typeof(CUISerializableAttribute)))
-        {
-          Props.Add(mi.Name);
-          CUI.log($"{mi.Name}", Color.Lime);
-        }
-      }
-    }
-  }
 
   public partial class CUIComponent
   {
@@ -90,37 +70,29 @@ namespace CrabUI
 
     }
 
-    public void ToXML(XElement e)
+    public XElement ToXML()
     {
       Type type = GetType();
 
-      if (!TypeMetaData.ContainsKey(type))
-      {
-        TypeMetaData[type] = new CUITypeMetaData(type);
-      }
+      XElement e = new XElement(type.Name);
 
-      foreach (string prop in TypeMetaData[type].Props)
+      foreach (string prop in CUITypeMetaData.Get(type).Props)
       {
         SetAttribute(prop, e);
       }
-    }
-
-    private XElement ToXMLRec()
-    {
-      XElement e = new XElement(GetType().Name);
-      ToXML(e);
 
       foreach (CUIComponent child in Children)
       {
-        e.Add(child.ToXMLRec());
+        e.Add(child.ToXML());
       }
 
       return e;
     }
 
+
     public string Serialize()
     {
-      XElement e = this.ToXMLRec();
+      XElement e = this.ToXML();
       return e.ToString();
     }
     public static CUIComponent Deserialize(string raw)
@@ -131,18 +103,19 @@ namespace CrabUI
     //TODO think, what would happen if value is null and != def?
     public void SetAttribute(string name, XElement e)
     {
-      object def = TypeMetaData[GetType()].Default;
+      Type type = GetType();
+      object def = CUITypeMetaData.Get(type).Default;
       object value = CUI.GetNestedValue(this, name);
 
       if (def == null)
       {
         e?.SetAttributeValue(name, value);
-        return;
       }
-
-      object defValue = CUI.GetNestedValue(def, name);
-
-      e?.SetAttributeValue(name, Object.Equals(value, defValue) ? null : value);
+      else
+      {
+        object defValue = CUI.GetNestedValue(def, name);
+        e?.SetAttributeValue(name, Object.Equals(value, defValue) ? null : value);
+      }
     }
 
     #endregion

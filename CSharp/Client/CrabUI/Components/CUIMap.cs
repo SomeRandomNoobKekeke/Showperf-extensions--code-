@@ -11,8 +11,6 @@ namespace CrabUI
 {
   public class CUIMap : CUIComponent
   {
-
-
     public class CUIMapLink
     {
       public CUIComponent Start;
@@ -46,7 +44,7 @@ namespace CrabUI
       {
         UnCullable = true;
         BackgroundColor = Color.Transparent;
-        // BorderColor = Color.Transparent;
+        BorderColor = Color.Transparent;
       }
     }
 
