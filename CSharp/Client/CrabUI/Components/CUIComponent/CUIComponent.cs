@@ -145,8 +145,8 @@ namespace CrabUI
 
       DragHandle = new CUIDragHandle(this);
       SwipeHandle = new CUISwipeHandle(this);
-      LeftResizeHandle = new CUIResizeHandle(this, CUIAnchorType.LeftBottom);
-      RightResizeHandle = new CUIResizeHandle(this, CUIAnchorType.RightBottom);
+      LeftResizeHandle = new CUIResizeHandle(this, anchor: new Vector2(0, 1));
+      RightResizeHandle = new CUIResizeHandle(this, anchor: new Vector2(1, 1));
 
       ComponentInitialized = true;
     }

@@ -33,7 +33,7 @@ namespace ShowPerfExtensions
         Append(new CUIButton("Dump")
         {
           Fixed = true,
-          Anchor = new CUIAnchor(CUIAnchorType.RightTop),
+          Anchor = new Vector2(1, 0),
           AddOnMouseDown = (e) =>
           {
             int Btnprecision = 1;

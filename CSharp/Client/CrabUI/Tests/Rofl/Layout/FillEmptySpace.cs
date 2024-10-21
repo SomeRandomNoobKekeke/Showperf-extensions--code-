@@ -36,7 +36,7 @@ namespace CrabUI
       {
         TextScale = 1.5f,
         Wrap = true,
-        TextAlign = new CUIAnchor(CUIAnchorType.CenterCenter),
+        TextAlign = new Vector2(0.5f, 0.5f),
         BackgroundColor = Color.Red * 0.25f,
         BorderColor = Color.Lime,
         BorderThickness = 2,
@@ -47,7 +47,7 @@ namespace CrabUI
       {
         TextScale = 1.5f,
         Wrap = true,
-        TextAlign = new CUIAnchor(CUIAnchorType.CenterCenter),
+        TextAlign = new Vector2(0.5f, 0.5f),
         BackgroundColor = Color.Red * 0.25f,
         BorderColor = Color.Lime,
         BorderThickness = 2,

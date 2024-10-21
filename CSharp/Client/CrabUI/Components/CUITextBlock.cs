@@ -18,9 +18,7 @@ namespace CrabUI
     [CUISerializable] public Color TextColor;
     [CUISerializable] public GUIFont Font = GUIStyle.Font;
     [CUISerializable] public bool Ghost;
-
-    [CUISerializable]
-    public CUIAnchor TextAlign = new CUIAnchor(CUIAnchorType.LeftTop);
+    [CUISerializable] public Vector2 TextAlign;
 
 
     [CUISerializable]
@@ -108,11 +106,10 @@ namespace CrabUI
 
     internal override void UpdatePseudoChildren()
     {
-      TextDrawPos = TextAlign.GetChildPos(Real, Vector2.Zero, RealTextSize / Scale) + Padding * TextAlign.Direction;
-      if (ComponentInitialized)
-      {
-        CUIDebug.Capture(null, this, "UpdatePseudoChildren", "", "TextDrawPos", TextDrawPos.ToString());
-      }
+      TextDrawPos = CUIAnchor.GetChildPos(Real, TextAlign, Vector2.Zero, RealTextSize / Scale)
+      + Padding * CUIAnchor.Direction(TextAlign);
+
+      CUIDebug.Capture(null, this, "UpdatePseudoChildren", "", "TextDrawPos", TextDrawPos.ToString());
     }
 
 

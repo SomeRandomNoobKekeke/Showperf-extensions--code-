@@ -28,8 +28,8 @@ namespace CrabUI
     [CUISerializable] public bool IgnoreParentEventIgnorance;
     [CUISerializable] public bool IgnoreParentZIndex;
     [CUISerializable] public bool Fixed;
-    [CUISerializable]
-    public CUIAnchor Anchor = new CUIAnchor(CUIAnchorType.LeftTop);
+    [CUISerializable] public Vector2 Anchor;
+
     [CUISerializable]
     public int? ZIndex { get => zIndex; set => SetZIndex(value); }
     [CUISerializable]

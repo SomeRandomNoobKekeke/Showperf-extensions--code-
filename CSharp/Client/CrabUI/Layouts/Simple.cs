@@ -68,7 +68,12 @@ namespace CrabUI
 
 
           (w, h) = c.AmIOkWithThisSize(new Vector2(w, h));
-          (x, y) = c.Anchor.GetChildPos(new CUIRect(Vector2.Zero, Host.Real.Size), new Vector2(x, y), new Vector2(w, h));
+          (x, y) = CUIAnchor.GetChildPos(
+            new CUIRect(Vector2.Zero, Host.Real.Size),
+            c.Anchor,
+            new Vector2(x, y),
+            new Vector2(w, h)
+          );
 
           CUIRect real = Host.ChildrenBoundaries.Check(x, y, w, h);
 

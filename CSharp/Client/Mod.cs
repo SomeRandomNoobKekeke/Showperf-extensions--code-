@@ -55,7 +55,7 @@ namespace ShowPerfExtensions
       };
 
       Showperf.Absolute = new CUINullRect(
-        CUIAnchor.GetChildPos(CUIMain.Real, CUIAnchorType.RightCenter, new Vector2(-1, 0), Showperf.Absolute.Size),
+        CUIAnchor.GetChildPos(CUIMain.Real, new Vector2(1, 0.5f), new Vector2(-1, 0), Showperf.Absolute.Size),
         Showperf.Absolute.Size
       );
 
@@ -65,7 +65,7 @@ namespace ShowPerfExtensions
 
       CUIMain["showperfButton"] = new CUIButton("SHOWPERF")
       {
-        Anchor = new CUIAnchor(CUIAnchorType.RightCenter),
+        Anchor = new Vector2(1, 0.5f),
         Font = GUIStyle.MonospacedFont,
         TextScale = 0.8f,
         Wrap = true,

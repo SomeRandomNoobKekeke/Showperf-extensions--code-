@@ -15,7 +15,7 @@ namespace CrabUI
     public CUIComponent Host;
     public CUIRect Real;
 
-    public CUIAnchor Anchor;
+    public Vector2 Anchor;
     public CUINullRect Absolute;
 
     //TODO unhardcode these colors
@@ -53,7 +53,9 @@ namespace CrabUI
     {
       // NOTE: i tried to use GrabOffset and it's just more annoying
       // you can accidentally resize something beyond screen bounds
-      if (Anchor.Type == CUIAnchorType.RightBottom)
+
+      // TODO remove == new Vector(1, 1)
+      if (Anchor == new Vector2(1, 1))
       {
         Host.SetAbsolute(
           Host.Absolute with
@@ -65,7 +67,7 @@ namespace CrabUI
         return;
       }
 
-      if (Anchor.Type == CUIAnchorType.LeftBottom)
+      if (Anchor == new Vector2(0, 1))
       {
         float w = Math.Max(Real.Width, Host.Real.Width - (cursorPos.X - Host.Real.Left));
 
@@ -93,7 +95,7 @@ namespace CrabUI
       if (Absolute.Width.HasValue) w = Absolute.Width.Value;
       if (Absolute.Height.HasValue) h = Absolute.Height.Value;
 
-      Vector2 Pos = Anchor.GetChildPos(Host.Real, new Vector2(x, y), new Vector2(w, h));
+      Vector2 Pos = CUIAnchor.GetChildPos(Host.Real, Anchor, new Vector2(x, y), new Vector2(w, h));
 
       Real = new CUIRect(Pos, new Vector2(w, h));
     }
@@ -103,11 +105,11 @@ namespace CrabUI
       GUI.DrawRectangle(spriteBatch, Real.Position, Real.Size, Grabbed ? GrabbedColor : BackgroundColor, isFilled: true);
     }
 
-    public CUIResizeHandle(CUIComponent host, CUIAnchorType anchor)
+    public CUIResizeHandle(CUIComponent host, Vector2 anchor)
     {
       Host = host;
 
-      Anchor = new CUIAnchor(anchor);
+      Anchor = anchor;
       //BackgroundColor = Host.BorderColor;
 
       Absolute = new CUINullRect(0, 0, 15, 10);

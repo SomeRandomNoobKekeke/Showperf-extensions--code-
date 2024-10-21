@@ -78,7 +78,7 @@ namespace CrabUI
         {
           State = c.Debug,
           IgnoreDebug = true,
-          TextAlign = new CUIAnchor(CUIAnchorType.LeftTop),
+          TextAlign = new Vector2(0, 0),
           AddOnMouseDown = (m) =>
           {
             c.Debug = !c.Debug;
@@ -106,7 +106,7 @@ namespace CrabUI
 
       this["handle"]["closebutton"] = new CUIButton("X")
       {
-        Anchor = new CUIAnchor(CUIAnchorType.RightCenter),
+        Anchor = new Vector2(1, 0.5f),
         InactiveColor = new Color(32, 0, 0),
         MouseOverColor = new Color(64, 0, 0),
         MousePressedColor = new Color(128, 0, 0),

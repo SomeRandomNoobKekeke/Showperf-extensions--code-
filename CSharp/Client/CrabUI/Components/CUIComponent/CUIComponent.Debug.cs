@@ -51,7 +51,7 @@ namespace CrabUI
     public void PrintLayout([CallerFilePath] string source = "", [CallerLineNumber] int lineNumber = 0)
     {
       Info(
-        $"{Real} {Anchor.Type} Z:{ZIndex} A:{Absolute} R:{Relative} AMin:{AbsoluteMin} RMin:{RelativeMin} AMax:{AbsoluteMax} RMax:{RelativeMax}",
+        $"{Real} {Anchor} Z:{ZIndex} A:{Absolute} R:{Relative} AMin:{AbsoluteMin} RMin:{RelativeMin} AMax:{AbsoluteMax} RMax:{RelativeMax}",
         source,
         lineNumber
       );

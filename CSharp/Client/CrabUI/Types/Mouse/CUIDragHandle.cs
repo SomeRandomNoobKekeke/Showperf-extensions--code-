@@ -29,7 +29,7 @@ namespace CrabUI
     public void BeginDrag(Vector2 cursorPos)
     {
       Grabbed = true;
-      GrabOffset = cursorPos - Host.Anchor.PosIn(Host.Real);
+      GrabOffset = cursorPos - CUIAnchor.PosIn(Host);
       StartPosition = Host.Real.Position;
     }
 
