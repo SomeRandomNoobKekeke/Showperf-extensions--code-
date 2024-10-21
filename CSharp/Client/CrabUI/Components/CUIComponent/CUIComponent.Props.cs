@@ -18,212 +18,179 @@ namespace CrabUI
 {
   public partial class CUIComponent
   {
+    #region Declaration
     //TODO This is potentially cursed
     public object Data;
-    public bool HideChildrenOutsideFrame;
-    public bool ShouldPassPropsToChildren = true;
-
-    //TODO rethink
-    #region Stupid Props
-    public bool UnCullable { get; set; } // >:(
-    public bool IgnoreParentVisibility { get; set; } // >:(
-    public bool IgnoreParentEventIgnorance { get; set; } // >:(
-    public bool IgnoreParentZIndex { get; set; } // >:(
-    public bool Fixed { get; set; } // >:(
-    #endregion
+    [CUISerializable] public bool HideChildrenOutsideFrame;
+    [CUISerializable] public bool ShouldPassPropsToChildren = true;
+    [CUISerializable] public bool UnCullable;
+    [CUISerializable] public bool IgnoreParentVisibility;
+    [CUISerializable] public bool IgnoreParentEventIgnorance;
+    [CUISerializable] public bool IgnoreParentZIndex;
+    [CUISerializable] public bool Fixed;
+    [CUISerializable]
     public CUIAnchor Anchor = new CUIAnchor(CUIAnchorType.LeftTop);
+    [CUISerializable]
+    public int? ZIndex { get => zIndex; set => SetZIndex(value); }
+    [CUISerializable]
+    public bool IgnoreEvents { get => ignoreEvents; set => SetIgnoreEvents(value); }
+    [CUISerializable]
+    public bool Visible { get => visible; set => SetVisible(value); }
 
-    private int? zIndex; public int? ZIndex
+    public bool Revealed { get => revealed; set => SetRevealed(value); }
+    //HACK this is meant for buttons, but i want to access it on generic components in CUIMap
+    [CUISerializable]
+    public bool Disabled { get; set; }
+    [CUISerializable]
+    public float BorderThickness = 1f;
+    [CUISerializable]
+    public Vector2 Padding { get => padding; set => SetPadding(value); }
+    [CUISerializable]
+    public Color BorderColor { get => borderColor; set => SetBorderColor(value); }
+    [CUISerializable]
+    public Color BackgroundColor { get => backgroundColor; set => SetBackgroundColor(value); }
+
+    [CUISerializable]
+    public CUIBool2 FillEmptySpace { get => fillEmptySpace; set => SetFillEmptySpace(value); }
+    [CUISerializable]
+    public CUIBool2 FitContent { get => fitContent; set => SetFitContent(value); }
+    [CUISerializable]
+    public CUINullRect Absolute { get => absolute; set => SetAbsolute(value); }
+    [CUISerializable]
+    public CUINullRect AbsoluteMin { get => absoluteMin; set => SetAbsoluteMin(value); }
+    [CUISerializable]
+    public CUINullRect AbsoluteMax { get => absoluteMax; set => SetAbsoluteMax(value); }
+    [CUISerializable]//TODO make sure i don't call Relative setters directly
+    public CUINullRect Relative { get => relative; set => SetRelative(value); }
+    [CUISerializable]
+    public CUINullRect RelativeMin { get => relativeMin; set => SetRelativeMin(value); }
+    [CUISerializable]
+    public CUINullRect RelativeMax { get => relativeMax; set => SetRelativeMax(value); }
+
+    #endregion
+    //Note those should be wrapped in objects, but i don't know how to unwrap closure to CUIComponent
+    #region implementation
+
+
+    private int? zIndex; internal void SetZIndex(int? value)
     {
-      get => zIndex;
-      set
+      zIndex = value;
+      OnPropChanged();
+      foreach (var child in Children)
       {
-        zIndex = value;
-        OnPropChanged();
-        foreach (var child in Children)
+        //TODO think, should i propagate null?
+        if (zIndex.HasValue && !child.IgnoreParentZIndex)
         {
-          //TODO think, should i propagate null?
-          if (zIndex.HasValue && !child.IgnoreParentZIndex)
-          {
-            child.ZIndex = zIndex.Value + 1;
-          }
+          child.ZIndex = zIndex.Value + 1;
         }
       }
     }
-    private bool ignoreEvents; public bool IgnoreEvents
+
+    private bool ignoreEvents; internal void SetIgnoreEvents(bool value)
     {
-      get => ignoreEvents;
-      set
+      ignoreEvents = value;
+      foreach (var child in Children)
       {
-        ignoreEvents = value;
-        foreach (var child in Children)
-        {
-          if (!child.IgnoreParentEventIgnorance) child.IgnoreEvents = value;
-        }
+        if (!child.IgnoreParentEventIgnorance) child.IgnoreEvents = value;
       }
     }
 
-    private bool visible = true; public bool Visible
+    private bool visible = true; internal void SetVisible(bool value)
     {
-      get => visible;
-      set
+      visible = value;
+      foreach (var child in Children)
       {
-        visible = value;
-        foreach (var child in Children)
-        {
-          if (!child.IgnoreParentVisibility) child.Visible = value;
-        }
+        if (!child.IgnoreParentVisibility) child.Visible = value;
       }
     }
 
-    public void Hide() { Visible = false; IgnoreEvents = true; }
-    public void Reveal() { Visible = true; IgnoreEvents = false; }
-
-    private bool revealed = true; public bool Revealed
+    private bool revealed = true; internal void SetRevealed(bool value)
     {
-      get => revealed;
-      set
-      {
-        revealed = value;
-        if (revealed) Reveal(); else Hide();
-      }
+      revealed = value;
+      if (revealed) { Visible = true; IgnoreEvents = false; }
+      else { Visible = false; IgnoreEvents = true; }
     }
 
-    private CUIBool2 fillEmptySpace; public CUIBool2 FillEmptySpace
+    private CUIBool2 fillEmptySpace; internal void SetFillEmptySpace(CUIBool2 value)
     {
-      get => fillEmptySpace;
-      set { fillEmptySpace = value; OnPropChanged(); }
+      fillEmptySpace = value; OnPropChanged();
     }
 
-    private CUIBool2 fitContent; public CUIBool2 FitContent
+    private CUIBool2 fitContent; internal void SetFitContent(CUIBool2 value)
     {
-      get => fitContent;
-      set { fitContent = value; OnPropChanged(); OnAbsolutePropChanged(); }
+      fitContent = value; OnPropChanged(); OnAbsolutePropChanged();
     }
 
-    // Ugly, but otherwise it'll be undebugable
-    //TODO make less ugly
-    #region Absolute Props
+    #region Absolute Props 
+    #endregion
 
-    private CUINullRect absolute; public CUINullRect Absolute
-    {
-      get => absolute;
-      set => SetAbsolute(value);
-    }
-    internal void SetAbsolute(CUINullRect value, [CallerMemberName] string memberName = "")
+    private CUINullRect absolute; internal void SetAbsolute(CUINullRect value, [CallerMemberName] string memberName = "")
     {
       absolute = value;
-      if (ComponentInitialized)
-      {
-        CUIDebug.Capture(null, this, "SetAbsolute", memberName, "Absolute", Absolute.ToString());
-      }
+      CUIDebug.Capture(null, this, "SetAbsolute", memberName, "Absolute", Absolute.ToString());
       OnPropChanged(); OnAbsolutePropChanged();
     }
 
-    private CUINullRect absoluteMin; public CUINullRect AbsoluteMin
-    {
-      get => absoluteMin;
-      set => SetAbsoluteMin(value);
-    }
-    internal void SetAbsoluteMin(CUINullRect value, [CallerMemberName] string memberName = "")
+    private CUINullRect absoluteMin; internal void SetAbsoluteMin(CUINullRect value, [CallerMemberName] string memberName = "")
     {
       absoluteMin = value;
-      if (ComponentInitialized)
-      {
-        CUIDebug.Capture(null, this, "SetAbsoluteMin", memberName, "AbsoluteMin", AbsoluteMin.ToString());
-      }
+      CUIDebug.Capture(null, this, "SetAbsoluteMin", memberName, "AbsoluteMin", AbsoluteMin.ToString());
       OnPropChanged(); OnAbsolutePropChanged();
     }
-    private CUINullRect absoluteMax; public CUINullRect AbsoluteMax
-    {
-      get => absoluteMax;
-      set => SetAbsoluteMax(value);
-    }
-    internal void SetAbsoluteMax(CUINullRect value, [CallerMemberName] string memberName = "")
+
+    private CUINullRect absoluteMax; internal void SetAbsoluteMax(CUINullRect value, [CallerMemberName] string memberName = "")
     {
       absoluteMax = value;
-      if (ComponentInitialized)
-      {
-        CUIDebug.Capture(null, this, "SetAbsoluteMax", memberName, "AbsoluteMax", AbsoluteMax.ToString());
-      }
+      CUIDebug.Capture(null, this, "SetAbsoluteMax", memberName, "AbsoluteMax", AbsoluteMax.ToString());
       OnPropChanged(); OnAbsolutePropChanged();
     }
 
-    #endregion
-    #region Relative Props
 
-    //TODO make sure i don't call Relative setters directly
-    [CUISerializable]
-    protected CUINullRect relative; public CUINullRect Relative
-    {
-      get => relative;
-      set => SetRelative(value);
-    }
-    internal void SetRelative(CUINullRect value, [CallerMemberName] string memberName = "")
+    #region Relative Props
+    #endregion
+    private CUINullRect relative; internal void SetRelative(CUINullRect value, [CallerMemberName] string memberName = "")
     {
       relative = value;
-      if (ComponentInitialized)
-      {
-        CUIDebug.Capture(null, this, "SetRelative", memberName, "Relative", Relative.ToString());
-      }
+      CUIDebug.Capture(null, this, "SetRelative", memberName, "Relative", Relative.ToString());
       OnPropChanged();
     }
 
-    private CUINullRect relativeMin; public CUINullRect RelativeMin
-    {
-      get => relativeMin;
-      set => SetRelativeMin(value);
-    }
-    internal void SetRelativeMin(CUINullRect value, [CallerMemberName] string memberName = "")
+    private CUINullRect relativeMin; internal void SetRelativeMin(CUINullRect value, [CallerMemberName] string memberName = "")
     {
       relativeMin = value;
-      if (ComponentInitialized)
-      {
-        CUIDebug.Capture(null, this, "SetRelativeMin", memberName, "RelativeMin", RelativeMin.ToString());
-      }
+      CUIDebug.Capture(null, this, "SetRelativeMin", memberName, "RelativeMin", RelativeMin.ToString());
       OnPropChanged();
     }
 
-    private CUINullRect relativeMax; public CUINullRect RelativeMax
-    {
-      get => relativeMax;
-      set => SetRelativeMax(value);
-    }
-    internal void SetRelativeMax(CUINullRect value, [CallerMemberName] string memberName = "")
+    private CUINullRect relativeMax; internal void SetRelativeMax(CUINullRect value, [CallerMemberName] string memberName = "")
     {
       relativeMax = value;
-      if (ComponentInitialized)
-      {
-        CUIDebug.Capture(null, this, "SetRelativeMax", memberName, "RelativeMax", RelativeMax.ToString());
-      }
+      CUIDebug.Capture(null, this, "SetRelativeMax", memberName, "RelativeMax", RelativeMax.ToString());
       OnPropChanged();
     }
 
-    #endregion
     #region Graphic Props --------------------------------------------------------
+    #endregion
 
-    //HACK this is meant for buttons, but i want to access it on generic components in CUIMap
-    public bool Disabled { get; set; }
     protected bool BackgroundVisible;
-    private Color backgroundColor; public Color BackgroundColor
+    private Color backgroundColor; internal void SetBackgroundColor(Color value)
     {
-      get => backgroundColor;
-      set { backgroundColor = value; BackgroundVisible = backgroundColor != Color.Transparent; }
+      backgroundColor = value; BackgroundVisible = backgroundColor != Color.Transparent;
     }
 
     protected bool BorderVisible;
-    private Color borderColor; public Color BorderColor
+    private Color borderColor; internal void SetBorderColor(Color value)
     {
-      get => borderColor;
-      set { borderColor = value; BorderVisible = borderColor != Color.Transparent; }
+      borderColor = value; BorderVisible = borderColor != Color.Transparent;
     }
 
-    public float BorderThickness = 1f;
-    private Vector2 padding = new Vector2(2, 2); public Vector2 Padding
+    private Vector2 padding = new Vector2(2, 2); internal void SetPadding(Vector2 value)
     {
-      get => padding;
-      set { padding = value; OnDecorPropChanged(); }
+      padding = value; OnDecorPropChanged();
     }
+
+
+
     #endregion
   }
 }

@@ -13,39 +13,56 @@ namespace CrabUI
   {
     public event Action OnTextChanged;
     public Action AddOnTextChanged { set { OnTextChanged += value; } }
-    [CUISerializable]
-    protected string text = ""; public string Text
-    {
-      get => text;
-      set
-      {
-        text = value ?? "";
-        OnTextChanged?.Invoke();
 
-        if (!Ghost)
-        {
-          NeedReWrapping = true;
-          OnPropChanged();
-          OnAbsolutePropChanged();
-        }
-        else
-        {
-          WrappedText = text;
-          // OnDecorPropChanged();
-        }
-      }
-    }
+    [CUISerializable] public bool Wrap;
+    [CUISerializable] public Color TextColor;
+    [CUISerializable] public GUIFont Font = GUIStyle.Font;
+    [CUISerializable] public bool Ghost;
+
+    [CUISerializable]
+    public CUIAnchor TextAlign = new CUIAnchor(CUIAnchorType.LeftTop);
+
+
+    [CUISerializable]
+    public string Text { get => text; set => SetText(value); }
+    [CUISerializable]
+    public float TextScale { get => textScale; set => SetTextScale(value); }
+
+
+
     //TODO Uncringe
     #region Cringe
-    [CUISerializable]
-    public bool Wrap;
-    #region MegaCringe
-    public bool Ghost;
-    #endregion
+    private Vector2 RealTextSize;
+    private Vector2 TextDrawPos;
     protected string WrappedText = "";
     protected Vector2? WrappedForThisSize;
     protected Vector2 WrappedSize;
     protected bool NeedReWrapping;
+    #endregion
+
+    protected string text = ""; internal void SetText(string value)
+    {
+      text = value ?? "";
+      OnTextChanged?.Invoke();
+
+      if (!Ghost)
+      {
+        NeedReWrapping = true;
+        OnPropChanged();
+        OnAbsolutePropChanged();
+      }
+      else
+      {
+        WrappedText = text;
+        // OnDecorPropChanged();
+      }
+    }
+
+    protected float textScale = 0.9f; internal void SetTextScale(float value)
+    {
+      textScale = value; OnDecorPropChanged();
+    }
+
 
     //FIXME find a solution that doesn't overwrite absolute min 
     protected void DoWrapFor(Vector2 size)
@@ -80,7 +97,6 @@ namespace CrabUI
       NeedReWrapping = false;
     }
 
-    #endregion
     internal override Vector2 AmIOkWithThisSize(Vector2 size)
     {
       if (!WrappedForThisSize.HasValue || size != WrappedForThisSize.Value || NeedReWrapping)
@@ -90,18 +106,6 @@ namespace CrabUI
       return WrappedSize;
     }
 
-    public CUIAnchor TextAlign = new CUIAnchor(CUIAnchorType.LeftTop);
-    public Color TextColor;
-    public GUIFont Font = GUIStyle.Font;
-    private float textScale = 0.9f; public float TextScale
-    {
-      get => textScale;
-      set { textScale = value; OnDecorPropChanged(); }
-    }
-    private Vector2 RealTextSize;
-    private Vector2 TextDrawPos;
-
-
     internal override void UpdatePseudoChildren()
     {
       TextDrawPos = TextAlign.GetChildPos(Real, Vector2.Zero, RealTextSize / Scale) + Padding * TextAlign.Direction;
@@ -110,6 +114,7 @@ namespace CrabUI
         CUIDebug.Capture(null, this, "UpdatePseudoChildren", "", "TextDrawPos", TextDrawPos.ToString());
       }
     }
+
 
     public override void Draw(SpriteBatch spriteBatch)
     {
@@ -133,7 +138,5 @@ namespace CrabUI
     {
       Text = text;
     }
-
-
   }
 }

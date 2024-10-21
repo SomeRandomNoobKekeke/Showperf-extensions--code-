@@ -34,36 +34,24 @@ namespace CrabUI
     internal void SetChildrenOffset(CUI3DOffset value, [CallerMemberName] string memberName = "")
     {
       childrenOffset = ChildOffsetBounds.Check(value);
-      if (ComponentInitialized)
-      {
-        CUIDebug.Capture(null, this, "SetChildrenOffset", memberName, "ChildrenOffset", ChildrenOffset.ToString());
-      }
+      CUIDebug.Capture(null, this, "SetChildrenOffset", memberName, "ChildrenOffset", ChildrenOffset.ToString());
       OnChildrenPropChanged();
     }
 
     internal void OnPropChanged([CallerMemberName] string memberName = "")
     {
       Layout.Changed = true;
-      if (ComponentInitialized)
-      {
-        CUIDebug.Capture(null, this, "OnPropChanged", memberName, "Layout.Changed", "true");
-      }
+      CUIDebug.Capture(null, this, "OnPropChanged", memberName, "Layout.Changed", "true");
     }
     internal void OnDecorPropChanged([CallerMemberName] string memberName = "")
     {
       Layout.DecorChanged = true;
-      if (ComponentInitialized)
-      {
-        CUIDebug.Capture(null, this, "OnDecorPropChanged", memberName, "Layout.DecorChanged", "true");
-      }
+      CUIDebug.Capture(null, this, "OnDecorPropChanged", memberName, "Layout.DecorChanged", "true");
     }
     internal void OnAbsolutePropChanged([CallerMemberName] string memberName = "")
     {
       Layout.AbsoluteChanged = true;
-      if (ComponentInitialized)
-      {
-        CUIDebug.Capture(null, this, "OnAbsolutePropChanged", memberName, "Layout.AbsoluteChanged", "true");
-      }
+      CUIDebug.Capture(null, this, "OnAbsolutePropChanged", memberName, "Layout.AbsoluteChanged", "true");
     }
     internal void OnChildrenPropChanged([CallerMemberName] string memberName = "")
     {

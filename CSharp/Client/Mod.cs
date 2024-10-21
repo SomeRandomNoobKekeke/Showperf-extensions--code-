@@ -71,7 +71,7 @@ namespace ShowPerfExtensions
         Wrap = true,
         AddOnMouseDown = (e) =>
         {
-          CUIMain["showperfButton"].Hide();
+          CUIMain["showperfButton"].Revealed = false;
           Showperf.Open();
         },
         InactiveColor = new Color(0, 0, 32, 128),
@@ -79,7 +79,7 @@ namespace ShowPerfExtensions
         MousePressedColor = new Color(0, 0, 128, 128),
       };
 
-      Showperf.OnClose += () => CUIMain["showperfButton"].Reveal();
+      Showperf.OnClose += () => CUIMain["showperfButton"].Revealed = true;
 
       CUIMain["showperfButton"].Click();
       Showperf.Pages.Open(Showperf.Map);

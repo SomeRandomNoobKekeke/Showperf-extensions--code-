@@ -28,10 +28,10 @@ namespace CrabUI
     {
       Host = host;
       Target = target;
-      Method = method;
-      SProp = sprop;
-      TProp = tprop;
-      Value = value;
+      Method = method ?? "";
+      SProp = sprop ?? "";
+      TProp = tprop ?? "";
+      Value = value ?? "";
     }
   }
 

@@ -30,7 +30,7 @@ namespace ShowPerfExtensions
 #else
         Absolute = new CUINullRect(x: x, y: y);
         BorderColor = Color.Transparent;
-        Hide();
+        Revealed = false;
 #endif
 
         Disabled = disabled;
