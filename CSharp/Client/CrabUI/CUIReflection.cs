@@ -16,7 +16,19 @@ namespace CrabUI
 {
   public static partial class CUI
   {
+
+    public static Dictionary<string, Type> CUITypes = new Dictionary<string, Type>();
+
     public static Type GetComponentTypeByName(string name)
+    {
+      if (!CUITypes.ContainsKey(name))
+      {
+        CUITypes[name] = getComponentTypeByName(name);
+      }
+
+      return CUITypes[name];
+    }
+    private static Type getComponentTypeByName(string name)
     {
       Assembly CUIAssembly = Assembly.GetAssembly(typeof(CUI));
       Assembly CallingAssembly = Assembly.GetCallingAssembly();

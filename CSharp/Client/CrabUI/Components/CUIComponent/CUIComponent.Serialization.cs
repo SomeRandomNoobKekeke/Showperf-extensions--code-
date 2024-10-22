@@ -65,20 +65,16 @@ namespace CrabUI
 
     #endregion
     #region XML --------------------------------------------------------
-    public void FromXML(XElement element)
-    {
 
-    }
-
-    public XElement ToXML()
+    public virtual XElement ToXML()
     {
       Type type = GetType();
 
       XElement e = new XElement(type.Name);
 
-      foreach (string prop in CUITypeMetaData.Get(type).Props)
+      foreach (string key in CUITypeMetaData.Get(type).Serializable.Keys)
       {
-        SetAttribute(prop, e);
+        SetAttribute(key, e);
       }
 
       foreach (CUIComponent child in Children)
@@ -89,15 +85,98 @@ namespace CrabUI
       return e;
     }
 
+    public virtual void FromXML(XElement element)
+    {
+      Type type = GetType();
+
+      CUITypeMetaData meta = CUITypeMetaData.Get(type);
+
+      foreach (XAttribute attribute in element.Attributes())
+      {
+        if (!meta.Properties.ContainsKey(attribute.Name.ToString()))
+        {
+          CUIDebug.Err($"Can't parse prop {attribute.Name} in {type.Name} because type metadata doesn't contain that prop");
+          continue;
+        }
+
+        PropertyInfo prop = meta.Properties[attribute.Name.ToString()];
+
+
+        MethodInfo parse = prop.PropertyType.GetMethod(
+          "Parse",
+          BindingFlags.Public | BindingFlags.Static
+        );
+
+        if (parse == null)
+        {
+          CUIDebug.Err($"Can't parse prop {prop.Name} in {type.Name} because it's type {prop.PropertyType.Name} is missing Parse method");
+          continue;
+        }
+
+        try
+        {
+          object result = parse.Invoke(null, new object[] { attribute.Value });
+
+          prop.SetValue(this, result);
+          CUIDebug.log($"{prop.GetValue(this)}");
+        }
+        catch (Exception e)
+        {
+          CUIDebug.Err($"Can't parse {attribute.Value} into {prop.PropertyType.Name}\n{e}");
+        }
+
+
+        // BaroDev (wide)
+        // try
+        // {
+        //   object result = Activator.CreateInstance(prop.PropertyType.MakeByRefType());
+        //   object[] args = new object[] { attribute.Value, result };
+        //   object? ok = tryparse.Invoke(null, args);
+
+        //   CUIDebug.log($"{ok} {attribute.Name} {result}");
+        // }
+        // catch (Exception e)
+        // {
+        //   CUIDebug.Err(e);
+        // }
+      }
+    }
+
 
     public string Serialize()
     {
-      XElement e = this.ToXML();
-      return e.ToString();
+      try
+      {
+        XElement e = this.ToXML();
+        return e.ToString();
+      }
+      catch (Exception e)
+      {
+        return e.Message;
+      }
     }
     public static CUIComponent Deserialize(string raw)
     {
-      return null;
+      return Deserialize(XElement.Parse(raw));
+    }
+
+    public static CUIComponent Deserialize(XElement e)
+    {
+      try
+      {
+        Type type = CUI.GetComponentTypeByName(e.Name.ToString());
+        if (type == null) return null;
+
+        CUIComponent c = (CUIComponent)Activator.CreateInstance(type);
+        c.FromXML(e);
+
+        return c;
+      }
+      catch (Exception ex)
+      {
+        CUIDebug.Err(ex);
+        return null;
+      }
     }
 
     //TODO think, what would happen if value is null and != def?

@@ -38,10 +38,9 @@ namespace CrabUI
 
     public static void RemoveCommands()
     {
-      AddedCommands.ForEach(c => DebugConsole.Commands.RemoveAll(which => which.Names.Contains(c.Names[0])));
+      AddedCommands?.ForEach(c => DebugConsole.Commands.RemoveAll(which => which.Names.Contains(c.Names[0])));
 
-      AddedCommands.Clear();
-      AddedCommands = null;
+      AddedCommands?.Clear();
     }
 
     // public static void PermitCommands(Identifier command, ref bool __result)

@@ -12,6 +12,7 @@ namespace CrabUI
 {
   public struct CUIRect
   {
+
     public float Left;
     public float Top;
     public float Width;
@@ -55,6 +56,9 @@ namespace CrabUI
       return r.Right >= Left && r.Left <= Right && r.Bottom >= Top && r.Top <= Bottom;
     }
 
+
+
+
     public CUIRect(Vector2 size) : this(0, 0, size.X, size.Y) { }
     public CUIRect(Vector2 position, Vector2 size) : this(position.X, position.Y, size.X, size.Y) { }
     public CUIRect(float x, float y, float w, float h)
@@ -71,6 +75,11 @@ namespace CrabUI
   }
   public struct CUINullRect
   {
+    public static CUINullRect Parse(string s)
+    {
+      return new CUINullRect(0.4f, 0.4f, 0.4f, 0.4f);
+    }
+
     public float? Left;
     public float? Top;
     public float? Width;

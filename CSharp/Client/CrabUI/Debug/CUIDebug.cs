@@ -46,7 +46,7 @@ namespace CrabUI
 #endif
     public static void Err(object msg, Color? cl = null, [CallerFilePath] string source = "", [CallerLineNumber] int lineNumber = 0)
     {
-      cl ??= Color.Orange * 0.5f;
+      cl ??= Color.Orange;
       var fi = new FileInfo(source);
 
       CUI.log($"{fi.Directory.Name}/{fi.Name}:{lineNumber}", cl * 0.5f);
