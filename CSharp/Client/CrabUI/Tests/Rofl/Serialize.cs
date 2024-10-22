@@ -18,25 +18,25 @@ namespace CrabUI
     {
 
       CUIComponent f = new CUIFrame(0.6f, 0.2f, 0.2f, 0.6f);
-      // CUIComponent l = f.Append(new CUIVerticalList()
-      // {
-      //   Relative = new CUINullRect(0, 0, 1, 1),
-      //   Scrollable = true
-      // });
+      CUIComponent l = f.Append(new CUIVerticalList()
+      {
+        Relative = new CUINullRect(0, 0, 1, 1),
+        Scrollable = true
+      });
 
 
-      // foreach (var sound in Enum.GetValues(typeof(GUISoundType)).Cast<GUISoundType>())
-      // {
-      //   l[$"{sound.ToString()} Button"] = new CUIButton($"{sound}")
-      //   {
-      //     Relative = new CUINullRect(h: 0.1f),
-      //     ClickSound = sound,
-      //   };
-      // }
-      // foreach (var sound in Enum.GetValues(typeof(GUISoundType)).Cast<GUISoundType>())
-      // {
-      //   CUIComponent b = l.Append(new CUITextBlock($"{sound}"));
-      // }
+      foreach (var sound in Enum.GetValues(typeof(GUISoundType)).Cast<GUISoundType>())
+      {
+        l[$"{sound.ToString()} Button"] = new CUIButton($"{sound}")
+        {
+          Relative = new CUINullRect(h: 0.1f),
+          ClickSound = sound,
+        };
+      }
+      foreach (var sound in Enum.GetValues(typeof(GUISoundType)).Cast<GUISoundType>())
+      {
+        CUIComponent b = l.Append(new CUITextBlock($"{sound}"));
+      }
 
       string s = f.Serialize();
       CUIDebug.log(s);

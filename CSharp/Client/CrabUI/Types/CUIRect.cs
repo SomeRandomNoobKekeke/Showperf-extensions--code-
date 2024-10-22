@@ -75,9 +75,39 @@ namespace CrabUI
   }
   public struct CUINullRect
   {
+    // Guh...
     public static CUINullRect Parse(string s)
     {
-      return new CUINullRect(0.4f, 0.4f, 0.4f, 0.4f);
+      string content = s.Substring(
+        s.IndexOf('[') + 1,
+        s.IndexOf(']') - s.IndexOf('[') - 1
+      );
+
+      var components = content.Split(',').Select(a => a.Trim());
+
+      string sx = components.ElementAtOrDefault(0);
+      string sy = components.ElementAtOrDefault(1);
+      string sw = components.ElementAtOrDefault(2);
+      string sh = components.ElementAtOrDefault(3);
+
+      float? x = null;
+      float? y = null;
+      float? w = null;
+      float? h = null;
+
+      if (sx == null || sx == "") x = null;
+      else x = float.Parse(sx);
+
+      if (sy == null || sy == "") y = null;
+      else y = float.Parse(sy);
+
+      if (sw == null || sw == "") w = null;
+      else w = float.Parse(sw);
+
+      if (sh == null || sh == "") h = null;
+      else h = float.Parse(sh);
+
+      return new CUINullRect(x, y, w, h);
     }
 
     public float? Left;

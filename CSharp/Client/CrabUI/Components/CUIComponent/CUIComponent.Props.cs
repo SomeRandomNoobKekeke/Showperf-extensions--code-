@@ -21,14 +21,14 @@ namespace CrabUI
     #region Declaration
     //TODO This is potentially cursed
     public object Data;
-    [CUISerializable] public bool HideChildrenOutsideFrame;
-    [CUISerializable] public bool ShouldPassPropsToChildren = true;
-    [CUISerializable] public bool UnCullable;
-    [CUISerializable] public bool IgnoreParentVisibility;
-    [CUISerializable] public bool IgnoreParentEventIgnorance;
-    [CUISerializable] public bool IgnoreParentZIndex;
-    [CUISerializable] public bool Fixed;
-    [CUISerializable] public Vector2 Anchor;
+    [CUISerializable] public bool HideChildrenOutsideFrame { get; set; }
+    [CUISerializable] public bool ShouldPassPropsToChildren { get; set; } = true;
+    [CUISerializable] public bool UnCullable { get; set; }
+    [CUISerializable] public bool IgnoreParentVisibility { get; set; }
+    [CUISerializable] public bool IgnoreParentEventIgnorance { get; set; }
+    [CUISerializable] public bool IgnoreParentZIndex { get; set; }
+    [CUISerializable] public bool Fixed { get; set; }
+    [CUISerializable] public Vector2 Anchor { get; set; }
 
     [CUISerializable]
     public int? ZIndex { get => zIndex; set => SetZIndex(value); }
@@ -42,7 +42,7 @@ namespace CrabUI
     [CUISerializable]
     public bool Disabled { get; set; }
     [CUISerializable]
-    public float BorderThickness = 1f;
+    public float BorderThickness { get; set; } = 1f;
     [CUISerializable]
     public Vector2 Padding { get => padding; set => SetPadding(value); }
     [CUISerializable]

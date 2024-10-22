@@ -15,7 +15,7 @@ namespace CrabUI
   //TODO add scrollbar
   public class CUIVerticalList : CUIComponent
   {
-    public bool Scrollable { get; set; }
+    [CUISerializable] public bool Scrollable { get; set; }
 
     public float TopGap = 0;
     public float BottomGap = 10f;

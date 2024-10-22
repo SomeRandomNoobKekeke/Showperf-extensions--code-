@@ -85,6 +85,7 @@ namespace CrabUI
       return e;
     }
 
+    // TODO do i really want to override this? xd
     public virtual void FromXML(XElement element)
     {
       Type type = GetType();
@@ -104,8 +105,14 @@ namespace CrabUI
 
         MethodInfo parse = prop.PropertyType.GetMethod(
           "Parse",
-          BindingFlags.Public | BindingFlags.Static
+          BindingFlags.Public | BindingFlags.Static,
+          new Type[] { typeof(string) }
         );
+
+        if (parse == null && CUIExtensions.Parse.ContainsKey(prop.PropertyType))
+        {
+          parse = CUIExtensions.Parse[prop.PropertyType];
+        }
 
         if (parse == null)
         {
@@ -116,29 +123,23 @@ namespace CrabUI
         try
         {
           object result = parse.Invoke(null, new object[] { attribute.Value });
-
           prop.SetValue(this, result);
-          CUIDebug.log($"{prop.GetValue(this)}");
         }
         catch (Exception e)
         {
           CUIDebug.Err($"Can't parse {attribute.Value} into {prop.PropertyType.Name}\n{e}");
         }
+      }
 
+      foreach (XElement childElement in element.Elements())
+      {
+        Type childType = CUI.GetComponentTypeByName(childElement.Name.ToString());
+        if (childType == null) continue;
 
-        // BaroDev (wide)
-        // try
-        // {
-        //   object result = Activator.CreateInstance(prop.PropertyType.MakeByRefType());
-        //   object[] args = new object[] { attribute.Value, result };
-        //   object? ok = tryparse.Invoke(null, args);
+        CUIComponent child = (CUIComponent)Activator.CreateInstance(childType);
+        child.FromXML(childElement);
 
-        //   CUIDebug.log($"{ok} {attribute.Name} {result}");
-        // }
-        // catch (Exception e)
-        // {
-        //   CUIDebug.Err(e);
-        // }
+        this.Append(child);
       }
     }
 
