@@ -19,7 +19,7 @@ namespace CrabUI
   {
     public static string ParseString(string s) => s; // BaroDev (wide)
     public static GUISoundType ParseGUISoundType(string s) => Enum.Parse<GUISoundType>(s);
-
+    public static Color ParseColor(string s) => XMLExtensions.ParseColor(s);
 
     public static Dictionary<Type, MethodInfo> Parse;
     public static Dictionary<Type, MethodInfo> CustomToString;
@@ -31,6 +31,7 @@ namespace CrabUI
 
       Parse[typeof(string)] = typeof(CUIExtensions).GetMethod("ParseString");
       Parse[typeof(GUISoundType)] = typeof(CUIExtensions).GetMethod("ParseGUISoundType");
+      Parse[typeof(Color)] = typeof(CUIExtensions).GetMethod("ParseColor");
     }
 
   }

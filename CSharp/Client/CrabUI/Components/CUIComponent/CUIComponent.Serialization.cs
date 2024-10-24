@@ -109,7 +109,7 @@ namespace CrabUI
       {
         if (!meta.Properties.ContainsKey(attribute.Name.ToString()))
         {
-          CUIDebug.Error($"Can't parse prop {attribute.Name} in {type.Name} because type metadata doesn't contain that prop");
+          CUIDebug.Error($"Can't parse prop {attribute.Name} in {type.Name} because type metadata doesn't contain that prop (is it a property? fields aren't supported yet)");
           continue;
         }
 

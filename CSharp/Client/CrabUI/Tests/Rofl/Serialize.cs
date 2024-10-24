@@ -27,11 +27,17 @@ namespace CrabUI
 
       foreach (var sound in Enum.GetValues(typeof(GUISoundType)).Cast<GUISoundType>())
       {
-        l[$"{sound.ToString()} Button"] = new CUIButton($"{sound}")
+        CUIButton b;
+        l[$"{sound.ToString()} Button"] = b = new CUIButton($"{sound}")
         {
           Relative = new CUINullRect(h: 0.1f),
           ClickSound = sound,
         };
+
+        if (sound == GUISoundType.PickItem)
+        {
+          b.InactiveColor = Color.Yellow;
+        }
       }
       foreach (var sound in Enum.GetValues(typeof(GUISoundType)).Cast<GUISoundType>())
       {

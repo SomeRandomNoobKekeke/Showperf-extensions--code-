@@ -14,11 +14,10 @@ namespace CrabUI
   {
     [CUISerializable]
     public GUISoundType ClickSound { get; set; } = GUISoundType.Select;
-
-    public Color DisabledColor;
-    public Color InactiveColor;
-    public Color MouseOverColor;
-    public Color MousePressedColor;
+    [CUISerializable] public Color DisabledColor { get; set; }
+    [CUISerializable] public Color InactiveColor { get; set; }
+    [CUISerializable] public Color MouseOverColor { get; set; }
+    [CUISerializable] public Color MousePressedColor { get; set; }
 
     public override void Draw(SpriteBatch spriteBatch)
     {
