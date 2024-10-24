@@ -13,7 +13,7 @@ using System.IO;
 
 namespace ShowPerfExtensions
 {
-  public partial class Mod : IAssemblyPlugin
+  public partial class Plugin : IAssemblyPlugin
   {
     public static void log(object msg, Color? cl = null)
     {

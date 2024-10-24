@@ -15,7 +15,7 @@ using Barotrauma.Extensions;
 
 namespace ShowPerfExtensions
 {
-  public partial class Mod : IAssemblyPlugin
+  public partial class Plugin : IAssemblyPlugin
   {
     public static bool LevelObjectManager_DrawObjects_Replace(SpriteBatch spriteBatch, Camera cam, List<LevelObject> objectList, LevelObjectManager __instance)
     {

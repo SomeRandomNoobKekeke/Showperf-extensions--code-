@@ -12,7 +12,7 @@ using CrabUI;
 
 namespace ShowPerfExtensions
 {
-  public partial class Mod : IAssemblyPlugin
+  public partial class Plugin : IAssemblyPlugin
   {
     public class CUIShowperf : CUIFrame
     {

@@ -17,7 +17,7 @@ using System.IO;
 
 namespace ShowPerfExtensions
 {
-  public partial class Mod : IAssemblyPlugin
+  public partial class Plugin : IAssemblyPlugin
   {
     //TODO this is dead end, there's no way to expand it, find better view
     // mb add zoom?

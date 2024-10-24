@@ -17,11 +17,11 @@ using System.Runtime.CompilerServices;
 
 namespace ShowPerfExtensions
 {
-  public partial class Mod : IAssemblyPlugin
+  public partial class Plugin : IAssemblyPlugin
   {
     public static Harmony harmony = new Harmony("showperf");
     public static string ModName = "Showperf extensions";
-    public static Mod mod;
+    public static Plugin Mod;
 
     public bool debug = true;
 
@@ -39,7 +39,7 @@ namespace ShowPerfExtensions
 
     public void Initialize()
     {
-      mod = this;
+      Mod = this;
 
 
 

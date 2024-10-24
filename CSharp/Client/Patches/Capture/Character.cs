@@ -15,7 +15,7 @@ using Barotrauma.Items.Components;
 
 namespace ShowPerfExtensions
 {
-  public partial class Mod : IAssemblyPlugin
+  public partial class Plugin : IAssemblyPlugin
   {
     public static bool Character_UpdateAll_Replace(float deltaTime, Camera cam)
     {

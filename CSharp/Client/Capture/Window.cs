@@ -15,7 +15,7 @@ using System.Text;
 
 namespace ShowPerfExtensions
 {
-  public partial class Mod : IAssemblyPlugin
+  public partial class Plugin : IAssemblyPlugin
   {
     public enum CaptureWindowMode { Sum, Mean, Spike }
     public enum SubType { Player, Outpost, OutpostModule, Wreck, BeaconStation, EnemySubmarine, Ruin, All }

@@ -15,7 +15,7 @@ using Barotrauma.Extensions;
 
 namespace ShowPerfExtensions
 {
-  public partial class Mod : IAssemblyPlugin
+  public partial class Plugin : IAssemblyPlugin
   {
     public static bool LevelRenderer_DrawBackground_Replace(LevelRenderer __instance, SpriteBatch spriteBatch, Camera cam, LevelObjectManager backgroundSpriteManager = null, BackgroundCreatureManager backgroundCreatureManager = null)
     {

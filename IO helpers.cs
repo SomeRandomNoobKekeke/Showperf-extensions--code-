@@ -64,8 +64,8 @@ namespace ShowPerfExtensions
         if (p.Name.Contains(ModName))
         {
           found = true;
-          Mod.ModDir = Path.GetFullPath(p.Dir);
-          Mod.ModVersion = p.ModVersion;
+          Plugin.ModDir = Path.GetFullPath(p.Dir);
+          Plugin.ModVersion = p.ModVersion;
           break;
         }
       }

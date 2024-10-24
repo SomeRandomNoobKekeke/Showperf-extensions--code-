@@ -8,7 +8,7 @@ using HarmonyLib;
 
 namespace ShowPerfExtensions
 {
-  public partial class Mod : IAssemblyPlugin
+  public partial class Plugin : IAssemblyPlugin
   {
     public enum CName
     {

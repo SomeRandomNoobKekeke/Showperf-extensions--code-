@@ -16,7 +16,7 @@ using FarseerPhysics.Dynamics;
 
 namespace ShowPerfExtensions
 {
-  public partial class Mod : IAssemblyPlugin
+  public partial class Plugin : IAssemblyPlugin
   {
     public static bool Item_Update_Replace(float deltaTime, Camera cam, Item __instance)
     {
