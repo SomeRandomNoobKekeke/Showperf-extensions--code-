@@ -220,9 +220,7 @@ namespace CrabUI
     public static CUIComponent LoadFromFile(string path)
     {
       XDocument xdoc = XDocument.Load(path);
-      CUIDebug.log(xdoc);
-
-      return null;
+      return Deserialize(xdoc.Root);
     }
     public void SaveToFile(string path)
     {

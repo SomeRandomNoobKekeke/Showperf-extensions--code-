@@ -44,12 +44,8 @@ namespace CrabUI
         CUIComponent b = l.Append(new CUITextBlock($"{sound}"));
       }
 
-      string s = f.Serialize();
-      CUIDebug.log(s);
-
-      CUIComponent c = CUIComponent.Deserialize(s);
-      CUIDebug.log("------------------------------");
-      CUIDebug.log(c.Serialize());
+      f.SaveToFile(CUI.IgnoreDir + "/test.xml");
+      CUIComponent c = CUIComponent.LoadFromFile(CUI.IgnoreDir + "/test.xml");
 
       Main.Append(c);
     }

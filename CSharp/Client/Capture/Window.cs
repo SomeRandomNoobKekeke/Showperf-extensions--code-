@@ -218,7 +218,7 @@ namespace ShowPerfExtensions
 
       // public void debugCapacity()
       // {
-      //   if (mod.debug)
+      //   if (Mod.Debug)
       //   {
       //     StringBuilder sb = new StringBuilder();
       //     string s = "";

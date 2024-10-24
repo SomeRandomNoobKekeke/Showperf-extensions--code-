@@ -1,4 +1,4 @@
-// #define DEBUG
+#define DEBUG
 
 using System;
 using System.Reflection;
@@ -26,7 +26,7 @@ namespace ShowPerfExtensions
 #endif
     public static void info(object msg, [CallerFilePath] string source = "", [CallerLineNumber] int lineNumber = 0)
     {
-      if (Mod.debug)
+      if (Mod.Debug)
       {
         var fi = new FileInfo(source);
 
@@ -40,7 +40,7 @@ namespace ShowPerfExtensions
 #endif
     public static void error(object msg, [CallerFilePath] string source = "", [CallerLineNumber] int lineNumber = 0)
     {
-      if (Mod.debug)
+      if (Mod.Debug)
       {
         var fi = new FileInfo(source);
 

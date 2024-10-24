@@ -23,10 +23,10 @@ namespace ShowPerfExtensions
     public static string ModName = "Showperf extensions";
     public static Plugin Mod;
 
-    public string ModDir;
-    public string ModVersion;
+    public string ModDir = "";
+    public string ModVersion = "1.0.0";
 
-    public bool debug = true;
+    public bool Debug = true;
 
 
 
@@ -44,6 +44,12 @@ namespace ShowPerfExtensions
     {
       Mod = this;
       FindModFolder();
+
+      if (ModDir.Contains("LocalMods"))
+      {
+        Debug = true;
+        info($"found {ModName} in LocalMods, debug: {Debug}");
+      }
 
 
       GameMain.PerformanceCounter.DrawTimeGraph = new Graph(1000);
