@@ -72,10 +72,7 @@ namespace CrabUI
 
       XElement e = new XElement(type.Name);
 
-      foreach (string key in CUITypeMetaData.Get(type).Serializable.Keys)
-      {
-        SetAttribute(key, e);
-      }
+      PackProps(e);
 
       foreach (CUIComponent child in Children)
       {
@@ -85,51 +82,10 @@ namespace CrabUI
       return e;
     }
 
-    // TODO do i really want to override this? xd
+
     public virtual void FromXML(XElement element)
     {
-      Type type = GetType();
-
-      CUITypeMetaData meta = CUITypeMetaData.Get(type);
-
-      foreach (XAttribute attribute in element.Attributes())
-      {
-        if (!meta.Properties.ContainsKey(attribute.Name.ToString()))
-        {
-          CUIDebug.Err($"Can't parse prop {attribute.Name} in {type.Name} because type metadata doesn't contain that prop");
-          continue;
-        }
-
-        PropertyInfo prop = meta.Properties[attribute.Name.ToString()];
-
-
-        MethodInfo parse = prop.PropertyType.GetMethod(
-          "Parse",
-          BindingFlags.Public | BindingFlags.Static,
-          new Type[] { typeof(string) }
-        );
-
-        if (parse == null && CUIExtensions.Parse.ContainsKey(prop.PropertyType))
-        {
-          parse = CUIExtensions.Parse[prop.PropertyType];
-        }
-
-        if (parse == null)
-        {
-          CUIDebug.Err($"Can't parse prop {prop.Name} in {type.Name} because it's type {prop.PropertyType.Name} is missing Parse method");
-          continue;
-        }
-
-        try
-        {
-          object result = parse.Invoke(null, new object[] { attribute.Value });
-          prop.SetValue(this, result);
-        }
-        catch (Exception e)
-        {
-          CUIDebug.Err($"Can't parse {attribute.Value} into {prop.PropertyType.Name}\n{e}");
-        }
-      }
+      ExtractProps(element);
 
       foreach (XElement childElement in element.Elements())
       {
@@ -140,6 +96,87 @@ namespace CrabUI
         child.FromXML(childElement);
 
         this.Append(child);
+      }
+    }
+
+    protected void ExtractProps(XElement element)
+    {
+      Type type = GetType();
+
+      CUITypeMetaData meta = CUITypeMetaData.Get(type);
+
+      foreach (XAttribute attribute in element.Attributes())
+      {
+        if (!meta.Properties.ContainsKey(attribute.Name.ToString()))
+        {
+          CUIDebug.Error($"Can't parse prop {attribute.Name} in {type.Name} because type metadata doesn't contain that prop");
+          continue;
+        }
+
+        PropertyInfo prop = meta.Properties[attribute.Name.ToString()];
+
+        MethodInfo parse = null;
+        if (CUIExtensions.Parse.ContainsKey(prop.PropertyType))
+        {
+          parse = CUIExtensions.Parse[prop.PropertyType];
+        }
+
+        parse ??= prop.PropertyType.GetMethod(
+          "Parse",
+          BindingFlags.Public | BindingFlags.Static,
+          new Type[] { typeof(string) }
+        );
+
+
+        if (parse == null)
+        {
+          CUIDebug.Error($"Can't parse prop {prop.Name} in {type.Name} because it's type {prop.PropertyType.Name} is missing Parse method");
+          continue;
+        }
+
+        try
+        {
+          object result = parse.Invoke(null, new object[] { attribute.Value });
+          prop.SetValue(this, result);
+        }
+        catch (Exception e)
+        {
+          CUIDebug.Error($"Can't parse {attribute.Value} into {prop.PropertyType.Name}\n{e}");
+        }
+      }
+    }
+
+    protected void PackProps(XElement element)
+    {
+      Type type = GetType();
+      CUITypeMetaData meta = CUITypeMetaData.Get(type);
+
+      foreach (string key in meta.Serializable.Keys)
+      {
+        object value = CUI.GetNestedValue(this, key);
+
+        if (meta.Default != null && Object.Equals(value, CUI.GetNestedValue(meta.Default, key)))
+        {
+          value = null;
+        }
+
+        //TODO rethink, what if value should be null?
+        if (value == null) continue;
+
+        MethodInfo customToString = null;
+        if (CUIExtensions.CustomToString.ContainsKey(value.GetType()))
+        {
+          customToString = CUIExtensions.CustomToString[value.GetType()];
+        }
+
+        if (customToString != null)
+        {
+          element?.SetAttributeValue(key, customToString.Invoke(value, new object[] { }));
+        }
+        else
+        {
+          element?.SetAttributeValue(key, value);
+        }
       }
     }
 
@@ -175,29 +212,10 @@ namespace CrabUI
       }
       catch (Exception ex)
       {
-        CUIDebug.Err(ex);
+        CUIDebug.Error(ex);
         return null;
       }
     }
-
-    //TODO think, what would happen if value is null and != def?
-    public void SetAttribute(string name, XElement e)
-    {
-      Type type = GetType();
-      object def = CUITypeMetaData.Get(type).Default;
-      object value = CUI.GetNestedValue(this, name);
-
-      if (def == null)
-      {
-        e?.SetAttributeValue(name, value);
-      }
-      else
-      {
-        object defValue = CUI.GetNestedValue(def, name);
-        e?.SetAttributeValue(name, Object.Equals(value, defValue) ? null : value);
-      }
-    }
-
     #endregion
   }
 }

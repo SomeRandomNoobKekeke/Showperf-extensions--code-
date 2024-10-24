@@ -12,6 +12,7 @@ namespace CrabUI
 {
   public class CUIButton : CUITextBlock
   {
+    [CUISerializable]
     public GUISoundType ClickSound { get; set; } = GUISoundType.Select;
 
     public Color DisabledColor;

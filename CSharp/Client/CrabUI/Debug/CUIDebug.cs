@@ -44,7 +44,7 @@ namespace CrabUI
 #if !CUIDEBUG
     [Conditional("DONT")]
 #endif
-    public static void Err(object msg, Color? cl = null, [CallerFilePath] string source = "", [CallerLineNumber] int lineNumber = 0)
+    public static void Error(object msg, Color? cl = null, [CallerFilePath] string source = "", [CallerLineNumber] int lineNumber = 0)
     {
       cl ??= Color.Orange;
       var fi = new FileInfo(source);
