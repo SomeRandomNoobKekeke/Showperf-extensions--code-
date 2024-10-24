@@ -199,7 +199,10 @@ namespace ShowPerfExtensions
       addedCommands.Clear();
       addedCommands = null;
 
-      DebugConsole.Commands.Insert(0, vanillaShowperfCommand);
+      if (vanillaShowperfCommand != null)
+      {
+        DebugConsole.Commands.Insert(0, vanillaShowperfCommand);
+      }
       vanillaShowperfCommand = null;
     }
 
