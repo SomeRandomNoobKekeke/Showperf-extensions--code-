@@ -49,7 +49,7 @@ namespace ShowPerfExtensions
     public class MapButton : CUIToggleButton
     {
       public static Dictionary<CaptureState, MapButton> Buttons = new Dictionary<CaptureState, MapButton>();
-      public CaptureState CState;
+      [CUISerializable] public CaptureState CState { get; set; }
       public MapButton() : base()
       {
         Padding = new Vector2(2, 0);

@@ -67,6 +67,9 @@ namespace ShowPerfExtensions
       {
         Category = cat;
       }
+
+      public override string ToString() => Category.ToString();
+      public static CaptureState Parse(string s) => new CaptureState(Enum.Parse<CName>(s));
     }
 
     public static class Capture

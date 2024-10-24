@@ -40,9 +40,9 @@ namespace CrabUI
 
     public object Default;
 
-    public Dictionary<string, MemberInfo> Serializable = new Dictionary<string, MemberInfo>();
-    public Dictionary<string, FieldInfo> Fields = new Dictionary<string, FieldInfo>();
-    public Dictionary<string, PropertyInfo> Properties = new Dictionary<string, PropertyInfo>();
+    public SortedDictionary<string, MemberInfo> Serializable = new SortedDictionary<string, MemberInfo>();
+    public SortedDictionary<string, FieldInfo> Fields = new SortedDictionary<string, FieldInfo>();
+    public SortedDictionary<string, PropertyInfo> Properties = new SortedDictionary<string, PropertyInfo>();
 
 
     public CUITypeMetaData(Type type)
