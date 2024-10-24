@@ -60,7 +60,7 @@ namespace CrabUI
     #endregion
     #region AKA --------------------------------------------------------
 
-    public string AKA;
+    [CUISerializable] public string AKA { get; set; }
     public Dictionary<string, CUIComponent> NamedComponents = new Dictionary<string, CUIComponent>();
 
     public CUIComponent Remember(CUIComponent c, string name)

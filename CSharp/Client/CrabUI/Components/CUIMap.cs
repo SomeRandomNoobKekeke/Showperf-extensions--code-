@@ -103,6 +103,7 @@ namespace CrabUI
       BackgroundColor = Color.Transparent;
 
       //without container links won't be culled
+      //TODO linksContainer should be special and not just first child
       this["links"] = linksContainer = new LinksContainer();
 
       //TODO the main todo of this branch

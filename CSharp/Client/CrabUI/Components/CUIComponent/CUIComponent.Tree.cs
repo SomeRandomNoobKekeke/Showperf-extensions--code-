@@ -53,7 +53,7 @@ namespace CrabUI
       set { treeChanged = value; if (value && Parent != null) Parent.TreeChanged = true; }
     }
 
-    public CUIComponent Append(CUIComponent c, string name = null)
+    public virtual CUIComponent Append(CUIComponent c, string name = null)
     {
       if (c == null) return c;
 
@@ -71,7 +71,7 @@ namespace CrabUI
       return c;
     }
 
-    public CUIComponent Prepend(CUIComponent c, string name = null)
+    public virtual CUIComponent Prepend(CUIComponent c, string name = null)
     {
       if (c == null) return c;
 

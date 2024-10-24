@@ -216,6 +216,21 @@ namespace CrabUI
         return null;
       }
     }
+
+    public static CUIComponent LoadFromFile(string path)
+    {
+      XDocument xdoc = XDocument.Load(path);
+      CUIDebug.log(xdoc);
+
+      return null;
+    }
+    public void SaveToFile(string path)
+    {
+      XDocument xdoc = new XDocument();
+      xdoc.Add(this.ToXML());
+      xdoc.Save(path);
+    }
+
     #endregion
   }
 }
