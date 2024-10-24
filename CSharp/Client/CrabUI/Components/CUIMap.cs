@@ -6,7 +6,8 @@ using Barotrauma;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Graphics;
-
+using System.Xml;
+using System.Xml.Linq;
 namespace CrabUI
 {
   public class CUIMap : CUIComponent
@@ -93,7 +94,33 @@ namespace CrabUI
     }
 
 
+    public override XElement ToXML()
+    {
+      Type type = GetType();
 
+      XElement e = new XElement(type.Name);
+
+      PackProps(e);
+
+
+
+      XElement children = new XElement("Children");
+      e.Add(children);
+
+      foreach (CUIComponent child in Children)
+      {
+        if (child == linksContainer) continue;
+        children.Add(child.ToXML());
+      }
+
+      return e;
+    }
+
+
+    public override void FromXML(XElement element)
+    {
+
+    }
 
     public CUIMap() : base()
     {

@@ -185,6 +185,8 @@ namespace ShowPerfExtensions
         Map = new CUICaptureMap(0, 0, 1, 1);
         Map.Fill();
 
+        Map.SaveToFile(Mod.ModDir + "/Ignore/test.xml");
+
         Pages.Open(TickList);
       }
 

@@ -160,7 +160,7 @@ namespace CrabUI
           value = null;
         }
 
-        //TODO rethink, what if value should be null?
+        //TODO think, what if value should be null?
         if (value == null) continue;
 
         MethodInfo customToString = null;

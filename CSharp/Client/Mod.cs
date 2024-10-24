@@ -25,8 +25,7 @@ namespace ShowPerfExtensions
 
     public string ModDir = "";
     public string ModVersion = "1.0.0";
-
-    public bool Debug = true;
+    public bool Debug;
 
 
 
@@ -93,7 +92,7 @@ namespace ShowPerfExtensions
       CUIMain["showperfButton"].Click();
       Showperf.Pages.Open(Showperf.Map);
 
-      CUIMain.Load(CUITest.Serialize);
+      //CUIMain.Load(CUITest.Serialize);
 
 
       PatchAll();

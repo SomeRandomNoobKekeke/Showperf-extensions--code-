@@ -7,7 +7,8 @@ using Barotrauma;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Graphics;
-
+using System.Xml;
+using System.Xml.Linq;
 namespace CrabUI
 {
   public class CUIDropDown : CUIButton
@@ -157,6 +158,19 @@ namespace CrabUI
       return new Vector2(Math.Max(Box.AbsoluteMin.Width ?? 0, size.X), mySize.Y);
     }
 
+    public override XElement ToXML()
+    {
+      Type type = GetType();
+      XElement e = new XElement(type.Name);
+      return e;
+    }
+
+
+    public override void FromXML(XElement element)
+    {
+
+    }
+
     public CUIDropDown() : base()
     {
       Text = "CUIDropDown";
@@ -167,6 +181,8 @@ namespace CrabUI
       OnMouseDown += (m) => Toggle();
       Close();
     }
+
+
 
     #endregion
   }

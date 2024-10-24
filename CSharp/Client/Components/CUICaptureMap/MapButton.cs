@@ -20,24 +20,28 @@ namespace ShowPerfExtensions
   {
     public class MapBend : CUIComponent
     {
-      public MapBend(int x, int y, bool disabled = true) : base()
+      public MapBend() : base()
       {
-
+        ConsumeSwipe = true;
 #if DEBUG
-        Absolute = new CUINullRect(x: x, y: y, w: 5, h: 5);
         BackgroundColor = Color.Lime;
         BorderColor = Color.Transparent;
+
+        Draggable = true;
+        OnDrag += (x, y) => Info(Absolute.Position);
 #else
-        Absolute = new CUINullRect(x: x, y: y);
         BorderColor = Color.Transparent;
         Revealed = false;
 #endif
-
+      }
+      public MapBend(int x, int y, bool disabled = true) : this()
+      {
         Disabled = disabled;
-        ConsumeSwipe = true;
+
 #if DEBUG
-        Draggable = true;
-        OnDrag += (x, y) => Info(Absolute.Position);
+        Absolute = new CUINullRect(x: x, y: y, w: 5, h: 5);
+#else
+        Absolute = new CUINullRect(x: x, y: y);
 #endif
       }
     }
@@ -46,19 +50,26 @@ namespace ShowPerfExtensions
     {
       public static Dictionary<CaptureState, MapButton> Buttons = new Dictionary<CaptureState, MapButton>();
       public CaptureState CState;
-
-      public MapButton(int x, int y, string name, CaptureState cs = null) : base(name)
+      public MapButton() : base()
       {
-        Absolute = new CUINullRect(x: x, y: y);
-
         Padding = new Vector2(2, 0);
         TextScale = 0.8f;
-        CState = cs;
         ConsumeSwipe = false;
+
 #if DEBUG
         Draggable = true;
         OnDrag += (x, y) => Info(Absolute.Position);
 #endif
+      }
+      public MapButton(int x, int y, string name, CaptureState cs = null) : this()
+      {
+        Absolute = new CUINullRect(x: x, y: y);
+        CState = cs;
+
+        OnText = name;
+        OffText = name;
+        Text = name;
+
         if (cs != null)
         {
           State = cs.IsActive;
