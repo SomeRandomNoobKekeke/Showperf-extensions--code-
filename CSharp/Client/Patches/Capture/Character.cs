@@ -111,7 +111,7 @@ namespace ShowPerfExtensions
           }
 
         }
-        catch (Exception e) { err(e); }
+        catch (Exception e) { error(e); }
       }
 
       // #if CLIENT

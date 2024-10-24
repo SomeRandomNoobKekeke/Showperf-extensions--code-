@@ -21,6 +21,9 @@ namespace CrabUI
     public static CUIMainComponent Main => CUIMainComponent.Main;
     public static CUIInput Input = new CUIInput();
 
+    public static string ModDir => ShowPerfExtensions.Plugin.Mod.ModDir;
+
+
     public static void log(object msg, Color? cl = null)
     {
       cl ??= Color.Yellow;

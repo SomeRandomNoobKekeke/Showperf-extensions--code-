@@ -26,7 +26,7 @@ namespace ShowPerfExtensions
 #endif
     public static void info(object msg, [CallerFilePath] string source = "", [CallerLineNumber] int lineNumber = 0)
     {
-      if (mod.debug)
+      if (Mod.debug)
       {
         var fi = new FileInfo(source);
 
@@ -38,9 +38,9 @@ namespace ShowPerfExtensions
 #if !DEBUG
     [Conditional("DONT")]
 #endif
-    public static void err(object msg, [CallerFilePath] string source = "", [CallerLineNumber] int lineNumber = 0)
+    public static void error(object msg, [CallerFilePath] string source = "", [CallerLineNumber] int lineNumber = 0)
     {
-      if (mod.debug)
+      if (Mod.debug)
       {
         var fi = new FileInfo(source);
 

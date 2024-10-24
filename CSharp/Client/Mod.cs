@@ -23,6 +23,9 @@ namespace ShowPerfExtensions
     public static string ModName = "Showperf extensions";
     public static Plugin Mod;
 
+    public string ModDir;
+    public string ModVersion;
+
     public bool debug = true;
 
 
@@ -40,7 +43,7 @@ namespace ShowPerfExtensions
     public void Initialize()
     {
       Mod = this;
-
+      FindModFolder();
 
 
       GameMain.PerformanceCounter.DrawTimeGraph = new Graph(1000);

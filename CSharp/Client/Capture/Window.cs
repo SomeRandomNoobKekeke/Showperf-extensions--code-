@@ -154,7 +154,7 @@ namespace ShowPerfExtensions
             LastUpdateTime += FrameDuration;
           }
         }
-        catch (Exception e) { err(e); }
+        catch (Exception e) { error(e); }
       }
 
 
@@ -191,11 +191,11 @@ namespace ShowPerfExtensions
         catch (KeyNotFoundException e)
         {
           EnsureCategory(t.Category);
-          err($"tried to add ticks to missing category {(CName)t.Category}");
+          error($"tried to add ticks to missing category {(CName)t.Category}");
         }
         catch (Exception e)
         {
-          err(e.Message);
+          error(e.Message);
         }
       }
 
@@ -211,7 +211,7 @@ namespace ShowPerfExtensions
         }
         catch (Exception e)
         {
-          err(e);
+          error(e);
           return new UpdateTicks(0, category, "[[not found]]");
         }
       }
