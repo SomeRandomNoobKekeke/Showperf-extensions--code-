@@ -12,12 +12,29 @@ namespace CrabUI
 {
   public class CUIMap : CUIComponent
   {
+    #region CUIMapLink
+    #endregion
     public class CUIMapLink
     {
+      public static CUIMapLink Default = new CUIMapLink(null, null);
+
       public CUIComponent Start;
       public CUIComponent End;
       public float LineWidth;
       public Color LineColor;
+
+      public XElement ToXML()
+      {
+        XElement connection = new XElement("Connection");
+        if (LineWidth != Default.LineWidth)
+        {
+          connection.SetAttributeValue("LineWidth", LineWidth);
+        }
+        connection.SetAttributeValue("Start", Start.AKA);
+        connection.SetAttributeValue("End", End.AKA);
+
+        return connection;
+      }
 
       public CUIMapLink(CUIComponent start, CUIComponent end, Color? lineColor = null, float lineWidth = 2f)
       {
@@ -27,6 +44,9 @@ namespace CrabUI
         End = end;
       }
     }
+
+    #region LinksContainer
+    #endregion
     public class LinksContainer : CUIComponent
     {
       public List<CUIMapLink> Connections = new List<CUIMapLink>();
@@ -37,7 +57,19 @@ namespace CrabUI
 
         foreach (CUIMapLink link in Connections)
         {
-          GUI.DrawLine(spriteBatch, link.Start.Real.Center, link.End.Real.Center, link.LineColor, width: link.LineWidth);
+          Vector2 midPoint = new Vector2(link.End.Real.Center.X, link.Start.Real.Center.Y);
+
+          GUI.DrawLine(spriteBatch,
+            link.Start.Real.Center,
+            midPoint,
+            link.LineColor, width: link.LineWidth
+          );
+
+          GUI.DrawLine(spriteBatch,
+            midPoint,
+            link.End.Real.Center,
+            link.LineColor, width: link.LineWidth
+          );
         }
       }
 
@@ -49,9 +81,11 @@ namespace CrabUI
       }
     }
 
+    #region CUIMap
+    #endregion
+
     public LinksContainer linksContainer;
-
-
+    public List<CUIMapLink> Connections => linksContainer.Connections;
 
     public CUIComponent Add(CUIComponent c) => Append(c);
     public CUIComponent Add(string name, CUIComponent c)
@@ -77,6 +111,13 @@ namespace CrabUI
       CUIComponent endComponent = Children.ElementAtOrDefault(end);
       return Connect(startComponent, endComponent, color);
     }
+    public CUIComponent Connect(string start, string end, Color? color = null)
+    {
+      CUIComponent startComponent = this[start];
+      CUIComponent endComponent = this[end];
+
+      return Connect(startComponent, endComponent, color);
+    }
     public CUIComponent Connect(int start, int end, Color? color = null)
     {
       start = MathUtils.PositiveModulo(start, Children.Count);
@@ -98,14 +139,20 @@ namespace CrabUI
     {
       Type type = GetType();
 
-      XElement e = new XElement(type.Name);
+      XElement element = new XElement(type.Name);
 
-      PackProps(e);
+      PackProps(element);
 
+      XElement connections = new XElement("Connections");
+      element.Add(connections);
 
+      foreach (CUIMapLink link in Connections)
+      {
+        connections.Add(link.ToXML());
+      }
 
       XElement children = new XElement("Children");
-      e.Add(children);
+      element.Add(children);
 
       foreach (CUIComponent child in Children)
       {
@@ -113,13 +160,37 @@ namespace CrabUI
         children.Add(child.ToXML());
       }
 
-      return e;
+      return element;
     }
 
 
     public override void FromXML(XElement element)
     {
+      ExtractProps(element);
 
+      foreach (XElement childElement in element.Element("Children").Elements())
+      {
+        Type childType = CUI.GetComponentTypeByName(childElement.Name.ToString());
+        if (childType == null) continue;
+
+        CUIComponent child = (CUIComponent)Activator.CreateInstance(childType);
+        child.FromXML(childElement);
+
+        this.Append(child, child.AKA);
+      }
+
+      foreach (XElement link in element.Element("Connections").Elements())
+      {
+        CUIComponent startComponent = this[link.Attribute("Start").Value];
+        CUIComponent endComponent = this[link.Attribute("End").Value];
+
+        if (startComponent == null || endComponent == null)
+        {
+          CUIDebug.Error("startComponent == null || endComponent == null");
+          continue;
+        }
+        Connect(startComponent, endComponent);
+      }
     }
 
     public CUIMap() : base()
@@ -133,7 +204,6 @@ namespace CrabUI
       //TODO linksContainer should be special and not just first child
       this["links"] = linksContainer = new LinksContainer();
 
-      //TODO the main todo of this branch
       OnScroll += (m) =>
       {
         SetChildrenOffset(

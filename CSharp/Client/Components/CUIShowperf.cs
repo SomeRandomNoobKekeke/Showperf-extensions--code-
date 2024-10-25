@@ -182,9 +182,10 @@ namespace ShowPerfExtensions
         };
 
         TickList = new CUITickList(0, 0, 1, 1);
-        Map = new CUICaptureMap(0, 0, 1, 1);
-        Map.Fill();
 
+        // Map = new CUICaptureMap() { Relative = new CUINullRect(0, 0, 1, 1) };
+        //Map.Fill();
+        Map = CUIComponent.LoadFromFile<CUICaptureMap>(Mod.ModDir + "/Ignore/test.xml");
         Map.SaveToFile(Mod.ModDir + "/Ignore/test.xml");
 
         Pages.Open(TickList);

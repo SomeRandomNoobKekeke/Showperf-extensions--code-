@@ -1,4 +1,4 @@
-//#define DEBUG
+#define DEBUG
 
 using System;
 using System.Reflection;
@@ -28,7 +28,6 @@ namespace ShowPerfExtensions
         BorderColor = Color.Transparent;
 
         Draggable = true;
-        OnDrag += (x, y) => Info(Absolute.Position);
 #else
         BorderColor = Color.Transparent;
         Revealed = false;
@@ -55,10 +54,9 @@ namespace ShowPerfExtensions
         Padding = new Vector2(2, 0);
         TextScale = 0.8f;
         ConsumeSwipe = false;
-
 #if DEBUG
         Draggable = true;
-        OnDrag += (x, y) => Info(Absolute.Position);
+        ConsumeSwipe = true;
 #endif
       }
       public MapButton(int x, int y, string name, CaptureState cs = null) : this()

@@ -17,6 +17,8 @@ namespace CrabUI
     public float Y;
     public float Z;
 
+    public Vector2 ToVector2 => new Vector2(X, Y);
+
     //TODO unhardcode and move to CUIBoundaries
     public static float MinZ = 1f;
 

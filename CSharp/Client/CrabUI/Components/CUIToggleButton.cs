@@ -12,19 +12,27 @@ namespace CrabUI
 {
   public class CUIToggleButton : CUITextBlock
   {
+    [CUISerializable]
     public GUISoundType ClickSound { get; set; } = GUISoundType.Select;
 
-    public Color DisabledColor;
-    public Color OnColor;
-    public Color OnHoverColor;
-    public Color OffColor;
-    public Color OffHoverColor;
-    private string onText; public string OnText
+    [CUISerializable] public Color DisabledColor { get; set; }
+    [CUISerializable] public Color OnColor { get; set; }
+    [CUISerializable] public Color OnHoverColor { get; set; }
+    [CUISerializable] public Color OffColor { get; set; }
+    [CUISerializable] public Color OffHoverColor { get; set; }
+
+
+    private string onText;
+    private string offText;
+    [CUISerializable]
+    public string OnText
     {
       get => onText;
       set { onText = value; Text = state ? OnText : OffText; }
     }
-    private string offText; public string OffText
+
+    [CUISerializable]
+    public string OffText
     {
       get => offText;
       set { offText = value; Text = state ? OnText : OffText; }
@@ -32,7 +40,11 @@ namespace CrabUI
 
     public event Action<bool> OnStateChange;
     public Action<bool> AddOnStateChange { set { OnStateChange += value; } }
-    protected bool state; public bool State
+
+
+    protected bool state;
+    [CUISerializable]
+    public bool State
     {
       get => state;
       set

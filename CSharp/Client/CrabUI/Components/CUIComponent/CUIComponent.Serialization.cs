@@ -68,6 +68,8 @@ namespace CrabUI
 
     public virtual XElement ToXML()
     {
+      if (Unserializable) return null;
+
       Type type = GetType();
 
       XElement e = new XElement(type.Name);
@@ -221,6 +223,12 @@ namespace CrabUI
     {
       XDocument xdoc = XDocument.Load(path);
       return Deserialize(xdoc.Root);
+    }
+
+    public static T LoadFromFile<T>(string path) where T : CUIComponent
+    {
+      XDocument xdoc = XDocument.Load(path);
+      return (T)Deserialize(xdoc.Root);
     }
     public void SaveToFile(string path)
     {

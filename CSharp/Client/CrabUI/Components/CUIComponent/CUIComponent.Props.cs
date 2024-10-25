@@ -21,6 +21,7 @@ namespace CrabUI
     #region Declaration
     //TODO This is potentially cursed
     public object Data;
+    public bool Unserializable { get; set; }
     [CUISerializable] public bool HideChildrenOutsideFrame { get; set; }
     [CUISerializable] public bool ShouldPassPropsToChildren { get; set; } = true;
     [CUISerializable] public bool UnCullable { get; set; }
