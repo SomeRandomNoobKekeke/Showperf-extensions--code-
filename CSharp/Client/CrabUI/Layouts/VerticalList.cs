@@ -45,8 +45,6 @@ namespace CrabUI
           float h = 0;
           Vector2 s = new Vector2(w, h);
 
-
-
           if (!c.FillEmptySpace.Y)
           {
             if (c.Relative.Height.HasValue)
@@ -88,6 +86,8 @@ namespace CrabUI
 
             s = okSize;
 
+            if (!c.Fixed) s /= c.Scale;
+
             TotalHeight += s.Y;
           }
 
@@ -101,7 +101,8 @@ namespace CrabUI
 
         Resizible.ForEach(c =>
         {
-          c.Size = c.Component.AmIOkWithThisSize(new Vector2(c.Size.X, dif / Resizible.Count));
+          c.Size = new Vector2(c.Size.X, dif / Resizible.Count);
+          //c.Component.AmIOkWithThisSize(new Vector2(c.Size.X, dif / Resizible.Count));
           CUIDebug.Capture(Host, c.Component, "Layout.Update", "Resizible.ForEach", "c.Size", c.Size.ToString());
         });
 

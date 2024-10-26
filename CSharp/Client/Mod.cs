@@ -94,6 +94,8 @@ namespace ShowPerfExtensions
 
       //CUIMain.Load(CUITest.Serialize);
 
+      CUIDebugWindow.Open();
+
 
       PatchAll();
       addCommands();

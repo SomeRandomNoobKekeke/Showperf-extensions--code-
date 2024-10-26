@@ -109,7 +109,7 @@ namespace CrabUI
       TextDrawPos = CUIAnchor.GetChildPos(Real, TextAlign, Vector2.Zero, RealTextSize / Scale)
       + Padding * CUIAnchor.Direction(TextAlign);
 
-      CUIDebug.Capture(null, this, "UpdatePseudoChildren", "", "TextDrawPos", TextDrawPos.ToString());
+      CUIDebug.Capture(null, this, "UpdatePseudoChildren", "", "TextDrawPos", (TextDrawPos - Real.Position).ToString());
     }
 
 

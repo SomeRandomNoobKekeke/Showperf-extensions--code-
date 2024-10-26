@@ -67,7 +67,7 @@ namespace CrabUI
       set
       {
         scale = value;
-        foreach (var child in Children) { child.Scale = value; }
+        //foreach (var child in Children) { child.Scale = value; }
       }
     }
     //TODO should CulledOut be propagated to children?
