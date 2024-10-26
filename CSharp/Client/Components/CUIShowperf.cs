@@ -182,13 +182,13 @@ namespace ShowPerfExtensions
         };
 
         TickList = new CUITickList(0, 0, 1, 1);
+        LoadMap();
+      }
 
-        // Map = new CUICaptureMap() { Relative = new CUINullRect(0, 0, 1, 1) };
-        //Map.Fill();
+      public void LoadMap()
+      {
         Map = CUIComponent.LoadFromFile<CUICaptureMap>(Mod.ModDir + "/Ignore/test.xml");
-        Map.SaveToFile(Mod.ModDir + "/Ignore/test.xml");
-
-        Pages.Open(TickList);
+        Pages.Open(Map);
       }
 
       public void OnMapButtonClicked(MapButton b)
