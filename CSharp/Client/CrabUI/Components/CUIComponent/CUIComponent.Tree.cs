@@ -53,6 +53,14 @@ namespace CrabUI
       set { treeChanged = value; if (value && Parent != null) Parent.TreeChanged = true; }
     }
 
+    public IEnumerable<CUIComponent> AddChildren
+    {
+      set
+      {
+        foreach (CUIComponent c in value) { Append(c, c.AKA); }
+      }
+    }
+
     public virtual CUIComponent Append(CUIComponent c, string name = null)
     {
       if (c == null) return c;

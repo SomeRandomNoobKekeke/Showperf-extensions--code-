@@ -19,16 +19,24 @@ namespace ShowPerfExtensions
 {
   public partial class Plugin : IAssemblyPlugin
   {
-    //TODO this is dead end, there's no way to expand it, find better view
-    // mb add zoom?
-    //TODO also this should be in xml
     public partial class CUICaptureMap : CUIMap
     {
 
       //Note: this method is temporary
       public void AddStuff()
       {
-        CUI.log(123);
+        MapGroup g = new MapGroup()
+        {
+          Absolute = new CUINullRect(x: 50, y: 200),
+          Caption = "Group",
+        };
+
+        g.Add(new CUIButton("bebeeb"));
+        g.Add(new CUIButton("bebeeb"));
+        g.Add(new CUIButton("bebeeb"));
+        g.Add(new CUIButton("bebeeb"));
+
+        Add("Group", g);
       }
 
 
