@@ -42,6 +42,11 @@ namespace CrabUI
 
       return new CUI3DOffset(X + d.X, Y + d.Y, newZ);
     }
+
+    public Vector2 ToPlaneCoords(Vector2 v)
+    {
+      return new Vector2(v.X * Z - X, v.Y * Z - Y);
+    }
     public CUIRect Transform(CUIRect rect)
     {
       return new CUIRect(
