@@ -90,12 +90,16 @@ namespace CrabUI
 
             TotalHeight += s.Y;
 
-            Sizes.Add(new CUIComponentSize(c, s));
+            CUIComponentSize size = new CUIComponentSize(c, s);
+            Sizes.Add(size);
           }
           else
           {
-            Resizible.Add(new CUIComponentSize(c, s));
+            CUIComponentSize size = new CUIComponentSize(c, s);
+            Sizes.Add(size);
+            Resizible.Add(size);
           }
+
         }
 
         float dif = Math.Max(0, Host.Real.Height - TotalHeight);
