@@ -89,15 +89,17 @@ namespace CrabUI
             if (!c.Fixed) s /= c.Scale;
 
             TotalHeight += s.Y;
+
+            Sizes.Add(new CUIComponentSize(c, s));
           }
-
-          CUIComponentSize size = new CUIComponentSize(c, s);
-
-          Sizes.Add(size);
-          if (c.FillEmptySpace.Y) Resizible.Add(size);
+          else
+          {
+            Resizible.Add(new CUIComponentSize(c, s));
+          }
         }
 
         float dif = Math.Max(0, Host.Real.Height - TotalHeight);
+
 
         Resizible.ForEach(c =>
         {

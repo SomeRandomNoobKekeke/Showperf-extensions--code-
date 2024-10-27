@@ -92,7 +92,7 @@ namespace ShowPerfExtensions
       CUIMain["showperfButton"].Click();
       Showperf.Pages.Open(Showperf.Map);
 
-      //CUIMain.Load(CUITest.Serialize);
+      //CUIMain.Load(CUITest.NestedScale);
 
       CUIDebugWindow.Open();
 
