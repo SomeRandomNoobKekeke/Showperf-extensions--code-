@@ -78,6 +78,7 @@ namespace CrabUI
               CUIDebug.Capture(Host, c, "Layout.Update", "AbsoluteMax.Width", "w", w.ToString());
             }
 
+            //TODO make it react to scale like vlist
             s = new Vector2(w, h);
             Vector2 okSize = c.AmIOkWithThisSize(s);
             CUIDebug.Capture(Host, c, "Layout.Update", "AmIOkWithThisSize", "s", okSize.ToString());

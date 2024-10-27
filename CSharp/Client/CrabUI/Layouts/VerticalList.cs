@@ -15,6 +15,8 @@ namespace CrabUI
     internal float TotalHeight;
     public CUIDirection Direction;
 
+
+    //TODO i don't really use X component, do i really need this?
     private class CUIComponentSize
     {
       public CUIComponent Component;
@@ -86,20 +88,15 @@ namespace CrabUI
 
             s = okSize;
 
-            if (!c.Fixed) s /= c.Scale;
+            if (!c.Fixed) s = new Vector2(s.X, s.Y / c.Scale);
 
             TotalHeight += s.Y;
-
-            CUIComponentSize size = new CUIComponentSize(c, s);
-            Sizes.Add(size);
-          }
-          else
-          {
-            CUIComponentSize size = new CUIComponentSize(c, s);
-            Sizes.Add(size);
-            Resizible.Add(size);
           }
 
+          CUIComponentSize size = new CUIComponentSize(c, s);
+          Sizes.Add(size);
+
+          if (c.FillEmptySpace.Y) Resizible.Add(size);
         }
 
         float dif = Math.Max(0, Host.Real.Height - TotalHeight);
@@ -107,8 +104,8 @@ namespace CrabUI
 
         Resizible.ForEach(c =>
         {
-          c.Size = new Vector2(c.Size.X, dif / Resizible.Count);
-          //c.Component.AmIOkWithThisSize(new Vector2(c.Size.X, dif / Resizible.Count));
+          c.Size = c.Component.AmIOkWithThisSize(new Vector2(c.Size.X, dif / Resizible.Count));
+
           CUIDebug.Capture(Host, c.Component, "Layout.Update", "Resizible.ForEach", "c.Size", c.Size.ToString());
         });
 
@@ -122,7 +119,7 @@ namespace CrabUI
           float y = 0;
           foreach (CUIComponentSize c in Sizes)
           {
-            CUIRect real = Host.ChildrenBoundaries.Check(0, y, c.Size.X, c.Size.Y);
+            CUIRect real = Host.ChildrenBoundaries.Check(0, y, Host.Real.Width, c.Size.Y);
             real = offset.Transform(real);
             real = real.Shift(Host.Real.Position);
 
@@ -139,7 +136,7 @@ namespace CrabUI
           {
             y -= c.Size.Y;
 
-            CUIRect real = Host.ChildrenBoundaries.Check(0, y, c.Size.X, c.Size.Y);
+            CUIRect real = Host.ChildrenBoundaries.Check(0, y, Host.Real.Width, c.Size.Y);
             real = offset.Transform(real);
             real = real.Shift(Host.Real.Position);
 
