@@ -65,6 +65,8 @@ namespace CrabUI
     //FIXME find a solution that doesn't overwrite absolute min 
     protected void DoWrapFor(Vector2 size)
     {
+      if ((!WrappedForThisSize.HasValue || size == WrappedForThisSize.Value) && !NeedReWrapping) return;
+
       if (Wrap) WrappedText = Font.WrapText(Text, size.X / TextScale - Padding.X * 2);
       else WrappedText = Text;
 
@@ -97,15 +99,14 @@ namespace CrabUI
 
     internal override Vector2 AmIOkWithThisSize(Vector2 size)
     {
-      if (!WrappedForThisSize.HasValue || size != WrappedForThisSize.Value || NeedReWrapping)
-      {
-        DoWrapFor(size);
-      }
+      DoWrapFor(size);
       return WrappedSize;
     }
 
     internal override void UpdatePseudoChildren()
     {
+      // if (WrappedForThisSize.HasValue) DoWrapFor(WrappedForThisSize.Value);
+
       TextDrawPos = CUIAnchor.GetChildPos(Real, TextAlign, Vector2.Zero, RealTextSize / Scale)
       + Padding * CUIAnchor.Direction(TextAlign);
 

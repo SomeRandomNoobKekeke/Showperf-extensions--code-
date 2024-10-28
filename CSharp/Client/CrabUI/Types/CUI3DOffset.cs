@@ -47,6 +47,16 @@ namespace CrabUI
     {
       return new Vector2(v.X * Z - X, v.Y * Z - Y);
     }
+    public Vector2 TransformPoint(Vector2 point)
+    {
+      return new Vector2((point.X + X) / Z, (point.Y + Y) / Z);
+    }
+
+    public Vector2 TransformSize(Vector2 size)
+    {
+      return new Vector2(size.X / Z, size.Y / Z);
+    }
+
     public CUIRect Transform(CUIRect rect)
     {
       return new CUIRect(

@@ -38,7 +38,7 @@ namespace CrabUI
         Resizible.Clear();
 
         TotalHeight = 0;
-        CUI3DOffset offset = Host.ChildOffsetBounds.Check(Host.ChildrenOffset);
+
 
         float w = Host.Real.Width;
         foreach (CUIComponent c in Host.Children)
@@ -88,11 +88,6 @@ namespace CrabUI
 
             s = okSize;
 
-            if (!c.Fixed)
-            {
-              s = new Vector2(s.X, s.Y / c.Scale);
-            }
-
             TotalHeight += s.Y;
           }
 
@@ -114,6 +109,8 @@ namespace CrabUI
 
         //Host.ChildrenSizeCalculated();
 
+
+        CUI3DOffset offset = Host.ChildOffsetBounds.Check(Host.ChildrenOffset);
 
 
 

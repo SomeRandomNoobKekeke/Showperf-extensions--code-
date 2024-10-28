@@ -35,6 +35,10 @@ namespace CrabUI
     {
       childrenOffset = ChildOffsetBounds.Check(value);
       CUIDebug.Capture(null, this, "SetChildrenOffset", memberName, "ChildrenOffset", ChildrenOffset.ToString());
+      foreach (var child in Children)
+      {
+        if (!child.Fixed) child.Scale = value.Z;
+      }
       OnChildrenPropChanged();
     }
 

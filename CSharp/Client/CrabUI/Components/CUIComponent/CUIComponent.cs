@@ -76,6 +76,18 @@ namespace CrabUI
       set => SetReal(value);
     }
 
+    //Note: this is just for text
+    protected float scale = 1f; public float Scale
+    {
+      get => scale;
+      set
+      {
+        scale = value;
+        foreach (var child in Children) { child.Scale = value; }
+        // OnDecorPropChanged();
+      }
+    }
+
     internal void SetReal(CUIRect value, [CallerMemberName] string memberName = "")
     {
       real = value;
