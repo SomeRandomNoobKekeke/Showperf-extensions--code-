@@ -196,7 +196,10 @@ namespace ShowPerfExtensions
 
       public void OnMapButtonClicked(MapButton b)
       {
-        if (b.CState != null) b.CState.IsActive = b.State;
+        if (b.CState != null)
+        {
+          b.CState.IsActive = b.State;
+        }
       }
 
       public void OnCaptureStateChange(CaptureState cs)

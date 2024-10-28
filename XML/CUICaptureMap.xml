@@ -40,9 +40,9 @@
   </Connections>
   <Children>
     <CUITextBlock AbsoluteMin="[,,42.2,16.199999]" Fixed="true" Text="Client" />
-    <MapButton AKA="GameScreen" Absolute="[-7.2800293,11.408005,,]" AbsoluteMin="[,,69.6,14.400001]" BackgroundColor="{R:64 G:64 B:64 A:255}" Disabled="true" OffText="GameScreen" OnText="GameScreen" Text="GameScreen" />
-    <MapButton AKA="Update" Absolute="[20,50,,]" AbsoluteMin="[,,41.600002,14.400001]" BackgroundColor="{R:64 G:64 B:64 A:255}" Disabled="true" OffText="Update" OnText="Update" Text="Update" />
-    <MapButton AKA="Draw" Absolute="[172.81592,-96.49597,,]" AbsoluteMin="[,,32,14.400001]" BackgroundColor="{R:64 G:64 B:64 A:255}" Disabled="true" OffText="Draw" OnText="Draw" Text="Draw" />
+    <MapButton AKA="GameScreen" Absolute="[-67.280045,-182.59198,,]" AbsoluteMin="[,,69.6,14.400001]" BackgroundColor="{R:64 G:64 B:64 A:255}" Disabled="true" OffText="GameScreen" OnText="GameScreen" Text="GameScreen" />
+    <MapButton AKA="Update" Absolute="[-148.14401,-103.74399,,]" AbsoluteMin="[,,41.600002,14.400001]" BackgroundColor="{R:64 G:64 B:64 A:255}" Disabled="true" OffText="Update" OnText="Update" Text="Update" />
+    <MapButton AKA="Draw" Absolute="[89.81584,-135.49597,,]" AbsoluteMin="[,,32,14.400001]" BackgroundColor="{R:64 G:64 B:64 A:255}" Disabled="true" OffText="Draw" OnText="Draw" Text="Draw" />
     <MapBend AKA="SubmarineBend" Absolute="[270,27,5,5]" Disabled="true" />
     <MapButton AKA="Submarine" Absolute="[431.99994,-57.000015,,]" AbsoluteMin="[,,60,14.400001]" BackgroundColor="{R:64 G:64 B:64 A:255}" Disabled="true" OffText="Submarine" OnText="Submarine" Text="Submarine" />
     <MapButton AKA="DrawFront" Absolute="[215,59,,]" AbsoluteMin="[,,60.8,14.400001]" BackgroundColor="{R:64 G:64 B:64 A:255}" Disabled="true" OffText="DrawFront" OnText="DrawFront" Text="DrawFront" />
@@ -72,7 +72,7 @@
     <MapButton AKA="LevelRenderer" Absolute="[245,185,,]" AbsoluteMin="[,,80.8,14.400001]" BackgroundColor="{R:64 G:64 B:64 A:255}" Disabled="true" OffText="LevelRenderer" OnText="LevelRenderer" Text="LevelRenderer" />
     <MapButton AKA="DrawBackground" Absolute="[238,211,,]" AbsoluteMin="[,,93.6,14.400001]" CState="LevelMisc" OffText="DrawBackground" OnText="DrawBackground" Text="DrawBackground" />
     <MapButton AKA="Character.UpdateAll" Absolute="[157,335,,]" AbsoluteMin="[,,109.6,14.400001]" CState="CharactersUpdate" OffText="Character.UpdateAll" OnText="Character.UpdateAll" Text="Character.UpdateAll" />
-    <MapGroup AKA="group" Absolute="[17.56018,153.00797,,36]" AbsoluteMin="[,,86,]">
+    <MapGroup AKA="group" Absolute="[416.5202,-252.70404,,36]" AbsoluteMin="[,,86,]">
       <CUITextBlock AbsoluteMin="[,,86,36]" Text="Group" TextScale="2" />
       <CUIVerticalList AKA="list" Absolute="[,,,80.799995]" AbsoluteMin="[,,51.199997,]" FillEmptySpace="[False,True]" FitContent="[True,True]" HideChildrenOutsideFrame="false">
         <CUIButton AbsoluteMin="[,,51.199997,20.199999]" Text="bebeeb" />

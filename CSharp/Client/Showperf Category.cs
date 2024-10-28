@@ -1,5 +1,6 @@
 using System;
 using System.Reflection;
+using System.Diagnostics;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -29,7 +30,11 @@ namespace ShowPerfExtensions
     public class CaptureState
     {
       public static Dictionary<CName, CaptureState> States = new Dictionary<CName, CaptureState>();
-
+      public static CaptureState Get(CName cat)
+      {
+        if (!States.ContainsKey(cat)) States[cat] = new CaptureState(cat);
+        return States[cat];
+      }
       public CName Category;
       public string Description;
       public void ToggleIsActive() => IsActive = !IsActive;
@@ -68,11 +73,14 @@ namespace ShowPerfExtensions
       public CaptureState(CName cat)
       {
         Category = cat;
+
+        if (States.ContainsKey(cat)) throw new Exception($"Capture name {cat} already added to CaptureState.States\nReplacing this CaptureState object will lead to sneaky state desync so enjoy an exception\nUse CaptureState.Get(CName cat) instead");
+
         States[cat] = this;
       }
 
       public override string ToString() => Category.ToString();
-      public static CaptureState Parse(string s) => new CaptureState(Enum.Parse<CName>(s));
+      public static CaptureState Parse(string s) => Get(Enum.Parse<CName>(s));
     }
 
     public static class Capture
