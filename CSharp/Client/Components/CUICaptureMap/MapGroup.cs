@@ -38,8 +38,15 @@ namespace ShowPerfExtensions
       public override void FromXML(XElement element)
       {
         this.RemoveAllChildren();
+        Header = null;
+        Content = null;
         base.FromXML(element);
+
+        Header = (CUITextBlock)Children.ElementAtOrDefault(0);
+        Content = (CUIVerticalList)Children.ElementAtOrDefault(1);
       }
+
+      protected override CUIComponent RawGet(string name) => Content.RawGet(name);
       public MapGroup() : base()
       {
         FitContent = new CUIBool2(true, true);

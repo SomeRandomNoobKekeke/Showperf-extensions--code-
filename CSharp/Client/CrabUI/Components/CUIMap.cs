@@ -87,12 +87,8 @@ namespace CrabUI
     public LinksContainer linksContainer;
     public List<CUIMapLink> Connections => linksContainer.Connections;
 
-    public CUIComponent Add(CUIComponent c) => Append(c);
-    public CUIComponent Add(string name, CUIComponent c)
-    {
-      if (name != null) Remember(c, name);
-      return Append(c);
-    }
+    public CUIComponent Add(CUIComponent c) => Append(c, c.AKA);
+
 
 
 

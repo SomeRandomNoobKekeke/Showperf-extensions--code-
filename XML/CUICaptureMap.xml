@@ -11,6 +11,7 @@
     <Connection Start="LevelObjectManager" End="DrawObjects" />
     <Connection Start="LevelObjectManagerBend" End="LevelObjectManager" />
     <Connection Start="Draw" End="LevelRendererInBend" />
+    <Connection Start="group.b1" End="Draw" />
     <Connection Start="Draw" End="SubmarineBend" />
     <Connection Start="Draw" End="LevelObjectManagerBend" />
     <Connection Start="ItemUpdateOutBend" End="WholeSubmarineBend" />
@@ -71,11 +72,11 @@
     <MapButton AKA="LevelRenderer" Absolute="[245, 185, , ]" AbsoluteMin="[, , 80.8, 14.400001]" BackgroundColor="{R:64 G:64 B:64 A:255}" Disabled="true" OffText="LevelRenderer" OnText="LevelRenderer" Text="LevelRenderer" />
     <MapButton AKA="DrawBackground" Absolute="[238, 211, , ]" AbsoluteMin="[, , 93.6, 14.400001]" BackgroundColor="{R:0 G:0 B:32 A:255}" CState="LevelMisc" OffText="DrawBackground" OnText="DrawBackground" Text="DrawBackground" />
     <MapButton AKA="Character.UpdateAll" Absolute="[157, 335, , ]" AbsoluteMin="[, , 109.6, 14.400001]" BackgroundColor="{R:0 G:0 B:32 A:255}" CState="CharactersUpdate" OffText="Character.UpdateAll" OnText="Character.UpdateAll" Text="Character.UpdateAll" />
-    <MapGroup Absolute="[32, 137, , 36]" AbsoluteMin="[, , 86, ]">
+    <MapGroup AKA="group" Absolute="[32, 137, , 36]" AbsoluteMin="[, , 86, ]">
       <CUITextBlock AbsoluteMin="[, , 86, 36]" Text="Group" TextScale="2" />
-      <CUIVerticalList Absolute="[, , , 80.799995]" AbsoluteMin="[, , 51.199997, ]" FillEmptySpace="[False, True]" FitContent="[True, True]" HideChildrenOutsideFrame="false">
+      <CUIVerticalList AKA="list" Absolute="[, , , 80.799995]" AbsoluteMin="[, , 51.199997, ]" FillEmptySpace="[False, True]" FitContent="[True, True]" HideChildrenOutsideFrame="false">
         <CUIButton AbsoluteMin="[, , 51.199997, 20.199999]" BackgroundColor="{R:0 G:0 B:32 A:255}" Text="bebeeb" />
-        <CUIButton AbsoluteMin="[, , 51.199997, 20.199999]" BackgroundColor="{R:0 G:0 B:32 A:255}" Text="bebeeb" />
+        <CUIButton AKA="b1" AbsoluteMin="[, , 51.199997, 20.199999]" BackgroundColor="{R:0 G:0 B:32 A:255}" Text="bebeeb" />
         <CUIButton AbsoluteMin="[, , 51.199997, 20.199999]" BackgroundColor="{R:0 G:0 B:32 A:255}" Text="bebeeb" />
         <CUIButton AbsoluteMin="[, , 51.199997, 20.199999]" BackgroundColor="{R:0 G:0 B:32 A:255}" Text="bebeeb" />
       </CUIVerticalList>

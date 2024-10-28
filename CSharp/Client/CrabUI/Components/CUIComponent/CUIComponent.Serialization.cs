@@ -97,6 +97,7 @@ namespace CrabUI
         CUIComponent child = (CUIComponent)Activator.CreateInstance(childType);
         child.FromXML(childElement);
 
+        //CUI.log($"{this}[{child.AKA}] = {child} ");
         this.Append(child, child.AKA);
       }
     }

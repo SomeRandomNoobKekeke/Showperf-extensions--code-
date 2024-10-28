@@ -70,6 +70,8 @@ namespace CrabUI
 
       PassPropsToChild(c);
 
+
+      //TODO mb i shoud just use c.AKA here
       if (name != null)
       {
         NamedComponents[name] = c;

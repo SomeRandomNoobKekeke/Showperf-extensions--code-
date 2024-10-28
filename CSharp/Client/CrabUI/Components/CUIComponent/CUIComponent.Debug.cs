@@ -77,8 +77,9 @@ namespace CrabUI
       set => Append(value, name);
     }
 
-
-    public CUIComponent Get(string name)
+    //TODO Too hacky, rethink
+    protected virtual CUIComponent RawGet(string name) => NamedComponents.GetValueOrDefault(name);
+    public virtual CUIComponent Get(string name)
     {
       if (name == null) return null;
       if (NamedComponents.ContainsKey(name)) return NamedComponents[name];
@@ -88,7 +89,9 @@ namespace CrabUI
 
       foreach (string n in names)
       {
-        component = component.Get(n);
+        //CUI.log($"{component}[{n}] = {RawGet(n)}");
+        component = component.RawGet(n);
+
         if (component == null) break;
       }
 
