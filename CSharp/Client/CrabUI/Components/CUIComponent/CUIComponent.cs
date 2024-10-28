@@ -59,17 +59,8 @@ namespace CrabUI
 
     public int ID;
     public bool DebugHighlight;
-    //TODO should it be [CUISerializable] ?
-    //TODO probably should be in props
-    protected float scale = 1f; public float Scale
-    {
-      get => scale;
-      set
-      {
-        scale = value;
-        foreach (var child in Children) { child.Scale = value; }
-      }
-    }
+
+
     //TODO should CulledOut be propagated to children?
     internal bool CulledOut;
     //HACK need a more robust solution

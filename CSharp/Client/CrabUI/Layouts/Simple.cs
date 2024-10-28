@@ -80,7 +80,6 @@ namespace CrabUI
           if (!c.Fixed)
           {
             real = offset.Transform(real);
-            c.Scale = offset.Z;
           }
           //TODO guh...
           real = real.Shift(Host.Real.Position);

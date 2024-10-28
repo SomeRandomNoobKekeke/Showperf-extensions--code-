@@ -38,14 +38,14 @@ namespace CrabUI
         Resizible.Clear();
 
         TotalHeight = 0;
-
-
+        CUI3DOffset offset = Host.ChildOffsetBounds.Check(Host.ChildrenOffset);
 
         float w = Host.Real.Width;
         foreach (CUIComponent c in Host.Children)
         {
           float h = 0;
           Vector2 s = new Vector2(w, h);
+
 
           if (!c.FillEmptySpace.Y)
           {
@@ -88,7 +88,10 @@ namespace CrabUI
 
             s = okSize;
 
-            if (!c.Fixed) s = new Vector2(s.X, s.Y / c.Scale);
+            if (!c.Fixed)
+            {
+              s = new Vector2(s.X, s.Y / c.Scale);
+            }
 
             TotalHeight += s.Y;
           }
@@ -111,7 +114,7 @@ namespace CrabUI
 
         //Host.ChildrenSizeCalculated();
 
-        CUI3DOffset offset = Host.ChildOffsetBounds.Check(Host.ChildrenOffset);
+
 
 
         if (Direction == CUIDirection.Straight)
@@ -121,6 +124,7 @@ namespace CrabUI
           {
             CUIRect real = Host.ChildrenBoundaries.Check(0, y, Host.Real.Width, c.Size.Y);
             real = offset.Transform(real);
+
             real = real.Shift(Host.Real.Position);
 
             c.Component.SetReal(real);

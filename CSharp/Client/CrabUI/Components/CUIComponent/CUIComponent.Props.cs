@@ -68,6 +68,17 @@ namespace CrabUI
     [CUISerializable]
     public CUINullRect RelativeMax { get => relativeMax; set => SetRelativeMax(value); }
 
+
+    protected float scale = 1f; public float Scale
+    {
+      get => scale;
+      set
+      {
+        scale = value;
+        foreach (var child in Children) { child.Scale = value; }
+      }
+    }
+
     #endregion
     //Note those should be wrapped in objects, but i don't know how to unwrap closure to CUIComponent
     #region implementation

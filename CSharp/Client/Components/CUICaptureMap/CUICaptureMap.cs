@@ -30,31 +30,14 @@ namespace ShowPerfExtensions
           Absolute = new CUINullRect(x: 50, y: 200),
           Caption = "Group",
         };
+        g.Header.Debug = true;
 
         g.Add(new CUIButton("bebeeb"));
         g.Add(new CUIButton("bebeeb"));
-        g.Add(new CUIButton("bebeeb") { Debug = true });
+        g.Add(new CUIButton("bebeeb") { });
         g.Add(new CUIButton("bebeeb"));
 
         Add("Group", g);
-
-
-        // CUIVerticalList v = new CUIVerticalList()
-        // {
-        //   FitContent = new CUIBool2(true, true),
-        //   BackgroundColor = Color.Yellow,
-        //   Absolute = new CUINullRect(x: 50, y: 200),
-        //   AddChildren = new CUIComponent[]{
-        //     new CUIButton("bebebe"),
-        //     new CUIButton("bebebe"),
-        //     new CUIButton("bebebe"),
-        //     new CUIButton("bebebe"),
-        //     new CUIButton("bebebe"),
-        //   },
-        // };
-
-        // Add("test", v);
-
       }
 
 
