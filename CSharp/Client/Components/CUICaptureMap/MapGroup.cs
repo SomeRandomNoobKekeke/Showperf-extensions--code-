@@ -38,20 +38,11 @@ namespace ShowPerfExtensions
         Draggable = true;
         HideChildrenOutsideFrame = false;
 
-        this["header"] = new CUIComponent()
-        {
-          FitContent = new CUIBool2(true, true),
-        };
-
-
-
-        Header = new CUITextBlock("Header")
+        this["header"] = Header = new CUITextBlock("Header")
         {
           TextScale = 2.0f,
-          Relative = new CUINullRect(0, 0, 1, 1),
+          Padding = new Vector2(0, 0),
         };
-        this["header"].Append(Header);
-
 
         this["content"] = Content = new CUIVerticalList()
         {

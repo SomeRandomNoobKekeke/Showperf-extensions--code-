@@ -88,6 +88,8 @@ namespace CrabUI
 
             s = okSize;
 
+            if (!c.Fixed) s = new Vector2(s.X, s.Y / c.Scale);
+
             TotalHeight += s.Y;
           }
 
