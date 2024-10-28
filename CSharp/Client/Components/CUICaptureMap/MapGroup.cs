@@ -41,7 +41,7 @@ namespace ShowPerfExtensions
         this["header"] = Header = new CUITextBlock("Header")
         {
           TextScale = 2.0f,
-          Padding = new Vector2(0, 0),
+
         };
 
         this["content"] = Content = new CUIVerticalList()

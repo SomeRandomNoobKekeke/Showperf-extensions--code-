@@ -105,9 +105,9 @@ namespace CrabUI
 
     internal override void UpdatePseudoChildren()
     {
-      //FIXME TextDrawPos of nested scaled childs of vlist is totaly broken
+
       TextDrawPos = CUIAnchor.GetChildPos(Real, TextAlign, Vector2.Zero, RealTextSize / Scale)
-      + Padding * CUIAnchor.Direction(TextAlign);
+      + Padding * CUIAnchor.Direction(TextAlign) / Scale;
 
       CUIDebug.Capture(null, this, "UpdatePseudoChildren", "", "TextDrawPos", $"{TextDrawPos - Real.Position}");
     }
