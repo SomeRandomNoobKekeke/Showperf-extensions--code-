@@ -37,7 +37,7 @@ namespace ShowPerfExtensions
         g.Add(new CUIButton("bebeeb") { });
         g.Add(new CUIButton("bebeeb"));
 
-        Add("Group", g);
+        Add(g);
       }
 
 
@@ -63,7 +63,7 @@ namespace ShowPerfExtensions
 
         this["wrapper"]["save"] = new CUIButton("Save")
         {
-          AddOnMouseDown = (e) => SaveToFile(Mod.ModDir + "/Ignore/test.xml"),
+          AddOnMouseDown = (e) => SaveToFile(Mod.ModDir + "/XML/CUICaptureMap.xml"),
         };
         this["wrapper"]["load"] = new CUIButton("Load")
         {

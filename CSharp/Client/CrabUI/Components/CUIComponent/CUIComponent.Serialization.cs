@@ -97,7 +97,7 @@ namespace CrabUI
         CUIComponent child = (CUIComponent)Activator.CreateInstance(childType);
         child.FromXML(childElement);
 
-        this.Append(child);
+        this.Append(child, child.AKA);
       }
     }
 
@@ -208,6 +208,7 @@ namespace CrabUI
         if (type == null) return null;
 
         CUIComponent c = (CUIComponent)Activator.CreateInstance(type);
+        // c.RemoveAllChildren();
         c.FromXML(e);
 
         return c;
@@ -221,14 +222,30 @@ namespace CrabUI
 
     public static CUIComponent LoadFromFile(string path)
     {
-      XDocument xdoc = XDocument.Load(path);
-      return Deserialize(xdoc.Root);
+      try
+      {
+        XDocument xdoc = XDocument.Load(path);
+        return Deserialize(xdoc.Root);
+      }
+      catch (Exception ex)
+      {
+        CUIDebug.Error(ex);
+        return null;
+      }
     }
 
     public static T LoadFromFile<T>(string path) where T : CUIComponent
     {
-      XDocument xdoc = XDocument.Load(path);
-      return (T)Deserialize(xdoc.Root);
+      try
+      {
+        XDocument xdoc = XDocument.Load(path);
+        return (T)Deserialize(xdoc.Root);
+      }
+      catch (Exception ex)
+      {
+        CUIDebug.Error(ex);
+        return null;
+      }
     }
     public void SaveToFile(string path)
     {

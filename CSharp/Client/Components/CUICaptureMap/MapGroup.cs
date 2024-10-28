@@ -14,6 +14,9 @@ using Microsoft.Xna.Framework.Graphics;
 using HarmonyLib;
 using CrabUI;
 
+using System.Xml;
+using System.Xml.Linq;
+
 namespace ShowPerfExtensions
 {
   public partial class Plugin : IAssemblyPlugin
@@ -31,25 +34,34 @@ namespace ShowPerfExtensions
 
       public CUIComponent Add(CUIComponent c) => Content.Append(c);
 
+
+      public override void FromXML(XElement element)
+      {
+        this.RemoveAllChildren();
+        base.FromXML(element);
+      }
       public MapGroup() : base()
       {
         FitContent = new CUIBool2(true, true);
         ConsumeSwipe = true;
         Draggable = true;
         HideChildrenOutsideFrame = false;
+        BackgroundColor = Color.Black;
 
-        this["header"] = Header = new CUITextBlock("Header")
+        Header = new CUITextBlock("Header")
         {
           TextScale = 2.0f,
-
         };
 
-        this["content"] = Content = new CUIVerticalList()
+        Content = new CUIVerticalList()
         {
           FillEmptySpace = new CUIBool2(false, true),
           FitContent = new CUIBool2(true, true),
           HideChildrenOutsideFrame = false,
         };
+
+        this.Append(Header);
+        this.Append(Content);
       }
     }
   }

@@ -73,10 +73,27 @@ namespace CrabUI
 
     public CUIComponent this[string name]
     {
-      get => NamedComponents.GetValueOrDefault(name);
+      get => Get(name);
       set => Append(value, name);
     }
 
+
+    public CUIComponent Get(string name)
+    {
+      if (name == null) return null;
+      if (NamedComponents.ContainsKey(name)) return NamedComponents[name];
+
+      CUIComponent component = this;
+      string[] names = name.Split('.');
+
+      foreach (string n in names)
+      {
+        component = component.Get(n);
+        if (component == null) break;
+      }
+
+      return component;
+    }
     public T Get<T>(string name) where T : CUIComponent => NamedComponents.GetValueOrDefault(name) as T;
 
     #endregion

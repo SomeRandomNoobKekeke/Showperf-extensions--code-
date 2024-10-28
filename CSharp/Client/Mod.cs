@@ -96,7 +96,6 @@ namespace ShowPerfExtensions
 
       CUIDebugWindow.Open();
 
-
       PatchAll();
       addCommands();
 

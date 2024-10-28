@@ -1,0 +1,84 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<CUICaptureMap Relative="[0, 0, 1, 1]">
+  <Connections>
+    <Connection Start="LevelRenderer" End="DrawBackground" />
+    <Connection Start="LevelRendererInBend" End="LevelRenderer" />
+    <Connection Start="DrawFront" End="MapEntityDrawing" />
+    <Connection Start="DrawBack" End="MapEntityDrawing" />
+    <Connection Start="Submarine" End="DrawFront" />
+    <Connection Start="Submarine" End="DrawBack" />
+    <Connection Start="SubmarineBend" End="Submarine" />
+    <Connection Start="LevelObjectManager" End="DrawObjects" />
+    <Connection Start="LevelObjectManagerBend" End="LevelObjectManager" />
+    <Connection Start="Draw" End="LevelRendererInBend" />
+    <Connection Start="Draw" End="SubmarineBend" />
+    <Connection Start="Draw" End="LevelObjectManagerBend" />
+    <Connection Start="ItemUpdateOutBend" End="WholeSubmarineBend" />
+    <Connection Start="ItemUpdate" End="ItemUpdateOutBend" />
+    <Connection Start="ItemUpdate" End="ItemComponentsUpdate" />
+    <Connection Start="ItemUpdateInBend" End="ItemUpdate" />
+    <Connection Start="HullUpdateOutBend" End="WholeSubmarineBend" />
+    <Connection Start="HullUpdate" End="HullUpdateOutBend" />
+    <Connection Start="HullUpdateInBend" End="HullUpdate" />
+    <Connection Start="GapUpdateOutBend" End="WholeSubmarineBend" />
+    <Connection Start="GapUpdate" End="GapUpdateOutBend" />
+    <Connection Start="GapUpdateInBend" End="GapUpdate" />
+    <Connection Start="WholeSubmarineBend" End="WholeSubmarineUpdate" />
+    <Connection Start="StructureUpdateOutBend" End="WholeSubmarineBend" />
+    <Connection Start="StructureUpdate" End="StructureUpdateOutBend" />
+    <Connection Start="StructureUpdateInBend" End="StructureUpdate" />
+    <Connection Start="MapEntity.UpdateAllOutBend" End="ItemUpdateInBend" />
+    <Connection Start="MapEntity.UpdateAllOutBend" End="HullUpdateInBend" />
+    <Connection Start="MapEntity.UpdateAllOutBend" End="GapUpdateInBend" />
+    <Connection Start="MapEntity.UpdateAllOutBend" End="StructureUpdateInBend" />
+    <Connection Start="MapEntity.UpdateAll" End="MapEntity.UpdateAllOutBend" />
+    <Connection Start="Update" End="Character.UpdateAll" />
+    <Connection Start="Update" End="MapEntity.UpdateAll" />
+    <Connection Start="GameScreen" End="Draw" />
+    <Connection Start="GameScreen" End="Update" />
+  </Connections>
+  <Children>
+    <CUITextBlock AbsoluteMin="[, , 42.2, 16.199999]" Fixed="true" Text="Client" />
+    <MapButton AKA="GameScreen" Absolute="[50, 20, , ]" AbsoluteMin="[, , 69.6, 14.400001]" BackgroundColor="{R:64 G:64 B:64 A:255}" Disabled="true" OffText="GameScreen" OnText="GameScreen" Text="GameScreen" />
+    <MapButton AKA="Update" Absolute="[20, 50, , ]" AbsoluteMin="[, , 41.600002, 14.400001]" BackgroundColor="{R:64 G:64 B:64 A:255}" Disabled="true" OffText="Update" OnText="Update" Text="Update" />
+    <MapButton AKA="Draw" Absolute="[157, 83, , ]" AbsoluteMin="[, , 32, 14.400001]" BackgroundColor="{R:64 G:64 B:64 A:255}" Disabled="true" OffText="Draw" OnText="Draw" Text="Draw" />
+    <MapBend AKA="SubmarineBend" Absolute="[270, 27, 5, 5]" Disabled="true" />
+    <MapButton AKA="Submarine" Absolute="[247, 38, , ]" AbsoluteMin="[, , 60, 14.400001]" BackgroundColor="{R:64 G:64 B:64 A:255}" Disabled="true" OffText="Submarine" OnText="Submarine" Text="Submarine" />
+    <MapButton AKA="DrawFront" Absolute="[215, 59, , ]" AbsoluteMin="[, , 60.8, 14.400001]" BackgroundColor="{R:64 G:64 B:64 A:255}" Disabled="true" OffText="DrawFront" OnText="DrawFront" Text="DrawFront" />
+    <MapButton AKA="DrawBack" Absolute="[464, 22, , ]" AbsoluteMin="[, , 56.8, 14.400001]" BackgroundColor="{R:64 G:64 B:64 A:255}" Disabled="true" OffText="DrawBack" OnText="DrawBack" Text="DrawBack" />
+    <MapButton AKA="MapEntityDrawing" Absolute="[382, 339, , ]" AbsoluteMin="[, , 103.200005, 14.400001]" BackgroundColor="{R:0 G:0 B:32 A:255}" CState="MapEntityDrawing" OffText="MapEntityDrawing" OnText="MapEntityDrawing" Text="MapEntityDrawing" />
+    <MapBend AKA="LevelObjectManagerBend" Absolute="[215, 122, 5, 5]" Disabled="true" />
+    <MapButton AKA="LevelObjectManager" Absolute="[235, 115, , ]" AbsoluteMin="[, , 112.8, 14.400001]" BackgroundColor="{R:64 G:64 B:64 A:255}" Disabled="true" OffText="LevelObjectManager" OnText="LevelObjectManager" Text="LevelObjectManager" />
+    <MapButton AKA="DrawObjects" Absolute="[258, 147, , ]" AbsoluteMin="[, , 71.200005, 14.400001]" BackgroundColor="{R:0 G:0 B:32 A:255}" CState="LevelObjectsDrawing" OffText="DrawObjects" OnText="DrawObjects" Text="DrawObjects" />
+    <MapButton AKA="MapEntity.UpdateAll" Absolute="[418, 205, , ]" AbsoluteMin="[, , 112.8, 14.400001]" BackgroundColor="{R:64 G:64 B:64 A:255}" Disabled="true" OffText="MapEntity.UpdateAll" OnText="MapEntity.UpdateAll" Text="MapEntity.UpdateAll" />
+    <MapBend AKA="MapEntity.UpdateAllOutBend" Absolute="[194, 94, 5, 5]" />
+    <MapBend AKA="ItemUpdateInBend" Absolute="[249, 257, 5, 5]" />
+    <MapBend AKA="HullUpdateInBend" Absolute="[146, 42, 5, 5]" />
+    <MapBend AKA="GapUpdateInBend" Absolute="[214, 244, 5, 5]" />
+    <MapBend AKA="StructureUpdateInBend" Absolute="[256, 253, 5, 5]" />
+    <MapBend AKA="ItemUpdateOutBend" Absolute="[150, 250, 5, 5]" />
+    <MapBend AKA="HullUpdateOutBend" Absolute="[183, 67, 5, 5]" />
+    <MapBend AKA="GapUpdateOutBend" Absolute="[188, 151, 5, 5]" />
+    <MapBend AKA="StructureUpdateOutBend" Absolute="[183, 194, 5, 5]" />
+    <MapButton AKA="ItemUpdate" Absolute="[259, 332, , ]" AbsoluteMin="[, , 65.600006, 14.400001]" BackgroundColor="{R:0 G:0 B:255 A:255}" CState="ItemUpdate" OffText="ItemUpdate" OnText="ItemUpdate" State="true" Text="ItemUpdate" />
+    <MapButton AKA="HullUpdate" Absolute="[139, 41, , ]" AbsoluteMin="[, , 61.600002, 14.400001]" BackgroundColor="{R:0 G:0 B:255 A:255}" CState="HullUpdate" OffText="HullUpdate" OnText="HullUpdate" State="true" Text="HullUpdate" />
+    <MapButton AKA="GapUpdate" Absolute="[236, 87, , ]" AbsoluteMin="[, , 61.600002, 14.400001]" BackgroundColor="{R:0 G:0 B:32 A:255}" CState="GapUpdate" OffText="GapUpdate" OnText="GapUpdate" Text="GapUpdate" />
+    <MapButton AKA="StructureUpdate" Absolute="[296, 269, , ]" AbsoluteMin="[, , 92, 14.400001]" BackgroundColor="{R:0 G:0 B:32 A:255}" CState="StructureUpdate" OffText="StructureUpdate" OnText="StructureUpdate" Text="StructureUpdate" />
+    <MapButton AKA="WholeSubmarineUpdate" Absolute="[161, 281, , ]" AbsoluteMin="[, , 130.4, 14.400001]" BackgroundColor="{R:0 G:0 B:32 A:255}" CState="WholeSubmarineUpdate" OffText="WholeSubmarineUpdate" OnText="WholeSubmarineUpdate" Text="WholeSubmarineUpdate" />
+    <MapBend AKA="WholeSubmarineBend" Absolute="[180, 220, 5, 5]" />
+    <MapButton AKA="ItemComponentsUpdate" Absolute="[189, 359, , ]" AbsoluteMin="[, , 130.4, 14.400001]" BackgroundColor="{R:0 G:0 B:255 A:255}" CState="ItemComponentsUpdate" OffText="ItemComponentsUpdate" OnText="ItemComponentsUpdate" State="true" Text="ItemComponentsUpdate" />
+    <MapBend AKA="LevelRendererInBend" Absolute="[205, 150, 5, 5]" Disabled="true" />
+    <MapButton AKA="LevelRenderer" Absolute="[245, 185, , ]" AbsoluteMin="[, , 80.8, 14.400001]" BackgroundColor="{R:64 G:64 B:64 A:255}" Disabled="true" OffText="LevelRenderer" OnText="LevelRenderer" Text="LevelRenderer" />
+    <MapButton AKA="DrawBackground" Absolute="[238, 211, , ]" AbsoluteMin="[, , 93.6, 14.400001]" BackgroundColor="{R:0 G:0 B:32 A:255}" CState="LevelMisc" OffText="DrawBackground" OnText="DrawBackground" Text="DrawBackground" />
+    <MapButton AKA="Character.UpdateAll" Absolute="[157, 335, , ]" AbsoluteMin="[, , 109.6, 14.400001]" BackgroundColor="{R:0 G:0 B:32 A:255}" CState="CharactersUpdate" OffText="Character.UpdateAll" OnText="Character.UpdateAll" Text="Character.UpdateAll" />
+    <MapGroup Absolute="[32, 137, , 36]" AbsoluteMin="[, , 86, ]">
+      <CUITextBlock AbsoluteMin="[, , 86, 36]" Text="Group" TextScale="2" />
+      <CUIVerticalList Absolute="[, , , 80.799995]" AbsoluteMin="[, , 51.199997, ]" FillEmptySpace="[False, True]" FitContent="[True, True]" HideChildrenOutsideFrame="false">
+        <CUIButton AbsoluteMin="[, , 51.199997, 20.199999]" BackgroundColor="{R:0 G:0 B:32 A:255}" Text="bebeeb" />
+        <CUIButton AbsoluteMin="[, , 51.199997, 20.199999]" BackgroundColor="{R:0 G:0 B:32 A:255}" Text="bebeeb" />
+        <CUIButton AbsoluteMin="[, , 51.199997, 20.199999]" BackgroundColor="{R:0 G:0 B:32 A:255}" Text="bebeeb" />
+        <CUIButton AbsoluteMin="[, , 51.199997, 20.199999]" BackgroundColor="{R:0 G:0 B:32 A:255}" Text="bebeeb" />
+      </CUIVerticalList>
+    </MapGroup>
+  </Children>
+</CUICaptureMap>

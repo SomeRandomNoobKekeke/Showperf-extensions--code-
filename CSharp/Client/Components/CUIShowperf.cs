@@ -187,7 +187,7 @@ namespace ShowPerfExtensions
 
       public void LoadMap()
       {
-        Map = CUIComponent.LoadFromFile<CUICaptureMap>(Mod.ModDir + "/Ignore/test.xml");
+        Map = CUIComponent.LoadFromFile<CUICaptureMap>(Mod.ModDir + "/XML/CUICaptureMap.xml");
         Pages.Open(Map);
       }
 
