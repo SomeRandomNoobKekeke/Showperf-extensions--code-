@@ -20,6 +20,10 @@ namespace CrabUI
 
       public CUIComponent Start;
       public CUIComponent End;
+
+      //TODO all this crap wasn't designed for nested AKA
+      public string StartAKA;
+      public string EndAKA;
       public float LineWidth;
       public Color LineColor;
 
@@ -30,8 +34,8 @@ namespace CrabUI
         {
           connection.SetAttributeValue("LineWidth", LineWidth);
         }
-        connection.SetAttributeValue("Start", Start.AKA);
-        connection.SetAttributeValue("End", End.AKA);
+        connection.SetAttributeValue("Start", StartAKA ?? "");
+        connection.SetAttributeValue("End", EndAKA ?? "");
 
         return connection;
       }
@@ -42,6 +46,9 @@ namespace CrabUI
         LineWidth = lineWidth;
         Start = start;
         End = end;
+
+        StartAKA = start?.AKA;
+        EndAKA = end?.AKA;
       }
     }
 
@@ -91,7 +98,6 @@ namespace CrabUI
 
 
 
-
     public CUIComponent Connect(CUIComponent startComponent, CUIComponent endComponent, Color? color = null)
     {
       if (startComponent != null && endComponent != null)
@@ -107,12 +113,23 @@ namespace CrabUI
       CUIComponent endComponent = Children.ElementAtOrDefault(end);
       return Connect(startComponent, endComponent, color);
     }
+
+    //TODO  DRY
     public CUIComponent Connect(string start, string end, Color? color = null)
     {
       CUIComponent startComponent = this[start];
       CUIComponent endComponent = this[end];
 
-      return Connect(startComponent, endComponent, color);
+      if (startComponent != null && endComponent != null)
+      {
+        if (color == null && (!startComponent.Disabled || !endComponent.Disabled)) color = new Color(0, 0, 255);
+        linksContainer.Connections.Add(new CUIMapLink(startComponent, endComponent, color)
+        {
+          StartAKA = start,
+          EndAKA = end,
+        });
+      }
+      return startComponent;
     }
     public CUIComponent Connect(int start, int end, Color? color = null)
     {
@@ -185,7 +202,7 @@ namespace CrabUI
           CUIDebug.Error("startComponent == null || endComponent == null");
           continue;
         }
-        Connect(startComponent, endComponent);
+        Connect(link.Attribute("Start").Value, link.Attribute("End").Value);
       }
     }
 
