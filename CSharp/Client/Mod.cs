@@ -62,6 +62,8 @@ namespace ShowPerfExtensions
         Absolute = new CUINullRect(null, null, 350, 550),
       };
 
+      Showperf.CreateGUI();
+
       Showperf.Absolute = new CUINullRect(
         CUIAnchor.GetChildPos(CUIMain.Real, new Vector2(1, 0.5f), new Vector2(-1, 0), Showperf.Absolute.Size),
         Showperf.Absolute.Size

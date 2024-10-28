@@ -28,6 +28,8 @@ namespace ShowPerfExtensions
 
     public class CaptureState
     {
+      public static Dictionary<CName, CaptureState> States = new Dictionary<CName, CaptureState>();
+
       public CName Category;
       public string Description;
       public void ToggleIsActive() => IsActive = !IsActive;
@@ -43,8 +45,8 @@ namespace ShowPerfExtensions
       public void SetIsActive(bool value)
       {
         isActive = value;
-        if (isActive) Capture.Active.Add(this);
-        else Capture.Active.Remove(this);
+        if (isActive) Capture.Active.Add(Category);
+        else Capture.Active.Remove(Category);
       }
 
 
@@ -66,6 +68,7 @@ namespace ShowPerfExtensions
       public CaptureState(CName cat)
       {
         Category = cat;
+        States[cat] = this;
       }
 
       public override string ToString() => Category.ToString();
@@ -91,7 +94,7 @@ namespace ShowPerfExtensions
       public static event Action OnGlobalStateChange;
       public static void InvokeOnGlobalStateChange() => OnGlobalStateChange?.Invoke();
 
-      public static HashSet<CaptureState> Active = new HashSet<CaptureState>();
+      public static HashSet<CName> Active = new HashSet<CName>();
 
       private static bool globalByID; public static bool GlobalByID
       {
@@ -99,9 +102,9 @@ namespace ShowPerfExtensions
         set
         {
           globalByID = value;
-          foreach (CaptureState s in Capture.Active)
+          foreach (CName c in Capture.Active)
           {
-            s.SetByID(value);
+            CaptureState.States[c].SetByID(value);
           }
           InvokeOnGlobalStateChange();
         }
@@ -113,9 +116,9 @@ namespace ShowPerfExtensions
         set
         {
           globalIsActive = value;
-          foreach (CaptureState s in Capture.Active)
+          foreach (CName c in Capture.Active)
           {
-            s.SetIsActive(value);
+            CaptureState.States[c].SetIsActive(value);
           }
           InvokeOnGlobalStateChange();
         }

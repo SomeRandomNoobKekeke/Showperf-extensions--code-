@@ -38,9 +38,9 @@ namespace ShowPerfExtensions
       public void SetCategoryText()
       {
         string s = String.Join(", ", Capture.Active.ToList()
-        .Select(cs => MapButton.Buttons.ContainsKey(cs) ?
-          MapButton.Buttons[cs].Text :
-          cs.Category.ToString()
+        .Select(cs => MapButton.Buttons.ContainsKey(CaptureState.States[cs]) ?
+          MapButton.Buttons[CaptureState.States[cs]].Text :
+          cs.ToString()
         ));
         CategoryLine.Text = s;
       }
@@ -183,6 +183,9 @@ namespace ShowPerfExtensions
 
         TickList = new CUITickList(0, 0, 1, 1);
         LoadMap();
+
+
+        SetCategoryText();
       }
 
       public void LoadMap()
@@ -210,8 +213,10 @@ namespace ShowPerfExtensions
       public void OnGlobalCaptureStateChange()
       {
         Clear();
-        foreach (CaptureState cs in Capture.Active)
+        foreach (CName cn in Capture.Active)
         {
+          CaptureState cs = CaptureState.States[cn];
+
           if (MapButton.Buttons.ContainsKey(cs))
           {
             MapButton.Buttons[cs].SetState(cs.IsActive);
@@ -235,11 +240,9 @@ namespace ShowPerfExtensions
       {
         Layout = new CUILayoutVerticalList();
 
-        CreateGUI();
 
         Capture.OnStateChange += (cs) => OnCaptureStateChange(cs);
         Capture.OnGlobalStateChange += () => OnGlobalCaptureStateChange();
-        SetCategoryText();
         Window.OnCaptureFromChanged += (s) => OnWindowCaptureFromChanged(s);
         Window.OnModeChanged += (m) => OnWindowModeChanged(m);
 
@@ -248,6 +251,7 @@ namespace ShowPerfExtensions
           m.ClickConsumed = true;
           this.ApplyState(States["init"]);
         };
+
       }
       public CUIShowperf(float x, float y, float w, float h) : this()
       {

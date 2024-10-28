@@ -54,6 +54,9 @@ namespace ShowPerfExtensions
         Padding = new Vector2(2, 0);
         TextScale = 0.8f;
         ConsumeSwipe = false;
+        //TODO don't depend on global static vars
+        OnStateChange += (state) => Showperf.OnMapButtonClicked(this);
+
 #if DEBUG
         Draggable = true;
         ConsumeSwipe = true;
@@ -71,7 +74,6 @@ namespace ShowPerfExtensions
         if (cs != null)
         {
           State = cs.IsActive;
-          OnStateChange += (state) => Showperf.OnMapButtonClicked(this);
           Buttons[cs] = this;
         }
         else
