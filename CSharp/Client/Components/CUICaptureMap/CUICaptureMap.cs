@@ -47,12 +47,19 @@ namespace ShowPerfExtensions
         // BorderColor = Color.Transparent;
         OnDClick += (e) => SetChildrenOffset(new CUI3DOffset(0, 0, 1));
 
+        Append(new CUITextBlock("Client")
+        {
+          Fixed = true,
+          Unserializable = true,
+        });
+
 #if DEBUG
         this["wrapper"] = new CUIHorizontalList()
         {
           Anchor = new Vector2(1, 0),
           Fixed = true,
           Unserializable = true,
+          ZIndex = 100,
           FitContent = new CUIBool2(true, true),
         };
 
