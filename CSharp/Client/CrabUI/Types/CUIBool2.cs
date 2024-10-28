@@ -21,7 +21,7 @@ namespace CrabUI
       Y = y;
     }
 
-    public override string ToString() => $"[{X}, {Y}]";
+    public override string ToString() => $"[{X},{Y}]";
     public static CUIBool2 Parse(string s)
     {
       string content = s.Substring(

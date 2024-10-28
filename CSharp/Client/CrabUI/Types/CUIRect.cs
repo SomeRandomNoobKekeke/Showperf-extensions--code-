@@ -71,7 +71,7 @@ namespace CrabUI
 
 
 
-    public override string ToString() => $"[{Left}, {Top}, {Width}, {Height}]";
+    public override string ToString() => $"[{Left},{Top},{Width},{Height}]";
   }
   public struct CUINullRect
   {
@@ -141,7 +141,7 @@ namespace CrabUI
       Height = h;
     }
 
-    public override string ToString() => $"[{Left}, {Top}, {Width}, {Height}]";
+    public override string ToString() => $"[{Left},{Top},{Width},{Height}]";
 
   }
 }

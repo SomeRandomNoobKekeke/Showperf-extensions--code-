@@ -95,6 +95,7 @@ namespace CrabUI
       OffHoverColor = CUIPallete.Default.Secondary.OffHover;
       BorderColor = CUIPallete.Default.Secondary.Border;
       DisabledColor = CUIPallete.Default.Secondary.Disabled;
+      BackgroundColor = OffColor;
 
       TextAlign = new Vector2(0.5f, 0.5f);
       Padding = new Vector2(4, 2);

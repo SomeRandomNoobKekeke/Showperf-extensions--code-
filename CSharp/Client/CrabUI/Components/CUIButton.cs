@@ -45,6 +45,7 @@ namespace CrabUI
       MousePressedColor = CUIPallete.Default.Secondary.On;
       BorderColor = CUIPallete.Default.Secondary.Border;
       DisabledColor = CUIPallete.Default.Secondary.Disabled;
+      BackgroundColor = InactiveColor;
 
       TextAlign = new Vector2(0.5f, 0.5f);
       Padding = new Vector2(4, 2);
