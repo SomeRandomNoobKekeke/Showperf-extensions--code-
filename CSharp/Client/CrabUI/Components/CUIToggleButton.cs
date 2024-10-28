@@ -21,6 +21,10 @@ namespace CrabUI
     [CUISerializable] public Color OffColor { get; set; }
     [CUISerializable] public Color OffHoverColor { get; set; }
 
+    // BackgroundColor is used in base.Draw, but here it's calculated from OnColor/OffColor
+    // so it's not a prop anymore, and i don't want to serialize it
+    public new Color BackgroundColor { get => backgroundColor; set => SetBackgroundColor(value); }
+
 
     private string onText;
     private string offText;
@@ -28,14 +32,14 @@ namespace CrabUI
     public string OnText
     {
       get => onText;
-      set { onText = value; Text = state ? OnText : OffText; }
+      set { onText = value; if (State && onText != null) Text = onText; }
     }
 
     [CUISerializable]
     public string OffText
     {
       get => offText;
-      set { offText = value; Text = state ? OnText : OffText; }
+      set { offText = value; if (!State && offText != null) Text = offText; }
     }
 
     public event Action<bool> OnStateChange;
@@ -57,7 +61,8 @@ namespace CrabUI
     public void SetState(bool value)
     {
       state = value;
-      Text = state ? OnText : OffText;
+      if (state && OnText != null) Text = OnText;
+      if (!state && OnText != null) Text = OnText;
     }
 
     public override void Draw(SpriteBatch spriteBatch)
@@ -112,8 +117,6 @@ namespace CrabUI
 
     public CUIToggleButton(string text) : this()
     {
-      OnText = text;
-      OffText = text;
       Text = text;
     }
 

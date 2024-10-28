@@ -19,6 +19,10 @@ namespace CrabUI
     [CUISerializable] public Color MouseOverColor { get; set; }
     [CUISerializable] public Color MousePressedColor { get; set; }
 
+    // BackgroundColor is used in base.Draw, but here it's calculated from colors above
+    // so it's not a prop anymore, and i don't want to serialize it
+    public new Color BackgroundColor { get => backgroundColor; set => SetBackgroundColor(value); }
+
     public override void Draw(SpriteBatch spriteBatch)
     {
       if (Disabled)

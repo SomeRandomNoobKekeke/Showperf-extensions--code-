@@ -177,18 +177,18 @@ namespace CrabUI
     #endregion
 
     protected bool BackgroundVisible;
-    private Color backgroundColor; internal void SetBackgroundColor(Color value)
+    protected Color backgroundColor; internal void SetBackgroundColor(Color value)
     {
       backgroundColor = value; BackgroundVisible = backgroundColor != Color.Transparent;
     }
 
     protected bool BorderVisible;
-    private Color borderColor; internal void SetBorderColor(Color value)
+    protected Color borderColor; internal void SetBorderColor(Color value)
     {
       borderColor = value; BorderVisible = borderColor != Color.Transparent;
     }
 
-    private Vector2 padding = new Vector2(2, 2); internal void SetPadding(Vector2 value)
+    protected Vector2 padding = new Vector2(2, 2); internal void SetPadding(Vector2 value)
     {
       padding = value; OnDecorPropChanged();
     }

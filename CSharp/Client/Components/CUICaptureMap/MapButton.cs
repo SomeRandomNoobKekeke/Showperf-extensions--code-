@@ -48,7 +48,14 @@ namespace ShowPerfExtensions
     public class MapButton : CUIToggleButton
     {
       public static Dictionary<CaptureState, MapButton> Buttons = new Dictionary<CaptureState, MapButton>();
-      [CUISerializable] public CaptureState CState { get; set; }
+
+      private CaptureState cState;
+      [CUISerializable]
+      public CaptureState CState
+      {
+        get => cState;
+        set { cState = value; Disabled = cState == null; }
+      }
       public MapButton() : base()
       {
         Padding = new Vector2(2, 0);
@@ -67,18 +74,12 @@ namespace ShowPerfExtensions
         Absolute = new CUINullRect(x: x, y: y);
         CState = cs;
 
-        OnText = name;
-        OffText = name;
         Text = name;
 
         if (cs != null)
         {
           State = cs.IsActive;
           Buttons[cs] = this;
-        }
-        else
-        {
-          Disabled = true;
         }
       }
     }
