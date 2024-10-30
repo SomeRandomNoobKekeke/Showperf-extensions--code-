@@ -28,15 +28,13 @@ namespace CrabUI
     [CUISerializable] public bool IgnoreParentVisibility { get; set; }
     [CUISerializable] public bool IgnoreParentEventIgnorance { get; set; }
     [CUISerializable] public bool IgnoreParentZIndex { get; set; }
+
     [CUISerializable] public bool Fixed { get; set; }
     [CUISerializable] public Vector2 Anchor { get; set; }
 
-    [CUISerializable]
-    public int? ZIndex { get => zIndex; set => SetZIndex(value); }
-    [CUISerializable]
-    public bool IgnoreEvents { get => ignoreEvents; set => SetIgnoreEvents(value); }
-    [CUISerializable]
-    public bool Visible { get => visible; set => SetVisible(value); }
+    [CUISerializable] public int? ZIndex { get => zIndex; set => SetZIndex(value); }
+    [CUISerializable] public bool IgnoreEvents { get => ignoreEvents; set => SetIgnoreEvents(value); }
+    [CUISerializable] public bool Visible { get => visible; set => SetVisible(value); }
 
     public bool Revealed { get => revealed; set => SetRevealed(value); }
     //HACK this is meant for buttons, but i want to access it on generic components in CUIMap

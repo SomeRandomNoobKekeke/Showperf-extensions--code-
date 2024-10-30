@@ -1,53 +1,32 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <CUICaptureMap Relative="[0,0,1,1]">
-  <Connections />
+  <Connections>
+    <Connection Start="GameMain" End="GameMainUpdate" />
+    <Connection Start="GameMain" End="GameMainDraw" />
+    <Connection Start="GameMainUpdate.ScreenSelectedUpdate" End="GameScreenUpdate" />
+  </Connections>
   <Children>
-    <MapButton AKA="GameScreen" Absolute="[-67.280045,-182.59198,,]" AbsoluteMin="[,,69.6,14.400001]" Disabled="true" Text="GameScreen" />
-    <MapButton AKA="Update" Absolute="[-148.14401,-103.74399,,]" AbsoluteMin="[,,41.600002,14.400001]" Disabled="true" Text="Update" />
-    <MapButton AKA="Draw" Absolute="[89.81584,-135.49597,,]" AbsoluteMin="[,,32,14.400001]" Disabled="true" Text="Draw" />
-    <MapBend AKA="SubmarineBend" Absolute="[270,27,5,5]" Disabled="true" />
-    <MapButton AKA="Submarine" Absolute="[431.99994,-57.000015,,]" AbsoluteMin="[,,60,14.400001]" Disabled="true" Text="Submarine" />
-    <MapButton AKA="DrawFront" Absolute="[273.00003,83.999985,,]" AbsoluteMin="[,,60.8,14.400001]" Disabled="true" Text="DrawFront" />
-    <MapButton AKA="DrawBack" Absolute="[490.99994,67.999985,,]" AbsoluteMin="[,,56.8,14.400001]" Disabled="true" Text="DrawBack" />
-    <MapButton AKA="MapEntityDrawing" Absolute="[382,339,,]" AbsoluteMin="[,,103.200005,14.400001]" CState="MapEntityDrawing" Text="MapEntityDrawing" />
-    <MapBend AKA="LevelObjectManagerBend" Absolute="[215,122,5,5]" Disabled="true" />
-    <MapButton AKA="LevelObjectManager" Absolute="[401,279,,]" AbsoluteMin="[,,112.8,14.400001]" Disabled="true" Text="LevelObjectManager" />
-    <MapButton AKA="DrawObjects" Absolute="[211,42,,]" AbsoluteMin="[,,71.200005,14.400001]" CState="LevelObjectsDrawing" Text="DrawObjects" />
-    <MapButton AKA="MapEntity.UpdateAll" Absolute="[418,205,,]" AbsoluteMin="[,,112.8,14.400001]" Disabled="true" Text="MapEntity.UpdateAll" />
-    <MapBend AKA="MapEntity.UpdateAllOutBend" Absolute="[194,94,5,5]" />
-    <MapBend AKA="ItemUpdateInBend" Absolute="[249,257,5,5]" />
-    <MapBend AKA="HullUpdateInBend" Absolute="[146,42,5,5]" />
-    <MapBend AKA="GapUpdateInBend" Absolute="[214,244,5,5]" />
-    <MapBend AKA="StructureUpdateInBend" Absolute="[256,253,5,5]" />
-    <MapBend AKA="ItemUpdateOutBend" Absolute="[150,250,5,5]" />
-    <MapBend AKA="HullUpdateOutBend" Absolute="[183,67,5,5]" />
-    <MapBend AKA="GapUpdateOutBend" Absolute="[188,151,5,5]" />
-    <MapBend AKA="StructureUpdateOutBend" Absolute="[183,194,5,5]" />
-    <MapButton AKA="ItemUpdate" Absolute="[259,332,,]" AbsoluteMin="[,,65.600006,14.400001]" CState="ItemUpdate" Text="ItemUpdate" />
-    <MapButton AKA="HullUpdate" Absolute="[150.00003,-41.000015,,]" AbsoluteMin="[,,61.600002,14.400001]" CState="HullUpdate" Text="HullUpdate" />
-    <MapButton AKA="GapUpdate" Absolute="[406.99994,-4.0000153,,]" AbsoluteMin="[,,61.600002,14.400001]" CState="GapUpdate" Text="GapUpdate" />
-    <MapButton AKA="StructureUpdate" Absolute="[296,269,,]" AbsoluteMin="[,,92,14.400001]" CState="StructureUpdate" Text="StructureUpdate" />
-    <MapButton AKA="WholeSubmarineUpdate" Absolute="[161,281,,]" AbsoluteMin="[,,130.4,14.400001]" CState="WholeSubmarineUpdate" Text="WholeSubmarineUpdate" />
-    <MapBend AKA="WholeSubmarineBend" Absolute="[180,220,5,5]" />
-    <MapButton AKA="ItemComponentsUpdate" Absolute="[189,360,,]" AbsoluteMin="[,,130.4,14.400001]" CState="ItemComponentsUpdate" Text="ItemComponentsUpdate" />
-    <MapBend AKA="LevelRendererInBend" Absolute="[205,150,5,5]" Disabled="true" />
-    <MapButton AKA="LevelRenderer" Absolute="[245,185,,]" AbsoluteMin="[,,80.8,14.400001]" Disabled="true" Text="LevelRenderer" />
-    <MapButton AKA="DrawBackground" Absolute="[238,211,,]" AbsoluteMin="[,,93.6,14.400001]" CState="LevelMisc" Text="DrawBackground" />
-    <MapButton AKA="Character.UpdateAll" Absolute="[157,335,,]" AbsoluteMin="[,,109.6,14.400001]" CState="CharactersUpdate" Text="Character.UpdateAll" />
-    <MapGroup AKA="group2" Absolute="[416.5202,-252.70404,,36]" AbsoluteMin="[,,108,]">
-      <CUITextBlock AbsoluteMin="[,,108,36]" Text="Group 2" TextScale="2" />
-      <CUIVerticalList AKA="list" Absolute="[,,,80.799995]" AbsoluteMin="[,,51.199997,]" FillEmptySpace="[False,True]" FitContent="[True,True]" HideChildrenOutsideFrame="false">
+    <MapButton AKA="GameMain" Absolute="[352.27182,-8.4880295,,]" AbsoluteMin="[,,144,36]" State="true" Text="GameMain" TextScale="2" />
+    <MapGroup AKA="GameMainUpdate" Absolute="[261.46432,183.9361,,36]" AbsoluteMin="[,,128,]">
+      <MapButton Absolute="[-126,-16,,]" AbsoluteMin="[,,98,36]" Text="Update" TextScale="2" />
+      <CUIVerticalList Absolute="[,,,14.400001]" AbsoluteMin="[,,128,]" FillEmptySpace="[False,True]" FitContent="[True,True]" HideChildrenOutsideFrame="false">
+        <MapButton AKA="ScreenSelectedUpdate" Absolute="[-67.280045,-182.59198,,]" AbsoluteMin="[,,128,14.400001]" Text="Screen.Selected.Update" />
+      </CUIVerticalList>
+    </MapGroup>
+    <MapGroup AKA="GameMainDraw" Absolute="[588.46436,197.9361,,36]" AbsoluteMin="[,,78,]">
+      <CUITextBlock AbsoluteMin="[,,78,36]" Text="Draw" TextScale="2" />
+      <CUIVerticalList Absolute="[,,,80.799995]" AbsoluteMin="[,,51.199997,]" FillEmptySpace="[False,True]" FitContent="[True,True]" HideChildrenOutsideFrame="false">
         <CUIButton AbsoluteMin="[,,51.199997,20.199999]" Text="bebeeb" />
-        <CUIButton AKA="b1" AbsoluteMin="[,,51.199997,20.199999]" Text="bebeeb" />
+        <CUIButton AbsoluteMin="[,,51.199997,20.199999]" Text="bebeeb" />
         <CUIButton AbsoluteMin="[,,51.199997,20.199999]" Text="bebeeb" />
         <CUIButton AbsoluteMin="[,,51.199997,20.199999]" Text="bebeeb" />
       </CUIVerticalList>
     </MapGroup>
-    <MapGroup AKA="group" Absolute="[151.46423,-314.95203,,36]" AbsoluteMin="[,,86,]">
-      <CUITextBlock AbsoluteMin="[,,86,36]" Text="Group" TextScale="2" />
-      <CUIVerticalList AKA="list" Absolute="[,,,80.799995]" AbsoluteMin="[,,51.199997,]" FillEmptySpace="[False,True]" FitContent="[True,True]" HideChildrenOutsideFrame="false">
+    <MapGroup AKA="GameScreenUpdate" Absolute="[3.3283386,322.84808,,36]" AbsoluteMin="[,,272,]">
+      <CUITextBlock AbsoluteMin="[,,272,36]" Text="GameScreen.Update" TextScale="2" />
+      <CUIVerticalList Absolute="[,,,80.799995]" AbsoluteMin="[,,51.199997,]" FillEmptySpace="[False,True]" FitContent="[True,True]" HideChildrenOutsideFrame="false">
         <CUIButton AbsoluteMin="[,,51.199997,20.199999]" Text="bebeeb" />
-        <CUIButton AKA="b1" AbsoluteMin="[,,51.199997,20.199999]" Text="bebeeb" />
+        <CUIButton AbsoluteMin="[,,51.199997,20.199999]" Text="bebeeb" />
         <CUIButton AbsoluteMin="[,,51.199997,20.199999]" Text="bebeeb" />
         <CUIButton AbsoluteMin="[,,51.199997,20.199999]" Text="bebeeb" />
       </CUIVerticalList>

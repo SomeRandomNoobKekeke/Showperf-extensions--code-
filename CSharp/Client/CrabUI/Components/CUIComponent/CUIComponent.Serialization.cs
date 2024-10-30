@@ -17,12 +17,7 @@ using HarmonyLib;
 
 namespace CrabUI
 {
-  public class CUISerializableAttribute : System.Attribute
-  {
-    public CUISerializableAttribute() { }
-  }
-
-
+  public class CUISerializableAttribute : System.Attribute { }
   public partial class CUIComponent
   {
     #region State --------------------------------------------------------

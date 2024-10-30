@@ -22,10 +22,10 @@ namespace CrabUI
 
     public bool MouseOver { get; set; }
     public bool MousePressed { get; set; }
-    public bool ConsumeMouseClicks { get; set; }
-    public bool ConsumeDragAndDrop { get; set; }
-    public bool ConsumeSwipe { get; set; }
-    public bool ConsumeMouseScroll { get; set; }
+    [CUISerializable] public bool ConsumeMouseClicks { get; set; }
+    [CUISerializable] public bool ConsumeDragAndDrop { get; set; }
+    [CUISerializable] public bool ConsumeSwipe { get; set; }
+    [CUISerializable] public bool ConsumeMouseScroll { get; set; }
 
 
     // Without wrappers they will throw FieldAccessException
@@ -54,6 +54,7 @@ namespace CrabUI
     #region Handles --------------------------------------------------------
 
     public CUIDragHandle DragHandle;
+    [CUISerializable]
     public bool Draggable
     {
       get => DragHandle.Draggable;
@@ -61,7 +62,7 @@ namespace CrabUI
     }
     public CUIResizeHandle LeftResizeHandle;
     public CUIResizeHandle RightResizeHandle;
-
+    [CUISerializable]
     public bool Resizible
     {
       get => LeftResizeHandle.Visible || RightResizeHandle.Visible;
@@ -69,6 +70,7 @@ namespace CrabUI
     }
 
     public CUISwipeHandle SwipeHandle;
+    [CUISerializable]
     public bool Swipeable
     {
       get => SwipeHandle.Swipeable;

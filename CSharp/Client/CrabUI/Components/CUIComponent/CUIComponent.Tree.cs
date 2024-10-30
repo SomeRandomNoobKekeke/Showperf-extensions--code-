@@ -125,6 +125,8 @@ namespace CrabUI
 
     private void PassPropsToChild(CUIComponent child)
     {
+      //TODO shouldn't i use Ignore props here?
+      // i don't remember why i didn't
       if (!ShouldPassPropsToChildren) return;
 
       if (ZIndex.HasValue) child.ZIndex = ZIndex.Value + 1;

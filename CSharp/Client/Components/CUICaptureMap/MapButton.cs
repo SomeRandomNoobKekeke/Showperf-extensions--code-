@@ -61,6 +61,7 @@ namespace ShowPerfExtensions
         Padding = new Vector2(2, 0);
         TextScale = 0.8f;
         ConsumeSwipe = false;
+        ConsumeDragAndDrop = false;
         //TODO don't depend on global static vars
         OnStateChange += (state) => Showperf.OnMapButtonClicked(this);
 
