@@ -21,22 +21,44 @@ namespace ShowPerfExtensions
   {
     public partial class CUICaptureMap : CUIMap
     {
+
+
       private bool locked; public bool Locked
       {
         get => locked;
         set
         {
           locked = value;
+          if (locked)
+          {
+            SaveButton.RemoveSelf();
+            LoadButton.RemoveSelf();
+          }
+          else
+          {
+            if (LoadButton.Parent == null) this["wrapper"].Prepend(LoadButton);
+            if (SaveButton.Parent == null) this["wrapper"].Prepend(SaveButton);
+          }
+
+          LockButton.Text = locked ? "Locked" : "Unlocked";
+
           foreach (CUIComponent c in Children) { PassLocked(c); }
         }
       }
 
       public void PassLocked(CUIComponent c)
       {
-        c.ConsumeSwipe = !locked;
-        c.ConsumeDragAndDrop = true;
-        c.Draggable = !locked;
+        if (c is MapGroup || c is MapButton)
+        {
+          c.ConsumeSwipe = !locked;
+          c.ConsumeDragAndDrop = true;
+          c.Draggable = !locked;
+        }
       }
+
+      public CUIButton LockButton;
+      public CUIButton SaveButton;
+      public CUIButton LoadButton;
 
 
       //Note: this method is temporary
@@ -70,7 +92,7 @@ namespace ShowPerfExtensions
           Unserializable = true,
         });
 
-#if DEBUG
+
         this["wrapper"] = new CUIHorizontalList()
         {
           Anchor = new Vector2(1, 0),
@@ -80,24 +102,31 @@ namespace ShowPerfExtensions
           FitContent = new CUIBool2(true, true),
         };
 
-        this["wrapper"]["add"] = new CUIButton("add")
-        {
-          AddOnMouseDown = (e) =>
-          {
-            Locked = !Locked;
-            this["wrapper"].Get<CUIButton>("add").Text = Locked ? "locked" : "unlocked";
-          },
-        };
 
-        this["wrapper"]["save"] = new CUIButton("Save")
+        SaveButton = new CUIButton("Save")
         {
           AddOnMouseDown = (e) => SaveToFile(Mod.ModDir + "/XML/CUICaptureMap.xml"),
         };
-        this["wrapper"]["load"] = new CUIButton("Load")
+
+        LoadButton = new CUIButton("Load")
         {
           AddOnMouseDown = (e) => Showperf.LoadMap(),
         };
-#endif
+
+        this["wrapper"]["lock"] = LockButton = new CUIButton("Unlocked")
+        {
+          Absolute = new CUINullRect(w: 70),
+          InactiveColor = CUIPallete.Default.Tertiary.Off,
+          MouseOverColor = CUIPallete.Default.Tertiary.OffHover,
+          MousePressedColor = CUIPallete.Default.Tertiary.On,
+          BorderColor = CUIPallete.Default.Tertiary.Border,
+          DisabledColor = CUIPallete.Default.Tertiary.Disabled,
+          AddOnMouseDown = (e) =>
+          {
+            Locked = !Locked;
+          },
+        };
+
 
         Locked = false;
         OnChildAdded += (c) => PassLocked(c);

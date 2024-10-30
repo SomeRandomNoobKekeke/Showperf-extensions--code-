@@ -59,7 +59,7 @@ namespace ShowPerfExtensions
       public MapButton() : base()
       {
         Padding = new Vector2(2, 0);
-        TextScale = 0.8f;
+        TextScale = 0.9f;
         ConsumeSwipe = false;
         ConsumeDragAndDrop = false;
         Draggable = false;

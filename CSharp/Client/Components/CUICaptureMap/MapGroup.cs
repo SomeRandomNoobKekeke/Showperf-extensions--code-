@@ -57,7 +57,7 @@ namespace ShowPerfExtensions
 
         Header = new CUITextBlock("Header")
         {
-          TextScale = 2.0f,
+          TextScale = 1.8f,
         };
 
         Content = new CUIVerticalList()

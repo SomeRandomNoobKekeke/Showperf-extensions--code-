@@ -102,7 +102,7 @@ namespace CrabUI
         ConsumeDragAndDrop = true;
         ConsumeSwipe = true;
         HideChildrenOutsideFrame = false;
-        ZIndex = 100;
+        ZIndex = 500;
 
         BackgroundColor = CUIPallete.Default.Tertiary.Off;
         BorderColor = CUIPallete.Default.Tertiary.Border;

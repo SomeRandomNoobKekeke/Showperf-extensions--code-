@@ -6,28 +6,28 @@
     <Connection Start="GameMainUpdate.ScreenSelectedUpdate" End="GameScreenUpdate" />
   </Connections>
   <Children>
-    <MapButton AKA="GameMain" Absolute="[71.599815,21.583984,,]" AbsoluteMin="[,,144,36]" ConsumeDragAndDrop="true" Draggable="true" Text="GameMain" TextScale="2" />
-    <MapGroup AKA="GameMainUpdate" Absolute="[85.464355,127.9361,,36]" AbsoluteMin="[,,128,]" Draggable="true">
-      <MapButton Absolute="[-126,-16,,]" AbsoluteMin="[,,98,36]" State="true" Text="Update" TextScale="2" />
+    <MapButton AKA="GameMain" Absolute="[120.88794,53.04802,,]" AbsoluteMin="[,,144,36]" ConsumeDragAndDrop="true" ConsumeSwipe="true" Draggable="true" Text="GameMain" TextScale="2" />
+    <MapGroup AKA="GameMainUpdate" Absolute="[41.79236,125.104126,,50.4]" AbsoluteMin="[,,128,]" ConsumeSwipe="true" Draggable="true">
+      <MapButton Absolute="[-126,-16,,]" AbsoluteMin="[,,98,36]" Text="Update" TextScale="2" />
       <CUIVerticalList Absolute="[,,,14.400001]" AbsoluteMin="[,,128,]" FitContent="[True,True]" HideChildrenOutsideFrame="false">
         <MapButton AKA="ScreenSelectedUpdate" Absolute="[-67.280045,-182.59198,,]" AbsoluteMin="[,,128,14.400001]" Text="Screen.Selected.Update" />
       </CUIVerticalList>
     </MapGroup>
-    <MapGroup AKA="GameMainDraw" Absolute="[588.46436,197.9361,,36]" AbsoluteMin="[,,78,]" Draggable="true">
+    <MapGroup AKA="GameMainDraw" Absolute="[238.78455,122.17609,,93.600006]" AbsoluteMin="[,,78,]" ConsumeSwipe="true" Draggable="true">
       <CUITextBlock AbsoluteMin="[,,78,36]" Text="Draw" TextScale="2" />
       <CUIVerticalList Absolute="[,,,57.600002]" AbsoluteMin="[,,42.4,]" FitContent="[True,True]" HideChildrenOutsideFrame="false">
-        <MapButton AbsoluteMin="[,,42.4,14.400001]" Text="bebeeb" />
-        <MapButton AbsoluteMin="[,,42.4,14.400001]" Text="bebeeb" />
+        <MapButton AbsoluteMin="[,,42.4,14.400001]" State="true" Text="bebeeb" />
+        <MapButton AbsoluteMin="[,,42.4,14.400001]" State="true" Text="bebeeb" />
         <MapButton AbsoluteMin="[,,42.4,14.400001]" Text="bebeeb" />
         <MapButton AbsoluteMin="[,,42.4,14.400001]" Text="bebeeb" />
       </CUIVerticalList>
     </MapGroup>
-    <MapGroup AKA="GameScreenUpdate" Absolute="[54.90454,249.10406,,36]" AbsoluteMin="[,,272,]" Draggable="true">
+    <MapGroup AKA="GameScreenUpdate" Absolute="[13.904541,237.10406,,93.600006]" AbsoluteMin="[,,272,]" ConsumeSwipe="true" Draggable="true">
       <CUITextBlock AbsoluteMin="[,,272,36]" Text="GameScreen.Update" TextScale="2" />
       <CUIVerticalList Absolute="[,,,57.600002]" AbsoluteMin="[,,42.4,]" FitContent="[True,True]" HideChildrenOutsideFrame="false">
         <MapButton AbsoluteMin="[,,42.4,14.400001]" Text="bebeeb" />
-        <MapButton AbsoluteMin="[,,42.4,14.400001]" State="true" Text="bebeeb" />
         <MapButton AbsoluteMin="[,,42.4,14.400001]" Text="bebeeb" />
+        <MapButton AbsoluteMin="[,,42.4,14.400001]" State="true" Text="bebeeb" />
         <MapButton AbsoluteMin="[,,42.4,14.400001]" Text="bebeeb" />
       </CUIVerticalList>
     </MapGroup>
