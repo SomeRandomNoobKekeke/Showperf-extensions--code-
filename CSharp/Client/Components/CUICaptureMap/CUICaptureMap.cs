@@ -27,13 +27,15 @@ namespace ShowPerfExtensions
         set
         {
           locked = value;
-          foreach (CUIComponent c in Children)
-          {
-            c.ConsumeSwipe = !locked;
-            c.ConsumeDragAndDrop = true;
-            c.Draggable = !locked;
-          }
+          foreach (CUIComponent c in Children) { PassLocked(c); }
         }
+      }
+
+      public void PassLocked(CUIComponent c)
+      {
+        c.ConsumeSwipe = !locked;
+        c.ConsumeDragAndDrop = true;
+        c.Draggable = !locked;
       }
 
 
@@ -98,12 +100,7 @@ namespace ShowPerfExtensions
 #endif
 
         Locked = false;
-        // OnChildAdded += (c) =>
-        // {
-        //   c.ConsumeSwipe = Locked;
-        //   c.ConsumeDragAndDrop = !Locked;
-        //   c.Draggable = !Locked;
-        // };
+        OnChildAdded += (c) => PassLocked(c);
       }
     }
   }

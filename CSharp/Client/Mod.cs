@@ -96,7 +96,7 @@ namespace ShowPerfExtensions
 
       //CUIMain.Load(CUITest.NestedScale);
 
-      // CUIDebugWindow.Open();
+      CUIDebugWindow.Open();
 
       PatchAll();
       addCommands();

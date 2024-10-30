@@ -162,6 +162,11 @@ namespace CrabUI
       RightResizeHandle = new CUIResizeHandle(this, anchor: new Vector2(1, 1));
 
       ComponentInitialized = true;
+
+      // OnUpdate += () =>
+      // {
+      //   if (Debug) Info($"Draggable:{Draggable}, ConsumeDragAndDrop:{ConsumeDragAndDrop}, ConsumeSwipe:{ConsumeSwipe}");
+      // };
     }
 
     public CUIComponent(float? x = null, float? y = null, float? w = null, float? h = null) : this()

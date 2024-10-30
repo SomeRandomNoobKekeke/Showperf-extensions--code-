@@ -50,7 +50,7 @@ namespace ShowPerfExtensions
       public MapGroup() : base()
       {
         FitContent = new CUIBool2(true, true);
-        ConsumeSwipe = true;
+        ConsumeSwipe = false;
         ConsumeDragAndDrop = true;
         HideChildrenOutsideFrame = false;
         BackgroundColor = Color.Black;
@@ -62,9 +62,10 @@ namespace ShowPerfExtensions
 
         Content = new CUIVerticalList()
         {
-          FillEmptySpace = new CUIBool2(false, true),
+          //FillEmptySpace = new CUIBool2(false, true),
           FitContent = new CUIBool2(true, true),
           HideChildrenOutsideFrame = false,
+          Debug = true,
         };
 
         this.Append(Header);

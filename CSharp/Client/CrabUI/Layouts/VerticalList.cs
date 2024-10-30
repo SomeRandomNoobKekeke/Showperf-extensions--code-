@@ -99,7 +99,15 @@ namespace CrabUI
           if (c.FillEmptySpace.Y) Resizible.Add(size);
         }
 
+
+
         float dif = Math.Max(0, Host.Real.Height - TotalHeight);
+
+
+        // if (Host.Debug)
+        // {
+        //   Host.Info($"dif{dif} Host.Real.Height{Host.Real.Height} TotalHeight{TotalHeight}");
+        // }
 
 
         Resizible.ForEach(c =>
