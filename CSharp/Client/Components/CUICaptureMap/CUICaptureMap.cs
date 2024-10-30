@@ -21,6 +21,21 @@ namespace ShowPerfExtensions
   {
     public partial class CUICaptureMap : CUIMap
     {
+      private bool locked; public bool Locked
+      {
+        get => locked;
+        set
+        {
+          locked = value;
+          foreach (CUIComponent c in Children)
+          {
+            c.ConsumeSwipe = !locked;
+            c.ConsumeDragAndDrop = true;
+            c.Draggable = !locked;
+          }
+        }
+      }
+
 
       //Note: this method is temporary
       public void AddStuff()
@@ -65,7 +80,11 @@ namespace ShowPerfExtensions
 
         this["wrapper"]["add"] = new CUIButton("add")
         {
-          AddOnMouseDown = (e) => AddStuff(),
+          AddOnMouseDown = (e) =>
+          {
+            Locked = !Locked;
+            this["wrapper"].Get<CUIButton>("add").Text = Locked ? "locked" : "unlocked";
+          },
         };
 
         this["wrapper"]["save"] = new CUIButton("Save")
@@ -77,6 +96,14 @@ namespace ShowPerfExtensions
           AddOnMouseDown = (e) => Showperf.LoadMap(),
         };
 #endif
+
+        Locked = false;
+        // OnChildAdded += (c) =>
+        // {
+        //   c.ConsumeSwipe = Locked;
+        //   c.ConsumeDragAndDrop = !Locked;
+        //   c.Draggable = !Locked;
+        // };
       }
     }
   }

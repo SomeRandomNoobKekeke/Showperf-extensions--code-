@@ -61,15 +61,14 @@ namespace CrabUI
       }
     }
 
+    public event Action<CUIComponent> OnChildAdded;
+
     public virtual CUIComponent Append(CUIComponent c, string name = null)
     {
       if (c == null) return c;
 
       Children.Add(c);
       c.SetParent(this);
-
-      PassPropsToChild(c);
-
 
       //TODO mb i shoud just use c.AKA here
       if (name != null)
@@ -78,6 +77,8 @@ namespace CrabUI
         c.AKA = name;
       }
 
+      PassPropsToChild(c);
+      OnChildAdded?.Invoke(c);
       return c;
     }
 
@@ -88,7 +89,6 @@ namespace CrabUI
       Children.Insert(0, c);
       c.SetParent(this);
 
-      PassPropsToChild(c);
 
       if (name != null)
       {
@@ -96,6 +96,8 @@ namespace CrabUI
         c.AKA = name;
       }
 
+      PassPropsToChild(c);
+      OnChildAdded?.Invoke(c);
       return c;
     }
 

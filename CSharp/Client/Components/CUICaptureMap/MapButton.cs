@@ -62,13 +62,9 @@ namespace ShowPerfExtensions
         TextScale = 0.8f;
         ConsumeSwipe = false;
         ConsumeDragAndDrop = false;
+        Draggable = false;
         //TODO don't depend on global static vars
         OnStateChange += (state) => Showperf.OnMapButtonClicked(this);
-
-#if DEBUG
-        Draggable = true;
-        ConsumeSwipe = true;
-#endif
       }
       public MapButton(int x, int y, string name, CaptureState cs = null) : this()
       {

@@ -51,7 +51,7 @@ namespace ShowPerfExtensions
       {
         FitContent = new CUIBool2(true, true);
         ConsumeSwipe = true;
-        Draggable = true;
+        ConsumeDragAndDrop = true;
         HideChildrenOutsideFrame = false;
         BackgroundColor = Color.Black;
 
