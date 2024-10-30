@@ -64,7 +64,6 @@ namespace ShowPerfExtensions
         {
           //FillEmptySpace = new CUIBool2(false, true),
           FitContent = new CUIBool2(true, true),
-          HideChildrenOutsideFrame = false,
           Debug = true,
         };
 

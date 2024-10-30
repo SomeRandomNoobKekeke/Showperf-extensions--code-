@@ -56,6 +56,7 @@ namespace ShowPerfExtensions
         get => cState;
         set { cState = value; Disabled = cState == null; }
       }
+
       public MapButton() : base()
       {
         Padding = new Vector2(2, 0);

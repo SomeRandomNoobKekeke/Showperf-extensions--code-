@@ -50,7 +50,7 @@ namespace ShowPerfExtensions
       {
         if (c is MapGroup || c is MapButton)
         {
-          c.ConsumeSwipe = !locked;
+          c.ConsumeSwipe = true; //!locked;
           c.ConsumeDragAndDrop = true;
           c.Draggable = !locked;
         }
