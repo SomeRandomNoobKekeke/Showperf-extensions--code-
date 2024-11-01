@@ -30,7 +30,6 @@ namespace ShowPerfExtensions
       {
         if (!Categories.ContainsKey(cat)) Categories[cat] = new Dictionary<int, UpdateTicks>();
       }
-      public void EnsureCategory(CName cat) => EnsureCategory((int)cat);
 
       public void Add(UpdateTicks t)
       {

@@ -57,6 +57,8 @@ namespace ShowPerfExtensions
       //Capture.MapEntityDrawing.IsActive = true;
 
       CUIMain = new CUIMainComponent();
+
+
       Showperf = new CUIShowperf()
       {
         Absolute = new CUINullRect(null, null, 350, 550),
@@ -94,17 +96,16 @@ namespace ShowPerfExtensions
       CUIMain["showperfButton"].Click();
       Showperf.Pages.Open(Showperf.Map);
 
+
       //CUIMain.Load(CUITest.NestedScale);
 
+
+
+      //CUIDebugWindow.Open();
+
       Capture.LoadFromFile();
-      foreach (string id in Capture.States.Keys)
-      {
-        log($"{id} {Capture.States[id]}");
-      }
+      PatchAll();
 
-      CUIDebugWindow.Open();
-
-      //PatchAll();
       //addCommands();
 
 

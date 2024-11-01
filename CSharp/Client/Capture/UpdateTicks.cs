@@ -44,11 +44,6 @@ namespace ShowPerfExtensions
         Category = category;
       }
 
-      public UpdateTicks(double ticks, CName category, string name, int hash) : this(ticks, (int)category, name, hash) { }
-      public UpdateTicks(double ticks, CName category, Identifier id) : this(ticks, (int)category, id) { }
-      public UpdateTicks(double ticks, CName category, string name) : this(ticks, (int)category, name) { }
-
-
       public static UpdateTicks operator +(UpdateTicks a, UpdateTicks b)
       {
         return new UpdateTicks(a.Ticks + b.Ticks, a.Category, a.Name, a.Hash);

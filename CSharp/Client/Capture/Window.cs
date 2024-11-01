@@ -180,7 +180,6 @@ namespace ShowPerfExtensions
       }
 
       public void EnsureCategory(int cat) => FirstSlice.EnsureCategory(cat);
-      public void EnsureCategory(CName cat) => FirstSlice.EnsureCategory(cat);
 
       public void AddTicks(UpdateTicks t)
       {
@@ -191,7 +190,7 @@ namespace ShowPerfExtensions
         catch (KeyNotFoundException e)
         {
           EnsureCategory(t.Category);
-          error($"tried to add ticks to missing category {(CName)t.Category}");
+          error($"tried to add ticks to missing category with hash = {t.Category}");
         }
         catch (Exception e)
         {

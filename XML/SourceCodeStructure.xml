@@ -1,0 +1,14 @@
+<SourceCodeStructure>
+  <GameMain>
+    <Draw IsActive="true"></Draw>
+    <Update>
+      <GameScreenUpdate>
+        <Character ById="true">
+          <UpdateAll>
+
+          </UpdateAll>
+        </Character>
+      </GameScreenUpdate>
+    </Update>
+  </GameMain>
+</SourceCodeStructure>

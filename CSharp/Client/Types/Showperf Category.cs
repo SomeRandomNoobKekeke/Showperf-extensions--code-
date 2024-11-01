@@ -14,46 +14,45 @@ namespace ShowPerfExtensions
 {
   public partial class Plugin : IAssemblyPlugin
   {
-    public enum CName
-    {
-      ItemUpdate,
-      StructureUpdate,
-      HullUpdate,
-      GapUpdate,
-      WholeSubmarineUpdate,
-      CharactersUpdate,
-      MapEntityDrawing,
-      LevelObjectsDrawing,
-      LevelMisc,
-      ItemComponentsUpdate,
-      CUI = 1000,
-    }
-
     public static class Capture
     {
       public static Dictionary<string, CaptureState> States = new Dictionary<string, CaptureState>();
 
+      public static XElement Tree;
+
       public static CaptureState Get(string id)
       {
         if (!States.ContainsKey(id)) States[id] = new CaptureState(id);
-        return Capture.States[id];
+        return States[id];
       }
 
       public static CaptureState Set(string id, CaptureState cs = null)
       {
-        if (!States.ContainsKey(id)) States[id] = cs;
+        if (!States.ContainsKey(id)) States[id] = cs ?? new CaptureState(id);
         return States[id];
       }
 
       public static void LoadFromFile(string path = null)
       {
-        path ??= Mod.ModDir + "/XML/SourceCodeTree.xml";
+        path ??= Mod.ModDir + "/XML/SourceCodeStructure.xml";
         XDocument xdoc = XDocument.Load(path);
+        Tree = xdoc.Root;
 
-        void FromElementRec(XElement e, string full)
+        void FromElementRec(XElement e, string full = "")
         {
           full = full + e.Name.ToString();
-          Set(full);
+          bool byID;
+          bool isActive;
+
+          bool.TryParse(e.Attribute("ById")?.Value, out byID);
+          bool.TryParse(e.Attribute("IsActive")?.Value, out isActive);
+
+          Set(full, new CaptureState(full)
+          {
+            ByID = byID,
+            IsActive = isActive,
+            Description = e.Attribute("Description")?.Value
+          });
 
           foreach (XElement child in e.Elements())
           {
@@ -61,11 +60,11 @@ namespace ShowPerfExtensions
           }
         }
 
-        FromElementRec(xdoc.Root, "");
+        foreach (XElement child in xdoc.Root.Elements())
+        {
+          FromElementRec(child);
+        }
       }
-
-
-
 
       // public static CaptureState ItemUpdate = new CaptureState(CName.ItemUpdate);
       // public static CaptureState StructureUpdate = new CaptureState(CName.StructureUpdate);
