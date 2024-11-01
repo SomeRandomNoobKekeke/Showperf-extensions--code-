@@ -1,0 +1,6 @@
+<Client>
+  <GameMain>
+    <Draw></Draw>
+    <Update></Update>
+  </GameMain>
+</Client>

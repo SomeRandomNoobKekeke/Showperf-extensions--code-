@@ -38,9 +38,8 @@ namespace ShowPerfExtensions
       public void SetCategoryText()
       {
         string s = String.Join(", ", Capture.Active.ToList()
-        .Select(cs => MapButton.Buttons.ContainsKey(CaptureState.States[cs]) ?
-          MapButton.Buttons[CaptureState.States[cs]].Text :
-          cs.ToString()
+          .Select(cs => MapButton.Buttons.ContainsKey(cs) ?
+          MapButton.Buttons[cs].Text : cs.ToString()
         ));
         CategoryLine.Text = s;
       }
@@ -216,9 +215,8 @@ namespace ShowPerfExtensions
       public void OnGlobalCaptureStateChange()
       {
         Clear();
-        foreach (CName cn in Capture.Active)
+        foreach (CaptureState cs in Capture.Active)
         {
-          CaptureState cs = CaptureState.States[cn];
 
           if (MapButton.Buttons.ContainsKey(cs))
           {

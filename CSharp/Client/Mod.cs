@@ -96,10 +96,16 @@ namespace ShowPerfExtensions
 
       //CUIMain.Load(CUITest.NestedScale);
 
+      Capture.LoadFromFile();
+      foreach (string id in Capture.States.Keys)
+      {
+        log($"{id} {Capture.States[id]}");
+      }
+
       CUIDebugWindow.Open();
 
-      PatchAll();
-      addCommands();
+      //PatchAll();
+      //addCommands();
 
 
       info($"{ModName} Initialized");
@@ -110,7 +116,7 @@ namespace ShowPerfExtensions
 
     public void Dispose()
     {
-      removeCommands();
+      //removeCommands();
       CUI.Dispose();
       info($"{ModName} Disposed");
     }
