@@ -215,28 +215,6 @@ namespace ShowPerfExtensions
         }
       }
 
-      // public void debugCapacity()
-      // {
-      //   if (Mod.Debug)
-      //   {
-      //     StringBuilder sb = new StringBuilder();
-      //     string s = "";
-      //     foreach (Slice slice in PartialSums)
-      //     {
-
-      //       int sum = 0;
-      //       foreach (var cat in slice.Categories)
-      //       {
-      //         sum += cat.Value.Count;
-      //       }
-
-      //       sb.Append($"{sum}|");
-      //     }
-
-      //     log(sb.ToString());
-      //   }
-      // }
-
       public void Dispose()
       {
         foreach (var s in PartialSums) s.Clear();

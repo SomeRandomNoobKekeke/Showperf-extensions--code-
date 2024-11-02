@@ -40,8 +40,7 @@ namespace ShowPerfExtensions
 
         var entitiesToRender = !editing && Submarine.visibleEntities != null ? Submarine.visibleEntities : MapEntity.MapEntityList;
 
-        var sw = new System.Diagnostics.Stopwatch();
-        long ticks;
+        Stopwatch sw = new Stopwatch();
 
         foreach (MapEntity e in entitiesToRender)
         {
@@ -54,17 +53,17 @@ namespace ShowPerfExtensions
 
           sw.Restart();
           e.Draw(spriteBatch, editing, true);
+          sw.Stop();
 
-          ticks = sw.ElapsedTicks;
           if (Window.ShouldCapture(e))
           {
             if (DrawBack.ByID || e.Prefab == null)
             {
-              Window.AddTicks(new UpdateTicks(ticks, DrawBack.ID.HashCode, $"{e.Name} (ID: {e.ID})"));
+              Window.AddTicks(new UpdateTicks(sw.ElapsedTicks, DrawBack, $"{e.Name} (ID: {e.ID})"));
             }
             else
             {
-              Window.AddTicks(new UpdateTicks(ticks, DrawBack.ID.HashCode, e.Prefab.Identifier));
+              Window.AddTicks(new UpdateTicks(sw.ElapsedTicks, DrawBack, e.Prefab.Identifier));
             }
           }
         }
