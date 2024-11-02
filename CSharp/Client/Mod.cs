@@ -30,14 +30,9 @@ namespace ShowPerfExtensions
 
 
 
-    public static CaptureWindow Window;
+    public static CaptureWindowsWrapper Window;
     public static CUIShowperf Showperf;
     public static CUIMainComponent CUIMain;
-
-
-    public static void EnsureCategory(int cat) => Window.EnsureCategory(cat);
-    public static void CaptureTicks(double ticks, int category, string name, int hash) => Window.AddTicks(new UpdateTicks(ticks, category, name, hash));
-    public static void CaptureTicks(double ticks, int category, string name) => Window.AddTicks(new UpdateTicks(ticks, category, name));
 
     public void Initialize()
     {
@@ -52,7 +47,7 @@ namespace ShowPerfExtensions
 
 
       GameMain.PerformanceCounter.DrawTimeGraph = new Graph(1000);
-      Window = new CaptureWindow(duration: 3, fps: 30);
+      Window = new CaptureWindowsWrapper();
 
       //Capture.MapEntityDrawing.IsActive = true;
 
@@ -72,8 +67,7 @@ namespace ShowPerfExtensions
       );
 
       Showperf.States["init"] = Showperf.Clone();
-      CUIMain.OnUpdate += () => Showperf.Update();
-
+      Showperf.OnUpdate += () => Showperf.Update();
 
       CUIMain["showperfButton"] = new CUIButton("SHOWPERF")
       {

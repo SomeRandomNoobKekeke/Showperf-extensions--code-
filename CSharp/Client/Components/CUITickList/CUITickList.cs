@@ -74,21 +74,30 @@ namespace ShowPerfExtensions
         );
       }
 
-      public double LastUpdateTime;
-
-      public bool ShouldUpdate => Timing.TotalTime - LastUpdateTime > Window.FrameDuration;
 
       public void Update()
       {
-        if (!Window.Frozen && !GameMain.Instance.Paused && ShouldUpdate)
+        if (!Window.Frozen && !GameMain.Instance.Paused)
         {
           Clear();
 
-          foreach (int cat in Window.TotalTicks.Keys)
+          foreach (int cat in Window.Draw.TotalTicks.Keys)
           {
-            foreach (int id in Window.TotalTicks[cat].Keys)
+            foreach (int id in Window.Draw.TotalTicks[cat].Keys)
             {
-              UpdateTicks t = Window.GetTotal(cat, id);
+              UpdateTicks t = Window.Draw.GetTotal(cat, id);
+              Values.Add(t);
+              Sum += t.Ticks;
+
+              TopValue = Math.Max(TopValue, t.Ticks);
+            }
+          }
+
+          foreach (int cat in Window.Update.TotalTicks.Keys)
+          {
+            foreach (int id in Window.Update.TotalTicks[cat].Keys)
+            {
+              UpdateTicks t = Window.Update.GetTotal(cat, id);
               Values.Add(t);
               Sum += t.Ticks;
 
@@ -107,8 +116,6 @@ namespace ShowPerfExtensions
             Linearity = (Values.First().Ticks * Values.Count / 2 - Sum) / Values.First().Ticks / Values.Count;
             Linearity = 1.0 - Linearity * 2;
           }
-
-          LastUpdateTime = Timing.TotalTime;
         }
 
         TickBlock.Update();

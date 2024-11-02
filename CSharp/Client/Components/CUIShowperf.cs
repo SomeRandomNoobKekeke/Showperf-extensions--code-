@@ -50,7 +50,7 @@ namespace ShowPerfExtensions
         {
           if (Revealed)
           {
-            Window.Update();
+            Window.Update.Update();
             TickList.Update();
           }
         }
@@ -59,6 +59,24 @@ namespace ShowPerfExtensions
           log($"ShowPerf Extensions: {e}");
         }
       }
+
+      public override void Draw(SpriteBatch spriteBatch)
+      {
+        try
+        {
+          if (Revealed)
+          {
+            Window.Draw.Update();
+            TickList.Update();
+          }
+        }
+        catch (Exception e)
+        {
+          log($"ShowPerf Extensions: {e}");
+        }
+        base.Draw(spriteBatch);
+      }
+
 
       public void CreateGUI()
       {
@@ -236,6 +254,7 @@ namespace ShowPerfExtensions
       {
         ModeButton.Select(m, silent: true);
       }
+
 
       public CUIShowperf() : base()
       {

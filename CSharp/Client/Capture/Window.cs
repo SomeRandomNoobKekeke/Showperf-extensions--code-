@@ -22,7 +22,6 @@ namespace ShowPerfExtensions
 
     public class CaptureWindow : IDisposable
     {
-      public double FrameDuration;
       public bool Frozen = false;
       public bool Reseted;
 
@@ -32,30 +31,6 @@ namespace ShowPerfExtensions
         set
         {
           frames = Math.Max(1, value);
-          fps = frames / duration;
-          FrameDuration = duration / frames;
-          Reset();
-        }
-      }
-
-      private double duration; public double Duration
-      {
-        get => duration;
-        set
-        {
-          duration = Math.Max(0.1, value);
-          frames = Math.Max(1, (int)Math.Ceiling(duration / FrameDuration));
-          Reset();
-        }
-      }
-      private double fps; public double FPS
-      {
-        get => fps;
-        set
-        {
-          fps = Math.Min(Math.Max(1, value), 60);
-          FrameDuration = 1.0 / fps;
-          frames = Math.Max(1, (int)Math.Ceiling(duration / FrameDuration));
           Reset();
         }
       }
@@ -97,15 +72,9 @@ namespace ShowPerfExtensions
       public Slice TotalTicks = new Slice();
       public Queue<Slice> PartialSums;
 
-      public CaptureWindow(double duration = 3, int fps = 30)
+      public CaptureWindow(int frames = 100)
       {
-        this.duration = duration;
-        this.fps = fps;
-
-        FrameDuration = 1.0 / fps;
-        frames = Math.Max(1, (int)Math.Ceiling(duration / FrameDuration));
-
-        Reset();
+        Frames = frames;
       }
 
       public void Rotate()
@@ -140,24 +109,17 @@ namespace ShowPerfExtensions
       }
 
       public double LastUpdateTime;
-      public bool ShouldUpdate => Timing.TotalTime - LastUpdateTime > FrameDuration;
-
       public void Update()
       {
         try
         {
           if (Frozen || GameMain.Instance.Paused) return;
 
-          while (ShouldUpdate)
-          {
-            Rotate();
-            LastUpdateTime += FrameDuration;
-          }
+          Rotate();
+          LastUpdateTime = Timing.TotalTime;
         }
         catch (Exception e) { error(e); }
       }
-
-
 
       public void Reset()
       {
@@ -175,8 +137,6 @@ namespace ShowPerfExtensions
 
         FirstSlice = new Slice();
         PartialSums.Enqueue(FirstSlice);
-
-        info($"Reset| fps:{fps} duration:{duration} PartialSums.Count: {PartialSums.Count}");
       }
 
       public void EnsureCategory(int cat) => FirstSlice.EnsureCategory(cat);
@@ -205,7 +165,7 @@ namespace ShowPerfExtensions
           return Mode switch
           {
             CaptureWindowMode.Sum => TotalTicks[category][id],
-            CaptureWindowMode.Mean => TotalTicks[category][id] / Frames * FPS
+            CaptureWindowMode.Mean => TotalTicks[category][id] / Frames
           };
         }
         catch (Exception e)

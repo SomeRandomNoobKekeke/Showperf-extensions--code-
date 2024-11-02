@@ -99,8 +99,8 @@ namespace CrabUI
         });
 
         sw.Stop();
-        CUIDebug.EnsureCategory();
-        CUIDebug.CaptureTicks(sw.ElapsedTicks, "CUI.Update");
+        // CUIDebug.EnsureCategory();
+        // CUIDebug.CaptureTicks(sw.ElapsedTicks, "CUI.Update");
 
 
         RunStraigth(c => c.InvokeOnUpdate());
@@ -154,8 +154,8 @@ namespace CrabUI
       });
 
       sw.Stop();
-      CUIDebug.EnsureCategory();
-      CUIDebug.CaptureTicks(sw.ElapsedTicks, "CUI.Draw");
+      // CUIDebug.EnsureCategory();
+      // CUIDebug.CaptureTicks(sw.ElapsedTicks, "CUI.Draw");
     }
     #endregion
     // https://youtu.be/xuFgUmYCS8E?feature=shared&t=72

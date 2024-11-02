@@ -69,20 +69,20 @@ namespace CrabUI
     public static void Flush() => CUIDebugWindow.Main?.Flush();
 
 
-    public static int CUIShowperfCategory = 1000;
-#if (!SHOWPERF || !CUIDEBUG)
-    [Conditional("DONT")]
-#endif
-    public static void CaptureTicks(double ticks, string name, int hash) => ShowPerfExtensions.Plugin.CaptureTicks(ticks, CUIShowperfCategory, name, hash);
+    //     public static int CUIShowperfCategory = 1000;
+    // #if (!SHOWPERF || !CUIDEBUG)
+    //     [Conditional("DONT")]
+    // #endif
+    //     public static void CaptureTicks(double ticks, string name, int hash) => ShowPerfExtensions.Plugin.CaptureTicks(ticks, CUIShowperfCategory, name, hash);
 
-#if (!SHOWPERF || !CUIDEBUG)
-    [Conditional("DONT")]
-#endif
-    public static void CaptureTicks(double ticks, string name) => ShowPerfExtensions.Plugin.CaptureTicks(ticks, CUIShowperfCategory, name);
+    // #if (!SHOWPERF || !CUIDEBUG)
+    //     [Conditional("DONT")]
+    // #endif
+    //     public static void CaptureTicks(double ticks, string name) => ShowPerfExtensions.Plugin.CaptureTicks(ticks, CUIShowperfCategory, name);
 
-#if (!SHOWPERF || !CUIDEBUG)
-    [Conditional("DONT")]
-#endif
-    public static void EnsureCategory() => ShowPerfExtensions.Plugin.EnsureCategory(CUIShowperfCategory);
+    // #if (!SHOWPERF || !CUIDEBUG)
+    //     [Conditional("DONT")]
+    // #endif
+    //     public static void EnsureCategory() => ShowPerfExtensions.Plugin.EnsureCategory(CUIShowperfCategory);
   }
 }
