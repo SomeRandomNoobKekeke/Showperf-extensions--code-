@@ -17,11 +17,8 @@ namespace ShowPerfExtensions
 {
   public partial class Plugin : IAssemblyPlugin
   {
-
-
     public class CaptureWindow : IDisposable
     {
-      public bool Frozen = false;
       public bool Reseted;
 
       private int frames; public int Frames

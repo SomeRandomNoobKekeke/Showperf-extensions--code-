@@ -32,6 +32,31 @@ namespace ShowPerfExtensions
         Update.Reset();
       }
 
+      public event Action<CaptureMode> OnModeChanged;
+      private CaptureMode mode = CaptureMode.Mean; public CaptureMode Mode
+      {
+        get => mode;
+        set
+        {
+          mode = value;
+          Reset();
+          OnModeChanged?.Invoke(mode);
+        }
+      }
+
+      public event Action<SubType> OnCaptureFromChanged;
+
+      private SubType captureFrom; public SubType CaptureFrom
+      {
+        get => captureFrom;
+        set
+        {
+          captureFrom = value;
+          Reset();
+          OnCaptureFromChanged?.Invoke(captureFrom);
+        }
+      }
+
       public bool ShouldCapture(Entity e)
       {
         if (CaptureFrom == SubType.All) return true;
@@ -125,30 +150,7 @@ namespace ShowPerfExtensions
         }
       }
 
-      public event Action<CaptureMode> OnModeChanged;
-      private CaptureMode mode = CaptureMode.Mean; public CaptureMode Mode
-      {
-        get => mode;
-        set
-        {
-          mode = value;
-          Reset();
-          OnModeChanged?.Invoke(mode);
-        }
-      }
 
-      public event Action<SubType> OnCaptureFromChanged;
-
-      private SubType captureFrom; public SubType CaptureFrom
-      {
-        get => captureFrom;
-        set
-        {
-          captureFrom = value;
-          Reset();
-          OnCaptureFromChanged?.Invoke(captureFrom);
-        }
-      }
 
 
       public CaptureClass()

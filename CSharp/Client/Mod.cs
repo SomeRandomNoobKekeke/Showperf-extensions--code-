@@ -45,8 +45,6 @@ namespace ShowPerfExtensions
 
       GameMain.PerformanceCounter.DrawTimeGraph = new Graph(1000);
 
-      //Capture.MapEntityDrawing.IsActive = true;
-
       CUIMain = new CUIMainComponent();
       Capture = new CaptureClass();
 
