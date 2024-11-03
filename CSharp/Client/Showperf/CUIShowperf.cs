@@ -48,11 +48,7 @@ namespace ShowPerfExtensions
       {
         try
         {
-          if (Revealed)
-          {
-            Capture.Update.Update();
-            TickList.Update();
-          }
+          if (Revealed) TickList.Update();
         }
         catch (Exception e)
         {
@@ -60,22 +56,6 @@ namespace ShowPerfExtensions
         }
       }
 
-      public override void Draw(SpriteBatch spriteBatch)
-      {
-        try
-        {
-          if (Revealed)
-          {
-            Capture.Draw.Update();
-            TickList.Update();
-          }
-        }
-        catch (Exception e)
-        {
-          log($"ShowPerf Extensions: {e}");
-        }
-        base.Draw(spriteBatch);
-      }
 
 
       public void CreateGUI()
