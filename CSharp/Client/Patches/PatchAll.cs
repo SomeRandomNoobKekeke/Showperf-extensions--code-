@@ -10,6 +10,8 @@ namespace ShowPerfExtensions
 {
   public partial class Plugin : IAssemblyPlugin
   {
+    public class ShowperfPatchAttribute : System.Attribute { }
+
     public void PatchAll()
     {
       PatchCapture();

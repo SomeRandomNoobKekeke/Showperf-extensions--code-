@@ -17,8 +17,7 @@ namespace ShowPerfExtensions
 {
   public partial class Plugin : IAssemblyPlugin
   {
-    public enum CaptureWindowMode { Sum, Mean, Spike }
-    public enum SubType { Player, Outpost, OutpostModule, Wreck, BeaconStation, EnemySubmarine, Ruin, All }
+
 
     public class CaptureWindow : IDisposable
     {
@@ -35,39 +34,6 @@ namespace ShowPerfExtensions
         }
       }
 
-      public event Action<CaptureWindowMode> OnModeChanged;
-      private CaptureWindowMode mode = CaptureWindowMode.Mean; public CaptureWindowMode Mode
-      {
-        get => mode;
-        set
-        {
-          mode = value;
-          Reset();
-          OnModeChanged?.Invoke(mode);
-        }
-      }
-
-      public event Action<SubType> OnCaptureFromChanged;
-
-      private SubType captureFrom; public SubType CaptureFrom
-      {
-        get => captureFrom;
-        set
-        {
-          captureFrom = value;
-          Reset();
-          OnCaptureFromChanged?.Invoke(captureFrom);
-        }
-      }
-
-      public bool ShouldCapture(Entity e)
-      {
-        if (CaptureFrom == SubType.All) return true;
-        if (e == null) return false;
-        if (e.Submarine == null || e.Submarine.Info == null) return false;
-        return (int)e.Submarine.Info.Type == (int)CaptureFrom;
-      }
-
       public Slice FirstSlice;
       public Slice TotalTicks = new Slice();
       public Queue<Slice> PartialSums;
@@ -80,13 +46,13 @@ namespace ShowPerfExtensions
       public void Rotate()
       {
         Reseted = false;
-        if (Mode == CaptureWindowMode.Sum)
+        if (Capture.Mode == CaptureMode.Sum)
         {
           TotalTicks.Add(FirstSlice);
           FirstSlice.Clear();
         }
 
-        if (Mode == CaptureWindowMode.Mean)
+        if (Capture.Mode == CaptureMode.Mean)
         {
           if (Frames == 1)
           {
@@ -113,7 +79,7 @@ namespace ShowPerfExtensions
       {
         try
         {
-          if (Frozen || GameMain.Instance.Paused) return;
+          if (Capture.Frozen || GameMain.Instance.Paused) return;
 
           Rotate();
           LastUpdateTime = Timing.TotalTime;
@@ -162,10 +128,10 @@ namespace ShowPerfExtensions
       {
         try
         {
-          return Mode switch
+          return Capture.Mode switch
           {
-            CaptureWindowMode.Sum => TotalTicks[category][id],
-            CaptureWindowMode.Mean => TotalTicks[category][id] / Frames
+            CaptureMode.Sum => TotalTicks[category][id],
+            CaptureMode.Mean => TotalTicks[category][id] / Frames
           };
         }
         catch (Exception e)

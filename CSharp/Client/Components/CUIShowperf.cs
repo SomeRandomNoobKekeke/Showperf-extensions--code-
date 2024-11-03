@@ -50,7 +50,7 @@ namespace ShowPerfExtensions
         {
           if (Revealed)
           {
-            Window.Update.Update();
+            Capture.Update.Update();
             TickList.Update();
           }
         }
@@ -66,7 +66,7 @@ namespace ShowPerfExtensions
         {
           if (Revealed)
           {
-            Window.Draw.Update();
+            Capture.Draw.Update();
             TickList.Update();
           }
         }
@@ -139,11 +139,11 @@ namespace ShowPerfExtensions
         this["buttons1"]["mode"] = ModeButton = new CUIMultiButton()
         {
           FillEmptySpace = new CUIBool2(true, false),
-          AddOnSelect = (b, i) => Window.Mode = (CaptureWindowMode)b.Data,
+          AddOnSelect = (b, i) => Capture.Mode = (CaptureMode)b.Data,
         };
 
-        ModeButton.Add(new CUIButton("Mean") { Data = CaptureWindowMode.Mean });
-        ModeButton.Add(new CUIButton("Sum") { Data = CaptureWindowMode.Sum });
+        ModeButton.Add(new CUIButton("Mean") { Data = CaptureMode.Mean });
+        ModeButton.Add(new CUIButton("Sum") { Data = CaptureMode.Sum });
 
         ModeButton.Select(0);
 
@@ -151,7 +151,7 @@ namespace ShowPerfExtensions
         this["buttons1"]["SubTypeDD"] = SubTypeDD = new CUIDropDown()
         {
           FillEmptySpace = new CUIBool2(true, false),
-          AddOnSelect = (v) => Window.CaptureFrom = Enum.Parse<SubType>(v),
+          AddOnSelect = (v) => Capture.CaptureFrom = Enum.Parse<SubType>(v),
         };
 
         foreach (SubType st in Enum.GetValues(typeof(SubType)))
@@ -250,7 +250,7 @@ namespace ShowPerfExtensions
         SubTypeDD.Select(s, silent: true);
       }
 
-      public void OnWindowModeChanged(CaptureWindowMode m)
+      public void OnWindowModeChanged(CaptureMode m)
       {
         ModeButton.Select(m, silent: true);
       }
@@ -263,8 +263,8 @@ namespace ShowPerfExtensions
 
         Capture.OnStateChange += (cs) => OnCaptureStateChange(cs);
         Capture.OnGlobalStateChange += () => OnGlobalCaptureStateChange();
-        Window.OnCaptureFromChanged += (s) => OnWindowCaptureFromChanged(s);
-        Window.OnModeChanged += (m) => OnWindowModeChanged(m);
+        Capture.OnCaptureFromChanged += (s) => OnWindowCaptureFromChanged(s);
+        Capture.OnModeChanged += (m) => OnWindowModeChanged(m);
 
         OnDClick += m =>
         {

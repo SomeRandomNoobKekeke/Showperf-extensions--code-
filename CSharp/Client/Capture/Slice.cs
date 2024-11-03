@@ -16,6 +16,8 @@ namespace ShowPerfExtensions
   {
     public class Slice
     {
+      public double Total;
+
       public Dictionary<int, Dictionary<int, UpdateTicks>> Categories = new Dictionary<int, Dictionary<int, UpdateTicks>>();
 
       public Dictionary<int, Dictionary<int, UpdateTicks>>.KeyCollection Keys => Categories.Keys;
@@ -39,6 +41,8 @@ namespace ShowPerfExtensions
 
       public void Add(Slice s)
       {
+        Total += s.Total;
+
         foreach (int cat in s.Categories.Keys)
         {
           if (!Categories.ContainsKey(cat)) Categories[cat] = new Dictionary<int, UpdateTicks>();
@@ -53,6 +57,8 @@ namespace ShowPerfExtensions
 
       public void Substract(Slice s)
       {
+        Total -= s.Total;
+
         foreach (int cat in s.Categories.Keys)
         {
           if (!Categories.ContainsKey(cat)) Categories[cat] = new Dictionary<int, UpdateTicks>();

@@ -36,7 +36,7 @@ namespace ShowPerfExtensions
       public static bool Submarine_DrawBack_Replace(SpriteBatch spriteBatch, bool editing = false, Predicate<MapEntity> predicate = null)
       {
         if (!DrawBack.IsActive) return true;
-        Window.Update.EnsureCategory(DrawBack.ID.HashCode);
+        Capture.Update.EnsureCategory(DrawBack.ID.HashCode);
 
         var entitiesToRender = !editing && Submarine.visibleEntities != null ? Submarine.visibleEntities : MapEntity.MapEntityList;
 
@@ -55,15 +55,15 @@ namespace ShowPerfExtensions
           e.Draw(spriteBatch, editing, true);
           sw.Stop();
 
-          if (Window.Update.ShouldCapture(e))
+          if (Capture.ShouldCapture(e))
           {
             if (DrawBack.ByID || e.Prefab == null)
             {
-              Window.Update.AddTicks(new UpdateTicks(sw.ElapsedTicks, DrawBack, $"{e.Name} (ID: {e.ID})"));
+              Capture.Update.AddTicks(new UpdateTicks(sw.ElapsedTicks, DrawBack, $"{e.Name} (ID: {e.ID})"));
             }
             else
             {
-              Window.Update.AddTicks(new UpdateTicks(sw.ElapsedTicks, DrawBack, e.Prefab.Identifier));
+              Capture.Update.AddTicks(new UpdateTicks(sw.ElapsedTicks, DrawBack, e.Prefab.Identifier));
             }
           }
         }

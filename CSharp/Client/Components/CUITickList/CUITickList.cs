@@ -77,15 +77,15 @@ namespace ShowPerfExtensions
 
       public void Update()
       {
-        if (!Window.Frozen && !GameMain.Instance.Paused)
+        if (!Capture.Frozen && !GameMain.Instance.Paused)
         {
           Clear();
 
-          foreach (int cat in Window.Draw.TotalTicks.Keys)
+          foreach (int cat in Capture.Draw.TotalTicks.Keys)
           {
-            foreach (int id in Window.Draw.TotalTicks[cat].Keys)
+            foreach (int id in Capture.Draw.TotalTicks[cat].Keys)
             {
-              UpdateTicks t = Window.Draw.GetTotal(cat, id);
+              UpdateTicks t = Capture.Draw.GetTotal(cat, id);
               Values.Add(t);
               Sum += t.Ticks;
 
@@ -93,11 +93,11 @@ namespace ShowPerfExtensions
             }
           }
 
-          foreach (int cat in Window.Update.TotalTicks.Keys)
+          foreach (int cat in Capture.Update.TotalTicks.Keys)
           {
-            foreach (int id in Window.Update.TotalTicks[cat].Keys)
+            foreach (int id in Capture.Update.TotalTicks[cat].Keys)
             {
-              UpdateTicks t = Window.Update.GetTotal(cat, id);
+              UpdateTicks t = Capture.Update.GetTotal(cat, id);
               Values.Add(t);
               Sum += t.Ticks;
 

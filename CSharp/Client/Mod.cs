@@ -27,11 +27,8 @@ namespace ShowPerfExtensions
     public string ModVersion = "1.0.0";
     public bool Debug;
 
-
-
-
-    public static CaptureWindowsWrapper Window;
     public static CUIShowperf Showperf;
+    public static CaptureClass Capture;
     public static CUIMainComponent CUIMain;
 
     public void Initialize()
@@ -47,12 +44,11 @@ namespace ShowPerfExtensions
 
 
       GameMain.PerformanceCounter.DrawTimeGraph = new Graph(1000);
-      Window = new CaptureWindowsWrapper();
 
       //Capture.MapEntityDrawing.IsActive = true;
 
       CUIMain = new CUIMainComponent();
-
+      Capture = new CaptureClass();
 
       Showperf = new CUIShowperf()
       {
