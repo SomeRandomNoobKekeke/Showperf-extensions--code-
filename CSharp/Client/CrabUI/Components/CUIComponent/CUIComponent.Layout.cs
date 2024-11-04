@@ -25,12 +25,13 @@ namespace CrabUI
       get => layout;
       set { layout = value; layout.Host = this; }
     }
-
-    private CUI3DOffset childrenOffset = new CUI3DOffset(); public CUI3DOffset ChildrenOffset
+    [CUISerializable]
+    public CUI3DOffset ChildrenOffset
     {
       get => childrenOffset;
       set => SetChildrenOffset(value);
     }
+    private CUI3DOffset childrenOffset = new CUI3DOffset();
     internal void SetChildrenOffset(CUI3DOffset value, [CallerMemberName] string memberName = "")
     {
       childrenOffset = ChildOffsetBounds.Check(value);

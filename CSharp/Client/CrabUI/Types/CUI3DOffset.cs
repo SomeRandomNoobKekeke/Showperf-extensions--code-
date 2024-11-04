@@ -83,5 +83,29 @@ namespace CrabUI
     }
 
     public override string ToString() => $"[{X},{Y},{Z}]";
+
+    public static CUI3DOffset Parse(string s)
+    {
+      string content = s.Substring(
+        s.IndexOf('[') + 1,
+        s.IndexOf(']') - s.IndexOf('[') - 1
+      );
+
+      var components = content.Split(',').Select(a => a.Trim());
+
+      string sx = components.ElementAtOrDefault(0);
+      string sy = components.ElementAtOrDefault(1);
+      string sz = components.ElementAtOrDefault(2);
+
+      float x = 0;
+      float y = 0;
+      float z = 0;
+
+      float.TryParse(sx, out x);
+      float.TryParse(sy, out y);
+      float.TryParse(sz, out z);
+
+      return new CUI3DOffset(x, y, z);
+    }
   }
 }

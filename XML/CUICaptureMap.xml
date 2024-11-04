@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<CUICaptureMap Relative="[0,0,1,1]">
+<CUICaptureMap ChildrenOffset="[59.20804,99.948166,2.1520004]" Relative="[0,0,1,1]">
   <Connections>
     <Connection Start="GameMain" End="GameMainUpdate" />
     <Connection Start="GameMain" End="GameMainDraw" />
