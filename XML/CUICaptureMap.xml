@@ -1,12 +1,12 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<CUICaptureMap ChildrenOffset="[99.760185,160.9595,2.2960005]" Relative="[0,0,1,1]">
+<CUICaptureMap ChildrenOffset="[44.368088,394.57892,2.4400005]" Relative="[0,0,1,1]">
   <Connections>
     <Connection Start="GameMain" End="GameMainUpdate" />
     <Connection Start="GameMain" End="GameMainDraw" />
     <Connection Start="GameMainUpdate.ScreenSelectedUpdate" End="GameScreenUpdate" />
   </Connections>
   <Children>
-    <MapButton AKA="GameMain" Absolute="[368.12805,-33.207962,,]" AbsoluteMin="[,,144,36]" ConsumeDragAndDrop="true" ConsumeSwipe="true" Draggable="true" Text="GameMain" TextScale="2" />
+    <MapButton AKA="GameMain" Absolute="[528.1681,-145.63196,,]" AbsoluteMin="[,,144,36]" ConsumeDragAndDrop="true" ConsumeSwipe="true" Draggable="true" Text="GameMain" TextScale="2" />
     <MapButton AKA="ItemUpdate" Absolute="[36,85.09601,,]" AbsoluteMin="[,,142.59999,32.399998]" CState="ItemUpdate" ConsumeDragAndDrop="true" ConsumeSwipe="true" Draggable="true" Text="ItemUpdate" TextScale="1.8" />
     <MapButton AKA="StructureUpdate" Absolute="[13,389,,]" AbsoluteMin="[,,202,32.399998]" CState="StructureUpdate" ConsumeDragAndDrop="true" ConsumeSwipe="true" Draggable="true" Text="StructureUpdate" TextScale="1.8" />
     <MapButton AKA="HullUpdate" Absolute="[23,350,,]" AbsoluteMin="[,,133.59999,32.399998]" CState="HullUpdate" ConsumeDragAndDrop="true" ConsumeSwipe="true" Draggable="true" Text="HullUpdate" TextScale="1.8" />
@@ -14,20 +14,20 @@
     <MapButton AKA="WholeSubmarineUpdate" Absolute="[10,274,,]" AbsoluteMin="[,,288.4,32.399998]" CState="WholeSubmarineUpdate" ConsumeDragAndDrop="true" ConsumeSwipe="true" Draggable="true" Text="WholeSubmarineUpdate" TextScale="1.8" />
     <MapButton AKA="MapEntityDrawing" Absolute="[7,240,,]" AbsoluteMin="[,,227.2,32.399998]" CState="MapEntityDrawing" ConsumeDragAndDrop="true" ConsumeSwipe="true" Draggable="true" Text="MapEntityDrawing" TextScale="1.8" />
     <MapButton AKA="CharactersUpdate" Absolute="[13,207,,]" AbsoluteMin="[,,218.2,32.399998]" CState="CharactersUpdate" ConsumeDragAndDrop="true" ConsumeSwipe="true" Draggable="true" Text="CharactersUpdate" TextScale="1.8" />
-    <MapButton AKA="LevelObjectsDrawing" Absolute="[3,170,,]" AbsoluteMin="[,,254.2,32.399998]" CState="LevelObjectsDrawing" ConsumeDragAndDrop="true" ConsumeSwipe="true" Draggable="true" Text="LevelObjectsDrawing" TextScale="1.8" />
+    <MapButton AKA="LevelObjectsDrawing" Absolute="[2.9998932,167.84793,,]" AbsoluteMin="[,,254.2,32.399998]" CState="LevelObjectsDrawing" ConsumeDragAndDrop="true" ConsumeSwipe="true" Draggable="true" Text="LevelObjectsDrawing" TextScale="1.8" />
     <MapButton AKA="LevelMisc" Absolute="[27.18396,125.359985,,]" AbsoluteMin="[,,122.799995,32.399998]" CState="LevelMisc" ConsumeDragAndDrop="true" ConsumeSwipe="true" Draggable="true" Text="LevelMisc" TextScale="1.8" />
-    <MapButton AKA="ItemComponentsUpdate" Absolute="[18.079956,43.83998,,]" AbsoluteMin="[,,288.4,32.399998]" CState="ItemComponentsUpdate" ConsumeDragAndDrop="true" ConsumeSwipe="true" Draggable="true" Text="ItemComponentsUpdate" TextScale="1.8" />
-    <MapGroup AKA="GameMainUpdate" Absolute="[402.79236,245.10413,,52.199997]" AbsoluteMin="[,,143.5,]" ConsumeSwipe="true" Draggable="true">
+    <MapButton AKA="ItemComponentsUpdate" Absolute="[18.079895,41.68799,,]" AbsoluteMin="[,,288.4,32.399998]" CState="ItemComponentsUpdate" ConsumeDragAndDrop="true" ConsumeSwipe="true" Draggable="true" Text="ItemComponentsUpdate" TextScale="1.8" />
+    <MapGroup AKA="GameMainUpdate" Absolute="[540.2485,161.4881,,52.199997]" AbsoluteMin="[,,143.5,]" ConsumeSwipe="true" Draggable="true">
       <MapButton Absolute="[-126,-16,,]" AbsoluteMin="[,,98,36]" Text="Update" TextScale="2" />
       <CUIVerticalList Absolute="[,,,16.199999]" AbsoluteMin="[,,143.5,]" FitContent="[True,True]">
         <MapButton AKA="ScreenSelectedUpdate" Absolute="[-67.280045,-182.59198,,]" AbsoluteMin="[,,143.5,16.199999]" Text="Screen.Selected.Update" />
       </CUIVerticalList>
     </MapGroup>
-    <MapGroup AKA="GameMainDraw" Absolute="[506.40057,77.216125,,100.799995]" AbsoluteMin="[,,78,]" ConsumeSwipe="true" Draggable="true">
+    <MapGroup AKA="GameMainDraw" Absolute="[737.5525,-3.1678925,,100.799995]" AbsoluteMin="[,,78,]" ConsumeSwipe="true" Draggable="true">
       <CUITextBlock AbsoluteMin="[,,78,36]" Text="Draw" TextScale="2" />
       <CUIVerticalList Absolute="[,,,64.799995]" AbsoluteMin="[,,47.199997,]" FitContent="[True,True]">
         <MapButton AbsoluteMin="[,,47.199997,16.199999]" Text="bebeeb" />
-        <MapButton AbsoluteMin="[,,47.199997,16.199999]" State="true" Text="bebeeb" />
+        <MapButton AbsoluteMin="[,,47.199997,16.199999]" Text="bebeeb" />
         <MapButton AbsoluteMin="[,,47.199997,16.199999]" Text="bebeeb" />
         <MapButton AbsoluteMin="[,,47.199997,16.199999]" Text="bebeeb" />
       </CUIVerticalList>
