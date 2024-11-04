@@ -190,8 +190,12 @@ namespace ShowPerfExtensions
 
       public void LoadMap()
       {
+        MapButton.Buttons.Clear();
+        Capture.Active.Clear();
+
         Map = CUIComponent.LoadFromFile<CUICaptureMap>(Mod.ModDir + "/XML/CUICaptureMap.xml");
         Pages.Open(Map);
+        OnGlobalCaptureStateChange();
       }
 
       public void OnMapButtonClicked(MapButton b)
