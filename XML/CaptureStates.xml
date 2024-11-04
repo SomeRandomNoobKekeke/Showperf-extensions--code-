@@ -1,4 +1,4 @@
-<SourceCodeStructure>
+<CaptureStates>
   <GameMain>
     <Draw IsActive="true"></Draw>
     <Update>
@@ -11,4 +11,4 @@
       </GameScreenUpdate>
     </Update>
   </GameMain>
-</SourceCodeStructure>
+</CaptureStates>

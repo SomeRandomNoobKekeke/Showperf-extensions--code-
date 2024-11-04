@@ -80,9 +80,10 @@ namespace ShowPerfExtensions
         return States[id];
       }
 
+      // Tag names joined with '.'
       public void LoadFromFile(string path = null)
       {
-        path ??= Mod.ModDir + "/XML/SourceCodeStructure.xml";
+        path ??= Mod.ModDir + "/XML/CaptureStates.xml";
         XDocument xdoc = XDocument.Load(path);
 
         void FromElementRec(XElement e, string full = "")
