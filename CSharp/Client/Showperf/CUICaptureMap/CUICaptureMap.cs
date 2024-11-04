@@ -15,13 +15,16 @@ using HarmonyLib;
 using CrabUI;
 using System.IO;
 
+using System.Xml;
+using System.Xml.Linq;
+
 namespace ShowPerfExtensions
 {
   public partial class Plugin : IAssemblyPlugin
   {
     public partial class CUICaptureMap : CUIMap
     {
-
+      public CUI3DOffset MemorizedOffset;
 
       private bool locked; public bool Locked
       {
@@ -79,12 +82,19 @@ namespace ShowPerfExtensions
         Add(g);
       }
 
+      public override void FromXML(XElement element)
+      {
+        base.FromXML(element);
+        //TODO all this "restore offset on dclick" stuff probably should be in CUIMap
+        MemorizedOffset = this.ChildrenOffset;
+      }
+
 
       public CUICaptureMap()
       {
         // BackgroundColor = Color.Transparent;
         // BorderColor = Color.Transparent;
-        OnDClick += (e) => SetChildrenOffset(new CUI3DOffset(0, 0, 1));
+        OnDClick += (e) => SetChildrenOffset(MemorizedOffset);
 
         Append(new CUITextBlock("Client")
         {
@@ -105,7 +115,12 @@ namespace ShowPerfExtensions
 
         SaveButton = new CUIButton("Save")
         {
-          AddOnMouseDown = (e) => SaveToFile(Mod.ModDir + "/XML/CUICaptureMap.xml"),
+          AddOnMouseDown = (e) =>
+          {
+            SaveToFile(Mod.ModDir + "/XML/CUICaptureMap.xml");
+            MemorizedOffset = ChildrenOffset;
+          },
+
         };
 
         LoadButton = new CUIButton("Load")
