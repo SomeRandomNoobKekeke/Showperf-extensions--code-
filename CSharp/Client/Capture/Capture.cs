@@ -66,7 +66,7 @@ namespace ShowPerfExtensions
       }
 
 
-      public Dictionary<string, CaptureState> States = new Dictionary<string, CaptureState>();
+      private Dictionary<string, CaptureState> States = new Dictionary<string, CaptureState>();
 
       public CaptureState Get(string id)
       {
