@@ -1,16 +1,37 @@
 <CaptureStates>
-  <bebebe>
-    <kokoko>
-
-    </kokoko>
-  </bebebe>
-  <jujuju>
-    <lyalyalya AKA="ololo">
-      <atyatya>
-        <hththt AKA="evil.hehehe">
-
-        </hththt>
-      </atyatya>
-    </lyalyalya>
-  </jujuju>
+  <Showperf>
+    <Draw>
+      <HUD />
+      <Map>
+        <BackCharactersItems />
+        <BackLevel />
+        <BackStructures />
+        <DeformableCharacters />
+        <FrontDamageable />
+        <FrontLevel />
+        <FrontMisc />
+        <FrontParticles />
+        <FrontStructuresItems />
+        <LOS />
+        <Lighting />
+        <PostProcess />
+      </Map>
+    </Draw>
+    <ThinkHook />
+    <Update>
+      <Character />
+      <GameSession />
+      <Level />
+      <MapEntity>
+        <Items />
+        <Misc />
+      </MapEntity>
+      <Particles />
+      <Physics />
+      <Power />
+      <Ragdolls />
+      <StatusEffects />
+      <Submarine />
+    </Update>
+  </Showperf>
 </CaptureStates>

@@ -37,10 +37,13 @@ namespace ShowPerfExtensions
       }
       public void SetCategoryText()
       {
-        string s = String.Join(", ", Capture.Active.ToList()
-          .Select(cs => MapButton.Buttons.ContainsKey(cs) ?
-          MapButton.Buttons[cs].Text : cs.ToString()
-        ));
+        string s = String.Join(", ",
+          Capture.Active.ToList()
+          .Select(cs =>
+            MapButton.Buttons.GetValueOrDefault(cs)?.FirstOrDefault()?.Text ??
+            cs.ToString()
+          )
+        );
         CategoryLine.Text = s;
       }
 
@@ -202,9 +205,13 @@ namespace ShowPerfExtensions
       public void OnCaptureStateChange(CaptureState cs)
       {
         Clear();
+
         if (MapButton.Buttons.ContainsKey(cs))
         {
-          MapButton.Buttons[cs].SetState(cs.IsActive);
+          foreach (MapButton b in MapButton.Buttons[cs])
+          {
+            b.SetState(cs.IsActive);
+          }
         }
 
         ById.SetState(cs.ByID);
@@ -215,10 +222,12 @@ namespace ShowPerfExtensions
         Clear();
         foreach (CaptureState cs in Capture.Active)
         {
-
           if (MapButton.Buttons.ContainsKey(cs))
           {
-            MapButton.Buttons[cs].SetState(cs.IsActive);
+            foreach (MapButton b in MapButton.Buttons[cs])
+            {
+              b.SetState(cs.IsActive);
+            }
           }
         }
         ById.SetState(Capture.GlobalByID);

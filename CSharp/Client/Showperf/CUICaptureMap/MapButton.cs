@@ -50,14 +50,24 @@ namespace ShowPerfExtensions
       [DontSerializeAttribute]
       public new CUINullRect AbsoluteMin { get => absoluteMin; set => SetAbsoluteMin(value); }
 
-      public static Dictionary<CaptureState, MapButton> Buttons = new Dictionary<CaptureState, MapButton>();
+      public static Dictionary<CaptureState, HashSet<MapButton>> Buttons = new Dictionary<CaptureState, HashSet<MapButton>>();
+      public static void AddButton(CaptureState cs, MapButton b)
+      {
+        if (!Buttons.ContainsKey(cs)) Buttons[cs] = new HashSet<MapButton>();
+        Buttons[cs].Add(b);
+      }
 
       private CaptureState cState;
       [CUISerializable]
       public CaptureState CState
       {
         get => cState;
-        set { cState = value; Disabled = cState == null; }
+        set
+        {
+          cState = value;
+          Disabled = cState == null;
+          if (cState != null) AddButton(cState, this);
+        }
       }
 
       public MapButton() : base()
@@ -81,7 +91,6 @@ namespace ShowPerfExtensions
         if (cs != null)
         {
           State = cs.IsActive;
-          Buttons[cs] = this;
         }
       }
     }

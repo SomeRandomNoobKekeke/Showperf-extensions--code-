@@ -48,41 +48,41 @@ namespace ShowPerfExtensions
       CUIMain = new CUIMainComponent();
       Capture = new CaptureClass();
 
-      // Showperf = new CUIShowperf()
-      // {
-      //   Absolute = new CUINullRect(null, null, 350, 550),
-      // };
+      Showperf = new CUIShowperf()
+      {
+        Absolute = new CUINullRect(null, null, 350, 550),
+      };
 
-      // Showperf.CreateGUI();
+      Showperf.CreateGUI();
 
-      // Showperf.Absolute = new CUINullRect(
-      //   CUIAnchor.GetChildPos(CUIMain.Real, new Vector2(1, 0.5f), new Vector2(-1, 0), Showperf.Absolute.Size),
-      //   Showperf.Absolute.Size
-      // );
+      Showperf.Absolute = new CUINullRect(
+        CUIAnchor.GetChildPos(CUIMain.Real, new Vector2(1, 0.5f), new Vector2(-1, 0), Showperf.Absolute.Size),
+        Showperf.Absolute.Size
+      );
 
-      // Showperf.States["init"] = Showperf.Clone();
-      // Showperf.OnUpdate += () => Showperf.Update();
+      Showperf.States["init"] = Showperf.Clone();
+      Showperf.OnUpdate += () => Showperf.Update();
 
-      // CUIMain["showperfButton"] = new CUIButton("SHOWPERF")
-      // {
-      //   Anchor = new Vector2(1, 0.5f),
-      //   Font = GUIStyle.MonospacedFont,
-      //   TextScale = 0.8f,
-      //   Wrap = true,
-      //   AddOnMouseDown = (e) =>
-      //   {
-      //     CUIMain["showperfButton"].Revealed = false;
-      //     Showperf.Open();
-      //   },
-      //   InactiveColor = new Color(0, 0, 32, 128),
-      //   MouseOverColor = new Color(0, 0, 64, 128),
-      //   MousePressedColor = new Color(0, 0, 128, 128),
-      // };
+      CUIMain["showperfButton"] = new CUIButton("SHOWPERF")
+      {
+        Anchor = new Vector2(1, 0.5f),
+        Font = GUIStyle.MonospacedFont,
+        TextScale = 0.8f,
+        Wrap = true,
+        AddOnMouseDown = (e) =>
+        {
+          CUIMain["showperfButton"].Revealed = false;
+          Showperf.Open();
+        },
+        InactiveColor = new Color(0, 0, 32, 128),
+        MouseOverColor = new Color(0, 0, 64, 128),
+        MousePressedColor = new Color(0, 0, 128, 128),
+      };
 
-      // Showperf.OnClose += () => CUIMain["showperfButton"].Revealed = true;
+      Showperf.OnClose += () => CUIMain["showperfButton"].Revealed = true;
 
-      // CUIMain["showperfButton"].Click();
-      // Showperf.Pages.Open(Showperf.Map);
+      CUIMain["showperfButton"].Click();
+      Showperf.Pages.Open(Showperf.Map);
 
 
       //CUIMain.Load(CUITest.NestedScale);
@@ -92,7 +92,7 @@ namespace ShowPerfExtensions
       //CUIDebugWindow.Open();
 
       Capture.LoadFromFile();
-      Capture.PrintStates();
+      //Capture.PrintStates();
 
       PatchAll();
 
