@@ -80,6 +80,14 @@ namespace ShowPerfExtensions
         return States[id];
       }
 
+      public void PrintStates()
+      {
+        foreach (string key in States.Keys)
+        {
+          log($"{States[key]}");
+        }
+      }
+
       // Tag names joined with '.'
       public void LoadFromFile(string path = null)
       {
@@ -95,7 +103,9 @@ namespace ShowPerfExtensions
           bool.TryParse(e.Attribute("ById")?.Value, out byID);
           bool.TryParse(e.Attribute("IsActive")?.Value, out isActive);
 
-          Set(full, new CaptureState(full)
+          string realName = e.Attribute("AKA")?.Value ?? full;
+
+          Set(realName, new CaptureState(realName)
           {
             ByID = byID,
             IsActive = isActive,
