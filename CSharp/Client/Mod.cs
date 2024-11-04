@@ -92,7 +92,7 @@ namespace ShowPerfExtensions
       //CUIDebugWindow.Open();
 
       Capture.LoadFromFile();
-      //Capture.PrintStates();
+      Capture.PrintStates();
 
       PatchAll();
 

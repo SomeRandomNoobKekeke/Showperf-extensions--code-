@@ -84,7 +84,7 @@ namespace ShowPerfExtensions
       {
         foreach (string key in States.Keys)
         {
-          log($"{States[key]}");
+          log($"{key} - {States[key]}");
         }
       }
 
@@ -103,14 +103,30 @@ namespace ShowPerfExtensions
           bool.TryParse(e.Attribute("ById")?.Value, out byID);
           bool.TryParse(e.Attribute("IsActive")?.Value, out isActive);
 
-          string realName = e.Attribute("AKA")?.Value ?? full;
 
-          Set(realName, new CaptureState(realName)
+          if (e.Attribute("AKA") == null)
           {
-            ByID = byID,
-            IsActive = isActive,
-            Description = e.Attribute("Description")?.Value
-          });
+            Set(full, new CaptureState(full)
+            {
+              ByID = byID,
+              IsActive = isActive,
+              Description = e.Attribute("Description")?.Value ?? ""
+            });
+          }
+          else
+          {
+            string realName = e.Attribute("AKA").Value;
+            CaptureState cs = Set(realName, new CaptureState(realName)
+            {
+              ByID = byID,
+              IsActive = isActive,
+              Description = e.Attribute("Description")?.Value ?? ""
+            });
+
+            Set(full, cs); /// alias
+          }
+
+
 
           foreach (XElement child in e.Elements())
           {
