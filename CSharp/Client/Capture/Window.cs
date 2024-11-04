@@ -19,7 +19,8 @@ namespace ShowPerfExtensions
   {
     public class CaptureWindow : IDisposable
     {
-      public bool Reseted;
+
+      public bool FreezeOnPause { get; set; }
 
       private int frames; public int Frames
       {
@@ -40,6 +41,7 @@ namespace ShowPerfExtensions
         Frames = frames;
       }
 
+      private bool Reseted;
       public void Rotate()
       {
         Reseted = false;
@@ -76,7 +78,7 @@ namespace ShowPerfExtensions
       {
         try
         {
-          if (Capture.Frozen || GameMain.Instance.Paused) return;
+          if (Capture.Frozen || (FreezeOnPause && GameMain.Instance.Paused)) return;
 
           Rotate();
           LastUpdateTime = Timing.TotalTime;

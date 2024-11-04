@@ -21,7 +21,10 @@ namespace ShowPerfExtensions
     {
 
       public CaptureWindow Draw = new CaptureWindow();
-      public CaptureWindow Update = new CaptureWindow();
+      public CaptureWindow Update = new CaptureWindow()
+      {
+        FreezeOnPause = true,
+      };
 
       public bool Frozen { get; set; }
 
