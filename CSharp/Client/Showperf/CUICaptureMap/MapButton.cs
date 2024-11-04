@@ -47,6 +47,9 @@ namespace ShowPerfExtensions
 
     public class MapButton : CUIToggleButton
     {
+      [DontSerializeAttribute]
+      public new CUINullRect AbsoluteMin { get => absoluteMin; set => SetAbsoluteMin(value); }
+
       public static Dictionary<CaptureState, MapButton> Buttons = new Dictionary<CaptureState, MapButton>();
 
       private CaptureState cState;
@@ -61,6 +64,7 @@ namespace ShowPerfExtensions
       {
         Padding = new Vector2(2, 0);
         TextScale = 0.9f;
+        TextAlign = new Vector2(0, 0);
         ConsumeSwipe = false;
         ConsumeDragAndDrop = false;
         Draggable = false;

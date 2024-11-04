@@ -74,7 +74,7 @@ namespace CrabUI
     #region implementation
 
 
-    private int? zIndex; internal void SetZIndex(int? value)
+    protected int? zIndex; internal void SetZIndex(int? value)
     {
       zIndex = value;
       OnPropChanged();
@@ -88,7 +88,7 @@ namespace CrabUI
       }
     }
 
-    private bool ignoreEvents; internal void SetIgnoreEvents(bool value)
+    protected bool ignoreEvents; internal void SetIgnoreEvents(bool value)
     {
       ignoreEvents = value;
       foreach (var child in Children)
@@ -97,7 +97,7 @@ namespace CrabUI
       }
     }
 
-    private bool visible = true; internal void SetVisible(bool value)
+    protected bool visible = true; internal void SetVisible(bool value)
     {
       visible = value;
       foreach (var child in Children)
@@ -106,19 +106,19 @@ namespace CrabUI
       }
     }
 
-    private bool revealed = true; internal void SetRevealed(bool value)
+    protected bool revealed = true; internal void SetRevealed(bool value)
     {
       revealed = value;
       if (revealed) { Visible = true; IgnoreEvents = false; }
       else { Visible = false; IgnoreEvents = true; }
     }
 
-    private CUIBool2 fillEmptySpace; internal void SetFillEmptySpace(CUIBool2 value)
+    protected CUIBool2 fillEmptySpace; internal void SetFillEmptySpace(CUIBool2 value)
     {
       fillEmptySpace = value; OnPropChanged();
     }
 
-    private CUIBool2 fitContent; internal void SetFitContent(CUIBool2 value)
+    protected CUIBool2 fitContent; internal void SetFitContent(CUIBool2 value)
     {
       fitContent = value; OnPropChanged(); OnAbsolutePropChanged();
     }
@@ -126,21 +126,21 @@ namespace CrabUI
     #region Absolute Props 
     #endregion
 
-    private CUINullRect absolute; internal void SetAbsolute(CUINullRect value, [CallerMemberName] string memberName = "")
+    protected CUINullRect absolute; internal void SetAbsolute(CUINullRect value, [CallerMemberName] string memberName = "")
     {
       absolute = value;
       CUIDebug.Capture(null, this, "SetAbsolute", memberName, "Absolute", Absolute.ToString());
       OnPropChanged(); OnAbsolutePropChanged();
     }
 
-    private CUINullRect absoluteMin; internal void SetAbsoluteMin(CUINullRect value, [CallerMemberName] string memberName = "")
+    protected CUINullRect absoluteMin; internal void SetAbsoluteMin(CUINullRect value, [CallerMemberName] string memberName = "")
     {
       absoluteMin = value;
       CUIDebug.Capture(null, this, "SetAbsoluteMin", memberName, "AbsoluteMin", AbsoluteMin.ToString());
       OnPropChanged(); OnAbsolutePropChanged();
     }
 
-    private CUINullRect absoluteMax; internal void SetAbsoluteMax(CUINullRect value, [CallerMemberName] string memberName = "")
+    protected CUINullRect absoluteMax; internal void SetAbsoluteMax(CUINullRect value, [CallerMemberName] string memberName = "")
     {
       absoluteMax = value;
       CUIDebug.Capture(null, this, "SetAbsoluteMax", memberName, "AbsoluteMax", AbsoluteMax.ToString());
@@ -150,21 +150,21 @@ namespace CrabUI
 
     #region Relative Props
     #endregion
-    private CUINullRect relative; internal void SetRelative(CUINullRect value, [CallerMemberName] string memberName = "")
+    protected CUINullRect relative; internal void SetRelative(CUINullRect value, [CallerMemberName] string memberName = "")
     {
       relative = value;
       CUIDebug.Capture(null, this, "SetRelative", memberName, "Relative", Relative.ToString());
       OnPropChanged();
     }
 
-    private CUINullRect relativeMin; internal void SetRelativeMin(CUINullRect value, [CallerMemberName] string memberName = "")
+    protected CUINullRect relativeMin; internal void SetRelativeMin(CUINullRect value, [CallerMemberName] string memberName = "")
     {
       relativeMin = value;
       CUIDebug.Capture(null, this, "SetRelativeMin", memberName, "RelativeMin", RelativeMin.ToString());
       OnPropChanged();
     }
 
-    private CUINullRect relativeMax; internal void SetRelativeMax(CUINullRect value, [CallerMemberName] string memberName = "")
+    protected CUINullRect relativeMax; internal void SetRelativeMax(CUINullRect value, [CallerMemberName] string memberName = "")
     {
       relativeMax = value;
       CUIDebug.Capture(null, this, "SetRelativeMax", memberName, "RelativeMax", RelativeMax.ToString());

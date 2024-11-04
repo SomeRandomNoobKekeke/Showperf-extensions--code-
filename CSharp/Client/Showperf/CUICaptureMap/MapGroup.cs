@@ -23,6 +23,8 @@ namespace ShowPerfExtensions
   {
     public class MapGroup : CUIVerticalList
     {
+      [DontSerializeAttribute]
+      public new CUINullRect AbsoluteMin { get => absoluteMin; set => SetAbsoluteMin(value); }
       public CUITextBlock Header;
       public CUIVerticalList Content;
 
