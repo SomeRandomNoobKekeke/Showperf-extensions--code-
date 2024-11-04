@@ -14,11 +14,11 @@ namespace CrabUI
     public event Action OnTextChanged;
     public Action AddOnTextChanged { set { OnTextChanged += value; } }
 
-    [CUISerializable] public bool Wrap;
-    [CUISerializable] public Color TextColor;
-    [CUISerializable] public GUIFont Font = GUIStyle.Font;
-    [CUISerializable] public bool Ghost;
-    [CUISerializable] public Vector2 TextAlign;
+    [CUISerializable] public bool Wrap { get; set; }
+    [CUISerializable] public Color TextColor { get; set; }
+    [CUISerializable] public GUIFont Font { get; set; } = GUIStyle.Font;
+    [CUISerializable] public bool Ghost { get; set; }
+    [CUISerializable] public Vector2 TextAlign { get; set; }
 
 
     [CUISerializable]
