@@ -83,8 +83,6 @@ namespace CrabUI
 
     public virtual void FromXML(XElement element)
     {
-      ExtractProps(element);
-
       foreach (XElement childElement in element.Elements())
       {
         Type childType = CUI.GetComponentTypeByName(childElement.Name.ToString());
@@ -96,6 +94,8 @@ namespace CrabUI
         //CUI.log($"{this}[{child.AKA}] = {child} ");
         this.Append(child, child.AKA);
       }
+
+      ExtractProps(element);
     }
 
     protected void ExtractProps(XElement element)

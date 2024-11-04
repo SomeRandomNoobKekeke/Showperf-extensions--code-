@@ -179,8 +179,6 @@ namespace CrabUI
 
     public override void FromXML(XElement element)
     {
-      ExtractProps(element);
-
       foreach (XElement childElement in element.Element("Children").Elements())
       {
         Type childType = CUI.GetComponentTypeByName(childElement.Name.ToString());
@@ -204,6 +202,10 @@ namespace CrabUI
         }
         Connect(link.Attribute("Start").Value, link.Attribute("End").Value);
       }
+
+      //TODO: think, this is potentially very bugged,
+      // Some props might need to be assigned before children, and some after
+      ExtractProps(element);
     }
 
     public CUIMap() : base()
