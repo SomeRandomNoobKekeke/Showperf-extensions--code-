@@ -38,7 +38,7 @@ namespace CrabUI
       zIndex = state.ZIndex; // TODO think how to uncurse this
       //IgnoreEvents = state.IgnoreEvents;  // TODO think how to uncurse this
       //Visible = state.Visible;  // TODO think how to uncurse this
-      ChildrenOffset = state.ChildrenOffset;
+      //ChildrenOffset = state.ChildrenOffset;
       Draggable = state.Draggable;
       LeftResizeHandle.Visible = state.LeftResizeHandle.Visible;
       RightResizeHandle.Visible = state.RightResizeHandle.Visible;
