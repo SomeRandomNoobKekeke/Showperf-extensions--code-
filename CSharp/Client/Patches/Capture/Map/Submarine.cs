@@ -36,7 +36,7 @@ namespace ShowPerfExtensions
       public static bool Submarine_DrawBack_Replace(SpriteBatch spriteBatch, bool editing = false, Predicate<MapEntity> predicate = null)
       {
         if (!DrawBack.IsActive) return true;
-        Capture.Update.EnsureCategory(DrawBack.ID.HashCode);
+        Capture.Update.EnsureCategory(DrawBack);
 
         var entitiesToRender = !editing && Submarine.visibleEntities != null ? Submarine.visibleEntities : MapEntity.MapEntityList;
 

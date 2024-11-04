@@ -103,6 +103,13 @@ namespace ShowPerfExtensions
       }
 
       public void EnsureCategory(int cat) => FirstSlice.EnsureCategory(cat);
+      public void EnsureCategory(CaptureState cs) => EnsureCategory(cs.ID.HashCode);
+
+      public void AddTicksOnce(UpdateTicks t)
+      {
+        EnsureCategory(t.Category);
+        AddTicks(t);
+      }
 
       public void AddTicks(UpdateTicks t)
       {
@@ -113,7 +120,8 @@ namespace ShowPerfExtensions
         catch (KeyNotFoundException e)
         {
           EnsureCategory(t.Category);
-          error($"tried to add ticks to missing category with hash = {t.Category}");
+          FirstSlice.Add(t);
+          error($"tried to add ticks to missing category {CaptureState.FromHash[t.Category]}");
         }
         catch (Exception e)
         {

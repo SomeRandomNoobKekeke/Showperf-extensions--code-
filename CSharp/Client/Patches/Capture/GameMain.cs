@@ -121,6 +121,8 @@ namespace ShowPerfExtensions
         GameMain.PerformanceCounter.AddElapsedTicks("Draw", sw.ElapsedTicks);
         GameMain.PerformanceCounter.DrawTimeGraph.Update(sw.ElapsedTicks * 1000.0f / (float)Stopwatch.Frequency);
 
+        Capture.Draw.AddTicksOnce(new UpdateTicks(sw.ElapsedTicks, Capture.Get("Showperf.Draw"), "Showperf.Draw"));
+
         Capture.Draw.FirstSlice.Total = sw.ElapsedTicks;
         Capture.Draw.Update();
 

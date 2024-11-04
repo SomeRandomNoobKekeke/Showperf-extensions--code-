@@ -16,6 +16,10 @@ namespace ShowPerfExtensions
   {
     public class CaptureState
     {
+      public static Dictionary<int, CaptureState> FromHash = new Dictionary<int, CaptureState>();
+
+
+
       public Identifier ID;
       public string Description;
       public void ToggleIsActive() => IsActive = !IsActive;
@@ -52,7 +56,19 @@ namespace ShowPerfExtensions
         byID = value;
       }
 
-      public CaptureState(string id) { ID = new Identifier(id); }
+      public CaptureState(string id)
+      {
+        ID = new Identifier(id);
+        if (!FromHash.ContainsKey(ID.HashCode))
+        {
+          FromHash[ID.HashCode] = this;
+        }
+        else
+        {
+          //Guh...
+          error($"hash collide! {ID} - {FromHash[ID.HashCode]}");
+        }
+      }
 
       public override string ToString() => ID.ToString();
       public static CaptureState Parse(string id) => Capture.Get(id);
