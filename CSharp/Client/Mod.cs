@@ -48,6 +48,9 @@ namespace ShowPerfExtensions
       CUIMain = new CUIMainComponent();
       Capture = new CaptureClass();
 
+      Capture.LoadFromFile();
+      Capture.PrintStates();
+
       Showperf = new CUIShowperf()
       {
         Absolute = new CUINullRect(null, null, 350, 550),
@@ -91,8 +94,7 @@ namespace ShowPerfExtensions
 
       //CUIDebugWindow.Open();
 
-      Capture.LoadFromFile();
-      Capture.PrintStates();
+
 
       PatchAll();
 

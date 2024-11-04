@@ -8,7 +8,7 @@
     <MapGroup AKA="Showperf" Absolute="[17,-25,,77.4]" ConsumeSwipe="true" Draggable="true">
       <CUITextBlock AbsoluteMin="[,,110.4,28.800001]" Text="Showperf" TextAlign="{X:0.5 Y:0.5}" TextScale="1.6" />
       <CUIVerticalList Absolute="[,,,48.6]" AbsoluteMin="[,,64.3,]" FitContent="[True,True]">
-        <MapButton AKA="Draw" Text="Draw" CState="Showperf.Draw" />
+        <MapButton AKA="Draw" Text="Draw" CState="Showperf.Draw2" />
         <MapButton AKA="ThinkHook" Disabled="true" Text="ThinkHook" />
         <MapButton AKA="Update" Text="Update" />
       </CUIVerticalList>
