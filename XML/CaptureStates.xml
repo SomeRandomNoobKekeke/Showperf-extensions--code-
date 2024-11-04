@@ -11,4 +11,40 @@
       </GameScreenUpdate>
     </Update>
   </GameMain>
+
+  <Showperf>
+    <Draw>
+      <HUD />
+      <Map>
+        <BackCharactersItems />
+        <BackLevel />
+        <BackStructures />
+        <DeformableCharacters />
+        <FrontDamageable />
+        <FrontLevel />
+        <FrontMisc />
+        <FrontParticles />
+        <FrontStructuresItems />
+        <LOS />
+        <Lighting />
+        <PostProcess />
+      </Map>
+    </Draw>
+    <ThinkHook />
+    <Update>
+      <Character />
+      <GameSession />
+      <Level />
+      <MapEntity>
+        <Items />
+        <Misc />
+      </MapEntity>
+      <Particles />
+      <Physics />
+      <Power />
+      <Ragdolls />
+      <StatusEffects />
+      <Submarine />
+    </Update>
+  </Showperf>
 </CaptureStates>

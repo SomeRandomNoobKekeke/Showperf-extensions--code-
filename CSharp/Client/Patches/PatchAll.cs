@@ -15,7 +15,7 @@ namespace ShowPerfExtensions
     public void PatchAll()
     {
       PatchCapture();
-      //PatchTechnical();
+      PatchTechnical();
     }
 
     public void PatchCapture()
