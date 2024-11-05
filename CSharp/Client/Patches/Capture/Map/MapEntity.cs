@@ -1,3 +1,5 @@
+#define CLIENT
+
 using System;
 using System.Reflection;
 using System.Diagnostics;
@@ -28,12 +30,17 @@ namespace ShowPerfExtensions
     [ShowperfPatch]
     public class MapEntityPatch
     {
+      public static CaptureState Misc;
+      public static CaptureState Items;
       public static void Initialize()
       {
         harmony.Patch(
           original: typeof(MapEntity).GetMethod("UpdateAll", AccessTools.all),
           prefix: new HarmonyMethod(typeof(MapEntityPatch).GetMethod("MapEntity_UpdateAll_Replace"))
         );
+
+        Misc = Capture.Get("Showperf.Update.MapEntity.Misc");
+        Items = Capture.Get("Showperf.Update.MapEntity.Items");
       }
 
       // https://github.com/evilfactory/LuaCsForBarotrauma/blob/master/Barotrauma/BarotraumaShared/SharedSource/Map/MapEntity.cs#L616
@@ -42,8 +49,8 @@ namespace ShowPerfExtensions
         MapEntity.mapEntityUpdateTick++;
 
 #if CLIENT
-      var sw = new System.Diagnostics.Stopwatch();
-      sw.Start();
+        var sw = new System.Diagnostics.Stopwatch();
+        sw.Start();
 #endif
         if (MapEntity.mapEntityUpdateTick % MapEntity.MapEntityUpdateInterval == 0)
         {
@@ -53,7 +60,7 @@ namespace ShowPerfExtensions
             hull.Update(deltaTime * MapEntity.MapEntityUpdateInterval, cam);
           }
 #if CLIENT
-        Hull.UpdateCheats(deltaTime * MapEntity.MapEntityUpdateInterval, cam);
+          Hull.UpdateCheats(deltaTime * MapEntity.MapEntityUpdateInterval, cam);
 #endif
 
           foreach (Structure structure in Structure.WallList)
@@ -77,9 +84,13 @@ namespace ShowPerfExtensions
         }
 
 #if CLIENT
-      sw.Stop();
-      GameMain.PerformanceCounter.AddElapsedTicks("Update:MapEntity:Misc", sw.ElapsedTicks);
-      sw.Restart();
+        sw.Stop();
+        GameMain.PerformanceCounter.AddElapsedTicks("Update:MapEntity:Misc", sw.ElapsedTicks);
+        if (Misc.IsActive)
+        {
+          Capture.Update.AddTicksOnce(new UpdateTicks(sw.ElapsedTicks, Misc, "Update.MapEntity.Misc"));
+        }
+        sw.Restart();
 #endif
 
         Item.UpdatePendingConditionUpdates(deltaTime);
@@ -114,9 +125,13 @@ namespace ShowPerfExtensions
         }
 
 #if CLIENT
-      sw.Stop();
-      GameMain.PerformanceCounter.AddElapsedTicks("Update:MapEntity:Items", sw.ElapsedTicks);
-      sw.Restart();
+        sw.Stop();
+        GameMain.PerformanceCounter.AddElapsedTicks("Update:MapEntity:Items", sw.ElapsedTicks);
+        if (Items.IsActive)
+        {
+          Capture.Update.AddTicksOnce(new UpdateTicks(sw.ElapsedTicks, Items, "Update.MapEntity.Items"));
+        }
+        sw.Restart();
 #endif
 
         if (MapEntity.mapEntityUpdateTick % MapEntity.MapEntityUpdateInterval == 0)

@@ -129,7 +129,7 @@ namespace ShowPerfExtensions
 
         if (ShowperfDraw.IsActive)
         {
-          Capture.Draw.AddTicksOnce(new UpdateTicks(sw.ElapsedTicks, ShowperfDraw, "Showperf.Draw"));
+          Capture.Draw.AddTicksOnce(new UpdateTicks(sw.ElapsedTicks, ShowperfDraw, "Draw"));
         }
 
 
@@ -487,7 +487,7 @@ namespace ShowPerfExtensions
 
           if (ShowperfUpdate.IsActive)
           {
-            Capture.Update.AddTicksOnce(new UpdateTicks(sw.ElapsedTicks, ShowperfUpdate, "Showperf.Update"));
+            Capture.Update.AddTicksOnce(new UpdateTicks(sw.ElapsedTicks, ShowperfUpdate, "Update"));
           }
 
           Capture.Update.FirstSlice.Total = sw.ElapsedTicks;

@@ -140,7 +140,7 @@ namespace ShowPerfExtensions
 
         if (ShowperfDrawMap.IsActive)
         {
-          Capture.Draw.AddTicksOnce(new UpdateTicks(sw.ElapsedTicks, ShowperfDrawMap, "Showperf.Draw.Map"));
+          Capture.Draw.AddTicksOnce(new UpdateTicks(sw.ElapsedTicks, ShowperfDrawMap, "Draw.Map"));
         }
         sw.Restart();
 
@@ -171,7 +171,7 @@ namespace ShowPerfExtensions
         GameMain.PerformanceCounter.AddElapsedTicks("Draw:HUD", sw.ElapsedTicks);
         if (ShowperfDrawHUD.IsActive)
         {
-          Capture.Draw.AddTicksOnce(new UpdateTicks(sw.ElapsedTicks, ShowperfDrawHUD, "Showperf.Draw.HUD"));
+          Capture.Draw.AddTicksOnce(new UpdateTicks(sw.ElapsedTicks, ShowperfDrawHUD, "Draw.HUD"));
         }
         sw.Restart();
 
@@ -211,7 +211,7 @@ namespace ShowPerfExtensions
         GameMain.PerformanceCounter.AddElapsedTicks("Draw:Map:LOS", sw.ElapsedTicks);
         if (LOS.IsActive)
         {
-          Capture.Draw.AddTicksOnce(new UpdateTicks(sw.ElapsedTicks, LOS, "Showperf.Draw.Map.LOS"));
+          Capture.Draw.AddTicksOnce(new UpdateTicks(sw.ElapsedTicks, LOS, "Draw.Map.LOS"));
         }
         sw.Restart();
 
@@ -234,7 +234,7 @@ namespace ShowPerfExtensions
         GameMain.PerformanceCounter.AddElapsedTicks("Draw:Map:BackStructures", sw.ElapsedTicks);
         if (BackStructures.IsActive)
         {
-          Capture.Draw.AddTicksOnce(new UpdateTicks(sw.ElapsedTicks, BackStructures, "Showperf.Draw.Map.BackStructures"));
+          Capture.Draw.AddTicksOnce(new UpdateTicks(sw.ElapsedTicks, BackStructures, "Draw.Map.BackStructures"));
         }
         sw.Restart();
 
@@ -245,7 +245,7 @@ namespace ShowPerfExtensions
         GameMain.PerformanceCounter.AddElapsedTicks("Draw:Map:Lighting", sw.ElapsedTicks);
         if (Lighting.IsActive)
         {
-          Capture.Draw.AddTicksOnce(new UpdateTicks(sw.ElapsedTicks, Lighting, "Showperf.Draw.Map.Lighting"));
+          Capture.Draw.AddTicksOnce(new UpdateTicks(sw.ElapsedTicks, Lighting, "Draw.Map.Lighting"));
         }
         sw.Restart();
 
@@ -286,7 +286,7 @@ namespace ShowPerfExtensions
         GameMain.PerformanceCounter.AddElapsedTicks("Draw:Map:BackLevel", sw.ElapsedTicks);
         if (BackLevel.IsActive)
         {
-          Capture.Draw.AddTicksOnce(new UpdateTicks(sw.ElapsedTicks, BackLevel, "Showperf.Draw.Map.BackLevel"));
+          Capture.Draw.AddTicksOnce(new UpdateTicks(sw.ElapsedTicks, BackLevel, "Draw.Map.BackLevel"));
         }
         sw.Restart();
 
@@ -310,7 +310,7 @@ namespace ShowPerfExtensions
         GameMain.PerformanceCounter.AddElapsedTicks("Draw:Map:BackCharactersItems", sw.ElapsedTicks);
         if (BackCharactersItems.IsActive)
         {
-          Capture.Draw.AddTicksOnce(new UpdateTicks(sw.ElapsedTicks, BackCharactersItems, "Showperf.Draw.Map.BackCharactersItems"));
+          Capture.Draw.AddTicksOnce(new UpdateTicks(sw.ElapsedTicks, BackCharactersItems, "Draw.Map.BackCharactersItems"));
         }
         sw.Restart();
 
@@ -344,7 +344,7 @@ namespace ShowPerfExtensions
         GameMain.PerformanceCounter.AddElapsedTicks("Draw:Map:DeformableCharacters", sw.ElapsedTicks);
         if (DeformableCharacters.IsActive)
         {
-          Capture.Draw.AddTicksOnce(new UpdateTicks(sw.ElapsedTicks, DeformableCharacters, "Showperf.Draw.Map.DeformableCharacters"));
+          Capture.Draw.AddTicksOnce(new UpdateTicks(sw.ElapsedTicks, DeformableCharacters, "Draw.Map.DeformableCharacters"));
         }
         sw.Restart();
 
@@ -354,7 +354,7 @@ namespace ShowPerfExtensions
         GameMain.PerformanceCounter.AddElapsedTicks("Draw:Map:FrontLevel", sw.ElapsedTicks);
         if (FrontLevel.IsActive)
         {
-          Capture.Draw.AddTicksOnce(new UpdateTicks(sw.ElapsedTicks, FrontLevel, "Showperf.Draw.Map.FrontLevel"));
+          Capture.Draw.AddTicksOnce(new UpdateTicks(sw.ElapsedTicks, FrontLevel, "Draw.Map.FrontLevel"));
         }
         sw.Restart();
 
@@ -396,7 +396,7 @@ namespace ShowPerfExtensions
         GameMain.PerformanceCounter.AddElapsedTicks("Draw:Map:FrontParticles", sw.ElapsedTicks);
         if (FrontParticles.IsActive)
         {
-          Capture.Draw.AddTicksOnce(new UpdateTicks(sw.ElapsedTicks, FrontParticles, "Showperf.Draw.Map.FrontParticles"));
+          Capture.Draw.AddTicksOnce(new UpdateTicks(sw.ElapsedTicks, FrontParticles, "Draw.Map.FrontParticles"));
         }
         sw.Restart();
 
@@ -413,7 +413,7 @@ namespace ShowPerfExtensions
         GameMain.PerformanceCounter.AddElapsedTicks("Draw:Map:FrontDamageable", sw.ElapsedTicks);
         if (FrontDamageable.IsActive)
         {
-          Capture.Draw.AddTicksOnce(new UpdateTicks(sw.ElapsedTicks, FrontDamageable, "Showperf.Draw.Map.FrontDamageable"));
+          Capture.Draw.AddTicksOnce(new UpdateTicks(sw.ElapsedTicks, FrontDamageable, "Draw.Map.FrontDamageable"));
         }
         sw.Restart();
 
@@ -425,7 +425,7 @@ namespace ShowPerfExtensions
         GameMain.PerformanceCounter.AddElapsedTicks("Draw:Map:FrontStructuresItems", sw.ElapsedTicks);
         if (FrontStructuresItems.IsActive)
         {
-          Capture.Draw.AddTicksOnce(new UpdateTicks(sw.ElapsedTicks, FrontStructuresItems, "Showperf.Draw.Map.FrontStructuresItems"));
+          Capture.Draw.AddTicksOnce(new UpdateTicks(sw.ElapsedTicks, FrontStructuresItems, "Draw.Map.FrontStructuresItems"));
         }
         sw.Restart();
 
@@ -470,7 +470,7 @@ namespace ShowPerfExtensions
         GameMain.PerformanceCounter.AddElapsedTicks("Draw:Map:FrontMisc", sw.ElapsedTicks);
         if (FrontMisc.IsActive)
         {
-          Capture.Draw.AddTicksOnce(new UpdateTicks(sw.ElapsedTicks, FrontMisc, "Showperf.Draw.Map.FrontMisc"));
+          Capture.Draw.AddTicksOnce(new UpdateTicks(sw.ElapsedTicks, FrontMisc, "Draw.Map.FrontMisc"));
         }
         sw.Restart();
 
@@ -603,7 +603,7 @@ namespace ShowPerfExtensions
         GameMain.PerformanceCounter.AddElapsedTicks("Draw:Map:PostProcess", sw.ElapsedTicks);
         if (PostProcess.IsActive)
         {
-          Capture.Draw.AddTicksOnce(new UpdateTicks(sw.ElapsedTicks, PostProcess, "Showperf.Draw.Map.PostProcess"));
+          Capture.Draw.AddTicksOnce(new UpdateTicks(sw.ElapsedTicks, PostProcess, "Draw.Map.PostProcess"));
         }
         sw.Restart();
 
@@ -673,7 +673,7 @@ namespace ShowPerfExtensions
         GameMain.PerformanceCounter.AddElapsedTicks("Update:GameSession", sw.ElapsedTicks);
         if (UpdateGameSession.IsActive)
         {
-          Capture.Update.AddTicksOnce(new UpdateTicks(sw.ElapsedTicks, UpdateGameSession, "Showperf.Update.GameSession"));
+          Capture.Update.AddTicksOnce(new UpdateTicks(sw.ElapsedTicks, UpdateGameSession, "Update.GameSession"));
         }
         sw.Restart();
 
@@ -683,7 +683,7 @@ namespace ShowPerfExtensions
         GameMain.PerformanceCounter.AddElapsedTicks("Update:Particles", sw.ElapsedTicks);
         if (UpdateParticles.IsActive)
         {
-          Capture.Update.AddTicksOnce(new UpdateTicks(sw.ElapsedTicks, UpdateParticles, "Showperf.Update.Particles"));
+          Capture.Update.AddTicksOnce(new UpdateTicks(sw.ElapsedTicks, UpdateParticles, "Update.Particles"));
         }
         sw.Restart();
 
@@ -693,7 +693,7 @@ namespace ShowPerfExtensions
         GameMain.PerformanceCounter.AddElapsedTicks("Update:Level", sw.ElapsedTicks);
         if (UpdateLevel.IsActive)
         {
-          Capture.Update.AddTicksOnce(new UpdateTicks(sw.ElapsedTicks, UpdateLevel, "Showperf.Update.Level"));
+          Capture.Update.AddTicksOnce(new UpdateTicks(sw.ElapsedTicks, UpdateLevel, "Update.Level"));
         }
 
         if (Character.Controlled is { } controlled)
@@ -728,7 +728,7 @@ namespace ShowPerfExtensions
         GameMain.PerformanceCounter.AddElapsedTicks("Update:Character", sw.ElapsedTicks);
         if (UpdateCharacter.IsActive)
         {
-          Capture.Update.AddTicksOnce(new UpdateTicks(sw.ElapsedTicks, UpdateCharacter, "Showperf.Update.Character"));
+          Capture.Update.AddTicksOnce(new UpdateTicks(sw.ElapsedTicks, UpdateCharacter, "Update.Character"));
         }
         sw.Restart();
 #endif
@@ -740,7 +740,7 @@ namespace ShowPerfExtensions
         GameMain.PerformanceCounter.AddElapsedTicks("Update:StatusEffects", sw.ElapsedTicks);
         if (UpdateStatusEffects.IsActive)
         {
-          Capture.Update.AddTicksOnce(new UpdateTicks(sw.ElapsedTicks, UpdateStatusEffects, "Showperf.Update.StatusEffects"));
+          Capture.Update.AddTicksOnce(new UpdateTicks(sw.ElapsedTicks, UpdateStatusEffects, "Update.StatusEffects"));
         }
         sw.Restart();
 
@@ -796,7 +796,7 @@ namespace ShowPerfExtensions
         GameMain.PerformanceCounter.AddElapsedTicks("Update:MapEntity", sw.ElapsedTicks);
         if (UpdateMapEntity.IsActive)
         {
-          Capture.Update.AddTicksOnce(new UpdateTicks(sw.ElapsedTicks, UpdateMapEntity, "Showperf.Update.MapEntity"));
+          Capture.Update.AddTicksOnce(new UpdateTicks(sw.ElapsedTicks, UpdateMapEntity, "Update.MapEntity"));
         }
         sw.Restart();
 #endif
@@ -813,7 +813,7 @@ namespace ShowPerfExtensions
         GameMain.PerformanceCounter.AddElapsedTicks("Update:Ragdolls", sw.ElapsedTicks);
         if (UpdateRagdolls.IsActive)
         {
-          Capture.Update.AddTicksOnce(new UpdateTicks(sw.ElapsedTicks, UpdateRagdolls, "Showperf.Update.Ragdolls"));
+          Capture.Update.AddTicksOnce(new UpdateTicks(sw.ElapsedTicks, UpdateRagdolls, "Update.Ragdolls"));
         }
         sw.Restart();
 #endif
@@ -828,7 +828,7 @@ namespace ShowPerfExtensions
         GameMain.PerformanceCounter.AddElapsedTicks("Update:Submarine", sw.ElapsedTicks);
         if (UpdateSubmarine.IsActive)
         {
-          Capture.Update.AddTicksOnce(new UpdateTicks(sw.ElapsedTicks, UpdateSubmarine, "Showperf.Update.Submarine"));
+          Capture.Update.AddTicksOnce(new UpdateTicks(sw.ElapsedTicks, UpdateSubmarine, "Update.Submarine"));
         }
         sw.Restart();
 #endif
@@ -852,7 +852,7 @@ namespace ShowPerfExtensions
         GameMain.PerformanceCounter.AddElapsedTicks("Update:Physics", sw.ElapsedTicks);
         if (UpdatePhysics.IsActive)
         {
-          Capture.Update.AddTicksOnce(new UpdateTicks(sw.ElapsedTicks, UpdatePhysics, "Showperf.Update.Physics"));
+          Capture.Update.AddTicksOnce(new UpdateTicks(sw.ElapsedTicks, UpdatePhysics, "Update.Physics"));
         }
         _.UpdateProjSpecific(deltaTime);
 #endif
