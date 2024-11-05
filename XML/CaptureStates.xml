@@ -20,7 +20,9 @@
     <ThinkHook />
     <Update>
       <Character />
-      <GameSession />
+      <GameSession>
+        <Store />
+      </GameSession>
       <Level />
       <MapEntity>
         <Items />
