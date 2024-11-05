@@ -1,3 +1,4 @@
+#define CLIENT
 using System;
 using System.Reflection;
 using System.Diagnostics;
@@ -27,12 +28,15 @@ namespace ShowPerfExtensions
     [ShowperfPatch]
     public class PoweredPatch
     {
+      public static CaptureState Power;
       public static void Initialize()
       {
         harmony.Patch(
           original: typeof(Powered).GetMethod("UpdatePower", AccessTools.all),
           prefix: new HarmonyMethod(typeof(PoweredPatch).GetMethod("Powered_UpdatePower_Replace"))
         );
+
+        Power = Capture.Get("Showperf.Update.Power");
       }
 
       // https://github.com/evilfactory/LuaCsForBarotrauma/blob/master/Barotrauma/BarotraumaShared/SharedSource/Items/Components/Power/Powered.cs#L425
@@ -56,16 +60,20 @@ namespace ShowPerfExtensions
         */
 
 #if CLIENT
-      System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
-      sw.Start();
+        System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
+        sw.Start();
 #endif
         //Ensure all grids are updated correctly and have the correct connections
         Powered.UpdateGrids();
 
 #if CLIENT
-      sw.Stop();
-      GameMain.PerformanceCounter.AddElapsedTicks("Update:Power", sw.ElapsedTicks);
-      sw.Restart();
+        sw.Stop();
+        GameMain.PerformanceCounter.AddElapsedTicks("Update:Power", sw.ElapsedTicks);
+        if (Power.IsActive)
+        {
+          Capture.Update.AddTicksOnce(new UpdateTicks(sw.ElapsedTicks, Power, "Update.Power"));
+        }
+        sw.Restart();
 #endif
 
         //Reset all grids
@@ -220,8 +228,12 @@ namespace ShowPerfExtensions
         }
 
 #if CLIENT
-      sw.Stop();
-      GameMain.PerformanceCounter.AddElapsedTicks("Update:Power", sw.ElapsedTicks);
+        sw.Stop();
+        GameMain.PerformanceCounter.AddElapsedTicks("Update:Power", sw.ElapsedTicks);
+        if (Power.IsActive)
+        {
+          Capture.Update.AddTicksOnce(new UpdateTicks(sw.ElapsedTicks, Power, "Update.Power"));
+        }
 #endif
         return false;
       }

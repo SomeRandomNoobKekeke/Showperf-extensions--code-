@@ -53,7 +53,6 @@ namespace ShowPerfExtensions
       public static CaptureState UpdateMapEntity;
       public static CaptureState UpdateParticles;
       public static CaptureState UpdatePhysics;
-      public static CaptureState UpdatePower;
       public static CaptureState UpdateRagdolls;
       public static CaptureState UpdateStatusEffects;
       public static CaptureState UpdateSubmarine;
@@ -98,7 +97,6 @@ namespace ShowPerfExtensions
         UpdateMapEntity = Capture.Get("Showperf.Update.MapEntity");
         UpdateParticles = Capture.Get("Showperf.Update.Particles");
         UpdatePhysics = Capture.Get("Showperf.Update.Physics");
-        UpdatePower = Capture.Get("Showperf.Update.Power");
         UpdateRagdolls = Capture.Get("Showperf.Update.Ragdolls");
         UpdateStatusEffects = Capture.Get("Showperf.Update.StatusEffects");
         UpdateSubmarine = Capture.Get("Showperf.Update.Submarine");
