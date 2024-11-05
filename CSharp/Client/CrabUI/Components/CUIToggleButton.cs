@@ -62,7 +62,7 @@ namespace CrabUI
     {
       state = value;
       if (state && OnText != null) Text = OnText;
-      if (!state && OnText != null) Text = OnText;
+      if (!state && OffText != null) Text = OffText;
     }
 
     public override void Draw(SpriteBatch spriteBatch)
