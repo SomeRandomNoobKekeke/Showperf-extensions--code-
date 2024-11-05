@@ -1,3 +1,4 @@
+#define CLIENT
 using System;
 using System.Reflection;
 using System.Diagnostics;
@@ -670,18 +671,30 @@ namespace ShowPerfExtensions
 #if CLIENT
         sw.Stop();
         GameMain.PerformanceCounter.AddElapsedTicks("Update:GameSession", sw.ElapsedTicks);
+        if (UpdateGameSession.IsActive)
+        {
+          Capture.Update.AddTicksOnce(new UpdateTicks(sw.ElapsedTicks, UpdateGameSession, "Showperf.Update.GameSession"));
+        }
         sw.Restart();
 
         GameMain.ParticleManager.Update((float)deltaTime);
 
         sw.Stop();
         GameMain.PerformanceCounter.AddElapsedTicks("Update:Particles", sw.ElapsedTicks);
+        if (UpdateParticles.IsActive)
+        {
+          Capture.Update.AddTicksOnce(new UpdateTicks(sw.ElapsedTicks, UpdateParticles, "Showperf.Update.Particles"));
+        }
         sw.Restart();
 
         if (Level.Loaded != null) Level.Loaded.Update((float)deltaTime, _.cam);
 
         sw.Stop();
         GameMain.PerformanceCounter.AddElapsedTicks("Update:Level", sw.ElapsedTicks);
+        if (UpdateLevel.IsActive)
+        {
+          Capture.Update.AddTicksOnce(new UpdateTicks(sw.ElapsedTicks, UpdateLevel, "Showperf.Update.Level"));
+        }
 
         if (Character.Controlled is { } controlled)
         {
@@ -713,6 +726,10 @@ namespace ShowPerfExtensions
 #if CLIENT
         sw.Stop();
         GameMain.PerformanceCounter.AddElapsedTicks("Update:Character", sw.ElapsedTicks);
+        if (UpdateCharacter.IsActive)
+        {
+          Capture.Update.AddTicksOnce(new UpdateTicks(sw.ElapsedTicks, UpdateCharacter, "Showperf.Update.Character"));
+        }
         sw.Restart();
 #endif
 
@@ -721,6 +738,10 @@ namespace ShowPerfExtensions
 #if CLIENT
         sw.Stop();
         GameMain.PerformanceCounter.AddElapsedTicks("Update:StatusEffects", sw.ElapsedTicks);
+        if (UpdateStatusEffects.IsActive)
+        {
+          Capture.Update.AddTicksOnce(new UpdateTicks(sw.ElapsedTicks, UpdateStatusEffects, "Showperf.Update.StatusEffects"));
+        }
         sw.Restart();
 
         if (Character.Controlled != null &&
@@ -773,6 +794,10 @@ namespace ShowPerfExtensions
 #if CLIENT
         sw.Stop();
         GameMain.PerformanceCounter.AddElapsedTicks("Update:MapEntity", sw.ElapsedTicks);
+        if (UpdateMapEntity.IsActive)
+        {
+          Capture.Update.AddTicksOnce(new UpdateTicks(sw.ElapsedTicks, UpdateMapEntity, "Showperf.Update.MapEntity"));
+        }
         sw.Restart();
 #endif
         Character.UpdateAnimAll((float)deltaTime);
@@ -786,6 +811,10 @@ namespace ShowPerfExtensions
 #if CLIENT
         sw.Stop();
         GameMain.PerformanceCounter.AddElapsedTicks("Update:Ragdolls", sw.ElapsedTicks);
+        if (UpdateRagdolls.IsActive)
+        {
+          Capture.Update.AddTicksOnce(new UpdateTicks(sw.ElapsedTicks, UpdateRagdolls, "Showperf.Update.Ragdolls"));
+        }
         sw.Restart();
 #endif
 
@@ -797,6 +826,10 @@ namespace ShowPerfExtensions
 #if CLIENT
         sw.Stop();
         GameMain.PerformanceCounter.AddElapsedTicks("Update:Submarine", sw.ElapsedTicks);
+        if (UpdateSubmarine.IsActive)
+        {
+          Capture.Update.AddTicksOnce(new UpdateTicks(sw.ElapsedTicks, UpdateSubmarine, "Showperf.Update.Submarine"));
+        }
         sw.Restart();
 #endif
 
@@ -817,6 +850,10 @@ namespace ShowPerfExtensions
 #if CLIENT
         sw.Stop();
         GameMain.PerformanceCounter.AddElapsedTicks("Update:Physics", sw.ElapsedTicks);
+        if (UpdatePhysics.IsActive)
+        {
+          Capture.Update.AddTicksOnce(new UpdateTicks(sw.ElapsedTicks, UpdatePhysics, "Showperf.Update.Physics"));
+        }
         _.UpdateProjSpecific(deltaTime);
 #endif
         // it seems that on server side this method is not even compiled because it's empty
