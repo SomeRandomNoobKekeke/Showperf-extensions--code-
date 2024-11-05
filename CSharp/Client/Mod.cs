@@ -49,7 +49,7 @@ namespace ShowPerfExtensions
       Capture = new CaptureClass();
 
       Capture.LoadFromFile();
-      Capture.PrintStates();
+      //Capture.PrintStates();
 
       Showperf = new CUIShowperf()
       {

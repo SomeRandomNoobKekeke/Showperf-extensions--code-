@@ -29,6 +29,35 @@ namespace ShowPerfExtensions
     [ShowperfPatch]
     public class GameScreenPatch
     {
+      public static CaptureState ShowperfDrawHUD;
+      public static CaptureState ShowperfDrawMap;
+
+      public static CaptureState BackCharactersItems;
+      public static CaptureState BackLevel;
+      public static CaptureState BackStructures;
+      public static CaptureState DeformableCharacters;
+      public static CaptureState FrontDamageable;
+      public static CaptureState FrontLevel;
+      public static CaptureState FrontMisc;
+      public static CaptureState FrontParticles;
+      public static CaptureState FrontStructuresItems;
+      public static CaptureState LOS;
+      public static CaptureState Lighting;
+      public static CaptureState PostProcess;
+
+
+      public static CaptureState UpdateCharacter;
+      public static CaptureState UpdateGameSession;
+      public static CaptureState UpdateLevel;
+      public static CaptureState UpdateMapEntity;
+      public static CaptureState UpdateParticles;
+      public static CaptureState UpdatePhysics;
+      public static CaptureState UpdatePower;
+      public static CaptureState UpdateRagdolls;
+      public static CaptureState UpdateStatusEffects;
+      public static CaptureState UpdateSubmarine;
+
+
       public static void Initialize()
       {
         harmony.Patch(
@@ -45,6 +74,33 @@ namespace ShowPerfExtensions
           original: typeof(GameScreen).GetMethod("Update", AccessTools.all),
           prefix: new HarmonyMethod(typeof(GameScreenPatch).GetMethod("GameScreen_Update_Replace"))
         );
+
+        ShowperfDrawHUD = Capture.Get("Showperf.Draw.HUD");
+        ShowperfDrawMap = Capture.Get("Showperf.Draw.Map");
+
+        BackCharactersItems = Capture.Get("Showperf.Draw.Map.BackCharactersItems");
+        BackLevel = Capture.Get("Showperf.Draw.Map.BackLevel");
+        BackStructures = Capture.Get("Showperf.Draw.Map.BackStructures");
+        DeformableCharacters = Capture.Get("Showperf.Draw.Map.DeformableCharacters");
+        FrontDamageable = Capture.Get("Showperf.Draw.Map.FrontDamageable");
+        FrontLevel = Capture.Get("Showperf.Draw.Map.FrontLevel");
+        FrontMisc = Capture.Get("Showperf.Draw.Map.FrontMisc");
+        FrontParticles = Capture.Get("Showperf.Draw.Map.FrontParticles");
+        FrontStructuresItems = Capture.Get("Showperf.Draw.Map.FrontStructuresItems");
+        LOS = Capture.Get("Showperf.Draw.Map.LOS");
+        Lighting = Capture.Get("Showperf.Draw.Map.Lighting");
+        PostProcess = Capture.Get("Showperf.Draw.Map.PostProcess");
+
+        UpdateCharacter = Capture.Get("Showperf.Update.Character");
+        UpdateGameSession = Capture.Get("Showperf.Update.GameSession");
+        UpdateLevel = Capture.Get("Showperf.Update.Level");
+        UpdateMapEntity = Capture.Get("Showperf.Update.MapEntity");
+        UpdateParticles = Capture.Get("Showperf.Update.Particles");
+        UpdatePhysics = Capture.Get("Showperf.Update.Physics");
+        UpdatePower = Capture.Get("Showperf.Update.Power");
+        UpdateRagdolls = Capture.Get("Showperf.Update.Ragdolls");
+        UpdateStatusEffects = Capture.Get("Showperf.Update.StatusEffects");
+        UpdateSubmarine = Capture.Get("Showperf.Update.Submarine");
       }
 
 
@@ -80,6 +136,11 @@ namespace ShowPerfExtensions
 
         sw.Stop();
         GameMain.PerformanceCounter.AddElapsedTicks("Draw:Map", sw.ElapsedTicks);
+
+        if (ShowperfDrawMap.IsActive)
+        {
+          Capture.Draw.AddTicksOnce(new UpdateTicks(sw.ElapsedTicks, ShowperfDrawMap, "Showperf.Draw.Map"));
+        }
         sw.Restart();
 
         spriteBatch.Begin(SpriteSortMode.Deferred, null, GUI.SamplerState, null, GameMain.ScissorTestEnable);
@@ -107,6 +168,10 @@ namespace ShowPerfExtensions
 
         sw.Stop();
         GameMain.PerformanceCounter.AddElapsedTicks("Draw:HUD", sw.ElapsedTicks);
+        if (ShowperfDrawHUD.IsActive)
+        {
+          Capture.Draw.AddTicksOnce(new UpdateTicks(sw.ElapsedTicks, ShowperfDrawHUD, "Showperf.Draw.HUD"));
+        }
         sw.Restart();
 
         return false;
@@ -143,6 +208,10 @@ namespace ShowPerfExtensions
 
         sw.Stop();
         GameMain.PerformanceCounter.AddElapsedTicks("Draw:Map:LOS", sw.ElapsedTicks);
+        if (LOS.IsActive)
+        {
+          Capture.Draw.AddTicksOnce(new UpdateTicks(sw.ElapsedTicks, LOS, "Showperf.Draw.Map.LOS"));
+        }
         sw.Restart();
 
 
@@ -162,6 +231,10 @@ namespace ShowPerfExtensions
 
         sw.Stop();
         GameMain.PerformanceCounter.AddElapsedTicks("Draw:Map:BackStructures", sw.ElapsedTicks);
+        if (BackStructures.IsActive)
+        {
+          Capture.Draw.AddTicksOnce(new UpdateTicks(sw.ElapsedTicks, BackStructures, "Showperf.Draw.Map.BackStructures"));
+        }
         sw.Restart();
 
         graphics.SetRenderTarget(null);
@@ -169,6 +242,10 @@ namespace ShowPerfExtensions
 
         sw.Stop();
         GameMain.PerformanceCounter.AddElapsedTicks("Draw:Map:Lighting", sw.ElapsedTicks);
+        if (Lighting.IsActive)
+        {
+          Capture.Draw.AddTicksOnce(new UpdateTicks(sw.ElapsedTicks, Lighting, "Showperf.Draw.Map.Lighting"));
+        }
         sw.Restart();
 
         //------------------------------------------------------------------------
@@ -206,6 +283,10 @@ namespace ShowPerfExtensions
 
         sw.Stop();
         GameMain.PerformanceCounter.AddElapsedTicks("Draw:Map:BackLevel", sw.ElapsedTicks);
+        if (BackLevel.IsActive)
+        {
+          Capture.Draw.AddTicksOnce(new UpdateTicks(sw.ElapsedTicks, BackLevel, "Showperf.Draw.Map.BackLevel"));
+        }
         sw.Restart();
 
         //----------------------------------------------------------------------------
@@ -226,6 +307,10 @@ namespace ShowPerfExtensions
 
         sw.Stop();
         GameMain.PerformanceCounter.AddElapsedTicks("Draw:Map:BackCharactersItems", sw.ElapsedTicks);
+        if (BackCharactersItems.IsActive)
+        {
+          Capture.Draw.AddTicksOnce(new UpdateTicks(sw.ElapsedTicks, BackCharactersItems, "Showperf.Draw.Map.BackCharactersItems"));
+        }
         sw.Restart();
 
         spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.NonPremultiplied, null, DepthStencilState.None, null, null, _.cam.Transform);
@@ -256,12 +341,20 @@ namespace ShowPerfExtensions
 
         sw.Stop();
         GameMain.PerformanceCounter.AddElapsedTicks("Draw:Map:DeformableCharacters", sw.ElapsedTicks);
+        if (DeformableCharacters.IsActive)
+        {
+          Capture.Draw.AddTicksOnce(new UpdateTicks(sw.ElapsedTicks, DeformableCharacters, "Showperf.Draw.Map.DeformableCharacters"));
+        }
         sw.Restart();
 
         Level.Loaded?.DrawFront(spriteBatch, _.cam);
 
         sw.Stop();
         GameMain.PerformanceCounter.AddElapsedTicks("Draw:Map:FrontLevel", sw.ElapsedTicks);
+        if (FrontLevel.IsActive)
+        {
+          Capture.Draw.AddTicksOnce(new UpdateTicks(sw.ElapsedTicks, FrontLevel, "Showperf.Draw.Map.FrontLevel"));
+        }
         sw.Restart();
 
         //draw the rendertarget and particles that are only supposed to be drawn in water into renderTargetWater
@@ -300,6 +393,10 @@ namespace ShowPerfExtensions
 
         sw.Stop();
         GameMain.PerformanceCounter.AddElapsedTicks("Draw:Map:FrontParticles", sw.ElapsedTicks);
+        if (FrontParticles.IsActive)
+        {
+          Capture.Draw.AddTicksOnce(new UpdateTicks(sw.ElapsedTicks, FrontParticles, "Showperf.Draw.Map.FrontParticles"));
+        }
         sw.Restart();
 
         _.DamageEffect.CurrentTechnique = _.DamageEffect.Techniques["StencilShader"];
@@ -313,6 +410,10 @@ namespace ShowPerfExtensions
 
         sw.Stop();
         GameMain.PerformanceCounter.AddElapsedTicks("Draw:Map:FrontDamageable", sw.ElapsedTicks);
+        if (FrontDamageable.IsActive)
+        {
+          Capture.Draw.AddTicksOnce(new UpdateTicks(sw.ElapsedTicks, FrontDamageable, "Showperf.Draw.Map.FrontDamageable"));
+        }
         sw.Restart();
 
         spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.NonPremultiplied, null, DepthStencilState.None, null, null, _.cam.Transform);
@@ -321,6 +422,10 @@ namespace ShowPerfExtensions
 
         sw.Stop();
         GameMain.PerformanceCounter.AddElapsedTicks("Draw:Map:FrontStructuresItems", sw.ElapsedTicks);
+        if (FrontStructuresItems.IsActive)
+        {
+          Capture.Draw.AddTicksOnce(new UpdateTicks(sw.ElapsedTicks, FrontStructuresItems, "Showperf.Draw.Map.FrontStructuresItems"));
+        }
         sw.Restart();
 
         //draw additive particles that are inside a sub
@@ -362,6 +467,10 @@ namespace ShowPerfExtensions
 
         sw.Stop();
         GameMain.PerformanceCounter.AddElapsedTicks("Draw:Map:FrontMisc", sw.ElapsedTicks);
+        if (FrontMisc.IsActive)
+        {
+          Capture.Draw.AddTicksOnce(new UpdateTicks(sw.ElapsedTicks, FrontMisc, "Showperf.Draw.Map.FrontMisc"));
+        }
         sw.Restart();
 
         if (GameMain.LightManager.LosEnabled && GameMain.LightManager.LosMode != LosMode.None && Barotrauma.Lights.LightManager.ViewTarget != null)
@@ -491,10 +600,19 @@ namespace ShowPerfExtensions
 
         sw.Stop();
         GameMain.PerformanceCounter.AddElapsedTicks("Draw:Map:PostProcess", sw.ElapsedTicks);
+        if (PostProcess.IsActive)
+        {
+          Capture.Draw.AddTicksOnce(new UpdateTicks(sw.ElapsedTicks, PostProcess, "Showperf.Draw.Map.PostProcess"));
+        }
         sw.Restart();
 
         return false;
       }
+
+
+
+
+
 
 
       // https://github.com/evilfactory/LuaCsForBarotrauma/blob/master/Barotrauma/BarotraumaShared/SharedSource/Screens/GameScreen.cs#L99

@@ -18,7 +18,7 @@
     <MapGroup AKA="Draw" Absolute="[100,1.0000153,,61.199997]" ConsumeSwipe="true" Draggable="true">
       <MapButton AKA="DrawHeader" CState="Showperf.Draw" Text="Draw" TextAlign="{X:0.5 Y:0.5}" TextScale="1.6" />
       <CUIVerticalList Absolute="[,,,32.399998]" AbsoluteMin="[,,30.099998,]" FitContent="[True,True]">
-        <MapButton AKA="HUD" CState="Showperf.HUD" Text="HUD" />
+        <MapButton AKA="HUD" CState="Showperf.Draw.HUD" Text="HUD" />
         <MapButton AKA="Map" CState="Showperf.Draw.Map" Text="Map" />
       </CUIVerticalList>
     </MapGroup>

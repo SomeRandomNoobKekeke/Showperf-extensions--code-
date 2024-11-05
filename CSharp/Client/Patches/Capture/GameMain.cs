@@ -38,6 +38,9 @@ namespace ShowPerfExtensions
     [ShowperfPatch]
     public class GameMainPatch
     {
+      public static CaptureState ShowperfDraw;
+      public static CaptureState ShowperfUpdate;
+
       public static void Initialize()
       {
         harmony.Patch(
@@ -49,6 +52,9 @@ namespace ShowPerfExtensions
           original: typeof(GameMain).GetMethod("Draw", AccessTools.all),
           prefix: new HarmonyMethod(typeof(GameMainPatch).GetMethod("GameMain_Draw_Replace"))
         );
+
+        ShowperfDraw = Capture.Get("Showperf.Draw");
+        ShowperfUpdate = Capture.Get("Showperf.Update");
       }
 
 
@@ -121,13 +127,22 @@ namespace ShowPerfExtensions
         GameMain.PerformanceCounter.AddElapsedTicks("Draw", sw.ElapsedTicks);
         GameMain.PerformanceCounter.DrawTimeGraph.Update(sw.ElapsedTicks * 1000.0f / (float)Stopwatch.Frequency);
 
-        Capture.Draw.AddTicksOnce(new UpdateTicks(sw.ElapsedTicks, Capture.Get("Showperf.Draw"), "Showperf.Draw"));
+        if (ShowperfDraw.IsActive)
+        {
+          Capture.Draw.AddTicksOnce(new UpdateTicks(sw.ElapsedTicks, ShowperfDraw, "Showperf.Draw"));
+        }
+
 
         Capture.Draw.FirstSlice.Total = sw.ElapsedTicks;
         Capture.Draw.Update();
 
         return false;
       }
+
+
+
+
+
 
       //https://github.com/evilfactory/LuaCsForBarotrauma/blob/master/Barotrauma/BarotraumaClient/ClientSource/GameMain.cs#L692
       public static bool GameMain_Update_Replace(GameTime gameTime, GameMain __instance)
@@ -469,6 +484,11 @@ namespace ShowPerfExtensions
           sw.Stop();
           GameMain.PerformanceCounter.AddElapsedTicks("Update", sw.ElapsedTicks);
           GameMain.PerformanceCounter.UpdateTimeGraph.Update(sw.ElapsedTicks * 1000.0f / (float)Stopwatch.Frequency);
+
+          if (ShowperfUpdate.IsActive)
+          {
+            Capture.Update.AddTicksOnce(new UpdateTicks(sw.ElapsedTicks, ShowperfUpdate, "Showperf.Update"));
+          }
 
           Capture.Update.FirstSlice.Total = sw.ElapsedTicks;
           Capture.Update.Update();
