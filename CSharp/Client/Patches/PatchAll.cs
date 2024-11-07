@@ -12,6 +12,15 @@ namespace ShowPerfExtensions
   {
     public class ShowperfPatchAttribute : System.Attribute { }
 
+    public static HarmonyMethod ShowperfMethod(MethodInfo? mi)
+    {
+      return new HarmonyMethod(mi)
+      {
+        priority = Priority.High,
+        //before = ["that.other.harmony.user"]
+      };
+    }
+
     public void PatchAll()
     {
       PatchCapture();
@@ -36,7 +45,7 @@ namespace ShowPerfExtensions
     {
       harmony.Patch(
         original: typeof(LuaGame).GetMethod("IsCustomCommandPermitted"),
-        postfix: new HarmonyMethod(typeof(Plugin).GetMethod("permitCommands"))
+        postfix: ShowperfMethod(typeof(Plugin).GetMethod("permitCommands"))
       );
     }
 

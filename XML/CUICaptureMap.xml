@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<CUICaptureMap ChildrenOffset="[88.527985,133.107,1.144]" Relative="[0,0,1,1]">
+<CUICaptureMap ChildrenOffset="[72.26396,123.1387,1.144]" Relative="[0,0,1,1]">
   <Connections>
     <Connection Start="Showperf.Draw" End="Draw" />
     <Connection Start="Draw.Map" End="Map" />
@@ -8,7 +8,7 @@
     <Connection Start="Update.GameSession" End="GameSession" />
   </Connections>
   <Children>
-    <MapGroup AKA="Showperf" Absolute="[-50.104126,-76.304,,77.4]" ConsumeSwipe="true" Draggable="true">
+    <MapGroup AKA="Showperf" Absolute="[-46.67213,-79.03201,,77.4]" ConsumeSwipe="true" Draggable="true">
       <CUITextBlock AbsoluteMin="[,,110.4,28.800001]" Text="Showperf" TextAlign="{X:0.5 Y:0.5}" TextScale="1.6" />
       <CUIVerticalList Absolute="[,,,48.6]" AbsoluteMin="[,,64.3,]" FitContent="[True,True]">
         <MapButton AKA="Draw" CState="Showperf.Draw" Text="Draw" />
@@ -16,14 +16,14 @@
         <MapButton AKA="Update" CState="Showperf.Update" Text="Update" />
       </CUIVerticalList>
     </MapGroup>
-    <MapGroup AKA="Draw" Absolute="[100,1.0000153,,61.199997]" ConsumeSwipe="true" Draggable="true">
+    <MapGroup AKA="Draw" Absolute="[100,-0.14398193,,61.199997]" ConsumeSwipe="true" Draggable="true">
       <MapButton AKA="DrawHeader" CState="Showperf.Draw" Text="Draw" TextAlign="{X:0.5 Y:0.5}" TextScale="1.6" />
       <CUIVerticalList Absolute="[,,,32.399998]" AbsoluteMin="[,,30.099998,]" FitContent="[True,True]">
         <MapButton AKA="HUD" CState="Showperf.Draw.HUD" Text="HUD" />
         <MapButton AKA="Map" CState="Showperf.Draw.Map" Text="Map" />
       </CUIVerticalList>
     </MapGroup>
-    <MapGroup AKA="Map" Absolute="[147.75195,126.03198,,223.19998]" ConsumeSwipe="true" Draggable="true">
+    <MapGroup AKA="Map" Absolute="[161.47987,118.02399,,223.19998]" ConsumeSwipe="true" Draggable="true">
       <MapButton AKA="Map" CState="Showperf.Draw.Map" Text="Map" TextAlign="{X:0.5 Y:0.5}" TextScale="1.6" />
       <CUIVerticalList Absolute="[,,,194.39998]" AbsoluteMin="[,,138.09999,]" FitContent="[True,True]">
         <MapButton AKA="BackCharactersItems" CState="Showperf.Draw.Map.BackCharactersItems" Text="BackCharactersItems" />
@@ -40,7 +40,7 @@
         <MapButton AKA="PostProcess" CState="Showperf.Draw.Map.PostProcess" Text="PostProcess" />
       </CUIVerticalList>
     </MapGroup>
-    <MapGroup AKA="Update" Absolute="[-64.48807,89.64003,,190.79999]" ConsumeSwipe="true" Draggable="true">
+    <MapGroup AKA="Update" Absolute="[-63.488083,86.640015,,190.79999]" ConsumeSwipe="true" Draggable="true">
       <MapButton AKA="DrawHeader" CState="Showperf.Update" Text="Update" TextAlign="{X:0.5 Y:0.5}" TextScale="1.6" />
       <CUIVerticalList Absolute="[,,,161.99998]" AbsoluteMin="[,,85.9,]" FitContent="[True,True]">
         <MapButton AKA="Character" CState="Showperf.Update.Character" Text="Character" />
@@ -55,14 +55,14 @@
         <MapButton AKA="Submarine" CState="Showperf.Update.Submarine" Text="Submarine" />
       </CUIVerticalList>
     </MapGroup>
-    <MapGroup AKA="MapEntity" Absolute="[51.824142,208.46399,,54]" ConsumeSwipe="true" Draggable="true">
+    <MapGroup AKA="MapEntity" Absolute="[47.248154,206.176,,54]" ConsumeSwipe="true" Draggable="true">
       <MapButton AKA="MapEntity" CState="Showperf.Update.MapEntity" Text="MapEntity" TextAlign="{X:0.5 Y:0.5}" TextScale="1.2" />
       <CUIVerticalList Absolute="[,,,32.399998]" AbsoluteMin="[,,37.3,]" FitContent="[True,True]">
         <MapButton AKA="Items" CState="Showperf.Update.MapEntity.Items" Text="Items" />
         <MapButton AKA="Misc" CState="Showperf.Update.MapEntity.Misc" Text="Misc" />
       </CUIVerticalList>
     </MapGroup>
-    <MapGroup AKA="GameSession" Absolute="[33.52015,96.35199,,37.8]" ConsumeSwipe="true" Draggable="true">
+    <MapGroup AKA="GameSession" Absolute="[37.952034,85.92799,,37.8]" ConsumeSwipe="true" Draggable="true">
       <MapButton AKA="GameSession" CState="Showperf.Update.GameSession" Text="GameSession" TextAlign="{X:0.5 Y:0.5}" TextScale="1.2" />
       <CUIVerticalList Absolute="[,,,16.199999]" AbsoluteMin="[,,36.399998,]" FitContent="[True,True]">
         <MapButton AKA="Store" CState="Showperf.Update.GameSession.Store" Text="Store" />

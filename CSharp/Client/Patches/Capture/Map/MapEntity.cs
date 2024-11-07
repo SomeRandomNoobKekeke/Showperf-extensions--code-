@@ -36,7 +36,7 @@ namespace ShowPerfExtensions
       {
         harmony.Patch(
           original: typeof(MapEntity).GetMethod("UpdateAll", AccessTools.all),
-          prefix: new HarmonyMethod(typeof(MapEntityPatch).GetMethod("MapEntity_UpdateAll_Replace"))
+          prefix: ShowperfMethod(typeof(MapEntityPatch).GetMethod("MapEntity_UpdateAll_Replace"))
         );
 
         Misc = Capture.Get("Showperf.Update.MapEntity.Misc");
@@ -46,6 +46,8 @@ namespace ShowPerfExtensions
       // https://github.com/evilfactory/LuaCsForBarotrauma/blob/master/Barotrauma/BarotraumaShared/SharedSource/Map/MapEntity.cs#L616
       public static bool MapEntity_UpdateAll_Replace(float deltaTime, Camera cam)
       {
+        if (!Showperf.Revealed) return true;
+
         MapEntity.mapEntityUpdateTick++;
 
 #if CLIENT

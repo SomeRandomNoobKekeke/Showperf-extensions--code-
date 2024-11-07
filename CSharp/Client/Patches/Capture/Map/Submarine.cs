@@ -25,13 +25,30 @@ namespace ShowPerfExtensions
       {
         harmony.Patch(
           original: typeof(Submarine).GetMethod("DrawBack", AccessTools.all),
-          prefix: new HarmonyMethod(typeof(SubmarinePatch).GetMethod("Submarine_DrawBack_Replace"))
+          prefix: ShowperfMethod(typeof(SubmarinePatch).GetMethod("Submarine_DrawBack_Replace"))
         );
 
         DrawBack = Capture.Get("MapEntityDrawing");
       }
       public static CaptureState DrawBack;
 
+      static bool IsFromOutpostDrawnBehindSubs(Entity e)
+            => e.Submarine is { Info.OutpostGenerationParams.DrawBehindSubs: true };
+
+      public static void DrawBack1(SpriteBatch spriteBatch)
+      {
+        Submarine.DrawBack(spriteBatch, false, e => e is Structure s && (e.SpriteDepth >= 0.9f || s.Prefab.BackgroundSprite != null) && !IsFromOutpostDrawnBehindSubs(e));
+      }
+
+      public static void DrawBack2(SpriteBatch spriteBatch)
+      {
+        Submarine.DrawBack(spriteBatch, false, e => e is Structure s && (e.SpriteDepth >= 0.9f || s.Prefab.BackgroundSprite != null) && IsFromOutpostDrawnBehindSubs(e));
+      }
+
+      public static void DrawBack3(SpriteBatch spriteBatch)
+      {
+        Submarine.DrawBack(spriteBatch, false, e => !(e is Structure) || e.SpriteDepth < 0.9f);
+      }
 
       public static bool Submarine_DrawBack_Replace(SpriteBatch spriteBatch, bool editing = false, Predicate<MapEntity> predicate = null)
       {

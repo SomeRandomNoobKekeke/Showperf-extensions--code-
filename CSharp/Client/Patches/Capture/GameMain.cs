@@ -45,12 +45,12 @@ namespace ShowPerfExtensions
       {
         harmony.Patch(
           original: typeof(GameMain).GetMethod("Update", AccessTools.all),
-          prefix: new HarmonyMethod(typeof(GameMainPatch).GetMethod("GameMain_Update_Replace"))
+          prefix: ShowperfMethod(typeof(GameMainPatch).GetMethod("GameMain_Update_Replace"))
         );
 
         harmony.Patch(
           original: typeof(GameMain).GetMethod("Draw", AccessTools.all),
-          prefix: new HarmonyMethod(typeof(GameMainPatch).GetMethod("GameMain_Draw_Replace"))
+          prefix: ShowperfMethod(typeof(GameMainPatch).GetMethod("GameMain_Draw_Replace"))
         );
 
         ShowperfDraw = Capture.Get("Showperf.Draw");
@@ -61,6 +61,8 @@ namespace ShowPerfExtensions
       //https://github.com/evilfactory/LuaCsForBarotrauma/blob/master/Barotrauma/BarotraumaClient/ClientSource/GameMain.cs#L1057
       public static bool GameMain_Draw_Replace(GameTime gameTime, GameMain __instance)
       {
+        if (!Showperf.Revealed) return true;
+
         GameMain _ = __instance;
 
         Stopwatch sw = new Stopwatch();
@@ -140,13 +142,11 @@ namespace ShowPerfExtensions
       }
 
 
-
-
-
-
       //https://github.com/evilfactory/LuaCsForBarotrauma/blob/master/Barotrauma/BarotraumaClient/ClientSource/GameMain.cs#L692
       public static bool GameMain_Update_Replace(GameTime gameTime, GameMain __instance)
       {
+        if (!Showperf.Revealed) return true;
+
         GameMain _ = __instance;
 
         Timing.Accumulator += gameTime.ElapsedGameTime.TotalSeconds;

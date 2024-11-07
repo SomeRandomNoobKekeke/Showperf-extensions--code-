@@ -62,17 +62,17 @@ namespace ShowPerfExtensions
       {
         harmony.Patch(
           original: typeof(GameScreen).GetMethod("Draw", AccessTools.all),
-          prefix: new HarmonyMethod(typeof(GameScreenPatch).GetMethod("GameScreen_Draw_Replace"))
+          prefix: ShowperfMethod(typeof(GameScreenPatch).GetMethod("GameScreen_Draw_Replace"))
         );
 
         harmony.Patch(
           original: typeof(GameScreen).GetMethod("DrawMap", AccessTools.all),
-          prefix: new HarmonyMethod(typeof(GameScreenPatch).GetMethod("GameScreen_DrawMap_Replace"))
+          prefix: ShowperfMethod(typeof(GameScreenPatch).GetMethod("GameScreen_DrawMap_Replace"))
         );
 
         harmony.Patch(
           original: typeof(GameScreen).GetMethod("Update", AccessTools.all),
-          prefix: new HarmonyMethod(typeof(GameScreenPatch).GetMethod("GameScreen_Update_Replace"))
+          prefix: ShowperfMethod(typeof(GameScreenPatch).GetMethod("GameScreen_Update_Replace"))
         );
 
         ShowperfDrawHUD = Capture.Get("Showperf.Draw.HUD");
@@ -106,6 +106,8 @@ namespace ShowPerfExtensions
       // https://github.com/evilfactory/LuaCsForBarotrauma/blob/master/Barotrauma/BarotraumaClient/ClientSource/Screens/GameScreen.cs#L98
       public static bool GameScreen_Draw_Replace(double deltaTime, GraphicsDevice graphics, SpriteBatch spriteBatch, GameScreen __instance)
       {
+        if (!Showperf.Revealed) return true;
+
         GameScreen _ = __instance;
 
         _.cam.UpdateTransform(true);
@@ -181,6 +183,8 @@ namespace ShowPerfExtensions
       // https://github.com/evilfactory/LuaCsForBarotrauma/blob/master/Barotrauma/BarotraumaClient/ClientSource/Screens/GameScreen.cs#L268
       public static bool GameScreen_DrawMap_Replace(GraphicsDevice graphics, SpriteBatch spriteBatch, double deltaTime, GameScreen __instance)
       {
+        if (!Showperf.Revealed) return true;
+
         GameScreen _ = __instance;
 
         foreach (Submarine sub in Submarine.Loaded)
@@ -224,7 +228,7 @@ namespace ShowPerfExtensions
         //(= the background texture that's revealed when a wall is destroyed) into the background render target
         //These will be visible through the LOS effect.
         spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.NonPremultiplied, null, DepthStencilState.None, null, null, _.cam.Transform);
-        Submarine.DrawBack(spriteBatch, false, e => e is Structure s && (e.SpriteDepth >= 0.9f || s.Prefab.BackgroundSprite != null) && !IsFromOutpostDrawnBehindSubs(e));
+        SubmarinePatch.DrawBack1(spriteBatch);
         Submarine.DrawPaintedColors(spriteBatch, false);
         spriteBatch.End();
 
@@ -260,7 +264,7 @@ namespace ShowPerfExtensions
         }
 
         spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.NonPremultiplied, null, DepthStencilState.None, null, null, _.cam.Transform);
-        Submarine.DrawBack(spriteBatch, false, e => e is Structure s && (e.SpriteDepth >= 0.9f || s.Prefab.BackgroundSprite != null) && IsFromOutpostDrawnBehindSubs(e));
+        SubmarinePatch.DrawBack2(spriteBatch);
         spriteBatch.End();
 
         //draw alpha blended particles that are in water and behind subs
@@ -300,7 +304,7 @@ namespace ShowPerfExtensions
 
         //Draw the rest of the structures, characters and front structures
         spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.NonPremultiplied, null, DepthStencilState.None, null, null, _.cam.Transform);
-        Submarine.DrawBack(spriteBatch, false, e => !(e is Structure) || e.SpriteDepth < 0.9f);
+        SubmarinePatch.DrawBack3(spriteBatch);
         DrawCharacters(deformed: false, firstPass: true);
         spriteBatch.End();
 
@@ -617,6 +621,8 @@ namespace ShowPerfExtensions
       // https://github.com/evilfactory/LuaCsForBarotrauma/blob/master/Barotrauma/BarotraumaShared/SharedSource/Screens/GameScreen.cs#L99
       public static bool GameScreen_Update_Replace(double deltaTime, GameScreen __instance)
       {
+        if (!Showperf.Revealed) return true;
+
         GameScreen _ = __instance;
 
 #if RUN_PHYSICS_IN_SEPARATE_THREAD

@@ -33,7 +33,7 @@ namespace ShowPerfExtensions
       {
         harmony.Patch(
           original: typeof(Store).GetMethod("Update", AccessTools.all),
-          prefix: new HarmonyMethod(typeof(StorePatch).GetMethod("Store_Update_Replace"))
+          prefix: ShowperfMethod(typeof(StorePatch).GetMethod("Store_Update_Replace"))
         );
 
         UpdateStore = Capture.Get("Showperf.Update.GameSession.Store");
@@ -42,6 +42,8 @@ namespace ShowPerfExtensions
       // https://github.com/evilfactory/LuaCsForBarotrauma/blob/master/Barotrauma/BarotraumaClient/ClientSource/GUI/Store.cs#L2270
       public static bool Store_Update_Replace(float deltaTime, Store __instance)
       {
+        if (!Showperf.Revealed) return true;
+
         Store _ = __instance;
 
         _.updateStopwatch.Restart();
