@@ -107,11 +107,7 @@ namespace ShowPerfExtensions
       public void EnsureCategory(int cat) => FirstSlice.EnsureCategory(cat);
       public void EnsureCategory(CaptureState cs) => EnsureCategory(cs.ID.HashCode);
 
-      public void AddTicksOnce(UpdateTicks t)
-      {
-        EnsureCategory(t.Category);
-        AddTicks(t);
-      }
+
 
       public void AddTicks(UpdateTicks t)
       {
@@ -130,6 +126,45 @@ namespace ShowPerfExtensions
           error(e.Message);
         }
       }
+
+
+      public void AddTicks(double ticks, CaptureState cs, string name) => AddTicks(ticks, cs, name, name.GetHashCode());
+      public void AddTicks(double ticks, CaptureState cs, Identifier id) => AddTicks(ticks, cs, id.Value, id.HashCode);
+      public void AddTicks(double ticks, CaptureState cs, string name, int hash)
+      {
+        try
+        {
+          if (!cs.IsActive) return;
+          FirstSlice.Add(new UpdateTicks(ticks, cs.ID.HashCode, name, hash));
+        }
+        catch (KeyNotFoundException e)
+        {
+          EnsureCategory(cs);
+          FirstSlice.Add(new UpdateTicks(ticks, cs.ID.HashCode, name, hash));
+          error($"tried to add ticks to missing category {cs}");
+        }
+        catch (Exception e)
+        {
+          error(e.Message);
+        }
+      }
+
+      public void AddTicksOnce(UpdateTicks t)
+      {
+        EnsureCategory(t.Category);
+        AddTicks(t);
+      }
+      public void AddTicksOnce(double ticks, CaptureState cs, string name) => AddTicksOnce(ticks, cs, name, name.GetHashCode());
+      public void AddTicksOnce(double ticks, CaptureState cs, Identifier id) => AddTicksOnce(ticks, cs, id.Value, id.HashCode);
+      public void AddTicksOnce(double ticks, CaptureState cs, string name, int hash)
+      {
+        if (!cs.IsActive) return;
+        EnsureCategory(cs);
+        AddTicks(new UpdateTicks(ticks, cs.ID.HashCode, name, hash));
+      }
+
+
+
 
       public UpdateTicks GetTotal(int category, int id)
       {

@@ -129,10 +129,7 @@ namespace ShowPerfExtensions
         GameMain.PerformanceCounter.AddElapsedTicks("Draw", sw.ElapsedTicks);
         GameMain.PerformanceCounter.DrawTimeGraph.Update(sw.ElapsedTicks * 1000.0f / (float)Stopwatch.Frequency);
 
-        if (ShowperfDraw.IsActive)
-        {
-          Capture.Draw.AddTicksOnce(new UpdateTicks(sw.ElapsedTicks, ShowperfDraw, "Draw"));
-        }
+        Capture.Draw.AddTicksOnce(sw.ElapsedTicks, ShowperfDraw, "Draw");
 
 
         Capture.Draw.FirstSlice.Total = sw.ElapsedTicks;
@@ -485,10 +482,7 @@ namespace ShowPerfExtensions
           GameMain.PerformanceCounter.AddElapsedTicks("Update", sw.ElapsedTicks);
           GameMain.PerformanceCounter.UpdateTimeGraph.Update(sw.ElapsedTicks * 1000.0f / (float)Stopwatch.Frequency);
 
-          if (ShowperfUpdate.IsActive)
-          {
-            Capture.Update.AddTicksOnce(new UpdateTicks(sw.ElapsedTicks, ShowperfUpdate, "Update"));
-          }
+          Capture.Update.AddTicksOnce(sw.ElapsedTicks, ShowperfUpdate, "Update");
 
           Capture.Update.FirstSlice.Total = sw.ElapsedTicks;
           Capture.Update.Update();

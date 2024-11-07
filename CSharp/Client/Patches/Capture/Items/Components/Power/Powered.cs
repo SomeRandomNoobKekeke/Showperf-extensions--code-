@@ -71,10 +71,7 @@ namespace ShowPerfExtensions
 #if CLIENT
         sw.Stop();
         GameMain.PerformanceCounter.AddElapsedTicks("Update:Power", sw.ElapsedTicks);
-        if (Power.IsActive)
-        {
-          Capture.Update.AddTicksOnce(new UpdateTicks(sw.ElapsedTicks, Power, "Update.Power"));
-        }
+        Capture.Update.AddTicksOnce(sw.ElapsedTicks, Power, "Update.Power");
         sw.Restart();
 #endif
 
@@ -232,10 +229,7 @@ namespace ShowPerfExtensions
 #if CLIENT
         sw.Stop();
         GameMain.PerformanceCounter.AddElapsedTicks("Update:Power", sw.ElapsedTicks);
-        if (Power.IsActive)
-        {
-          Capture.Update.AddTicksOnce(new UpdateTicks(sw.ElapsedTicks, Power, "Update.Power"));
-        }
+        Capture.Update.AddTicksOnce(sw.ElapsedTicks, Power, "Update.Power");
 #endif
         return false;
       }

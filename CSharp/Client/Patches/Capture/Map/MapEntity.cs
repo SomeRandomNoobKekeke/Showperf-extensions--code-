@@ -88,10 +88,7 @@ namespace ShowPerfExtensions
 #if CLIENT
         sw.Stop();
         GameMain.PerformanceCounter.AddElapsedTicks("Update:MapEntity:Misc", sw.ElapsedTicks);
-        if (Misc.IsActive)
-        {
-          Capture.Update.AddTicksOnce(new UpdateTicks(sw.ElapsedTicks, Misc, "Update.MapEntity.Misc"));
-        }
+        Capture.Update.AddTicksOnce(sw.ElapsedTicks, Misc, "Update.MapEntity.Misc");
         sw.Restart();
 #endif
 
@@ -129,10 +126,7 @@ namespace ShowPerfExtensions
 #if CLIENT
         sw.Stop();
         GameMain.PerformanceCounter.AddElapsedTicks("Update:MapEntity:Items", sw.ElapsedTicks);
-        if (Items.IsActive)
-        {
-          Capture.Update.AddTicksOnce(new UpdateTicks(sw.ElapsedTicks, Items, "Update.MapEntity.Items"));
-        }
+        Capture.Update.AddTicksOnce(sw.ElapsedTicks, Items, "Update.MapEntity.Items");
         sw.Restart();
 #endif
 

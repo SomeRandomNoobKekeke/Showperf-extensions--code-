@@ -133,10 +133,7 @@ namespace ShowPerfExtensions
 
         _.updateStopwatch.Stop();
         GameMain.PerformanceCounter.AddElapsedTicks("Update:GameSession:Store", _.updateStopwatch.ElapsedTicks);
-        if (UpdateStore.IsActive)
-        {
-          Capture.Update.AddTicksOnce(new UpdateTicks(_.updateStopwatch.ElapsedTicks, UpdateStore, "Update.GameSession.Store"));
-        }
+        Capture.Update.AddTicksOnce(_.updateStopwatch.ElapsedTicks, UpdateStore, "Update.GameSession.Store");
 
         return false;
       }

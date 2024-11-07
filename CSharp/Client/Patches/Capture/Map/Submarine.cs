@@ -76,11 +76,11 @@ namespace ShowPerfExtensions
           {
             if (DrawBack.ByID || e.Prefab == null)
             {
-              Capture.Update.AddTicks(new UpdateTicks(sw.ElapsedTicks, DrawBack, $"{e.Name} (ID: {e.ID})"));
+              Capture.Update.AddTicks(sw.ElapsedTicks, DrawBack, $"{e.Name} (ID: {e.ID})");
             }
             else
             {
-              Capture.Update.AddTicks(new UpdateTicks(sw.ElapsedTicks, DrawBack, e.Prefab.Identifier));
+              Capture.Update.AddTicks(sw.ElapsedTicks, DrawBack, e.Prefab.Identifier);
             }
           }
         }
