@@ -747,7 +747,7 @@ namespace ShowPerfExtensions
 #if CLIENT
         sw.Stop();
         GameMain.PerformanceCounter.AddElapsedTicks("Update:Character", sw.ElapsedTicks);
-        Capture.Update.AddTicksOnce(sw.ElapsedTicks, UpdateCharacter, "Update.Character");
+        //Capture.Update.AddTicksOnce(sw.ElapsedTicks, UpdateCharacter, "Update.Character");
         sw.Restart();
 #endif
 
