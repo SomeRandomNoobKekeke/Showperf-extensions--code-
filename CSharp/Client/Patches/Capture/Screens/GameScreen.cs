@@ -701,7 +701,7 @@ namespace ShowPerfExtensions
 
         sw.Stop();
         GameMain.PerformanceCounter.AddElapsedTicks("Update:Particles", sw.ElapsedTicks);
-        Capture.Update.AddTicksOnce(sw.ElapsedTicks, UpdateParticles, "Update.Particles");
+        //Capture.Update.AddTicksOnce(sw.ElapsedTicks, UpdateParticles, "Update.Particles");
         sw.Restart();
 
         if (Level.Loaded != null) Level.Loaded.Update((float)deltaTime, _.cam);
