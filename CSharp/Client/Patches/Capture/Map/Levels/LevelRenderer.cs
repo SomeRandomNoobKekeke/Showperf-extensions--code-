@@ -40,6 +40,8 @@ namespace ShowPerfExtensions
 
       public static bool LevelRenderer_Update_Replace(float deltaTime, Camera cam, LevelRenderer __instance)
       {
+        if (!LevelRenderer.IsActive || !Showperf.Revealed) return true;
+
         LevelRenderer _ = __instance;
         Stopwatch sw = new Stopwatch();
 

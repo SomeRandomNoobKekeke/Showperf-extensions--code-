@@ -47,6 +47,8 @@ namespace ShowPerfExtensions
       // https://github.com/evilfactory/LuaCsForBarotrauma/blob/master/Barotrauma/BarotraumaShared/SharedSource/Map/Levels/Level.cs#L3572
       public static bool Level_Update_Replace(float deltaTime, Camera cam, Level __instance)
       {
+        if (!UpdateLevel.IsActive || !Showperf.Revealed) return true;
+
         Level _ = __instance;
 
         Stopwatch sw = new Stopwatch();

@@ -61,10 +61,10 @@
     </MapGroup>
     <MapGroup AKA="Level" Absolute="[-272.816,229.27994,,102.59999]" ConsumeSwipe="true" Draggable="true">
       <MapButton AKA="Level" CState="Showperf.Update.Level" Text="Level" TextAlign="{X:0.5 Y:0.5}" TextScale="1.2" />
-      <CUIVerticalList Absolute="[,,,80.99999]" AbsoluteMin="[,,178.59999,]" FitContent="[True,True]">
-        <MapButton AKA="LevelObjectManager" CState="Showperf.Update.Level.LevelObjectManager" State="true" Text="Level Objects" />
+      <CUIVerticalList Absolute="[,,,80.99999]" AbsoluteMin="[,,134.5,]" FitContent="[True,True]">
+        <MapButton AKA="LevelObjectManager" CState="Showperf.Update.Level.LevelObjectManager" Text="Level Objects" />
         <MapButton AKA="Walls" CState="Showperf.Update.Level.Walls" Text="Walls" />
-        <MapButton AKA="BackgroundCreaturesManager" CState="Showperf.Update.Level.BackgroundCreatureManager" Text="Background Creatures" />
+        <MapButton AKA="BackgroundCreatureManager" CState="Showperf.Update.Level.BackgroundCreatureManager" State="true" Text="Background Creatures" />
         <MapButton AKA="WaterRenderer" CState="Showperf.Update.Level.WaterRenderer" Text="Water Renderer" />
         <MapButton AKA="LevelRenderer" CState="Showperf.Update.Level.LevelRenderer" Text="Level Renderer" />
       </CUIVerticalList>
