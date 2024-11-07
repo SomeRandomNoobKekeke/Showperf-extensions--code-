@@ -48,6 +48,7 @@ namespace ShowPerfExtensions
 
 
       public static CaptureState UpdateCharacter;
+      public static CaptureState UpdateItemsHUD;
       public static CaptureState UpdateGameSession;
       public static CaptureState UpdateLevel;
       public static CaptureState UpdateMapEntity;
@@ -91,6 +92,8 @@ namespace ShowPerfExtensions
         Lighting = Capture.Get("Showperf.Draw.Map.Lighting");
         PostProcess = Capture.Get("Showperf.Draw.Map.PostProcess");
 
+
+        UpdateItemsHUD = Capture.Get("Showperf.Update.ItemsHUD");
         UpdateCharacter = Capture.Get("Showperf.Update.Character");
         UpdateGameSession = Capture.Get("Showperf.Update.GameSession");
         UpdateLevel = Capture.Get("Showperf.Update.Level");
@@ -648,11 +651,15 @@ namespace ShowPerfExtensions
         GameMain.PerformanceCounter.AddElapsedTicks("Update:Level", sw.ElapsedTicks);
         Capture.Update.AddTicksOnce(sw.ElapsedTicks, UpdateLevel, "Update.Level");
 
+        Capture.Update.EnsureCategory(UpdateItemsHUD);
         if (Character.Controlled is { } controlled)
         {
           if (controlled.SelectedItem != null && controlled.CanInteractWith(controlled.SelectedItem))
           {
+            sw.Restart();
             controlled.SelectedItem.UpdateHUD(_.cam, controlled, (float)deltaTime);
+            sw.Stop();
+            Capture.Update.AddTicks(sw.ElapsedTicks, UpdateItemsHUD, controlled.SelectedItem.ToString());
           }
           if (controlled.Inventory != null)
           {
@@ -660,7 +667,10 @@ namespace ShowPerfExtensions
             {
               if (controlled.HasEquippedItem(item))
               {
+                sw.Restart();
                 item.UpdateHUD(_.cam, controlled, (float)deltaTime);
+                sw.Stop();
+                Capture.Update.AddTicks(sw.ElapsedTicks, UpdateItemsHUD, item.ToString());
               }
             }
           }

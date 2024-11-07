@@ -19,6 +19,7 @@
     </Draw>
     <ThinkHook />
     <Update>
+      <ItemsHUD />
       <Character />
       <GameSession>
         <Store />
