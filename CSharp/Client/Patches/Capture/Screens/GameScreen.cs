@@ -708,7 +708,7 @@ namespace ShowPerfExtensions
 
         sw.Stop();
         GameMain.PerformanceCounter.AddElapsedTicks("Update:Level", sw.ElapsedTicks);
-        Capture.Update.AddTicksOnce(sw.ElapsedTicks, UpdateLevel, "Update.Level");
+        //Capture.Update.AddTicksOnce(sw.ElapsedTicks, UpdateLevel, "Update.Level");
 
         Capture.Update.EnsureCategory(UpdateItemsHUD);
         if (Character.Controlled is { } controlled)
