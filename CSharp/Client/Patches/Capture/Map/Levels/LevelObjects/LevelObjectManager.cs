@@ -30,17 +30,25 @@ namespace ShowPerfExtensions
     [ShowperfPatch]
     public class LevelObjectManagerPatch
     {
+      public static CaptureState LevelObjects;
       public static void Initialize()
       {
         harmony.Patch(
           original: typeof(LevelObjectManager).GetMethod("Update", AccessTools.all),
           prefix: new HarmonyMethod(typeof(LevelObjectManagerPatch).GetMethod("LevelObjectManager_Update_Replace"))
         );
+
+        LevelObjects = Capture.Get("Showperf.Update.Level.LevelObjectManager");
       }
 
       public static bool LevelObjectManager_Update_Replace(float deltaTime, LevelObjectManager __instance)
       {
+        if (!LevelObjects.IsActive || !Showperf.Revealed) return true;
+
         LevelObjectManager _ = __instance;
+
+        Stopwatch sw = new Stopwatch();
+        Capture.Update.EnsureCategory(LevelObjects);
 
         _.GlobalForceDecreaseTimer += deltaTime;
         if (_.GlobalForceDecreaseTimer > 1000000.0f)
@@ -64,6 +72,8 @@ namespace ShowPerfExtensions
             }
             if (obj.Prefab.HideWhenBroken && obj.Health <= 0.0f) { continue; }
 
+
+            sw.Restart();
             if (obj.Triggers != null)
             {
               obj.ActivePrefab = obj.Prefab;
@@ -75,6 +85,15 @@ namespace ShowPerfExtensions
                   obj.ActivePrefab = obj.Prefab.OverrideProperties[i];
                 }
               }
+            }
+            sw.Stop();
+            if (LevelObjects.ByID)
+            {
+              Capture.Update.AddTicks(sw.ElapsedTicks, LevelObjects, $"{obj}.Triggers");
+            }
+            else
+            {
+              Capture.Update.AddTicks(sw.ElapsedTicks, LevelObjects, $"Triggers");
             }
 
             if (obj.PhysicsBody != null)

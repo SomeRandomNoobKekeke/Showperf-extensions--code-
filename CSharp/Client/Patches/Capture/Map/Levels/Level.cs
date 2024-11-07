@@ -55,7 +55,7 @@ namespace ShowPerfExtensions
         sw.Restart();
         _.LevelObjectManager.Update(deltaTime);
         sw.Stop();
-        Capture.Update.AddTicksOnce(sw.ElapsedTicks, UpdateLevel, "LevelObjectManager");
+        Capture.Update.AddTicksOnce(sw.ElapsedTicks, UpdateLevel, "Level Objects");
 
         sw.Restart();
         foreach (LevelWall wall in _.ExtraWalls) { wall.Update(deltaTime); }
@@ -94,17 +94,17 @@ namespace ShowPerfExtensions
       sw.Restart();
       _.backgroundCreatureManager.Update(deltaTime, cam);
       sw.Stop();
-      Capture.Update.AddTicksOnce(sw.ElapsedTicks, UpdateLevel, "BackgroundCreatureManager");
+      Capture.Update.AddTicksOnce(sw.ElapsedTicks, UpdateLevel, "Background Creatures");
 
       sw.Restart();
       WaterRenderer.Instance?.ScrollWater(Vector2.UnitY, (float)deltaTime);
       sw.Stop();
-      Capture.Update.AddTicksOnce(sw.ElapsedTicks, UpdateLevel, "WaterRenderer");
+      Capture.Update.AddTicksOnce(sw.ElapsedTicks, UpdateLevel, "Water Renderer");
 
       sw.Restart();
       _.renderer.Update(deltaTime, cam);
       sw.Stop();
-      Capture.Update.AddTicksOnce(sw.ElapsedTicks, UpdateLevel, "LevelRenderer");
+      Capture.Update.AddTicksOnce(sw.ElapsedTicks, UpdateLevel, "Level Renderer");
 #endif
 
         return false;

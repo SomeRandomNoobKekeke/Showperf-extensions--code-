@@ -30,18 +30,26 @@ namespace ShowPerfExtensions
     [ShowperfPatch]
     public class LevelObjectPatch
     {
+      public static CaptureState LevelObjects;
       public static void Initialize()
       {
         harmony.Patch(
           original: typeof(LevelObject).GetMethod("Update", AccessTools.all),
           prefix: new HarmonyMethod(typeof(LevelObjectPatch).GetMethod("LevelObject_Update_Replace"))
         );
+
+        LevelObjects = Capture.Get("Showperf.Update.Level.LevelObjectManager");
       }
 
       public static bool LevelObject_Update_Replace(float deltaTime, LevelObject __instance)
       {
+        if (!LevelObjects.IsActive || !Showperf.Revealed) return true;
+
         LevelObject _ = __instance;
 
+        Stopwatch sw = new Stopwatch();
+
+        sw.Restart();
         _.CurrentRotation = _.Rotation;
         if (_.ActivePrefab.SwingFrequency > 0.0f)
         {
@@ -69,7 +77,18 @@ namespace ShowPerfExtensions
               1.0f + sin * _.CurrentScaleOscillation.X,
               1.0f + sin * _.CurrentScaleOscillation.Y);
         }
+        sw.Stop();
+        if (LevelObjects.ByID)
+        {
+          Capture.Update.AddTicks(sw.ElapsedTicks, LevelObjects, $"{_}.Math");
+        }
+        else
+        {
+          Capture.Update.AddTicks(sw.ElapsedTicks, LevelObjects, $"Math");
+        }
 
+
+        sw.Restart();
         if (_.LightSources != null)
         {
           for (int i = 0; i < _.LightSources.Length; i++)
@@ -79,12 +98,32 @@ namespace ShowPerfExtensions
             _.LightSources[i].SpriteScale = _.CurrentScale;
           }
         }
+        sw.Stop();
+        if (LevelObjects.ByID)
+        {
+          Capture.Update.AddTicks(sw.ElapsedTicks, LevelObjects, $"{_}.LightSources");
+        }
+        else
+        {
+          Capture.Update.AddTicks(sw.ElapsedTicks, LevelObjects, $"LightSources");
+        }
 
+        sw.Restart();
         if (_.spriteDeformations.Count > 0)
         {
           _.UpdateDeformations(deltaTime);
         }
+        sw.Stop();
+        if (LevelObjects.ByID)
+        {
+          Capture.Update.AddTicks(sw.ElapsedTicks, LevelObjects, $"{_}.Deformations");
+        }
+        else
+        {
+          Capture.Update.AddTicks(sw.ElapsedTicks, LevelObjects, $"Deformations");
+        }
 
+        sw.Restart();
         if (_.ParticleEmitters != null)
         {
           for (int i = 0; i < _.ParticleEmitters.Length; i++)
@@ -95,7 +134,18 @@ namespace ShowPerfExtensions
                 angle: _.ParticleEmitters[i].Prefab.Properties.CopyEntityAngle ? -_.CurrentRotation + MathHelper.Pi : 0.0f);
           }
         }
+        sw.Stop();
+        if (LevelObjects.ByID)
+        {
+          Capture.Update.AddTicks(sw.ElapsedTicks, LevelObjects, $"{_}.ParticleEmitters");
+        }
+        else
+        {
+          Capture.Update.AddTicks(sw.ElapsedTicks, LevelObjects, $"ParticleEmitters");
+        }
 
+
+        sw.Restart();
         for (int i = 0; i < _.Sounds.Length; i++)
         {
           if (_.Sounds[i] == null) { continue; }
@@ -118,6 +168,15 @@ namespace ShowPerfExtensions
             _.SoundChannels[i].FadeOutAndDispose();
             _.SoundChannels[i] = null;
           }
+        }
+        sw.Stop();
+        if (LevelObjects.ByID)
+        {
+          Capture.Update.AddTicks(sw.ElapsedTicks, LevelObjects, $"{_}.Sounds");
+        }
+        else
+        {
+          Capture.Update.AddTicks(sw.ElapsedTicks, LevelObjects, $"Sounds");
         }
 
         return false;

@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<CUICaptureMap ChildrenOffset="[76.687744,107.63927,1]" Relative="[0,0,1,1]">
+<CUICaptureMap ChildrenOffset="[301.16772,230.68541,1.5760002]" Relative="[0,0,1,1]">
   <Connections>
     <Connection Start="Showperf.Draw" End="Draw" />
     <Connection Start="Draw.Map" End="Map" />
@@ -41,7 +41,7 @@
         <MapButton AKA="PostProcess" CState="Showperf.Draw.Map.PostProcess" Text="PostProcess" />
       </CUIVerticalList>
     </MapGroup>
-    <MapGroup AKA="Update" Absolute="[-63.488083,86.640015,,239.39998]" ConsumeSwipe="true" Draggable="true">
+    <MapGroup AKA="Update" Absolute="[-64.48804,85.64003,,239.39998]" ConsumeSwipe="true" Draggable="true">
       <MapButton AKA="DrawHeader" CState="Showperf.Update" Text="Update" TextAlign="{X:0.5 Y:0.5}" TextScale="1.6" />
       <CUIVerticalList Absolute="[,,,210.59998]" AbsoluteMin="[,,154.3,]" FitContent="[True,True]">
         <MapButton AKA="LightManager" CState="Showperf.Update.LightManager" Text="LightManager" />
@@ -51,7 +51,7 @@
         <MapButton AKA="GameSession" CState="Showperf.Update.GameSession" Text="GameSession" />
         <MapButton AKA="Level" CState="Showperf.Update.Level" Text="Level" />
         <MapButton AKA="MapEntity" CState="Showperf.Update.MapEntity" Text="MapEntity" />
-        <MapButton AKA="Particles" CState="Showperf.Update.Particles" State="true" Text="Particles" />
+        <MapButton AKA="Particles" CState="Showperf.Update.Particles" Text="Particles" />
         <MapButton AKA="Physics" CState="Showperf.Update.Physics" Text="Physics" />
         <MapButton AKA="Power" CState="Showperf.Update.Power" Text="Power" />
         <MapButton AKA="Ragdolls" CState="Showperf.Update.Ragdolls" Text="Ragdolls" />
@@ -62,11 +62,11 @@
     <MapGroup AKA="Level" Absolute="[-272.816,229.27994,,102.59999]" ConsumeSwipe="true" Draggable="true">
       <MapButton AKA="Level" CState="Showperf.Update.Level" Text="Level" TextAlign="{X:0.5 Y:0.5}" TextScale="1.2" />
       <CUIVerticalList Absolute="[,,,80.99999]" AbsoluteMin="[,,178.59999,]" FitContent="[True,True]">
-        <MapButton AKA="LevelObjectManager" CState="Showperf.Update.Level.LevelObjectManager" Text="LevelObjectManager" />
+        <MapButton AKA="LevelObjectManager" CState="Showperf.Update.Level.LevelObjectManager" State="true" Text="Level Objects" />
         <MapButton AKA="Walls" CState="Showperf.Update.Level.Walls" Text="Walls" />
-        <MapButton AKA="BackgroundCreatureManager" CState="Showperf.Update.Level.BackgroundCreatureManager" Text="BackgroundCreatureManager" />
-        <MapButton AKA="WaterRenderer" CState="Showperf.Update.Level.WaterRenderer" Text="WaterRenderer" />
-        <MapButton AKA="LevelRenderer" CState="Showperf.Update.Level.LevelRenderer" Text="LevelRenderer" />
+        <MapButton AKA="BackgroundCreaturesManager" CState="Showperf.Update.Level.BackgroundCreatureManager" Text="Background Creatures" />
+        <MapButton AKA="WaterRenderer" CState="Showperf.Update.Level.WaterRenderer" Text="Water Renderer" />
+        <MapButton AKA="LevelRenderer" CState="Showperf.Update.Level.LevelRenderer" Text="Level Renderer" />
       </CUIVerticalList>
     </MapGroup>
     <MapGroup AKA="MapEntity" Absolute="[105.31203,248.72,,54]" ConsumeSwipe="true" Draggable="true">
