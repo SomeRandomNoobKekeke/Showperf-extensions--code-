@@ -47,8 +47,9 @@ namespace ShowPerfExtensions
       public static CaptureState PostProcess;
 
 
-      public static CaptureState UpdateCharacter;
+      public static CaptureState UpdateLightManager;
       public static CaptureState UpdateItemsHUD;
+      public static CaptureState UpdateCharacter;
       public static CaptureState UpdateGameSession;
       public static CaptureState UpdateLevel;
       public static CaptureState UpdateMapEntity;
@@ -93,6 +94,8 @@ namespace ShowPerfExtensions
         PostProcess = Capture.Get("Showperf.Draw.Map.PostProcess");
 
 
+
+        UpdateLightManager = Capture.Get("Showperf.Update.LightManager");
         UpdateItemsHUD = Capture.Get("Showperf.Update.ItemsHUD");
         UpdateCharacter = Capture.Get("Showperf.Update.Character");
         UpdateGameSession = Capture.Get("Showperf.Update.GameSession");
@@ -585,6 +588,8 @@ namespace ShowPerfExtensions
 
         GameScreen _ = __instance;
 
+        Stopwatch sw = new Stopwatch();
+
 #if RUN_PHYSICS_IN_SEPARATE_THREAD
         physicsTime += deltaTime;
         lock (updateLock)
@@ -614,7 +619,10 @@ namespace ShowPerfExtensions
 #endif
 
 #if CLIENT
+        sw.Start();
         GameMain.LightManager?.Update((float)deltaTime);
+        Capture.Update.AddTicksOnce(sw.ElapsedTicks, UpdateLightManager, "Update.LightManager");
+        sw.Stop();
 #endif
 
         _.GameTime += deltaTime;
@@ -626,8 +634,7 @@ namespace ShowPerfExtensions
         MapEntity.ClearHighlightedEntities();
 
 #if CLIENT
-        var sw = new System.Diagnostics.Stopwatch();
-        sw.Start();
+        sw.Restart();
 #endif
 
         GameMain.GameSession?.Update((float)deltaTime);

@@ -43,6 +43,7 @@
     <MapGroup AKA="Update" Absolute="[-63.488083,86.640015,,190.79999]" ConsumeSwipe="true" Draggable="true">
       <MapButton AKA="DrawHeader" CState="Showperf.Update" Text="Update" TextAlign="{X:0.5 Y:0.5}" TextScale="1.6" />
       <CUIVerticalList Absolute="[,,,161.99998]" AbsoluteMin="[,,85.9,]" FitContent="[True,True]">
+        <MapButton AKA="LightManager" CState="Showperf.Update.LightManager" Text="LightManager" />
         <MapButton AKA="ItemsHUD" CState="Showperf.Update.ItemsHUD" Text="ItemsHUD" />
         <MapButton AKA="Character" CState="Showperf.Update.Character" Text="Character" />
         <MapButton AKA="GameSession" CState="Showperf.Update.GameSession" Text="GameSession" />

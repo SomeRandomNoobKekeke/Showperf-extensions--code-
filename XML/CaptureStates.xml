@@ -19,6 +19,7 @@
     </Draw>
     <ThinkHook />
     <Update>
+      <LightManager />
       <ItemsHUD />
       <Character />
       <GameSession>
