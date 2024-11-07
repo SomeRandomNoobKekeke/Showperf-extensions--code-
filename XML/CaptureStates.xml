@@ -26,7 +26,13 @@
       <GameSession>
         <Store />
       </GameSession>
-      <Level />
+      <Level>
+        <LevelObjectManager />
+        <Walls />
+        <BackgroundCreatureManager />
+        <WaterRenderer />
+        <LevelRenderer />
+      </Level>
       <MapEntity>
         <Items />
         <Misc />
