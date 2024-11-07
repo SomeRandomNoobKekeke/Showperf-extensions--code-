@@ -48,6 +48,7 @@ namespace ShowPerfExtensions
 
 
       public static CaptureState UpdateLightManager;
+      public static CaptureState UpdatePhysicBodies;
       public static CaptureState UpdateItemsHUD;
       public static CaptureState UpdateCharacter;
       public static CaptureState UpdateGameSession;
@@ -96,6 +97,7 @@ namespace ShowPerfExtensions
 
 
         UpdateLightManager = Capture.Get("Showperf.Update.LightManager");
+        UpdatePhysicBodies = Capture.Get("Showperf.Update.PhysicBodies");
         UpdateItemsHUD = Capture.Get("Showperf.Update.ItemsHUD");
         UpdateCharacter = Capture.Get("Showperf.Update.Character");
         UpdateGameSession = Capture.Get("Showperf.Update.GameSession");
@@ -627,9 +629,59 @@ namespace ShowPerfExtensions
 
         _.GameTime += deltaTime;
 
+        Capture.Update.EnsureCategory(UpdatePhysicBodies);
         foreach (PhysicsBody body in PhysicsBody.List)
         {
+          sw.Restart();
           if (body.Enabled && body.BodyType != FarseerPhysics.BodyType.Static) { body.Update(); }
+          sw.Stop();
+
+          if (body.UserData is Character c)
+          {
+            if (UpdatePhysicBodies.ByID)
+            {
+              string info = c.Info == null ? "" : $":{c.Info.DisplayName}";
+              Capture.Update.AddTicks(sw.ElapsedTicks, UpdatePhysicBodies, $"{c.ID}|{c}{info}");
+              continue;
+            }
+            else
+            {
+              Capture.Update.AddTicks(sw.ElapsedTicks, UpdatePhysicBodies, $"{c}");
+              continue;
+            }
+
+          }
+
+          if (body.UserData is Limb l)
+          {
+            if (UpdatePhysicBodies.ByID)
+            {
+              string info = l.character.Info == null ? "" : $":{l.character.Info.DisplayName}";
+              Capture.Update.AddTicks(sw.ElapsedTicks, UpdatePhysicBodies, $"{l.character.ID}|{l.character}{info}.{l.type}");
+              continue;
+            }
+            else
+            {
+              Capture.Update.AddTicks(sw.ElapsedTicks, UpdatePhysicBodies, $"{l.character}.{l.type}");
+              continue;
+            }
+          }
+
+          if (body.UserData is Item i)
+          {
+            if (UpdatePhysicBodies.ByID)
+            {
+              Capture.Update.AddTicks(sw.ElapsedTicks, UpdatePhysicBodies, $"{i}");
+              continue;
+            }
+            else
+            {
+              Capture.Update.AddTicks(sw.ElapsedTicks, UpdatePhysicBodies, $"{i.Prefab.Identifier}");
+              continue;
+            }
+          }
+
+          Capture.Update.AddTicks(sw.ElapsedTicks, UpdatePhysicBodies, body.UserData.ToString());
         }
         MapEntity.ClearHighlightedEntities();
 

@@ -20,6 +20,7 @@
     <ThinkHook />
     <Update>
       <LightManager />
+      <PhysicBodies />
       <ItemsHUD />
       <Character />
       <GameSession>
