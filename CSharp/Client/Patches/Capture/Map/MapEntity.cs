@@ -125,7 +125,7 @@ namespace ShowPerfExtensions
         }
         sw2.Stop();
         Capture.Update.AddTicksOnce(sw2.ElapsedTicks, Misc, "UpdatePower");
-        sw2.Restart();
+
 
 #if CLIENT
         sw.Stop();
@@ -134,6 +134,7 @@ namespace ShowPerfExtensions
         sw.Restart();
 #endif
 
+        Capture.Update.EnsureCategory(Items);
         Item.UpdatePendingConditionUpdates(deltaTime);
         if (MapEntity.mapEntityUpdateTick % MapEntity.MapEntityUpdateInterval == 0)
         {
@@ -145,7 +146,18 @@ namespace ShowPerfExtensions
             {
               if (GameMain.LuaCs.Game.UpdatePriorityItems.Contains(item)) { continue; }
               lastUpdatedItem = item;
+              sw2.Restart();
               item.Update(deltaTime * MapEntity.MapEntityUpdateInterval, cam);
+              sw2.Stop();
+              if (Items.ByID)
+              {
+                Capture.Update.AddTicks(sw2.ElapsedTicks, Items, $"{item}");
+              }
+              else
+              {
+                Capture.Update.AddTicks(sw2.ElapsedTicks, Items, item.Prefab.Identifier);
+              }
+
             }
           }
           catch (InvalidOperationException e)
@@ -162,13 +174,23 @@ namespace ShowPerfExtensions
         {
           if (item.Removed) continue;
 
+          sw2.Restart();
           item.Update(deltaTime, cam);
+          sw2.Stop();
+          if (Items.ByID)
+          {
+            Capture.Update.AddTicks(sw2.ElapsedTicks, Items, $"{item}");
+          }
+          else
+          {
+            Capture.Update.AddTicks(sw2.ElapsedTicks, Items, item.Prefab.Identifier);
+          }
         }
 
 #if CLIENT
         sw.Stop();
         GameMain.PerformanceCounter.AddElapsedTicks("Update:MapEntity:Items", sw.ElapsedTicks);
-        Capture.Update.AddTicksOnce(sw.ElapsedTicks, Items, "Update.MapEntity.Items");
+        Capture.Update.AddTicksOnce(sw.ElapsedTicks, UpdateMapEntity, "MapEntity.Items");
         sw.Restart();
 #endif
 
@@ -178,6 +200,8 @@ namespace ShowPerfExtensions
 
           MapEntity.Spawner?.Update();
         }
+        sw.Stop();
+        Capture.Update.AddTicksOnce(sw.ElapsedTicks, UpdateMapEntity, "MapEntity.Spawner");
 
         return false;
       }
