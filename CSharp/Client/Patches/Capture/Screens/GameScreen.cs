@@ -666,75 +666,81 @@ namespace ShowPerfExtensions
 
         sw.Restart();
 
+        // Note: it too heavy, it impacts update time and messes up timestamps
+        // if (UpdatePhysicBodies.IsActive)
+        // {
+        //   Capture.Update.EnsureCategory(UpdatePhysicBodies);
+        //   foreach (PhysicsBody body in PhysicsBody.List)
+        //   {
+        //     sw2.Restart();
+        //     if (body.Enabled && body.BodyType != FarseerPhysics.BodyType.Static) { body.Update(); }
+        //     sw2.Stop();
 
-        if (UpdatePhysicBodies.IsActive)
+        //     if (body.UserData is Character c)
+        //     {
+        //       if (UpdatePhysicBodies.ByID)
+        //       {
+        //         string info = c.Info == null ? "" : $":{c.Info.DisplayName}";
+        //         Capture.Update.AddTicks(sw2.ElapsedTicks, UpdatePhysicBodies, $"{c.ID}|{c}{info}");
+        //         continue;
+        //       }
+        //       else
+        //       {
+        //         Capture.Update.AddTicks(sw2.ElapsedTicks, UpdatePhysicBodies, c.ToString());
+        //         continue;
+        //       }
+
+        //     }
+
+        //     if (body.UserData is Limb l)
+        //     {
+        //       if (UpdatePhysicBodies.ByID)
+        //       {
+        //         string info = l.character.Info == null ? "" : $":{l.character.Info.DisplayName}";
+        //         Capture.Update.AddTicks(sw2.ElapsedTicks, UpdatePhysicBodies, $"{l.character.ID}|{l.character}{info}.{l.type}");
+        //         continue;
+        //       }
+        //       else
+        //       {
+        //         Capture.Update.AddTicks(sw2.ElapsedTicks, UpdatePhysicBodies, $"{l.character}.{l.type}");
+        //         continue;
+        //       }
+        //     }
+
+        //     if (body.UserData is Item i)
+        //     {
+        //       if (UpdatePhysicBodies.ByID)
+        //       {
+        //         Capture.Update.AddTicks(sw2.ElapsedTicks, UpdatePhysicBodies, i.ToString());
+        //         continue;
+        //       }
+        //       else
+        //       {
+        //         Capture.Update.AddTicks(sw2.ElapsedTicks, UpdatePhysicBodies, i.Prefab.Identifier);
+        //         continue;
+        //       }
+        //     }
+
+        //     Capture.Update.AddTicks(sw2.ElapsedTicks, UpdatePhysicBodies, body.UserData.ToString());
+        //   }
+        // }
+        // else
+        // {
+        //   foreach (PhysicsBody body in PhysicsBody.List)
+        //   {
+        //     if (body.Enabled && body.BodyType != FarseerPhysics.BodyType.Static) { body.Update(); }
+        //   }
+        // }
+
+        foreach (PhysicsBody body in PhysicsBody.List)
         {
-          Capture.Update.EnsureCategory(UpdatePhysicBodies);
-          foreach (PhysicsBody body in PhysicsBody.List)
-          {
-            sw.Restart();
-            if (body.Enabled && body.BodyType != FarseerPhysics.BodyType.Static) { body.Update(); }
-            sw.Stop();
-
-            if (body.UserData is Character c)
-            {
-              if (UpdatePhysicBodies.ByID)
-              {
-                string info = c.Info == null ? "" : $":{c.Info.DisplayName}";
-                Capture.Update.AddTicks(sw.ElapsedTicks, UpdatePhysicBodies, $"{c.ID}|{c}{info}");
-                continue;
-              }
-              else
-              {
-                Capture.Update.AddTicks(sw.ElapsedTicks, UpdatePhysicBodies, c.ToString());
-                continue;
-              }
-
-            }
-
-            if (body.UserData is Limb l)
-            {
-              if (UpdatePhysicBodies.ByID)
-              {
-                string info = l.character.Info == null ? "" : $":{l.character.Info.DisplayName}";
-                Capture.Update.AddTicks(sw.ElapsedTicks, UpdatePhysicBodies, $"{l.character.ID}|{l.character}{info}.{l.type}");
-                continue;
-              }
-              else
-              {
-                Capture.Update.AddTicks(sw.ElapsedTicks, UpdatePhysicBodies, $"{l.character}.{l.type}");
-                continue;
-              }
-            }
-
-            if (body.UserData is Item i)
-            {
-              if (UpdatePhysicBodies.ByID)
-              {
-                Capture.Update.AddTicks(sw.ElapsedTicks, UpdatePhysicBodies, i.ToString());
-                continue;
-              }
-              else
-              {
-                Capture.Update.AddTicks(sw.ElapsedTicks, UpdatePhysicBodies, i.Prefab.Identifier);
-                continue;
-              }
-            }
-
-            Capture.Update.AddTicks(sw.ElapsedTicks, UpdatePhysicBodies, body.UserData.ToString());
-          }
-        }
-        else
-        {
-          foreach (PhysicsBody body in PhysicsBody.List)
-          {
-            if (body.Enabled && body.BodyType != FarseerPhysics.BodyType.Static) { body.Update(); }
-          }
+          if (body.Enabled && body.BodyType != FarseerPhysics.BodyType.Static) { body.Update(); }
         }
 
         MapEntity.ClearHighlightedEntities();
 
         sw.Stop();
+        Capture.Update.AddTicksOnce(sw.ElapsedTicks, UpdatePhysicBodies, "Interpolate draw position");
         Capture.Update.AddTicksOnce(sw.ElapsedTicks, Update, "Interpolate draw position");
         sw.Restart();
 
