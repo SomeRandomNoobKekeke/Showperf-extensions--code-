@@ -39,6 +39,39 @@ namespace ShowPerfExtensions
         Categories[t.Category][t.Hash] + t : t;
       }
 
+      public void ReplaceWithMax(Slice s)
+      {
+        foreach (int cat in s.Categories.Keys)
+        {
+          if (!Categories.ContainsKey(cat)) Categories[cat] = new Dictionary<int, UpdateTicks>();
+
+          foreach (int id in s.Categories[cat].Keys)
+          {
+            Categories[cat][id] = Categories[cat].ContainsKey(id) ?
+            UpdateTicks.Max(Categories[cat][id], s.Categories[cat][id]) : s.Categories[cat][id];
+          }
+        }
+      }
+
+      public void RemoveMatches(Slice s)
+      {
+        foreach (int cat in s.Categories.Keys)
+        {
+          if (!Categories.ContainsKey(cat)) Categories[cat] = new Dictionary<int, UpdateTicks>();
+
+          foreach (int id in s.Categories[cat].Keys)
+          {
+            if (Categories[cat].ContainsKey(id))
+            {
+              if (Categories[cat][id].Ticks == s.Categories[cat][id].Ticks)
+              {
+                Categories[cat][id] = Categories[cat][id] with { Ticks = 0 };
+              }
+            }
+          }
+        }
+      }
+
       public void Add(Slice s)
       {
         Total += s.Total;

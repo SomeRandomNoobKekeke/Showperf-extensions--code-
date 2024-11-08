@@ -49,6 +49,28 @@ namespace ShowPerfExtensions
         {
           TotalTicks.Add(FirstSlice);
           FirstSlice.Clear();
+          return;
+        }
+
+        if (Capture.Mode == CaptureMode.Spike)
+        {
+          if (Frames == 1)
+          {
+            TotalTicks.ReplaceWithMax(FirstSlice);
+          }
+          else
+          {
+            Slice lastSlice = PartialSums.Dequeue();
+
+            TotalTicks.RemoveMatches(lastSlice);
+            TotalTicks.ReplaceWithMax(FirstSlice);
+
+            lastSlice.Clear();
+            FirstSlice = lastSlice;
+            PartialSums.Enqueue(lastSlice);
+          }
+
+          return;
         }
 
         if (Capture.Mode == CaptureMode.Mean)
@@ -70,6 +92,7 @@ namespace ShowPerfExtensions
             FirstSlice = lastSlice;
             PartialSums.Enqueue(lastSlice);
           }
+          return;
         }
       }
 
@@ -173,6 +196,7 @@ namespace ShowPerfExtensions
           return Capture.Mode switch
           {
             CaptureMode.Sum => TotalTicks[category][id],
+            CaptureMode.Spike => TotalTicks[category][id],
             CaptureMode.Mean => TotalTicks[category][id] / Frames
           };
         }

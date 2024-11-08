@@ -127,6 +127,7 @@ namespace ShowPerfExtensions
 
         ModeButton.Add(new CUIButton("Mean") { Data = CaptureMode.Mean });
         ModeButton.Add(new CUIButton("Sum") { Data = CaptureMode.Sum });
+        ModeButton.Add(new CUIButton("Spike") { Data = CaptureMode.Spike });
 
         ModeButton.Select(0);
 
