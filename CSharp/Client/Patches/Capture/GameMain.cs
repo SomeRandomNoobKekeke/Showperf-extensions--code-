@@ -58,6 +58,7 @@ namespace ShowPerfExtensions
         UpdateMonoGame = Capture.Get("MonoGame");
       }
 
+      // https://docs.monogame.net/api/Microsoft.Xna.Framework.Graphics.GraphicsMetrics.html
       public static void AddMonoGameMetrics()
       {
         if (!UpdateMonoGame.IsActive) return;
@@ -146,7 +147,7 @@ namespace ShowPerfExtensions
         GameMain.PerformanceCounter.AddElapsedTicks("Draw", sw.ElapsedTicks);
         GameMain.PerformanceCounter.DrawTimeGraph.Update(sw.ElapsedTicks * 1000.0f / (float)Stopwatch.Frequency);
 
-        Capture.Draw.AddTicksOnce(sw.ElapsedTicks, ShowperfDraw, "Draw");
+        //Capture.Draw.AddTicksOnce(sw.ElapsedTicks, ShowperfDraw, "Draw");
 
 
         Capture.Draw.FirstSlice.Total = sw.ElapsedTicks;

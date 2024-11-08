@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<CUICaptureMap ChildrenOffset="[316.15967,209.29788,1.4320002]" Relative="[0,0,1,1]">
+<CUICaptureMap ChildrenOffset="[38.503555,112.70322,1]" Relative="[0,0,1,1]">
   <Connections>
     <Connection Start="Showperf.Draw" End="Draw" />
     <Connection Start="Draw.Map" End="Map" />
@@ -10,7 +10,7 @@
     <Connection Start="MapEntity.Misc" End="Misc" />
   </Connections>
   <Children>
-    <MapButton AKA="MonoGame" Absolute="[-286.82413,-79.40802,,]" CState="MonoGame" ConsumeDragAndDrop="true" ConsumeSwipe="true" Draggable="true" State="true" Text="MonoGame Metrics" TextScale="1.6" />
+    <MapButton AKA="MonoGame" Absolute="[-286.82413,-79.40802,,]" CState="MonoGame" ConsumeDragAndDrop="true" ConsumeSwipe="true" Draggable="true" Text="MonoGame Metrics" TextScale="1.6" />
     <MapGroup AKA="Showperf" Absolute="[-46.67213,-79.03201,,77.4]" ConsumeSwipe="true" Draggable="true">
       <CUITextBlock AbsoluteMin="[,,110.4,28.800001]" Text="Showperf" TextAlign="{X:0.5 Y:0.5}" TextScale="1.6" />
       <CUIVerticalList Absolute="[,,,48.6]" AbsoluteMin="[,,64.3,]" FitContent="[True,True]">
