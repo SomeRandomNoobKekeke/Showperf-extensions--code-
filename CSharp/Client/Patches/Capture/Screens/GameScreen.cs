@@ -501,12 +501,21 @@ namespace ShowPerfExtensions
             null, null,
             _.DamageEffect,
             _.cam.Transform);
-        Submarine.DrawDamageable(spriteBatch, _.DamageEffect, false);
+
+        if (FrontDamageable.IsActive)
+        {
+          SubmarinePatch.DrawDamageable1(spriteBatch, _.DamageEffect, false);
+        }
+        else
+        {
+          Submarine.DrawDamageable(spriteBatch, _.DamageEffect, false);
+        }
+
         spriteBatch.End();
 
         sw.Stop();
         GameMain.PerformanceCounter.AddElapsedTicks("Draw:Map:FrontDamageable", sw.ElapsedTicks);
-        Capture.Draw.AddTicksOnce(sw.ElapsedTicks, FrontDamageable, "FrontDamageable");
+        //Capture.Draw.AddTicksOnce(sw.ElapsedTicks, FrontDamageable, "FrontDamageable");
         Capture.Draw.AddTicksOnce(sw.ElapsedTicks, DrawMap, "FrontDamageable");
         sw.Restart();
 

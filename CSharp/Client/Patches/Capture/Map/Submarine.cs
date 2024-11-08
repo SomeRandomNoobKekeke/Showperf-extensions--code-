@@ -69,14 +69,14 @@ namespace ShowPerfExtensions
         }
       }
 
-      public static void DrawDamageable1(SpriteBatch spriteBatch, Effect damageEffect)
+      public static void DrawDamageable1(SpriteBatch spriteBatch, Effect damageEffect, bool editing = false)
       {
-
+        Submarine_DrawDamageable_Alt(GameScreenPatch.FrontDamageable, spriteBatch, damageEffect, editing);
       }
 
-      public static void DrawDamageable2(SpriteBatch spriteBatch, Effect damageEffect)
+      public static void DrawDamageable2(SpriteBatch spriteBatch, Effect damageEffect, bool editing = false)
       {
-        Submarine_DrawDamageable_Alt(LightManagerPatch.DrawDamageable, spriteBatch, damageEffect);
+        Submarine_DrawDamageable_Alt(LightManagerPatch.DrawDamageable, spriteBatch, damageEffect, editing);
       }
 
       public static bool Submarine_DrawBack_Alt(CaptureState cs, SpriteBatch spriteBatch, bool editing = false, Predicate<MapEntity> predicate = null)
