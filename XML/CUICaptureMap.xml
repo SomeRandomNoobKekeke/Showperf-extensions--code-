@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<CUICaptureMap ChildrenOffset="[-110.59239,194.16714,1]" Relative="[0,0,1,1]">
+<CUICaptureMap ChildrenOffset="[180.09563,105.25073,1.144]" Relative="[0,0,1,1]">
   <Connections>
     <Connection Start="Showperf.Draw" End="Draw" />
     <Connection Start="Draw.Map" End="Map" />
@@ -63,7 +63,7 @@
         <MapButton AKA="Level" CState="Showperf.Update.Level" Text="Level" />
         <MapButton AKA="MapEntity" CState="Showperf.Update.MapEntity" Text="MapEntity" />
         <MapButton AKA="Particles" CState="Showperf.Update.Particles" Text="Particles" />
-        <MapButton AKA="Physics" CState="Showperf.Update.Physics" Text="Physics" />
+        <MapButton AKA="Physics" CState="Showperf.Update.Physics" State="true" Text="Physics" />
         <MapButton AKA="Power" CState="Showperf.Update.Power" Text="Power" />
         <MapButton AKA="Animations" CState="Showperf.Update.Animations" Text="Animations" />
         <MapButton AKA="Ragdolls" CState="Showperf.Update.Ragdolls" Text="Ragdolls" />

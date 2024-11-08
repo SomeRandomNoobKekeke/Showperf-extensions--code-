@@ -19,13 +19,14 @@ namespace ShowPerfExtensions
 
     public class CaptureClass
     {
-
       public CaptureWindow Draw = new CaptureWindow();
-      public CaptureWindow MonoGame = new CaptureWindow();
       public CaptureWindow Update = new CaptureWindow()
       {
         FreezeOnPause = true,
       };
+      public CaptureWindow MonoGame = new CaptureWindow();
+      public CaptureWindow Farseer = new CaptureWindow();
+
 
       public bool Frozen { get; set; }
 
@@ -35,6 +36,7 @@ namespace ShowPerfExtensions
         Draw.Reset();
         MonoGame.Reset();
         Update.Reset();
+        Farseer.Reset();
       }
 
       public event Action<CaptureMode> OnModeChanged;

@@ -117,6 +117,18 @@ namespace ShowPerfExtensions
             }
           }
 
+          foreach (int cat in Capture.Farseer.TotalTicks.Keys)
+          {
+            foreach (int id in Capture.Farseer.TotalTicks[cat].Keys)
+            {
+              UpdateTicks t = Capture.Farseer.GetTotal(cat, id);
+
+              Values.Add(new UpdateTicksView(t, $"{String.Format("{0:0000.0000}", t.Ticks)} {t.Name}"));
+
+              TopValue = 1000;
+            }
+          }
+
           if (Values.Count < 2 || Values.First().Ticks == 0)
           {
             Linearity = 0;

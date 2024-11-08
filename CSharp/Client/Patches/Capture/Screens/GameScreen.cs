@@ -1017,6 +1017,16 @@ namespace ShowPerfExtensions
         try
         {
           GameMain.World.Step((float)Timing.Step);
+
+          Capture.Farseer.EnsureCategory(UpdatePhysics);
+          Capture.Farseer.AddTicks(GameMain.World.ContinuousPhysicsTime.TotalMilliseconds, UpdatePhysics, "ContinuousPhysicsTime");
+          Capture.Farseer.AddTicks(GameMain.World.ControllersUpdateTime.TotalMilliseconds, UpdatePhysics, "ControllersUpdateTime");
+          Capture.Farseer.AddTicks(GameMain.World.AddRemoveTime.TotalMilliseconds, UpdatePhysics, "AddRemoveTime");
+          Capture.Farseer.AddTicks(GameMain.World.NewContactsTime.TotalMilliseconds, UpdatePhysics, "NewContactsTime");
+          Capture.Farseer.AddTicks(GameMain.World.ContactsUpdateTime.TotalMilliseconds, UpdatePhysics, "ContactsUpdateTime");
+          Capture.Farseer.AddTicks(GameMain.World.SolveUpdateTime.TotalMilliseconds, UpdatePhysics, "SolveUpdateTime");
+          Capture.Farseer.AddTicks(GameMain.World.ProxyCount, UpdatePhysics, "ProxyCount");
+          Capture.Farseer.AddTicks(GameMain.World.ContactCount, UpdatePhysics, "ContactCount");
         }
         catch (WorldLockedException e)
         {
@@ -1030,7 +1040,7 @@ namespace ShowPerfExtensions
 #if CLIENT
         sw.Stop();
         GameMain.PerformanceCounter.AddElapsedTicks("Update:Physics", sw.ElapsedTicks);
-        Capture.Update.AddTicksOnce(sw.ElapsedTicks, UpdatePhysics, "Update.Physics");
+        //Capture.Update.AddTicksOnce(sw.ElapsedTicks, UpdatePhysics, "Update.Physics");
         Capture.Update.AddTicksOnce(sw.ElapsedTicks, Update, "Update.Physics");
         _.UpdateProjSpecific(deltaTime);
 #endif
@@ -1040,6 +1050,8 @@ namespace ShowPerfExtensions
 #if RUN_PHYSICS_IN_SEPARATE_THREAD
         }
 #endif
+
+        Capture.Farseer.Update();
 
         return false;
       }
