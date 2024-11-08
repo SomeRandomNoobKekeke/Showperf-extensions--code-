@@ -40,6 +40,7 @@
       <Particles />
       <Physics />
       <Power />
+      <Animations />
       <Ragdolls />
       <StatusEffects />
       <CameraAndCursor />

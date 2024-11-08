@@ -57,6 +57,7 @@ namespace ShowPerfExtensions
       public static CaptureState UpdateParticles;
       public static CaptureState UpdatePhysics;
       public static CaptureState UpdateRagdolls;
+      public static CaptureState UpdateAnimations;
       public static CaptureState UpdateStatusEffects;
       public static CaptureState UpdateCameraAndCursor;
       public static CaptureState UpdateSetPrevTransform;
@@ -109,6 +110,7 @@ namespace ShowPerfExtensions
         UpdateParticles = Capture.Get("Showperf.Update.Particles");
         UpdatePhysics = Capture.Get("Showperf.Update.Physics");
         UpdateRagdolls = Capture.Get("Showperf.Update.Ragdolls");
+        UpdateAnimations = Capture.Get("Showperf.Update.Animations");
         UpdateStatusEffects = Capture.Get("Showperf.Update.StatusEffects");
         UpdateCameraAndCursor = Capture.Get("Showperf.Update.CameraAndCursor");
         UpdateSetPrevTransform = Capture.Get("Showperf.Update.SetPrevTransform");
@@ -825,6 +827,8 @@ namespace ShowPerfExtensions
         sw.Restart();
 #endif
         Character.UpdateAnimAll((float)deltaTime);
+        sw.Stop();
+        Capture.Update.AddTicksOnce(sw.ElapsedTicks, UpdateAnimations, "Update.Animations");
 
 #if CLIENT
         Ragdoll.UpdateAll((float)deltaTime, _.cam);
@@ -835,7 +839,7 @@ namespace ShowPerfExtensions
 #if CLIENT
         sw.Stop();
         GameMain.PerformanceCounter.AddElapsedTicks("Update:Ragdolls", sw.ElapsedTicks);
-        Capture.Update.AddTicksOnce(sw.ElapsedTicks, UpdateRagdolls, "Update.Ragdolls");
+        //Capture.Update.AddTicksOnce(sw.ElapsedTicks, UpdateRagdolls, "Update.Ragdolls");
         sw.Restart();
 #endif
 
