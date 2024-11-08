@@ -42,6 +42,8 @@
       <Power />
       <Ragdolls />
       <StatusEffects />
+      <CameraAndCursor />
+      <SetPrevTransform />
       <Submarine />
     </Update>
   </Showperf>

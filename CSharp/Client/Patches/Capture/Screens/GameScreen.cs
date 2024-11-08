@@ -58,6 +58,9 @@ namespace ShowPerfExtensions
       public static CaptureState UpdatePhysics;
       public static CaptureState UpdateRagdolls;
       public static CaptureState UpdateStatusEffects;
+      public static CaptureState UpdateCameraAndCursor;
+      public static CaptureState UpdateSetPrevTransform;
+
       public static CaptureState UpdateSubmarine;
 
 
@@ -107,6 +110,8 @@ namespace ShowPerfExtensions
         UpdatePhysics = Capture.Get("Showperf.Update.Physics");
         UpdateRagdolls = Capture.Get("Showperf.Update.Ragdolls");
         UpdateStatusEffects = Capture.Get("Showperf.Update.StatusEffects");
+        UpdateCameraAndCursor = Capture.Get("Showperf.Update.CameraAndCursor");
+        UpdateSetPrevTransform = Capture.Get("Showperf.Update.SetPrevTransform");
         UpdateSubmarine = Capture.Get("Showperf.Update.Submarine");
       }
 
@@ -785,6 +790,9 @@ namespace ShowPerfExtensions
         _.cam.MoveCamera((float)deltaTime, allowZoom: GUI.MouseOn == null && !Inventory.IsMouseOnInventory);
 
         Character.Controlled?.UpdateLocalCursor(_.cam);
+        sw.Stop();
+        Capture.Update.AddTicksOnce(sw.ElapsedTicks, UpdateCameraAndCursor, "Camera and cursor");
+        sw.Restart();
 #endif
 
         foreach (Submarine sub in Submarine.Loaded)
@@ -799,6 +807,10 @@ namespace ShowPerfExtensions
             body.SetPrevTransform(body.SimPosition, body.Rotation);
           }
         }
+
+        sw.Stop();
+        Capture.Update.AddTicksOnce(sw.ElapsedTicks, UpdateSetPrevTransform, "SetPrevTransform");
+        sw.Restart();
 
 #if CLIENT
         MapEntity.UpdateAll((float)deltaTime, _.cam);

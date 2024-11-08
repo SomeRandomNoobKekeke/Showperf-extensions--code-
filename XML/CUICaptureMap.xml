@@ -56,6 +56,8 @@
         <MapButton AKA="Power" CState="Showperf.Update.Power" Text="Power" />
         <MapButton AKA="Ragdolls" CState="Showperf.Update.Ragdolls" Text="Ragdolls" />
         <MapButton AKA="StatusEffects" CState="Showperf.Update.StatusEffects" Text="StatusEffects" />
+        <MapButton AKA="CameraAndCursor" CState="Showperf.Update.CameraAndCursor" Text="Camera And Cursor" />
+        <MapButton AKA="SetPrevTransform" CState="Showperf.Update.SetPrevTransform" Text="Body.SetPrevTransform" />
         <MapButton AKA="Submarine" CState="Showperf.Update.Submarine" Text="Submarine" />
       </CUIVerticalList>
     </MapGroup>
