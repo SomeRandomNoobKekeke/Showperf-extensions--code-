@@ -88,6 +88,8 @@ namespace ShowPerfExtensions
       {
         return new UpdateTicks(a.Ticks / div, a.Category, a.Name, a.Hash);
       }
+
+      public override string ToString() => $"{Name} {Ticks}";
     }
 
   }

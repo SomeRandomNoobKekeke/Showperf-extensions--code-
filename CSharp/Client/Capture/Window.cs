@@ -197,7 +197,7 @@ namespace ShowPerfExtensions
           {
             CaptureMode.Sum => TotalTicks[category][id],
             CaptureMode.Spike => TotalTicks[category][id],
-            CaptureMode.Mean => TotalTicks[category][id] / Frames
+            CaptureMode.Mean => TotalTicks[category][id] / (Frames - 1) // TODO why i need -1 here?
           };
         }
         catch (Exception e)

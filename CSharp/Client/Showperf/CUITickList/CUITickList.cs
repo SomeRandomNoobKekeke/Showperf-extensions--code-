@@ -111,7 +111,8 @@ namespace ShowPerfExtensions
             foreach (int id in Capture.MonoGame.TotalTicks[cat].Keys)
             {
               UpdateTicks t = Capture.MonoGame.GetTotal(cat, id);
-              Values.Add(new UpdateTicksView(t, $"{t.Ticks} {t.Name}"));
+              log(t);
+              Values.Add(new UpdateTicksView(t, $"{Math.Round(t.Ticks)} {t.Name}"));
 
               TopValue = 1000;
             }

@@ -40,7 +40,7 @@ namespace ShowPerfExtensions
     {
       public static CaptureState ShowperfDraw;
       public static CaptureState ShowperfUpdate;
-
+      public static CaptureState UpdateMonoGame;
       public static void Initialize()
       {
         harmony.Patch(
@@ -55,6 +55,23 @@ namespace ShowPerfExtensions
 
         ShowperfDraw = Capture.Get("Showperf.Draw");
         ShowperfUpdate = Capture.Get("Showperf.Update");
+        UpdateMonoGame = Capture.Get("MonoGame");
+      }
+
+      public static void AddMonoGameMetrics()
+      {
+        if (!UpdateMonoGame.IsActive) return;
+
+        GraphicsMetrics metrics = GameMain.Instance.GraphicsDevice.Metrics;
+
+        Capture.MonoGame.AddTicksOnce(metrics.ClearCount, UpdateMonoGame, "ClearCount");
+        Capture.MonoGame.AddTicksOnce(metrics.DrawCount, UpdateMonoGame, "DrawCount");
+        Capture.MonoGame.AddTicksOnce(metrics.PixelShaderCount, UpdateMonoGame, "PixelShaderCount");
+        Capture.MonoGame.AddTicksOnce(metrics.PrimitiveCount, UpdateMonoGame, "PrimitiveCount");
+        Capture.MonoGame.AddTicksOnce(metrics.SpriteCount, UpdateMonoGame, "SpriteCount");
+        Capture.MonoGame.AddTicksOnce(metrics.TargetCount, UpdateMonoGame, "TargetCount");
+        Capture.MonoGame.AddTicksOnce(metrics.TextureCount, UpdateMonoGame, "TextureCount");
+        Capture.MonoGame.AddTicksOnce(metrics.VertexShaderCount, UpdateMonoGame, "VertexShaderCount");
       }
 
 
@@ -134,6 +151,9 @@ namespace ShowPerfExtensions
 
         Capture.Draw.FirstSlice.Total = sw.ElapsedTicks;
         Capture.Draw.Update();
+
+        AddMonoGameMetrics();
+        Capture.MonoGame.Update();
 
         return false;
       }

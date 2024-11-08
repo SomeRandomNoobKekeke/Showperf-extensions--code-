@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<CUICaptureMap ChildrenOffset="[187.95966,12.239197,1]" Relative="[0,0,1,1]">
+<CUICaptureMap ChildrenOffset="[316.15967,209.29788,1.4320002]" Relative="[0,0,1,1]">
   <Connections>
     <Connection Start="Showperf.Draw" End="Draw" />
     <Connection Start="Draw.Map" End="Map" />
@@ -10,12 +10,13 @@
     <Connection Start="MapEntity.Misc" End="Misc" />
   </Connections>
   <Children>
+    <MapButton AKA="MonoGame" Absolute="[-286.82413,-79.40802,,]" CState="MonoGame" ConsumeDragAndDrop="true" ConsumeSwipe="true" Draggable="true" State="true" Text="MonoGame Metrics" TextScale="1.6" />
     <MapGroup AKA="Showperf" Absolute="[-46.67213,-79.03201,,77.4]" ConsumeSwipe="true" Draggable="true">
       <CUITextBlock AbsoluteMin="[,,110.4,28.800001]" Text="Showperf" TextAlign="{X:0.5 Y:0.5}" TextScale="1.6" />
       <CUIVerticalList Absolute="[,,,48.6]" AbsoluteMin="[,,64.3,]" FitContent="[True,True]">
         <MapButton AKA="Draw" CState="Showperf.Draw" Text="Draw" />
         <MapButton AKA="ThinkHook" Disabled="true" Text="ThinkHook" />
-        <MapButton AKA="Update" CState="Showperf.Update" State="true" Text="Update" />
+        <MapButton AKA="Update" CState="Showperf.Update" Text="Update" />
       </CUIVerticalList>
     </MapGroup>
     <MapGroup AKA="Draw" Absolute="[153.78404,-20.53598,,61.199997]" ConsumeSwipe="true" Draggable="true">
@@ -43,7 +44,7 @@
       </CUIVerticalList>
     </MapGroup>
     <MapGroup AKA="Update" Absolute="[-60.91205,85.640015,,287.99997]" ConsumeSwipe="true" Draggable="true">
-      <MapButton AKA="DrawHeader" CState="Showperf.Update" State="true" Text="Update" TextAlign="{X:0.5 Y:0.5}" TextScale="1.6" />
+      <MapButton AKA="DrawHeader" CState="Showperf.Update" Text="Update" TextAlign="{X:0.5 Y:0.5}" TextScale="1.6" />
       <CUIVerticalList Absolute="[,,,259.19998]" AbsoluteMin="[,,154.3,]" FitContent="[True,True]">
         <MapButton AKA="LightManager" CState="Showperf.Update.LightManager" Text="LightManager" />
         <MapButton AKA="PhysicBodies" CState="Showperf.Update.PhysicBodies" Text="Interpolate draw position" />

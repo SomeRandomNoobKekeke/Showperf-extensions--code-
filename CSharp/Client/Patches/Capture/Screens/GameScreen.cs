@@ -64,6 +64,7 @@ namespace ShowPerfExtensions
       public static CaptureState UpdateSubmarine;
 
 
+
       public static void Initialize()
       {
         harmony.Patch(
@@ -115,7 +116,11 @@ namespace ShowPerfExtensions
         UpdateCameraAndCursor = Capture.Get("Showperf.Update.CameraAndCursor");
         UpdateSetPrevTransform = Capture.Get("Showperf.Update.SetPrevTransform");
         UpdateSubmarine = Capture.Get("Showperf.Update.Submarine");
+
+
       }
+
+
 
 
       // https://github.com/evilfactory/LuaCsForBarotrauma/blob/master/Barotrauma/BarotraumaClient/ClientSource/Screens/GameScreen.cs#L98
