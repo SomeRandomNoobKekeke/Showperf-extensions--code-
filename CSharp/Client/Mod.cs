@@ -109,6 +109,7 @@ namespace ShowPerfExtensions
     {
       //removeCommands();
       CUI.Dispose();
+      LightSource_LightComponent.Clear();
       info($"{ModName} Disposed");
     }
   }

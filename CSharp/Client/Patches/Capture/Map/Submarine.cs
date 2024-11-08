@@ -173,7 +173,7 @@ namespace ShowPerfExtensions
           Submarine.DamageEffectCutoff = 0.0f;
         }
         sw.Stop();
-        Capture.Draw.AddTicks(sw.ElapsedTicks, cs, "DrawDamage");
+        //Capture.Draw.AddTicks(sw.ElapsedTicks, cs, "DrawDamage");
 
         return false;
       }

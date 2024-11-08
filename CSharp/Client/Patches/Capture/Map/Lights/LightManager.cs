@@ -215,6 +215,7 @@ namespace ShowPerfExtensions
 
         Stopwatch sw = new Stopwatch();
         Stopwatch sw2 = new Stopwatch();
+        Stopwatch sw3 = new Stopwatch();
 
         LightManager _ = __instance;
 
@@ -504,6 +505,8 @@ namespace ShowPerfExtensions
         spriteBatch.Draw(_.LimbLightMap, new Rectangle(cam.WorldView.X, -cam.WorldView.Y, cam.WorldView.Width, cam.WorldView.Height), Color.White);
 
 
+        Capture.Draw.EnsureCategory(LightVolumes);
+
         sw2.Restart();
         foreach (ElectricalDischarger discharger in ElectricalDischarger.List)
         {
@@ -515,12 +518,30 @@ namespace ShowPerfExtensions
 
         foreach (LightSource light in _.activeLights)
         {
+          sw3.Restart();
           if (light.IsBackground || light.CurrentBrightness <= 0.0f) { continue; }
           light.DrawLightVolume(spriteBatch, _.lightEffect, transform, recalculationCount < LightManager.MaxLightVolumeRecalculationsPerFrame, ref recalculationCount);
+          sw3.Stop();
+          if (LightVolumes.IsActive)
+          {
+            LightComponent lc = Mod.LightSource_LightComponent.GetValueOrDefault(light);
+            if (lc == null) continue;
+
+
+            if (LightVolumes.ByID)
+            {
+              Capture.Draw.AddTicks(sw3.ElapsedTicks, LightVolumes, lc.Item?.ToString());
+            }
+            else
+            {
+              Capture.Draw.AddTicks(sw3.ElapsedTicks, LightVolumes, lc.Item?.Prefab?.Identifier ?? lc.Item?.ToString());
+            }
+
+          }
         }
 
         sw2.Stop();
-        Capture.Draw.AddTicksOnce(sw2.ElapsedTicks, LightVolumes, "DrawLightVolumes");
+        //Capture.Draw.AddTicksOnce(sw2.ElapsedTicks, LightVolumes, "DrawLightVolumes");
         sw2.Restart();
 
         if (ConnectionPanel.ShouldDebugDrawWiring)
