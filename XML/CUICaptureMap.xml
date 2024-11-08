@@ -15,7 +15,7 @@
       <CUIVerticalList Absolute="[,,,48.6]" AbsoluteMin="[,,64.3,]" FitContent="[True,True]">
         <MapButton AKA="Draw" CState="Showperf.Draw" Text="Draw" />
         <MapButton AKA="ThinkHook" Disabled="true" Text="ThinkHook" />
-        <MapButton AKA="Update" CState="Showperf.Update" Text="Update" />
+        <MapButton AKA="Update" CState="Showperf.Update" State="true" Text="Update" />
       </CUIVerticalList>
     </MapGroup>
     <MapGroup AKA="Draw" Absolute="[153.78404,-20.53598,,61.199997]" ConsumeSwipe="true" Draggable="true">
@@ -42,8 +42,8 @@
         <MapButton AKA="PostProcess" CState="Showperf.Draw.Map.PostProcess" Text="PostProcess" />
       </CUIVerticalList>
     </MapGroup>
-    <MapGroup AKA="Update" Absolute="[-61.91205,85.640015,,287.99997]" ConsumeSwipe="true" Draggable="true">
-      <MapButton AKA="DrawHeader" CState="Showperf.Update" Text="Update" TextAlign="{X:0.5 Y:0.5}" TextScale="1.6" />
+    <MapGroup AKA="Update" Absolute="[-60.91205,85.640015,,287.99997]" ConsumeSwipe="true" Draggable="true">
+      <MapButton AKA="DrawHeader" CState="Showperf.Update" State="true" Text="Update" TextAlign="{X:0.5 Y:0.5}" TextScale="1.6" />
       <CUIVerticalList Absolute="[,,,259.19998]" AbsoluteMin="[,,154.3,]" FitContent="[True,True]">
         <MapButton AKA="LightManager" CState="Showperf.Update.LightManager" Text="LightManager" />
         <MapButton AKA="PhysicBodies" CState="Showperf.Update.PhysicBodies" Text="Interpolate draw position" />
@@ -56,7 +56,7 @@
         <MapButton AKA="Physics" CState="Showperf.Update.Physics" Text="Physics" />
         <MapButton AKA="Power" CState="Showperf.Update.Power" Text="Power" />
         <MapButton AKA="Animations" CState="Showperf.Update.Animations" Text="Animations" />
-        <MapButton AKA="Ragdolls" CState="Showperf.Update.Ragdolls" State="true" Text="Ragdolls" />
+        <MapButton AKA="Ragdolls" CState="Showperf.Update.Ragdolls" Text="Ragdolls" />
         <MapButton AKA="StatusEffects" CState="Showperf.Update.StatusEffects" Text="StatusEffects" />
         <MapButton AKA="CameraAndCursor" CState="Showperf.Update.CameraAndCursor" Text="Camera And Cursor" />
         <MapButton AKA="SetPrevTransform" CState="Showperf.Update.SetPrevTransform" Text="Body.SetPrevTransform" />

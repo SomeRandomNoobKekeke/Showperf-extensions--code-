@@ -46,7 +46,7 @@ namespace ShowPerfExtensions
       public static CaptureState Lighting;
       public static CaptureState PostProcess;
 
-
+      public static CaptureState Update;
       public static CaptureState UpdateLightManager;
       public static CaptureState UpdatePhysicBodies;
       public static CaptureState UpdateItemsHUD;
@@ -61,7 +61,6 @@ namespace ShowPerfExtensions
       public static CaptureState UpdateStatusEffects;
       public static CaptureState UpdateCameraAndCursor;
       public static CaptureState UpdateSetPrevTransform;
-
       public static CaptureState UpdateSubmarine;
 
 
@@ -100,6 +99,7 @@ namespace ShowPerfExtensions
 
 
 
+        Update = Capture.Get("Showperf.Update");
         UpdateLightManager = Capture.Get("Showperf.Update.LightManager");
         UpdatePhysicBodies = Capture.Get("Showperf.Update.PhysicBodies");
         UpdateItemsHUD = Capture.Get("Showperf.Update.ItemsHUD");
@@ -594,10 +594,12 @@ namespace ShowPerfExtensions
       public static bool GameScreen_Update_Replace(double deltaTime, GameScreen __instance)
       {
         if (!Showperf.Revealed) return true;
+        Capture.Update.EnsureCategory(Update);
 
         GameScreen _ = __instance;
 
         Stopwatch sw = new Stopwatch();
+        Stopwatch sw2 = new Stopwatch();
 
 #if RUN_PHYSICS_IN_SEPARATE_THREAD
         physicsTime += deltaTime;
@@ -631,70 +633,86 @@ namespace ShowPerfExtensions
         sw.Start();
         GameMain.LightManager?.Update((float)deltaTime);
         Capture.Update.AddTicksOnce(sw.ElapsedTicks, UpdateLightManager, "Update.LightManager");
+        Capture.Update.AddTicksOnce(sw.ElapsedTicks, Update, "Update.LightManager");
         sw.Stop();
 #endif
 
         _.GameTime += deltaTime;
 
-        Capture.Update.EnsureCategory(UpdatePhysicBodies);
-        foreach (PhysicsBody body in PhysicsBody.List)
+        sw.Restart();
+
+
+        if (UpdatePhysicBodies.IsActive)
         {
-          sw.Restart();
-          if (body.Enabled && body.BodyType != FarseerPhysics.BodyType.Static) { body.Update(); }
-          sw.Stop();
-
-          if (body.UserData is Character c)
+          Capture.Update.EnsureCategory(UpdatePhysicBodies);
+          foreach (PhysicsBody body in PhysicsBody.List)
           {
-            if (UpdatePhysicBodies.ByID)
+            sw.Restart();
+            if (body.Enabled && body.BodyType != FarseerPhysics.BodyType.Static) { body.Update(); }
+            sw.Stop();
+
+            if (body.UserData is Character c)
             {
-              string info = c.Info == null ? "" : $":{c.Info.DisplayName}";
-              Capture.Update.AddTicks(sw.ElapsedTicks, UpdatePhysicBodies, $"{c.ID}|{c}{info}");
-              continue;
-            }
-            else
-            {
-              Capture.Update.AddTicks(sw.ElapsedTicks, UpdatePhysicBodies, $"{c}");
-              continue;
+              if (UpdatePhysicBodies.ByID)
+              {
+                string info = c.Info == null ? "" : $":{c.Info.DisplayName}";
+                Capture.Update.AddTicks(sw.ElapsedTicks, UpdatePhysicBodies, $"{c.ID}|{c}{info}");
+                continue;
+              }
+              else
+              {
+                Capture.Update.AddTicks(sw.ElapsedTicks, UpdatePhysicBodies, c.ToString());
+                continue;
+              }
+
             }
 
+            if (body.UserData is Limb l)
+            {
+              if (UpdatePhysicBodies.ByID)
+              {
+                string info = l.character.Info == null ? "" : $":{l.character.Info.DisplayName}";
+                Capture.Update.AddTicks(sw.ElapsedTicks, UpdatePhysicBodies, $"{l.character.ID}|{l.character}{info}.{l.type}");
+                continue;
+              }
+              else
+              {
+                Capture.Update.AddTicks(sw.ElapsedTicks, UpdatePhysicBodies, $"{l.character}.{l.type}");
+                continue;
+              }
+            }
+
+            if (body.UserData is Item i)
+            {
+              if (UpdatePhysicBodies.ByID)
+              {
+                Capture.Update.AddTicks(sw.ElapsedTicks, UpdatePhysicBodies, i.ToString());
+                continue;
+              }
+              else
+              {
+                Capture.Update.AddTicks(sw.ElapsedTicks, UpdatePhysicBodies, i.Prefab.Identifier);
+                continue;
+              }
+            }
+
+            Capture.Update.AddTicks(sw.ElapsedTicks, UpdatePhysicBodies, body.UserData.ToString());
           }
-
-          if (body.UserData is Limb l)
-          {
-            if (UpdatePhysicBodies.ByID)
-            {
-              string info = l.character.Info == null ? "" : $":{l.character.Info.DisplayName}";
-              Capture.Update.AddTicks(sw.ElapsedTicks, UpdatePhysicBodies, $"{l.character.ID}|{l.character}{info}.{l.type}");
-              continue;
-            }
-            else
-            {
-              Capture.Update.AddTicks(sw.ElapsedTicks, UpdatePhysicBodies, $"{l.character}.{l.type}");
-              continue;
-            }
-          }
-
-          if (body.UserData is Item i)
-          {
-            if (UpdatePhysicBodies.ByID)
-            {
-              Capture.Update.AddTicks(sw.ElapsedTicks, UpdatePhysicBodies, $"{i}");
-              continue;
-            }
-            else
-            {
-              Capture.Update.AddTicks(sw.ElapsedTicks, UpdatePhysicBodies, $"{i.Prefab.Identifier}");
-              continue;
-            }
-          }
-
-          Capture.Update.AddTicks(sw.ElapsedTicks, UpdatePhysicBodies, body.UserData.ToString());
         }
+        else
+        {
+          foreach (PhysicsBody body in PhysicsBody.List)
+          {
+            if (body.Enabled && body.BodyType != FarseerPhysics.BodyType.Static) { body.Update(); }
+          }
+        }
+
         MapEntity.ClearHighlightedEntities();
 
-#if CLIENT
+        sw.Stop();
+        Capture.Update.AddTicksOnce(sw.ElapsedTicks, Update, "Interpolate draw position");
         sw.Restart();
-#endif
+
 
         GameMain.GameSession?.Update((float)deltaTime);
 
@@ -702,20 +720,21 @@ namespace ShowPerfExtensions
         sw.Stop();
         GameMain.PerformanceCounter.AddElapsedTicks("Update:GameSession", sw.ElapsedTicks);
         Capture.Update.AddTicksOnce(sw.ElapsedTicks, UpdateGameSession, "Update.GameSession");
+        Capture.Update.AddTicksOnce(sw.ElapsedTicks, Update, "Update.GameSession");
         sw.Restart();
 
         GameMain.ParticleManager.Update((float)deltaTime);
 
         sw.Stop();
         GameMain.PerformanceCounter.AddElapsedTicks("Update:Particles", sw.ElapsedTicks);
-        //Capture.Update.AddTicksOnce(sw.ElapsedTicks, UpdateParticles, "Update.Particles");
+        Capture.Update.AddTicksOnce(sw.ElapsedTicks, Update, "Update.Particles");
         sw.Restart();
 
         if (Level.Loaded != null) Level.Loaded.Update((float)deltaTime, _.cam);
 
         sw.Stop();
         GameMain.PerformanceCounter.AddElapsedTicks("Update:Level", sw.ElapsedTicks);
-        //Capture.Update.AddTicksOnce(sw.ElapsedTicks, UpdateLevel, "Update.Level");
+        Capture.Update.AddTicksOnce(sw.ElapsedTicks, Update, "Update.Level");
 
         Capture.Update.EnsureCategory(UpdateItemsHUD);
         if (Character.Controlled is { } controlled)
@@ -726,6 +745,7 @@ namespace ShowPerfExtensions
             controlled.SelectedItem.UpdateHUD(_.cam, controlled, (float)deltaTime);
             sw.Stop();
             Capture.Update.AddTicks(sw.ElapsedTicks, UpdateItemsHUD, controlled.SelectedItem.ToString());
+            Capture.Update.AddTicks(sw.ElapsedTicks, Update, controlled.SelectedItem.ToString());
           }
           if (controlled.Inventory != null)
           {
@@ -737,6 +757,7 @@ namespace ShowPerfExtensions
                 item.UpdateHUD(_.cam, controlled, (float)deltaTime);
                 sw.Stop();
                 Capture.Update.AddTicks(sw.ElapsedTicks, UpdateItemsHUD, item.ToString());
+                Capture.Update.AddTicks(sw.ElapsedTicks, Update, item.ToString());
               }
             }
           }
@@ -754,7 +775,7 @@ namespace ShowPerfExtensions
 #if CLIENT
         sw.Stop();
         GameMain.PerformanceCounter.AddElapsedTicks("Update:Character", sw.ElapsedTicks);
-        //Capture.Update.AddTicksOnce(sw.ElapsedTicks, UpdateCharacter, "Update.Character");
+        Capture.Update.AddTicksOnce(sw.ElapsedTicks, Update, "Update.Character");
         sw.Restart();
 #endif
 
@@ -764,6 +785,7 @@ namespace ShowPerfExtensions
         sw.Stop();
         GameMain.PerformanceCounter.AddElapsedTicks("Update:StatusEffects", sw.ElapsedTicks);
         Capture.Update.AddTicksOnce(sw.ElapsedTicks, UpdateStatusEffects, "Update.StatusEffects");
+        Capture.Update.AddTicksOnce(sw.ElapsedTicks, Update, "Update.StatusEffects");
         sw.Restart();
 
         if (Character.Controlled != null &&
@@ -794,6 +816,7 @@ namespace ShowPerfExtensions
         Character.Controlled?.UpdateLocalCursor(_.cam);
         sw.Stop();
         Capture.Update.AddTicksOnce(sw.ElapsedTicks, UpdateCameraAndCursor, "Camera and cursor");
+        Capture.Update.AddTicksOnce(sw.ElapsedTicks, Update, "Camera and cursor");
         sw.Restart();
 #endif
 
@@ -812,6 +835,7 @@ namespace ShowPerfExtensions
 
         sw.Stop();
         Capture.Update.AddTicksOnce(sw.ElapsedTicks, UpdateSetPrevTransform, "SetPrevTransform");
+        Capture.Update.AddTicksOnce(sw.ElapsedTicks, Update, "SetPrevTransform");
         sw.Restart();
 
 #if CLIENT
@@ -823,12 +847,14 @@ namespace ShowPerfExtensions
 #if CLIENT
         sw.Stop();
         GameMain.PerformanceCounter.AddElapsedTicks("Update:MapEntity", sw.ElapsedTicks);
-        //Capture.Update.AddTicksOnce(sw.ElapsedTicks, UpdateMapEntity, "Update.MapEntity");
+        Capture.Update.AddTicksOnce(sw.ElapsedTicks, Update, "Update.MapEntity");
         sw.Restart();
 #endif
         Character.UpdateAnimAll((float)deltaTime);
         sw.Stop();
         Capture.Update.AddTicksOnce(sw.ElapsedTicks, UpdateAnimations, "Update.Animations");
+        Capture.Update.AddTicksOnce(sw.ElapsedTicks, Update, "Update.Animations");
+        sw.Restart();
 
 #if CLIENT
         Ragdoll.UpdateAll((float)deltaTime, _.cam);
@@ -839,19 +865,23 @@ namespace ShowPerfExtensions
 #if CLIENT
         sw.Stop();
         GameMain.PerformanceCounter.AddElapsedTicks("Update:Ragdolls", sw.ElapsedTicks);
-        //Capture.Update.AddTicksOnce(sw.ElapsedTicks, UpdateRagdolls, "Update.Ragdolls");
+        Capture.Update.AddTicksOnce(sw.ElapsedTicks, Update, "Update.Ragdolls");
         sw.Restart();
 #endif
 
+        Capture.Update.EnsureCategory(UpdateSubmarine);
         foreach (Submarine sub in Submarine.Loaded)
         {
+          sw2.Restart();
           sub.Update((float)deltaTime);
+          sw2.Stop();
+          Capture.Update.AddTicksOnce(sw2.ElapsedTicks, UpdateSubmarine, $"{sub}");
         }
 
 #if CLIENT
         sw.Stop();
         GameMain.PerformanceCounter.AddElapsedTicks("Update:Submarine", sw.ElapsedTicks);
-        Capture.Update.AddTicksOnce(sw.ElapsedTicks, UpdateSubmarine, "Update.Submarine");
+        Capture.Update.AddTicksOnce(sw.ElapsedTicks, Update, "Update.Submarine");
         sw.Restart();
 #endif
 
@@ -873,6 +903,7 @@ namespace ShowPerfExtensions
         sw.Stop();
         GameMain.PerformanceCounter.AddElapsedTicks("Update:Physics", sw.ElapsedTicks);
         Capture.Update.AddTicksOnce(sw.ElapsedTicks, UpdatePhysics, "Update.Physics");
+        Capture.Update.AddTicksOnce(sw.ElapsedTicks, Update, "Update.Physics");
         _.UpdateProjSpecific(deltaTime);
 #endif
         // it seems that on server side this method is not even compiled because it's empty

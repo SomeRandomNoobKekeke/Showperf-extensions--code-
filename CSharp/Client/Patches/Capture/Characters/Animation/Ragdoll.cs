@@ -55,7 +55,6 @@ namespace ShowPerfExtensions
         {
           Capture.Update.AddTicks(ticks, UpdateRagdoll, name);
         }
-
       }
 
       public static bool Ragdoll_UpdateRagdoll_Replace(float deltaTime, Camera cam, Ragdoll __instance)

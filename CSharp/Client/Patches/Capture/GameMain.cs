@@ -482,7 +482,7 @@ namespace ShowPerfExtensions
           GameMain.PerformanceCounter.AddElapsedTicks("Update", sw.ElapsedTicks);
           GameMain.PerformanceCounter.UpdateTimeGraph.Update(sw.ElapsedTicks * 1000.0f / (float)Stopwatch.Frequency);
 
-          Capture.Update.AddTicksOnce(sw.ElapsedTicks, ShowperfUpdate, "Update");
+          //Capture.Update.AddTicksOnce(sw.ElapsedTicks, ShowperfUpdate, "Update");
 
           Capture.Update.FirstSlice.Total = sw.ElapsedTicks;
           Capture.Update.Update();
