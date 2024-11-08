@@ -20,11 +20,13 @@ namespace ShowPerfExtensions
     {
       public double Ticks;
       public string Name;
+      public string OriginalName;
 
       public UpdateTicksView(UpdateTicks t, string name)
       {
         Ticks = t.Ticks;
         Name = name;
+        OriginalName = t.Name;
       }
     }
 

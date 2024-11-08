@@ -57,7 +57,7 @@ namespace ShowPerfExtensions
       public Color GetColor(UpdateTicksView t)
       {
         Color cl = ShowperfGradient(t.Ticks / TopValue);
-        return Tracked.Count != 0 && !Tracked.Contains(t.Name) ? Color.DarkSlateGray : cl;
+        return Tracked.Count != 0 && !Tracked.Contains(t.OriginalName) ? Color.DarkSlateGray : cl;
       }
       public Color ShowperfGradient(double f) => ShowperfGradient((float)f);
 
@@ -167,7 +167,7 @@ namespace ShowPerfExtensions
             int i = (int)Math.Floor((e.MousePosition.Y - Real.Top - Scroll) / TickBlock.StringHeight);
             if (i >= 0 && i < Values.Count - 1)
             {
-              ToggleTracking(Values[i].Name);
+              ToggleTracking(Values[i].OriginalName);
             }
           }
         };
