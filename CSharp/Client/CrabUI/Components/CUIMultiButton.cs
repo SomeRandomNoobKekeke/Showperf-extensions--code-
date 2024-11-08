@@ -25,8 +25,8 @@ namespace CrabUI
       Buttons.Add(b);
       b.OnMouseDown += (m) => SelectNext(b);
       b.Relative = new CUINullRect(0, 0, 1f, 1f);
-
-      b.MouseOverColor = b.MousePressedColor; //HACK remove this kostyl
+      b.MousePressedColor = b.MouseOverColor; // HACK remove this kostyl
+      //b.MouseOverColor = b.MousePressedColor; //HACK remove this kostyl
       b.ConsumeDragAndDrop = ConsumeDragAndDrop;
 
       return b;

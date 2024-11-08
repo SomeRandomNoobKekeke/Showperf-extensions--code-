@@ -1,5 +1,6 @@
 using System;
 using System.Reflection;
+using System.Diagnostics;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -90,10 +91,7 @@ namespace ShowPerfExtensions
 
       //CUIMain.Load(CUITest.NestedScale);
 
-
-
       //CUIDebugWindow.Open();
-
 
 
       PatchAll();

@@ -120,12 +120,22 @@ namespace ShowPerfExtensions
             SaveToFile(Mod.ModDir + "/XML/CUICaptureMap.xml");
             MemorizedOffset = ChildrenOffset;
           },
+          InactiveColor = CUIPallete.Default.Tertiary.Off,
+          MouseOverColor = CUIPallete.Default.Tertiary.OffHover,
+          MousePressedColor = CUIPallete.Default.Tertiary.On,
+          BorderColor = CUIPallete.Default.Tertiary.Border,
+          DisabledColor = CUIPallete.Default.Tertiary.Disabled,
 
         };
 
         LoadButton = new CUIButton("Load")
         {
           AddOnMouseDown = (e) => Showperf.LoadMap(),
+          InactiveColor = CUIPallete.Default.Tertiary.Off,
+          MouseOverColor = CUIPallete.Default.Tertiary.OffHover,
+          MousePressedColor = CUIPallete.Default.Tertiary.On,
+          BorderColor = CUIPallete.Default.Tertiary.Border,
+          DisabledColor = CUIPallete.Default.Tertiary.Disabled,
         };
 
         this["wrapper"]["lock"] = LockButton = new CUIButton("Unlocked")
