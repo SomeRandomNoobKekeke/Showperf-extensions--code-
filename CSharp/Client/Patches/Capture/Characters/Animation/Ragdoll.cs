@@ -44,9 +44,25 @@ namespace ShowPerfExtensions
         UpdateRagdoll = Capture.Get("Showperf.Update.Ragdolls");
       }
 
+      public static void CaptureRagdoll(Ragdoll ragdoll, long ticks, string name)
+      {
+        string info = ragdoll.character?.Info?.DisplayName ?? ragdoll.character.ToString();
+        if (UpdateRagdoll.ByID)
+        {
+          Capture.Update.AddTicks(ticks, UpdateRagdoll, $"{info} {name}");
+        }
+        else
+        {
+          Capture.Update.AddTicks(ticks, UpdateRagdoll, name);
+        }
+
+      }
+
       public static bool Ragdoll_UpdateRagdoll_Replace(float deltaTime, Camera cam, Ragdoll __instance)
       {
         if (!UpdateRagdoll.IsActive || !Showperf.Revealed) return true;
+        Capture.Update.EnsureCategory(UpdateRagdoll);
+
         Stopwatch sw = new Stopwatch();
         Stopwatch sw2 = new Stopwatch();
 
@@ -61,44 +77,44 @@ namespace ShowPerfExtensions
           _.ApplyImpact(impact.F1, impact.F2, impact.LocalNormal, impact.ImpactPos, impact.Velocity);
         }
         sw.Stop();
-        Capture.Update.AddTicksOnce(sw.ElapsedTicks, UpdateRagdoll, "Apply Impacts");
+        CaptureRagdoll(_, sw.ElapsedTicks, "Apply Impacts");
         sw.Restart();
 
         sw2.Restart();
 
         _.CheckValidity();
         sw2.Stop();
-        Capture.Update.AddTicksOnce(sw.ElapsedTicks, UpdateRagdoll, "CheckValidity");
+        CaptureRagdoll(_, sw.ElapsedTicks, "CheckValidity");
         sw2.Restart();
 
         _.UpdateNetPlayerPosition(deltaTime);
         sw2.Stop();
-        Capture.Update.AddTicksOnce(sw.ElapsedTicks, UpdateRagdoll, "UpdateNetPlayerPosition");
+        CaptureRagdoll(_, sw.ElapsedTicks, "UpdateNetPlayerPosition");
         sw2.Restart();
 
         _.CheckDistFromCollider();
         sw2.Stop();
-        Capture.Update.AddTicksOnce(sw.ElapsedTicks, UpdateRagdoll, "CheckDistFromCollider");
+        CaptureRagdoll(_, sw.ElapsedTicks, "CheckDistFromCollider");
         sw2.Restart();
 
         _.UpdateCollisionCategories();
         sw2.Stop();
-        Capture.Update.AddTicksOnce(sw.ElapsedTicks, UpdateRagdoll, "UpdateCollisionCategories");
+        CaptureRagdoll(_, sw.ElapsedTicks, "UpdateCollisionCategories");
         sw2.Restart();
 
         _.FindHull();
         sw2.Stop();
-        Capture.Update.AddTicksOnce(sw.ElapsedTicks, UpdateRagdoll, "FindHull");
+        CaptureRagdoll(_, sw.ElapsedTicks, "FindHull");
         sw2.Restart();
 
         _.PreventOutsideCollision();
         sw2.Stop();
-        Capture.Update.AddTicksOnce(sw.ElapsedTicks, UpdateRagdoll, "PreventOutsideCollision");
+        CaptureRagdoll(_, sw.ElapsedTicks, "PreventOutsideCollision");
         sw2.Restart();
 
         _.CheckBodyInRest(deltaTime);
         sw2.Stop();
-        Capture.Update.AddTicksOnce(sw.ElapsedTicks, UpdateRagdoll, "CheckBodyInRest");
+        CaptureRagdoll(_, sw.ElapsedTicks, "CheckBodyInRest");
 
         _.splashSoundTimer -= deltaTime;
 
@@ -133,7 +149,7 @@ namespace ShowPerfExtensions
         }
 
         sw.Stop();
-        Capture.Update.AddTicksOnce(sw.ElapsedTicks, UpdateRagdoll, "Check Out ouf bounds");
+        CaptureRagdoll(_, sw.ElapsedTicks, "Check Out ouf bounds");
         sw.Restart();
 
         if (_.forceStanding)
@@ -187,13 +203,13 @@ namespace ShowPerfExtensions
         }
 
         sw.Stop();
-        Capture.Update.AddTicksOnce(sw.ElapsedTicks, UpdateRagdoll, "Update inWater");
+        CaptureRagdoll(_, sw.ElapsedTicks, "Update inWater");
         sw.Restart();
 
         _.UpdateHullFlowForces(deltaTime);
 
         sw.Stop();
-        Capture.Update.AddTicksOnce(sw.ElapsedTicks, UpdateRagdoll, "UpdateHullFlowForces");
+        CaptureRagdoll(_, sw.ElapsedTicks, "UpdateHullFlowForces");
         sw.Restart();
 
         if (_.currentHull == null ||
@@ -204,7 +220,7 @@ namespace ShowPerfExtensions
         }
 
         sw.Stop();
-        Capture.Update.AddTicksOnce(sw.ElapsedTicks, UpdateRagdoll, "ApplyWaterForces");
+        CaptureRagdoll(_, sw.ElapsedTicks, "ApplyWaterForces");
         sw.Restart();
 
         foreach (Limb limb in _.Limbs)
@@ -258,7 +274,7 @@ namespace ShowPerfExtensions
         }
 
         sw.Stop();
-        Capture.Update.AddTicksOnce(sw.ElapsedTicks, UpdateRagdoll, "limb.Update");
+        CaptureRagdoll(_, sw.ElapsedTicks, "limb.Update");
         sw.Restart();
 
         bool isAttachedToController =
@@ -312,14 +328,14 @@ namespace ShowPerfExtensions
         }
 
         sw.Stop();
-        Capture.Update.AddTicksOnce(sw.ElapsedTicks, UpdateRagdoll, "levitatingCollider");
+        CaptureRagdoll(_, sw.ElapsedTicks, "levitatingCollider");
         sw.Restart();
 
 #if CLIENT
-      _.UpdateProjSpecific(deltaTime, cam);
+        _.UpdateProjSpecific(deltaTime, cam);
 #endif
         sw.Stop();
-        Capture.Update.AddTicksOnce(sw.ElapsedTicks, UpdateRagdoll, "Update sprite deformations");
+        CaptureRagdoll(_, sw.ElapsedTicks, "Update sprite deformations");
         sw.Restart();
 
         _.forceNotStanding = false;
