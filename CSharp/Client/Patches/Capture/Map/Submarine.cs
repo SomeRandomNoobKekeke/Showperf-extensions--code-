@@ -59,7 +59,14 @@ namespace ShowPerfExtensions
 
       public static void DrawBack3(SpriteBatch spriteBatch)
       {
-        Submarine.DrawBack(spriteBatch, false, e => !(e is Structure) || e.SpriteDepth < 0.9f);
+        if (GameScreenPatch.BackCharactersItemsSubmarineDrawBack.IsActive)
+        {
+          Submarine_DrawBack_Alt(GameScreenPatch.BackCharactersItemsSubmarineDrawBack, spriteBatch, false, e => !(e is Structure) || e.SpriteDepth < 0.9f);
+        }
+        else
+        {
+          Submarine.DrawBack(spriteBatch, false, e => !(e is Structure) || e.SpriteDepth < 0.9f);
+        }
       }
 
       public static void DrawDamageable1(SpriteBatch spriteBatch, Effect damageEffect)

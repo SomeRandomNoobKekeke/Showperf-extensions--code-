@@ -4,7 +4,10 @@
     <Draw>
       <HUD />
       <Map>
-        <BackCharactersItems />
+        <BackCharactersItems>
+          <SubmarineDrawBack />
+          <DrawCharacters />
+        </BackCharactersItems>
         <BackLevel />
         <BackStructures />
         <DeformableCharacters />

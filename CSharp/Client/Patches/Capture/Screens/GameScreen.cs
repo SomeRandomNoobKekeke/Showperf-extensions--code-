@@ -37,6 +37,8 @@ namespace ShowPerfExtensions
       public static CaptureState DrawMap;
 
       public static CaptureState BackCharactersItems;
+      public static CaptureState BackCharactersItemsDrawCharacters;
+      public static CaptureState BackCharactersItemsSubmarineDrawBack;
       public static CaptureState BackLevel;
       public static CaptureState BackStructures;
       public static CaptureState DeformableCharacters;
@@ -92,6 +94,8 @@ namespace ShowPerfExtensions
         DrawMap = Capture.Get("Showperf.Draw.Map");
 
         BackCharactersItems = Capture.Get("Showperf.Draw.Map.BackCharactersItems");
+        BackCharactersItemsDrawCharacters = Capture.Get("Showperf.Draw.Map.BackCharactersItems.DrawCharacters");
+        BackCharactersItemsSubmarineDrawBack = Capture.Get("Showperf.Draw.Map.BackCharactersItems.SubmarineDrawBack");
         BackLevel = Capture.Get("Showperf.Draw.Map.BackLevel");
         BackStructures = Capture.Get("Showperf.Draw.Map.BackStructures");
         DeformableCharacters = Capture.Get("Showperf.Draw.Map.DeformableCharacters");
@@ -323,20 +327,61 @@ namespace ShowPerfExtensions
 
         //Draw the rest of the structures, characters and front structures
         spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.NonPremultiplied, null, DepthStencilState.None, null, null, _.cam.Transform);
+
+        sw2.Restart();
         SubmarinePatch.DrawBack3(spriteBatch);
-        DrawCharacters(deformed: false, firstPass: true);
+        sw2.Stop();
+        Capture.Draw.AddTicksOnce(sw2.ElapsedTicks, BackCharactersItems, "Submarine.DrawBack");
+
+        sw2.Restart();
+        if (BackCharactersItemsDrawCharacters.IsActive)
+        {
+          DrawCharactersAlt(BackCharactersItemsDrawCharacters, deformed: false, firstPass: true);
+        }
+        else
+        {
+          DrawCharacters(deformed: false, firstPass: true);
+        }
+
+        sw2.Stop();
+        Capture.Draw.AddTicksOnce(sw2.ElapsedTicks, BackCharactersItems, "DrawCharacters(deformed: false, firstPass: true)");
+
         spriteBatch.End();
 
         sw.Stop();
         GameMain.PerformanceCounter.AddElapsedTicks("Draw:Map:BackCharactersItems", sw.ElapsedTicks);
-        Capture.Draw.AddTicksOnce(sw.ElapsedTicks, BackCharactersItems, "BackCharactersItems");
+        //Capture.Draw.AddTicksOnce(sw.ElapsedTicks, BackCharactersItems, "BackCharactersItems");
         Capture.Draw.AddTicksOnce(sw.ElapsedTicks, DrawMap, "BackCharactersItems");
         sw.Restart();
 
         spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.NonPremultiplied, null, DepthStencilState.None, null, null, _.cam.Transform);
-        DrawCharacters(deformed: true, firstPass: true);
-        DrawCharacters(deformed: true, firstPass: false);
-        DrawCharacters(deformed: false, firstPass: false);
+
+        if (DeformableCharacters.IsActive)
+        {
+          Capture.Draw.EnsureCategory(DeformableCharacters);
+
+          sw2.Restart();
+          DrawCharactersAlt(DeformableCharacters, deformed: true, firstPass: true);
+          sw2.Stop();
+          Capture.Draw.AddTicks(sw2.ElapsedTicks, DeformableCharacters, "deformed: true, firstPass: true");
+          sw2.Restart();
+          DrawCharactersAlt(DeformableCharacters, deformed: true, firstPass: false);
+
+          sw2.Stop();
+          Capture.Draw.AddTicks(sw2.ElapsedTicks, DeformableCharacters, "deformed: true, firstPass: false");
+          sw2.Restart();
+
+          DrawCharactersAlt(DeformableCharacters, deformed: false, firstPass: false);
+          sw2.Stop();
+          Capture.Draw.AddTicks(sw2.ElapsedTicks, DeformableCharacters, "deformed: false, firstPass: false");
+        }
+        else
+        {
+          DrawCharacters(deformed: true, firstPass: true);
+          DrawCharacters(deformed: true, firstPass: false);
+          DrawCharacters(deformed: false, firstPass: false);
+        }
+
         spriteBatch.End();
 
         void DrawCharacters(bool deformed, bool firstPass)
@@ -359,9 +404,46 @@ namespace ShowPerfExtensions
           }
         }
 
+        void DrawCharactersAlt(CaptureState cs, bool deformed, bool firstPass)
+        {
+          Capture.Draw.EnsureCategory(cs);
+
+          Stopwatch sw = new Stopwatch();
+
+          //backwards order to render the most recently spawned characters in front (characters spawned later have a larger sprite depth)
+          for (int i = Character.CharacterList.Count - 1; i >= 0; i--)
+          {
+            sw.Restart();
+            Character c = Character.CharacterList[i];
+            if (!c.IsVisible) { continue; }
+            if (c.Params.DrawLast == firstPass) { continue; }
+            if (deformed)
+            {
+              if (c.AnimController.Limbs.All(l => l.DeformSprite == null)) { continue; }
+            }
+            else
+            {
+              if (c.AnimController.Limbs.Any(l => l.DeformSprite != null)) { continue; }
+            }
+            c.Draw(spriteBatch, _.Cam);
+            sw.Stop();
+
+            if (cs.ByID)
+            {
+              string info = c.Info?.DisplayName ?? c.ToString();
+              Capture.Draw.AddTicks(sw.ElapsedTicks, cs, info);
+            }
+            else
+            {
+              Capture.Draw.AddTicks(sw.ElapsedTicks, cs, c.ToString());
+            }
+
+          }
+        }
+
         sw.Stop();
         GameMain.PerformanceCounter.AddElapsedTicks("Draw:Map:DeformableCharacters", sw.ElapsedTicks);
-        Capture.Draw.AddTicksOnce(sw.ElapsedTicks, DeformableCharacters, "DeformableCharacters");
+        //Capture.Draw.AddTicksOnce(sw.ElapsedTicks, DeformableCharacters, "DeformableCharacters");
         Capture.Draw.AddTicksOnce(sw.ElapsedTicks, DrawMap, "DeformableCharacters");
         sw.Restart();
 
