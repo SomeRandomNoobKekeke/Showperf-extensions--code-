@@ -206,6 +206,10 @@ namespace ShowPerfExtensions
       {
         if (!Showperf.Revealed) return true;
 
+        Stopwatch sw = new Stopwatch();
+        Stopwatch sw2 = new Stopwatch();
+        Stopwatch sw3 = new Stopwatch();
+
         GameScreen _ = __instance;
 
         foreach (Submarine sub in Submarine.Loaded)
@@ -215,7 +219,7 @@ namespace ShowPerfExtensions
 
         GameMain.ParticleManager.UpdateTransforms();
 
-        Stopwatch sw = new Stopwatch();
+
         sw.Start();
 
         if (Character.Controlled != null &&
@@ -248,12 +252,14 @@ namespace ShowPerfExtensions
         //These will be visible through the LOS effect.
         spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.NonPremultiplied, null, DepthStencilState.None, null, null, _.cam.Transform);
         SubmarinePatch.DrawBack1(spriteBatch);
+
         Submarine.DrawPaintedColors(spriteBatch, false);
         spriteBatch.End();
 
+
         sw.Stop();
         GameMain.PerformanceCounter.AddElapsedTicks("Draw:Map:BackStructures", sw.ElapsedTicks);
-        Capture.Draw.AddTicksOnce(sw.ElapsedTicks, BackStructures, "BackStructures");
+        //Capture.Draw.AddTicksOnce(sw.ElapsedTicks, BackStructures, "BackStructures");
         Capture.Draw.AddTicksOnce(sw.ElapsedTicks, DrawMap, "BackStructures");
         sw.Restart();
 
@@ -262,7 +268,7 @@ namespace ShowPerfExtensions
 
         sw.Stop();
         GameMain.PerformanceCounter.AddElapsedTicks("Draw:Map:Lighting", sw.ElapsedTicks);
-        Capture.Draw.AddTicksOnce(sw.ElapsedTicks, Lighting, "Lighting");
+        //Capture.Draw.AddTicksOnce(sw.ElapsedTicks, Lighting, "Lighting");
         Capture.Draw.AddTicksOnce(sw.ElapsedTicks, DrawMap, "Lighting");
         sw.Restart();
 

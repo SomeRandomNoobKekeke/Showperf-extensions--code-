@@ -14,7 +14,17 @@
         <FrontParticles />
         <FrontStructuresItems />
         <LOS />
-        <Lighting />
+        <Lighting>
+          <UpdateHighlights />
+          <FindActiveLights />
+          <AttachedToCharacters />
+          <BackgroundLights />
+          <BlackRectangles />
+          <DrawDamageable />
+          <DrawHighlights />
+          <CharactersToObstruct />
+          <LightVolumes />
+        </Lighting>
         <PostProcess />
       </Map>
     </Draw>

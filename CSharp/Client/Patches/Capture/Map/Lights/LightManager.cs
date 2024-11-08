@@ -28,7 +28,17 @@ namespace ShowPerfExtensions
     [ShowperfPatch]
     public class LightManagerPatch
     {
+      public static CaptureState Lighting;
 
+      public static CaptureState UpdateHighlights;
+      public static CaptureState FindActiveLights;
+      public static CaptureState AttachedToCharacters;
+      public static CaptureState BackgroundLights;
+      public static CaptureState BlackRectangles;
+      public static CaptureState DrawDamageable;
+      public static CaptureState DrawHighlights;
+      public static CaptureState CharactersToObstruct;
+      public static CaptureState LightVolumes;
       public static void Initialize()
       {
         harmony.Patch(
@@ -46,6 +56,17 @@ namespace ShowPerfExtensions
           prefix: ShowperfMethod(typeof(LightManagerPatch).GetMethod("LightManager_UpdateHighlights_Replace"))
         );
 
+        Lighting = Capture.Get("Showperf.Draw.Map.Lighting");
+
+        UpdateHighlights = Capture.Get("Showperf.Draw.Map.Lighting.UpdateHighlights");
+        FindActiveLights = Capture.Get("Showperf.Draw.Map.Lighting.FindActiveLights");
+        AttachedToCharacters = Capture.Get("Showperf.Draw.Map.Lighting.AttachedToCharacters");
+        BackgroundLights = Capture.Get("Showperf.Draw.Map.Lighting.BackgroundLights");
+        BlackRectangles = Capture.Get("Showperf.Draw.Map.Lighting.BlackRectangles");
+        DrawDamageable = Capture.Get("Showperf.Draw.Map.Lighting.DrawDamageable");
+        DrawHighlights = Capture.Get("Showperf.Draw.Map.Lighting.DrawHighlights");
+        CharactersToObstruct = Capture.Get("Showperf.Draw.Map.Lighting.CharactersToObstruct");
+        LightVolumes = Capture.Get("Showperf.Draw.Map.Lighting.LightVolumes");
 
       }
 
@@ -190,6 +211,10 @@ namespace ShowPerfExtensions
       public static bool LightManager_RenderLightMap_Replace(GraphicsDevice graphics, SpriteBatch spriteBatch, Camera cam, RenderTarget2D backgroundObstructor, LightManager __instance)
       {
         if (!Showperf.Revealed) return true;
+        Capture.Draw.EnsureCategory(Lighting);
+
+        Stopwatch sw = new Stopwatch();
+        Stopwatch sw2 = new Stopwatch();
 
         LightManager _ = __instance;
 
@@ -205,7 +230,12 @@ namespace ShowPerfExtensions
         Matrix transform = cam.ShaderTransform
             * Matrix.CreateOrthographic(GameMain.GraphicsWidth, GameMain.GraphicsHeight, -1, 1) * 0.5f;
 
+        sw.Restart();
         bool highlightsVisible = _.UpdateHighlights(graphics, spriteBatch, spriteBatchTransform, cam);
+        sw.Stop();
+        Capture.Draw.AddTicks(sw.ElapsedTicks, Lighting, "UpdateHighlights");
+        Capture.Draw.AddTicksOnce(sw.ElapsedTicks, UpdateHighlights, "UpdateHighlights");
+        sw.Restart();
 
         Rectangle viewRect = cam.WorldView;
         viewRect.Y -= cam.WorldView.Height;
@@ -285,6 +315,11 @@ namespace ShowPerfExtensions
         }
         _.activeLights.Sort((l1, l2) => l1.LastRecalculationTime.CompareTo(l2.LastRecalculationTime));
 
+        sw.Stop();
+        Capture.Draw.AddTicks(sw.ElapsedTicks, Lighting, "Find active lights");
+        Capture.Draw.AddTicksOnce(sw.ElapsedTicks, FindActiveLights, "Find active lights");
+        sw.Restart();
+
         //draw light sprites attached to characters
         //render into a separate rendertarget using alpha blending (instead of on top of everything else with alpha blending)
         //to prevent the lights from showing through other characters or other light sprites attached to the same character
@@ -301,6 +336,11 @@ namespace ShowPerfExtensions
         }
         spriteBatch.End();
 
+        sw.Stop();
+        Capture.Draw.AddTicks(sw.ElapsedTicks, Lighting, "draw light sprites attached to characters. Render into a separate rendertarget using alpha blending (instead of on top of everything else with alpha blending) to prevent the lights from showing through other characters or other light sprites attached to the same character");
+        Capture.Draw.AddTicksOnce(sw.ElapsedTicks, AttachedToCharacters, "draw light sprites attached to characters");
+        sw.Restart();
+
         //draw background lights
         //---------------------------------------------------------------------------------------------------
         graphics.SetRenderTarget(_.LightMap);
@@ -316,6 +356,11 @@ namespace ShowPerfExtensions
         }
         GameMain.ParticleManager.Draw(spriteBatch, true, null, Barotrauma.Particles.ParticleBlendState.Additive);
         spriteBatch.End();
+
+        sw.Stop();
+        Capture.Draw.AddTicks(sw.ElapsedTicks, Lighting, "draw background lights");
+        Capture.Draw.AddTicksOnce(sw.ElapsedTicks, BackgroundLights, "draw background lights");
+        sw.Restart();
 
         //draw a black rectangle on hulls to hide background lights behind subs
         //---------------------------------------------------------------------------------------------------
@@ -363,13 +408,25 @@ namespace ShowPerfExtensions
         }
         spriteBatch.End();
 
+        sw.Stop();
+        Capture.Draw.AddTicks(sw.ElapsedTicks, Lighting, "draw a black rectangle on hulls to hide background lights behind subs");
+        Capture.Draw.AddTicksOnce(sw.ElapsedTicks, BlackRectangles, "draw a black rectangle on hulls");
+        sw.Restart();
+
         GameMain.GameScreen.DamageEffect.CurrentTechnique = GameMain.GameScreen.DamageEffect.Techniques["StencilShaderSolidColor"];
         GameMain.GameScreen.DamageEffect.Parameters["solidColor"].SetValue(Color.Black.ToVector4());
         spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.NonPremultiplied, SamplerState.LinearWrap, transformMatrix: spriteBatchTransform, effect: GameMain.GameScreen.DamageEffect);
-        Submarine.DrawDamageable(spriteBatch, GameMain.GameScreen.DamageEffect);
+
+        //Submarine.DrawDamageable(spriteBatch, GameMain.GameScreen.DamageEffect);
+        SubmarinePatch.DrawDamageable2(spriteBatch, GameMain.GameScreen.DamageEffect);
         spriteBatch.End();
 
         graphics.BlendState = BlendState.Additive;
+
+        sw.Stop();
+        Capture.Draw.AddTicks(sw.ElapsedTicks, Lighting, "DrawDamageable");
+        //Capture.Draw.AddTicksOnce(sw.ElapsedTicks, DrawDamageable, "DrawDamageable");
+        sw.Restart();
 
         //draw the focused item and character to highlight them,
         //and light sprites (done before drawing the actual light volumes so we can make characters obstruct the highlights and sprites)
@@ -390,6 +447,11 @@ namespace ShowPerfExtensions
           spriteBatch.End();
         }
 
+        sw.Stop();
+        Capture.Draw.AddTicks(sw.ElapsedTicks, Lighting, "draw the focused item and character to highlight them and light sprites (done before drawing the actual light volumes so we can make characters obstruct the highlights and sprites)");
+        Capture.Draw.AddTicksOnce(sw.ElapsedTicks, DrawHighlights, "Draw highlights");
+        sw.Restart();
+
         //draw characters to obstruct the highlighted items/characters and light sprites
         //---------------------------------------------------------------------------------------------------
         if (cam.Zoom > LightManager.ObstructLightsBehindCharactersZoomThreshold)
@@ -405,6 +467,11 @@ namespace ShowPerfExtensions
           DrawCharacters(spriteBatch, cam, drawDeformSprites: true);
           spriteBatch.End();
         }
+
+        sw.Stop();
+        Capture.Draw.AddTicks(sw.ElapsedTicks, Lighting, "draw characters to obstruct the highlighted items/characters and light sprites");
+        Capture.Draw.AddTicksOnce(sw.ElapsedTicks, CharactersToObstruct, "draw characters to obstruct the highlighted items");
+        sw.Restart();
 
         static void DrawCharacters(SpriteBatch spriteBatch, Camera cam, bool drawDeformSprites)
         {
@@ -436,16 +503,25 @@ namespace ShowPerfExtensions
 
         spriteBatch.Draw(_.LimbLightMap, new Rectangle(cam.WorldView.X, -cam.WorldView.Y, cam.WorldView.Width, cam.WorldView.Height), Color.White);
 
+
+        sw2.Restart();
         foreach (ElectricalDischarger discharger in ElectricalDischarger.List)
         {
           discharger.DrawElectricity(spriteBatch);
         }
+        sw2.Stop();
+        Capture.Draw.AddTicksOnce(sw2.ElapsedTicks, LightVolumes, "DrawElectricity");
+        sw2.Restart();
 
         foreach (LightSource light in _.activeLights)
         {
           if (light.IsBackground || light.CurrentBrightness <= 0.0f) { continue; }
           light.DrawLightVolume(spriteBatch, _.lightEffect, transform, recalculationCount < LightManager.MaxLightVolumeRecalculationsPerFrame, ref recalculationCount);
         }
+
+        sw2.Stop();
+        Capture.Draw.AddTicksOnce(sw2.ElapsedTicks, LightVolumes, "DrawLightVolumes");
+        sw2.Restart();
 
         if (ConnectionPanel.ShouldDebugDrawWiring)
         {
@@ -458,9 +534,17 @@ namespace ShowPerfExtensions
           }
         }
 
+        sw2.Stop();
+        Capture.Draw.AddTicksOnce(sw2.ElapsedTicks, LightVolumes, "DebugDrawWiring");
+        sw2.Restart();
+
         _.lightEffect.World = transform;
 
         GameMain.ParticleManager.Draw(spriteBatch, false, null, Barotrauma.Particles.ParticleBlendState.Additive);
+
+        sw2.Stop();
+        Capture.Draw.AddTicksOnce(sw2.ElapsedTicks, LightVolumes, "Draw Additive particles");
+        sw2.Restart();
 
         if (Character.Controlled != null)
         {
@@ -474,6 +558,10 @@ namespace ShowPerfExtensions
             DrawHalo(character);
           }
         }
+
+        sw2.Stop();
+        Capture.Draw.AddTicksOnce(sw2.ElapsedTicks, LightVolumes, "Draw Halo");
+
 
         void DrawHalo(Character character)
         {
@@ -494,6 +582,11 @@ namespace ShowPerfExtensions
         }
 
         spriteBatch.End();
+
+        sw.Stop();
+        Capture.Draw.AddTicks(sw.ElapsedTicks, Lighting, "draw the actual light volumes, additive particles, hull ambient lights and the halo around the player");
+        // Capture.Draw.AddTicksOnce(sw.ElapsedTicks, LightVolumes, "draw the actual light volumes, additive particles");
+        sw.Restart();
 
         //draw the actual light volumes, additive particles, hull ambient lights and the halo around the player
         //---------------------------------------------------------------------------------------------------

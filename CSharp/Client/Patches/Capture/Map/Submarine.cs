@@ -21,23 +21,35 @@ namespace ShowPerfExtensions
     [ShowperfPatch]
     public class SubmarinePatch
     {
+      public static bool shouldDrawBack1;
+
       public static void Initialize()
       {
-        harmony.Patch(
-          original: typeof(Submarine).GetMethod("DrawBack", AccessTools.all),
-          prefix: ShowperfMethod(typeof(SubmarinePatch).GetMethod("Submarine_DrawBack_Replace"))
-        );
+        // harmony.Patch(
+        //   original: typeof(Submarine).GetMethod("DrawBack", AccessTools.all),
+        //   prefix: ShowperfMethod(typeof(SubmarinePatch).GetMethod("Submarine_DrawBack_Replace"))
+        // );
 
-        DrawBack = Capture.Get("MapEntityDrawing");
+        harmony.Patch(
+          original: typeof(Submarine).GetMethod("DrawPaintedColors", AccessTools.all),
+          prefix: new HarmonyMethod(typeof(SubmarinePatch).GetMethod("Submarine_DrawPaintedColors_Replace"))
+        );
       }
-      public static CaptureState DrawBack;
+
 
       static bool IsFromOutpostDrawnBehindSubs(Entity e)
             => e.Submarine is { Info.OutpostGenerationParams.DrawBehindSubs: true };
 
       public static void DrawBack1(SpriteBatch spriteBatch)
       {
-        Submarine.DrawBack(spriteBatch, false, e => e is Structure s && (e.SpriteDepth >= 0.9f || s.Prefab.BackgroundSprite != null) && !IsFromOutpostDrawnBehindSubs(e));
+        if (GameScreenPatch.BackStructures.IsActive)
+        {
+          Submarine_DrawBack_Alt(GameScreenPatch.BackStructures, spriteBatch, false, e => e is Structure s && (e.SpriteDepth >= 0.9f || s.Prefab.BackgroundSprite != null) && !IsFromOutpostDrawnBehindSubs(e));
+        }
+        else
+        {
+          Submarine.DrawBack(spriteBatch, false, e => e is Structure s && (e.SpriteDepth >= 0.9f || s.Prefab.BackgroundSprite != null) && !IsFromOutpostDrawnBehindSubs(e));
+        }
       }
 
       public static void DrawBack2(SpriteBatch spriteBatch)
@@ -50,10 +62,19 @@ namespace ShowPerfExtensions
         Submarine.DrawBack(spriteBatch, false, e => !(e is Structure) || e.SpriteDepth < 0.9f);
       }
 
-      public static bool Submarine_DrawBack_Replace(SpriteBatch spriteBatch, bool editing = false, Predicate<MapEntity> predicate = null)
+      public static void DrawDamageable1(SpriteBatch spriteBatch, Effect damageEffect)
       {
-        if (!DrawBack.IsActive) return true;
-        Capture.Update.EnsureCategory(DrawBack);
+
+      }
+
+      public static void DrawDamageable2(SpriteBatch spriteBatch, Effect damageEffect)
+      {
+        Submarine_DrawDamageable_Alt(LightManagerPatch.DrawDamageable, spriteBatch, damageEffect);
+      }
+
+      public static bool Submarine_DrawBack_Alt(CaptureState cs, SpriteBatch spriteBatch, bool editing = false, Predicate<MapEntity> predicate = null)
+      {
+        Capture.Update.EnsureCategory(cs);
 
         var entitiesToRender = !editing && Submarine.visibleEntities != null ? Submarine.visibleEntities : MapEntity.MapEntityList;
 
@@ -74,13 +95,13 @@ namespace ShowPerfExtensions
 
           if (Capture.ShouldCapture(e))
           {
-            if (DrawBack.ByID || e.Prefab == null)
+            if (cs.ByID || e.Prefab == null)
             {
-              Capture.Update.AddTicks(sw.ElapsedTicks, DrawBack, $"{e.Name} (ID: {e.ID})");
+              Capture.Update.AddTicks(sw.ElapsedTicks, cs, $"{e.Name} (ID: {e.ID})");
             }
             else
             {
-              Capture.Update.AddTicks(sw.ElapsedTicks, DrawBack, e.Prefab.Identifier);
+              Capture.Update.AddTicks(sw.ElapsedTicks, cs, e.Prefab.Identifier);
             }
           }
         }
@@ -89,6 +110,142 @@ namespace ShowPerfExtensions
 
         return false;
       }
+
+
+      public static bool Submarine_DrawDamageable_Alt(CaptureState cs, SpriteBatch spriteBatch, Effect damageEffect, bool editing = false, Predicate<MapEntity> predicate = null)
+      {
+        Capture.Draw.EnsureCategory(cs);
+        Stopwatch sw = new Stopwatch();
+        Stopwatch sw2 = new Stopwatch();
+
+        var entitiesToRender = !editing && Submarine.visibleEntities != null ? Submarine.visibleEntities : MapEntity.MapEntityList;
+
+        sw.Restart();
+
+        Submarine.depthSortedDamageable.Clear();
+
+        //insertion sort according to draw depth
+        foreach (MapEntity e in entitiesToRender)
+        {
+          if (e is Structure structure && structure.DrawDamageEffect)
+          {
+            if (predicate != null)
+            {
+              if (!predicate(e)) { continue; }
+            }
+            float drawDepth = structure.GetDrawDepth();
+            int i = 0;
+            while (i < Submarine.depthSortedDamageable.Count)
+            {
+              float otherDrawDepth = Submarine.depthSortedDamageable[i].GetDrawDepth();
+              if (otherDrawDepth < drawDepth) { break; }
+              i++;
+            }
+            Submarine.depthSortedDamageable.Insert(i, structure);
+          }
+        }
+
+        sw.Stop();
+        Capture.Draw.AddTicks(sw.ElapsedTicks, cs, "insertion sort according to draw depth");
+        sw.Restart();
+
+        foreach (Structure s in Submarine.depthSortedDamageable)
+        {
+          sw2.Restart();
+          s.DrawDamage(spriteBatch, damageEffect, editing);
+          sw2.Stop();
+          if (Capture.ShouldCapture(s))
+          {
+            Capture.Draw.AddTicks(sw2.ElapsedTicks, cs, s.ToString());
+          }
+        }
+        if (damageEffect != null)
+        {
+          damageEffect.Parameters["aCutoff"].SetValue(0.0f);
+          damageEffect.Parameters["cCutoff"].SetValue(0.0f);
+          Submarine.DamageEffectCutoff = 0.0f;
+        }
+        sw.Stop();
+        Capture.Draw.AddTicks(sw.ElapsedTicks, cs, "DrawDamage");
+
+        return false;
+      }
+
+
+      public static bool Submarine_DrawPaintedColors_Replace(SpriteBatch spriteBatch, bool editing = false, Predicate<MapEntity> predicate = null)
+      {
+        if (!GameScreenPatch.BackStructures.IsActive) return true;
+
+        Stopwatch sw = new Stopwatch();
+        Capture.Draw.EnsureCategory(GameScreenPatch.BackStructures);
+
+        var entitiesToRender = !editing && Submarine.visibleEntities != null ? Submarine.visibleEntities : MapEntity.MapEntityList;
+
+        foreach (MapEntity e in entitiesToRender)
+        {
+          if (e is Hull hull)
+          {
+            sw.Restart();
+            if (hull.SupportsPaintedColors)
+            {
+              if (predicate != null)
+              {
+                if (!predicate(e)) { continue; }
+              }
+              hull.DrawSectionColors(spriteBatch);
+            }
+            sw.Stop();
+            if (Capture.ShouldCapture(hull))
+            {
+              Capture.Draw.AddTicks(sw.ElapsedTicks, GameScreenPatch.BackStructures, "DrawPaintedColors");
+            }
+          }
+        }
+
+        return false;
+      }
+
+
+
+      // public static bool Submarine_DrawBack_Replace(SpriteBatch spriteBatch, bool editing = false, Predicate<MapEntity> predicate = null)
+      // {
+      //   if (!DrawBack.IsActive) return true;
+      //   Capture.Update.EnsureCategory(DrawBack);
+
+      //   var entitiesToRender = !editing && Submarine.visibleEntities != null ? Submarine.visibleEntities : MapEntity.MapEntityList;
+
+      //   Stopwatch sw = new Stopwatch();
+
+      //   foreach (MapEntity e in entitiesToRender)
+      //   {
+      //     if (!e.DrawBelowWater) continue;
+
+      //     if (predicate != null)
+      //     {
+      //       if (!predicate(e)) continue;
+      //     }
+
+      //     sw.Restart();
+      //     e.Draw(spriteBatch, editing, true);
+      //     sw.Stop();
+
+      //     if (Capture.ShouldCapture(e))
+      //     {
+      //       if (DrawBack.ByID || e.Prefab == null)
+      //       {
+      //         Capture.Update.AddTicks(sw.ElapsedTicks, DrawBack, $"{e.Name} (ID: {e.ID})");
+      //       }
+      //       else
+      //       {
+      //         Capture.Update.AddTicks(sw.ElapsedTicks, DrawBack, e.Prefab.Identifier);
+      //       }
+      //     }
+      //   }
+
+      //   sw.Stop();
+
+      //   return false;
+      // }
 
       // public static bool Submarine_DrawFront_Replace(SpriteBatch spriteBatch, bool editing = false, Predicate<MapEntity> predicate = null)
       // {
