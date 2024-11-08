@@ -205,6 +205,8 @@ namespace ShowPerfExtensions
         {
           b.CState.IsActive = b.State;
         }
+
+        TickList.Scroll = 0;
       }
 
       public void OnCaptureStateChange(CaptureState cs)
@@ -221,6 +223,9 @@ namespace ShowPerfExtensions
 
         ById.SetState(cs.ByID);
         SetCategoryText();
+
+        TickList.Scroll = 0;
+        //OnPropChanged();
       }
       public void OnGlobalCaptureStateChange()
       {
@@ -237,6 +242,9 @@ namespace ShowPerfExtensions
         }
         ById.SetState(Capture.GlobalByID);
         SetCategoryText();
+
+        TickList.Scroll = 0;
+        //OnPropChanged();
       }
 
       public void OnWindowCaptureFromChanged(SubType s)
