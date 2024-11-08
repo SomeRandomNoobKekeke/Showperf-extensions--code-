@@ -821,7 +821,7 @@ namespace ShowPerfExtensions
 #if CLIENT
         sw.Stop();
         GameMain.PerformanceCounter.AddElapsedTicks("Update:MapEntity", sw.ElapsedTicks);
-        Capture.Update.AddTicksOnce(sw.ElapsedTicks, UpdateMapEntity, "Update.MapEntity");
+        //Capture.Update.AddTicksOnce(sw.ElapsedTicks, UpdateMapEntity, "Update.MapEntity");
         sw.Restart();
 #endif
         Character.UpdateAnimAll((float)deltaTime);

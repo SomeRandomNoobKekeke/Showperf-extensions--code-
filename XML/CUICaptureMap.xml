@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<CUICaptureMap ChildrenOffset="[313.4477,199.9085,1.8640003]" Relative="[0,0,1,1]">
+<CUICaptureMap ChildrenOffset="[21.591644,-20.192688,1]" Relative="[0,0,1,1]">
   <Connections>
     <Connection Start="Showperf.Draw" End="Draw" />
     <Connection Start="Draw.Map" End="Map" />
@@ -7,6 +7,7 @@
     <Connection Start="Update.MapEntity" End="MapEntity" />
     <Connection Start="Update.Level" End="Level" />
     <Connection Start="Update.GameSession" End="GameSession" />
+    <Connection Start="MapEntity.Misc" End="Misc" />
   </Connections>
   <Children>
     <MapGroup AKA="Showperf" Absolute="[-46.67213,-79.03201,,77.4]" ConsumeSwipe="true" Draggable="true">
@@ -24,7 +25,7 @@
         <MapButton AKA="Map" CState="Showperf.Draw.Map" Text="Map" />
       </CUIVerticalList>
     </MapGroup>
-    <MapGroup AKA="Map" Absolute="[203.80788,113.44797,,223.19998]" ConsumeSwipe="true" Draggable="true">
+    <MapGroup AKA="Map" Absolute="[300.7359,66.847946,,223.19998]" ConsumeSwipe="true" Draggable="true">
       <MapButton AKA="Map" CState="Showperf.Draw.Map" Text="Map" TextAlign="{X:0.5 Y:0.5}" TextScale="1.6" />
       <CUIVerticalList Absolute="[,,,194.39998]" AbsoluteMin="[,,138.09999,]" FitContent="[True,True]">
         <MapButton AKA="BackCharactersItems" CState="Showperf.Draw.Map.BackCharactersItems" Text="BackCharactersItems" />
@@ -41,13 +42,13 @@
         <MapButton AKA="PostProcess" CState="Showperf.Draw.Map.PostProcess" Text="PostProcess" />
       </CUIVerticalList>
     </MapGroup>
-    <MapGroup AKA="Update" Absolute="[-64.48804,85.64003,,239.39998]" ConsumeSwipe="true" Draggable="true">
+    <MapGroup AKA="Update" Absolute="[-62.912003,85.64,,271.79996]" ConsumeSwipe="true" Draggable="true">
       <MapButton AKA="DrawHeader" CState="Showperf.Update" Text="Update" TextAlign="{X:0.5 Y:0.5}" TextScale="1.6" />
-      <CUIVerticalList Absolute="[,,,210.59998]" AbsoluteMin="[,,154.3,]" FitContent="[True,True]">
+      <CUIVerticalList Absolute="[,,,242.99997]" AbsoluteMin="[,,154.3,]" FitContent="[True,True]">
         <MapButton AKA="LightManager" CState="Showperf.Update.LightManager" Text="LightManager" />
         <MapButton AKA="PhysicBodies" CState="Showperf.Update.PhysicBodies" Text="Interpolate draw position" />
         <MapButton AKA="ItemsHUD" CState="Showperf.Update.ItemsHUD" Text="ItemsHUD" />
-        <MapButton AKA="Character" CState="Showperf.Update.Character" State="true" Text="Character" />
+        <MapButton AKA="Character" CState="Showperf.Update.Character" Text="Character" />
         <MapButton AKA="GameSession" CState="Showperf.Update.GameSession" Text="GameSession" />
         <MapButton AKA="Level" CState="Showperf.Update.Level" Text="Level" />
         <MapButton AKA="MapEntity" CState="Showperf.Update.MapEntity" Text="MapEntity" />
@@ -76,6 +77,15 @@
       <CUIVerticalList Absolute="[,,,32.399998]" AbsoluteMin="[,,37.3,]" FitContent="[True,True]">
         <MapButton AKA="Items" CState="Showperf.Update.MapEntity.Items" Text="Items" />
         <MapButton AKA="Misc" CState="Showperf.Update.MapEntity.Misc" Text="Misc" />
+      </CUIVerticalList>
+    </MapGroup>
+    <MapGroup AKA="Misc" Absolute="[221.31192,327.71997,,86.399994]" ConsumeSwipe="true" Draggable="true">
+      <MapButton AKA="Misc" CState="Showperf.Update.MapEntity.Misc" Text="Misc" TextAlign="{X:0.5 Y:0.5}" TextScale="1.2" />
+      <CUIVerticalList Absolute="[,,,64.799995]" AbsoluteMin="[,,84.1,]" FitContent="[True,True]">
+        <MapButton AKA="Hulls" CState="Showperf.Update.MapEntity.Misc.Hulls" Text="Hulls" />
+        <MapButton AKA="Structures" CState="Showperf.Update.MapEntity.Misc.Structures" Text="Structures" />
+        <MapButton AKA="Gaps" CState="Showperf.Update.MapEntity.Misc.Gaps" Text="Gaps" />
+        <MapButton AKA="UpdatePower" CState="Showperf.Update.MapEntity.Misc.UpdatePower" Text="UpdatePower" />
       </CUIVerticalList>
     </MapGroup>
     <MapGroup AKA="GameSession" Absolute="[107.73604,42.45601,,37.8]" ConsumeSwipe="true" Draggable="true">
