@@ -21,6 +21,7 @@ namespace ShowPerfExtensions
     {
 
       public CaptureWindow Draw = new CaptureWindow();
+      public CaptureWindow MonoGame = new CaptureWindow();
       public CaptureWindow Update = new CaptureWindow()
       {
         FreezeOnPause = true,
@@ -32,6 +33,7 @@ namespace ShowPerfExtensions
       public void Reset()
       {
         Draw.Reset();
+        MonoGame.Reset();
         Update.Reset();
       }
 

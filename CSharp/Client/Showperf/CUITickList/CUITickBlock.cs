@@ -50,7 +50,7 @@ namespace ShowPerfExtensions
           {
             Font.DrawString(
               spriteBatch,
-              TickList.GetName(TickList.Values[i]),
+              TickList.Values[i].Name,
               Real.Position + new Vector2(Padding.X, i * StringHeight),
               TickList.GetColor(TickList.Values[i]),
               rotation: 0,

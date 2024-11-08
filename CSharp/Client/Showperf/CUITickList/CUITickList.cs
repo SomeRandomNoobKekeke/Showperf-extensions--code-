@@ -19,7 +19,7 @@ namespace ShowPerfExtensions
     public partial class CUITickList : CUIVerticalList
     {
       private CUITickBlock TickBlock;
-      public List<UpdateTicks> Values = new List<UpdateTicks>();
+      public List<UpdateTicksView> Values = new List<UpdateTicksView>();
 
       public double Sum;
       public double Linearity;
@@ -53,9 +53,8 @@ namespace ShowPerfExtensions
       public string GetName(UpdateTicks t)
       {
         return $"{ConverToUnits(t.Ticks)} {t.Name}";
-
       }
-      public Color GetColor(UpdateTicks t)
+      public Color GetColor(UpdateTicksView t)
       {
         Color cl = ShowperfGradient(t.Ticks / TopValue);
         return Tracked.Count != 0 && !Tracked.Contains(t.Name) ? Color.DarkSlateGray : cl;
@@ -86,7 +85,7 @@ namespace ShowPerfExtensions
             foreach (int id in Capture.Draw.TotalTicks[cat].Keys)
             {
               UpdateTicks t = Capture.Draw.GetTotal(cat, id);
-              Values.Add(t);
+              Values.Add(new UpdateTicksView(t, GetName(t)));
               Sum += t.Ticks;
 
               TopValue = Math.Max(TopValue, t.Ticks);
@@ -98,7 +97,7 @@ namespace ShowPerfExtensions
             foreach (int id in Capture.Update.TotalTicks[cat].Keys)
             {
               UpdateTicks t = Capture.Update.GetTotal(cat, id);
-              Values.Add(t);
+              Values.Add(new UpdateTicksView(t, GetName(t)));
               Sum += t.Ticks;
 
               TopValue = Math.Max(TopValue, t.Ticks);
@@ -106,6 +105,17 @@ namespace ShowPerfExtensions
           }
 
           Values.Sort((a, b) => (int)(b.Ticks - a.Ticks));
+
+          foreach (int cat in Capture.MonoGame.TotalTicks.Keys)
+          {
+            foreach (int id in Capture.MonoGame.TotalTicks[cat].Keys)
+            {
+              UpdateTicks t = Capture.MonoGame.GetTotal(cat, id);
+              Values.Add(new UpdateTicksView(t, $"{t.Ticks} {t.Name}"));
+
+              TopValue = 1000;
+            }
+          }
 
           if (Values.Count < 2 || Values.First().Ticks == 0)
           {
