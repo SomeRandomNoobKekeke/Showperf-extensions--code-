@@ -333,28 +333,33 @@ namespace ShowPerfExtensions
         spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.NonPremultiplied, transformMatrix: spriteBatchTransform);
         foreach (LightSource light in _.activeLights)
         {
-          sw3.Restart();
+
           if (light.IsBackground || light.CurrentBrightness <= 0.0f) { continue; }
           //draw limb lights at this point, because they were skipped over previously to prevent them from being obstructed
-          if (light.ParentBody?.UserData is Limb limb && !limb.Hide) { light.DrawSprite(spriteBatch, cam); }
-          sw3.Stop();
-          if (AttachedToCharacters.IsActive)
+          if (light.ParentBody?.UserData is Limb limb && !limb.Hide)
           {
-            try
-            {
-              if (!LightSource_Parent.ContainsKey(light)) continue;
-              LightSourceParentInfo lp = LightSource_Parent[light];
+            sw3.Restart();
+            light.DrawSprite(spriteBatch, cam);
+            sw3.Stop();
 
-              if (AttachedToCharacters.ByID)
+            if (AttachedToCharacters.IsActive)
+            {
+              try
               {
-                Capture.Draw.AddTicks(sw3.ElapsedTicks, AttachedToCharacters, lp.Name);
+                if (!LightSource_Parent.ContainsKey(light)) continue;
+                LightSourceParentInfo lp = LightSource_Parent[light];
+
+                if (AttachedToCharacters.ByID)
+                {
+                  Capture.Draw.AddTicks(sw3.ElapsedTicks, AttachedToCharacters, lp.Name);
+                }
+                else
+                {
+                  Capture.Draw.AddTicks(sw3.ElapsedTicks, AttachedToCharacters, lp.GenericName);
+                }
               }
-              else
-              {
-                Capture.Draw.AddTicks(sw3.ElapsedTicks, AttachedToCharacters, lp.GenericName);
-              }
+              catch (Exception e) { error(e); }
             }
-            catch (Exception e) { error(e); }
           }
         }
         spriteBatch.End();
@@ -375,11 +380,11 @@ namespace ShowPerfExtensions
         Level.Loaded?.BackgroundCreatureManager?.DrawLights(spriteBatch, cam);
         foreach (LightSource light in _.activeLights)
         {
-          sw3.Restart();
           if (!light.IsBackground || light.CurrentBrightness <= 0.0f) { continue; }
+          sw3.Restart();
           light.DrawLightVolume(spriteBatch, _.lightEffect, transform, recalculationCount < LightManager.MaxLightVolumeRecalculationsPerFrame, ref recalculationCount);
           light.DrawSprite(spriteBatch, cam);
-          sw.Stop();
+          sw3.Stop();
           if (BackgroundLights.IsActive)
           {
             try
@@ -483,8 +488,8 @@ namespace ShowPerfExtensions
         {
           //don't draw limb lights at this point, they need to be drawn after lights have been obstructed by characters
 
-          sw3.Restart();
           if (light.IsBackground || light.ParentBody?.UserData is Limb || light.CurrentBrightness <= 0.0f) { continue; }
+          sw3.Restart();
           light.DrawSprite(spriteBatch, cam);
           sw3.Stop();
           if (DrawHighlights.IsActive)
@@ -593,8 +598,8 @@ namespace ShowPerfExtensions
 
         foreach (LightSource light in _.activeLights)
         {
-          sw3.Restart();
           if (light.IsBackground || light.CurrentBrightness <= 0.0f) { continue; }
+          sw3.Restart();
           light.DrawLightVolume(spriteBatch, _.lightEffect, transform, recalculationCount < LightManager.MaxLightVolumeRecalculationsPerFrame, ref recalculationCount);
           sw3.Stop();
           if (LightVolumes.IsActive)

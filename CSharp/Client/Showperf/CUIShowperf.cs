@@ -28,6 +28,7 @@ namespace ShowPerfExtensions
       public CUIDropDown SubTypeDD;
       public CUIToggleButton ById;
       public CUIMultiButton ModeButton;
+      public CUIMultiButton CaptureButton;
       public CUIToggleButton Accumulate;
       public void Clear()
       {
@@ -145,14 +146,28 @@ namespace ShowPerfExtensions
 
         SubTypeDD.Select(SubType.All);
 
-        this["CaptureButton"] = new CUIButton("Capture")
+        // this["CaptureButton"] = new CUIButton("Capture")
+        // {
+        //   AddOnMouseDown = (e) =>
+        //   {
+        //     if (Pages.IsOpened(TickList)) { Pages.Open(Map); return; }
+        //     if (Pages.IsOpened(Map)) { Pages.Open(TickList); return; }
+        //   },
+        // };
+
+        this["CaptureButton"] = CaptureButton = new CUIMultiButton()
         {
-          AddOnMouseDown = (e) =>
+          AddOnSelect = (b, i) =>
           {
-            if (Pages.IsOpened(TickList)) { Pages.Open(Map); return; }
-            if (Pages.IsOpened(Map)) { Pages.Open(TickList); return; }
+            if (b.Text == "Capture") Pages.Open(TickList);
+            if (b.Text == "Map") Pages.Open(Map);
           },
         };
+
+        CaptureButton.Add(new CUIButton("Capture"));
+        CaptureButton.Add(new CUIButton("Map"));
+
+
 
         this["header"] = new CUIVerticalList()
         {
@@ -185,18 +200,20 @@ namespace ShowPerfExtensions
         TickList = new CUITickList(0, 0, 1, 1);
         LoadMap();
 
-
         SetCategoryText();
+        //Pages.Open(TickList);
+        CaptureButton.Select(1);
       }
 
-      public void LoadMap()
+      public CUICaptureMap LoadMap()
       {
         MapButton.Buttons.Clear();
         Capture.Active.Clear();
 
         Map = CUIComponent.LoadFromFile<CUICaptureMap>(Mod.ModDir + "/XML/CUICaptureMap.xml");
-        Pages.Open(Map);
         OnGlobalCaptureStateChange();
+
+        return Map;
       }
 
       public void OnMapButtonClicked(MapButton b)

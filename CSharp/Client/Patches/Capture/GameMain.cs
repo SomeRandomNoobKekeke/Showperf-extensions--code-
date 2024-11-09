@@ -62,17 +62,18 @@ namespace ShowPerfExtensions
       public static void AddMonoGameMetrics()
       {
         if (!UpdateMonoGame.IsActive) return;
+        Capture.MonoGame.EnsureCategory(UpdateMonoGame);
 
         GraphicsMetrics metrics = GameMain.Instance.GraphicsDevice.Metrics;
 
-        Capture.MonoGame.AddTicksOnce(metrics.ClearCount, UpdateMonoGame, "ClearCount");
-        Capture.MonoGame.AddTicksOnce(metrics.DrawCount, UpdateMonoGame, "DrawCount");
-        Capture.MonoGame.AddTicksOnce(metrics.PixelShaderCount, UpdateMonoGame, "PixelShaderCount");
-        Capture.MonoGame.AddTicksOnce(metrics.PrimitiveCount, UpdateMonoGame, "PrimitiveCount");
-        Capture.MonoGame.AddTicksOnce(metrics.SpriteCount, UpdateMonoGame, "SpriteCount");
-        Capture.MonoGame.AddTicksOnce(metrics.TargetCount, UpdateMonoGame, "TargetCount");
-        Capture.MonoGame.AddTicksOnce(metrics.TextureCount, UpdateMonoGame, "TextureCount");
-        Capture.MonoGame.AddTicksOnce(metrics.VertexShaderCount, UpdateMonoGame, "VertexShaderCount");
+        Capture.MonoGame.AddTicks(metrics.ClearCount, UpdateMonoGame, "ClearCount");
+        Capture.MonoGame.AddTicks(metrics.DrawCount, UpdateMonoGame, "DrawCount");
+        Capture.MonoGame.AddTicks(metrics.PixelShaderCount, UpdateMonoGame, "PixelShaderCount");
+        Capture.MonoGame.AddTicks(metrics.PrimitiveCount, UpdateMonoGame, "PrimitiveCount");
+        Capture.MonoGame.AddTicks(metrics.SpriteCount, UpdateMonoGame, "SpriteCount");
+        Capture.MonoGame.AddTicks(metrics.TargetCount, UpdateMonoGame, "TargetCount");
+        Capture.MonoGame.AddTicks(metrics.TextureCount, UpdateMonoGame, "TextureCount");
+        Capture.MonoGame.AddTicks(metrics.VertexShaderCount, UpdateMonoGame, "VertexShaderCount");
       }
 
 

@@ -102,8 +102,11 @@ namespace ShowPerfExtensions
             DebugConsole.ThrowError("Particle update failed", e);
             remove = true;
           }
-
+          sw.Restart();
           if (remove) { _.RemoveParticle(i); }
+          sw.Stop();
+
+          Capture.Update.AddTicks(sw.ElapsedTicks, UpdateParticles, "RemoveParticle");
         }
 
         return false;

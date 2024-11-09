@@ -130,7 +130,7 @@ namespace ShowPerfExtensions
 
         LoadButton = new CUIButton("Load")
         {
-          AddOnMouseDown = (e) => Showperf.LoadMap(),
+          AddOnMouseDown = (e) => Showperf.Pages.Open(Showperf.LoadMap()),
           InactiveColor = CUIPallete.Default.Tertiary.Off,
           MouseOverColor = CUIPallete.Default.Tertiary.OffHover,
           MousePressedColor = CUIPallete.Default.Tertiary.On,
@@ -153,7 +153,7 @@ namespace ShowPerfExtensions
         };
 
 
-        Locked = false;
+        Locked = true;
         OnChildAdded += (c) => PassLocked(c);
       }
     }
