@@ -37,6 +37,7 @@ namespace ShowPerfExtensions
       public static CaptureState UpdateGaps;
       public static CaptureState UpdatePower;
       public static CaptureState UpdateStructures;
+      public static CaptureState UpdateWholeSub;
       public static void Initialize()
       {
         harmony.Patch(
@@ -52,6 +53,8 @@ namespace ShowPerfExtensions
         UpdateGaps = Capture.Get("Showperf.Update.MapEntity.Misc.Gaps");
         UpdatePower = Capture.Get("Showperf.Update.MapEntity.Misc.Power");
         UpdateStructures = Capture.Get("Showperf.Update.MapEntity.Misc.Structures");
+        UpdateWholeSub = Capture.Get("Showperf.Update.MapEntity.WholeSub");
+
       }
 
       // https://github.com/evilfactory/LuaCsForBarotrauma/blob/master/Barotrauma/BarotraumaShared/SharedSource/Map/MapEntity.cs#L616
@@ -60,7 +63,17 @@ namespace ShowPerfExtensions
         if (!Showperf.Revealed) return true;
         if (!UpdateMapEntity.IsActive && !Items.IsActive && !Misc.IsActive &&
         !UpdateHulls.IsActive && !UpdateGaps.IsActive &&
-        !UpdatePower.IsActive && !UpdateStructures.IsActive) return true;
+        !UpdatePower.IsActive && !UpdateStructures.IsActive && !UpdateWholeSub.IsActive) return true;
+
+        Capture.Update.EnsureCategory(UpdateWholeSub);
+        Capture.Update.EnsureCategory(UpdateMapEntity);
+        Capture.Update.EnsureCategory(Misc);
+        Capture.Update.EnsureCategory(Items);
+        Capture.Update.EnsureCategory(UpdateHulls);
+        Capture.Update.EnsureCategory(UpdateStructures);
+        Capture.Update.EnsureCategory(UpdateGaps);
+
+
 
         MapEntity.mapEntityUpdateTick++;
 
@@ -74,32 +87,32 @@ namespace ShowPerfExtensions
         if (MapEntity.mapEntityUpdateTick % MapEntity.MapEntityUpdateInterval == 0)
         {
           sw2.Restart();
-          Capture.Update.EnsureCategory(UpdateHulls);
+
           foreach (Hull hull in Hull.HullList)
           {
             sw3.Restart();
             hull.Update(deltaTime * MapEntity.MapEntityUpdateInterval, cam);
             sw3.Stop();
             Capture.Update.AddTicks(sw3.ElapsedTicks, UpdateHulls, $"{hull}");
+            Capture.Update.AddTicks(sw3.ElapsedTicks, UpdateWholeSub, hull.Submarine?.ToString() ?? "Things in open water");
           }
 #if CLIENT
           Hull.UpdateCheats(deltaTime * MapEntity.MapEntityUpdateInterval, cam);
 #endif
           sw2.Stop();
-          Capture.Update.AddTicksOnce(sw2.ElapsedTicks, Misc, "Hulls");
+          Capture.Update.AddTicks(sw2.ElapsedTicks, Misc, "Hulls");
           sw2.Restart();
 
-          Capture.Update.EnsureCategory(UpdateStructures);
           foreach (Structure structure in Structure.WallList)
           {
             sw3.Restart();
             structure.Update(deltaTime * MapEntity.MapEntityUpdateInterval, cam);
             sw3.Stop();
             Capture.Update.AddTicks(sw3.ElapsedTicks, UpdateStructures, $"{structure}");
+            Capture.Update.AddTicks(sw3.ElapsedTicks, UpdateWholeSub, structure.Submarine?.ToString() ?? "Things in open water");
           }
           sw2.Stop();
-          Capture.Update.AddTicksOnce(sw2.ElapsedTicks, Misc, "Structures");
-          sw2.Restart();
+          Capture.Update.AddTicks(sw2.ElapsedTicks, Misc, "Structures");
         }
 
 
@@ -107,16 +120,17 @@ namespace ShowPerfExtensions
         //the water/air will always tend to flow through the first gap in the list,
         //which may lead to weird behavior like water draining down only through
         //one gap in a room even if there are several
-        Capture.Update.EnsureCategory(UpdateGaps);
+        sw2.Restart();
         foreach (Gap gap in Gap.GapList.OrderBy(g => Rand.Int(int.MaxValue)))
         {
           sw3.Restart();
           gap.Update(deltaTime, cam);
           sw3.Stop();
           Capture.Update.AddTicks(sw3.ElapsedTicks, UpdateGaps, $"{gap.Submarine?.Info?.Name}({gap.Submarine?.IdOffset}).Gap({gap.ID})");
+          Capture.Update.AddTicks(sw3.ElapsedTicks, UpdateWholeSub, gap.Submarine?.ToString() ?? "Things in open water");
         }
         sw2.Stop();
-        Capture.Update.AddTicksOnce(sw2.ElapsedTicks, Misc, "Gaps");
+        Capture.Update.AddTicks(sw2.ElapsedTicks, Misc, "Gaps");
         sw2.Restart();
 
         if (MapEntity.mapEntityUpdateTick % MapEntity.PoweredUpdateInterval == 0)
@@ -124,17 +138,17 @@ namespace ShowPerfExtensions
           Powered.UpdatePower(deltaTime * MapEntity.PoweredUpdateInterval);
         }
         sw2.Stop();
-        Capture.Update.AddTicksOnce(sw2.ElapsedTicks, Misc, "UpdatePower");
+        Capture.Update.AddTicks(sw2.ElapsedTicks, Misc, "UpdatePower");
 
 
 #if CLIENT
         sw.Stop();
         GameMain.PerformanceCounter.AddElapsedTicks("Update:MapEntity:Misc", sw.ElapsedTicks);
-        Capture.Update.AddTicksOnce(sw.ElapsedTicks, UpdateMapEntity, "MapEntity.Misc");
+        Capture.Update.AddTicks(sw.ElapsedTicks, UpdateMapEntity, "MapEntity.Misc");
         sw.Restart();
 #endif
 
-        Capture.Update.EnsureCategory(Items);
+
         Item.UpdatePendingConditionUpdates(deltaTime);
         if (MapEntity.mapEntityUpdateTick % MapEntity.MapEntityUpdateInterval == 0)
         {
@@ -158,6 +172,7 @@ namespace ShowPerfExtensions
                 Capture.Update.AddTicks(sw2.ElapsedTicks, Items, item.Prefab.Identifier);
               }
 
+              Capture.Update.AddTicks(sw2.ElapsedTicks, UpdateWholeSub, item.Submarine?.ToString() ?? "Things in open water");
             }
           }
           catch (InvalidOperationException e)
@@ -185,12 +200,13 @@ namespace ShowPerfExtensions
           {
             Capture.Update.AddTicks(sw2.ElapsedTicks, Items, item.Prefab.Identifier);
           }
+          Capture.Update.AddTicks(sw2.ElapsedTicks, UpdateWholeSub, item.Submarine?.ToString() ?? "Things in open water");
         }
 
 #if CLIENT
         sw.Stop();
         GameMain.PerformanceCounter.AddElapsedTicks("Update:MapEntity:Items", sw.ElapsedTicks);
-        Capture.Update.AddTicksOnce(sw.ElapsedTicks, UpdateMapEntity, "MapEntity.Items");
+        Capture.Update.AddTicks(sw.ElapsedTicks, UpdateMapEntity, "MapEntity.Items");
         sw.Restart();
 #endif
 
@@ -201,7 +217,7 @@ namespace ShowPerfExtensions
           MapEntity.Spawner?.Update();
         }
         sw.Stop();
-        Capture.Update.AddTicksOnce(sw.ElapsedTicks, UpdateMapEntity, "MapEntity.Spawner");
+        Capture.Update.AddTicks(sw.ElapsedTicks, UpdateMapEntity, "MapEntity.Spawner");
 
         return false;
       }

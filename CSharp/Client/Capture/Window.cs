@@ -128,7 +128,10 @@ namespace ShowPerfExtensions
       }
 
       public void EnsureCategory(int cat) => FirstSlice.EnsureCategory(cat);
-      public void EnsureCategory(CaptureState cs) => EnsureCategory(cs.ID.HashCode);
+      public void EnsureCategory(CaptureState cs)
+      {
+        if (cs.IsActive) EnsureCategory(cs.ID.HashCode);
+      }
 
 
 

@@ -48,6 +48,7 @@
         <LevelRenderer />
       </Level>
       <MapEntity>
+        <WholeSub />
         <Items />
         <Misc />
       </MapEntity>
