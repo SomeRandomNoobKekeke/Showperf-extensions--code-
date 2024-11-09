@@ -93,7 +93,10 @@ namespace ShowPerfExtensions
             sw3.Restart();
             hull.Update(deltaTime * MapEntity.MapEntityUpdateInterval, cam);
             sw3.Stop();
-            Capture.Update.AddTicks(sw3.ElapsedTicks, UpdateHulls, $"{hull}");
+            if (Capture.ShouldCapture(hull))
+            {
+              Capture.Update.AddTicks(sw3.ElapsedTicks, UpdateHulls, $"{hull}");
+            }
             Capture.Update.AddTicks(sw3.ElapsedTicks, UpdateWholeSub, hull.Submarine?.ToString() ?? "Things in open water");
           }
 #if CLIENT
@@ -108,7 +111,10 @@ namespace ShowPerfExtensions
             sw3.Restart();
             structure.Update(deltaTime * MapEntity.MapEntityUpdateInterval, cam);
             sw3.Stop();
-            Capture.Update.AddTicks(sw3.ElapsedTicks, UpdateStructures, $"{structure}");
+            if (Capture.ShouldCapture(structure))
+            {
+              Capture.Update.AddTicks(sw3.ElapsedTicks, UpdateStructures, $"{structure}");
+            }
             Capture.Update.AddTicks(sw3.ElapsedTicks, UpdateWholeSub, structure.Submarine?.ToString() ?? "Things in open water");
           }
           sw2.Stop();
@@ -126,7 +132,10 @@ namespace ShowPerfExtensions
           sw3.Restart();
           gap.Update(deltaTime, cam);
           sw3.Stop();
-          Capture.Update.AddTicks(sw3.ElapsedTicks, UpdateGaps, $"{gap.Submarine?.Info?.Name}({gap.Submarine?.IdOffset}).Gap({gap.ID})");
+          if (Capture.ShouldCapture(gap))
+          {
+            Capture.Update.AddTicks(sw3.ElapsedTicks, UpdateGaps, $"{gap.Submarine?.Info?.Name}({gap.Submarine?.IdOffset}).Gap({gap.ID})");
+          }
           Capture.Update.AddTicks(sw3.ElapsedTicks, UpdateWholeSub, gap.Submarine?.ToString() ?? "Things in open water");
         }
         sw2.Stop();
@@ -163,15 +172,17 @@ namespace ShowPerfExtensions
               sw2.Restart();
               item.Update(deltaTime * MapEntity.MapEntityUpdateInterval, cam);
               sw2.Stop();
-              if (Items.ByID)
+              if (Capture.ShouldCapture(item))
               {
-                Capture.Update.AddTicks(sw2.ElapsedTicks, Items, $"{item}");
+                if (Items.ByID)
+                {
+                  Capture.Update.AddTicks(sw2.ElapsedTicks, Items, $"{item}");
+                }
+                else
+                {
+                  Capture.Update.AddTicks(sw2.ElapsedTicks, Items, item.Prefab.Identifier);
+                }
               }
-              else
-              {
-                Capture.Update.AddTicks(sw2.ElapsedTicks, Items, item.Prefab.Identifier);
-              }
-
               Capture.Update.AddTicks(sw2.ElapsedTicks, UpdateWholeSub, item.Submarine?.ToString() ?? "Things in open water");
             }
           }
@@ -192,13 +203,16 @@ namespace ShowPerfExtensions
           sw2.Restart();
           item.Update(deltaTime, cam);
           sw2.Stop();
-          if (Items.ByID)
+          if (Capture.ShouldCapture(item))
           {
-            Capture.Update.AddTicks(sw2.ElapsedTicks, Items, $"{item}");
-          }
-          else
-          {
-            Capture.Update.AddTicks(sw2.ElapsedTicks, Items, item.Prefab.Identifier);
+            if (Items.ByID)
+            {
+              Capture.Update.AddTicks(sw2.ElapsedTicks, Items, $"{item}");
+            }
+            else
+            {
+              Capture.Update.AddTicks(sw2.ElapsedTicks, Items, item.Prefab.Identifier);
+            }
           }
           Capture.Update.AddTicks(sw2.ElapsedTicks, UpdateWholeSub, item.Submarine?.ToString() ?? "Things in open water");
         }
