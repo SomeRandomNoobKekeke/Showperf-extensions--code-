@@ -894,7 +894,7 @@ namespace ShowPerfExtensions
 #if CLIENT
         sw.Stop();
         GameMain.PerformanceCounter.AddElapsedTicks("Update:GameSession", sw.ElapsedTicks);
-        Capture.Update.AddTicksOnce(sw.ElapsedTicks, UpdateGameSession, "Update.GameSession");
+        //Capture.Update.AddTicksOnce(sw.ElapsedTicks, UpdateGameSession, "Update.GameSession");
         Capture.Update.AddTicksOnce(sw.ElapsedTicks, Update, "Update.GameSession");
         sw.Restart();
 

@@ -29,6 +29,8 @@ namespace ShowPerfExtensions
     public class StorePatch
     {
       public static CaptureState UpdateStore;
+      public static CaptureState UpdateGameSession;
+
       public static void Initialize()
       {
         harmony.Patch(
@@ -37,6 +39,7 @@ namespace ShowPerfExtensions
         );
 
         UpdateStore = Capture.Get("Showperf.Update.GameSession.Store");
+        UpdateGameSession = Capture.Get("Showperf.Update.GameSession");
       }
 
       // https://github.com/evilfactory/LuaCsForBarotrauma/blob/master/Barotrauma/BarotraumaClient/ClientSource/GUI/Store.cs#L2270
@@ -134,6 +137,8 @@ namespace ShowPerfExtensions
         _.updateStopwatch.Stop();
         GameMain.PerformanceCounter.AddElapsedTicks("Update:GameSession:Store", _.updateStopwatch.ElapsedTicks);
         Capture.Update.AddTicksOnce(_.updateStopwatch.ElapsedTicks, UpdateStore, "Update.GameSession.Store");
+        Capture.Update.AddTicksOnce(_.updateStopwatch.ElapsedTicks, UpdateGameSession, "Update.GameSession.Store");
+
 
         return false;
       }

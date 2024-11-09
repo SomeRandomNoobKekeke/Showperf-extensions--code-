@@ -48,6 +48,10 @@
       <Character />
       <GameSession>
         <Store />
+        <Events />
+        <GameMode />
+        <Missions />
+        <GUI />
       </GameSession>
       <Level>
         <LevelObjectManager />
