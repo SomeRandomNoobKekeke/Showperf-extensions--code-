@@ -29,6 +29,17 @@ namespace ShowPerfExtensions
 
 
       public bool Frozen { get; set; }
+      public int Frames
+      {
+        get => Draw.Frames;
+        set
+        {
+          Draw.Frames = value;
+          MonoGame.Frames = value;
+          Update.Frames = value;
+          Farseer.Frames = value;
+        }
+      }
 
 
       public void Reset()

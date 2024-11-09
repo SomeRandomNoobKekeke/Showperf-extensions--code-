@@ -22,12 +22,14 @@ namespace ShowPerfExtensions
 
       public bool FreezeOnPause { get; set; }
 
+      private int fakeFrames;
       private int frames; public int Frames
       {
         get => frames;
         set
         {
           frames = Math.Max(1, value);
+          fakeFrames = Math.Max(1, frames - 1);
           Reset();
         }
       }
@@ -200,7 +202,7 @@ namespace ShowPerfExtensions
           {
             CaptureMode.Sum => TotalTicks[category][id],
             CaptureMode.Spike => TotalTicks[category][id],
-            CaptureMode.Mean => TotalTicks[category][id] / (Frames - 1) // TODO why i need -1 here?
+            CaptureMode.Mean => TotalTicks[category][id] / fakeFrames // TODO why i need -1 here?
           };
         }
         catch (Exception e)

@@ -24,7 +24,7 @@ namespace ShowPerfExtensions
     public void PatchAll()
     {
       PatchCapture();
-      //PatchTechnical();
+      PatchTechnical();
     }
 
     public void PatchCapture()
@@ -45,7 +45,7 @@ namespace ShowPerfExtensions
     {
       harmony.Patch(
         original: typeof(LuaGame).GetMethod("IsCustomCommandPermitted"),
-        postfix: ShowperfMethod(typeof(Plugin).GetMethod("permitCommands"))
+        postfix: ShowperfMethod(typeof(Plugin).GetMethod("PermitCommands"))
       );
     }
 

@@ -44,7 +44,7 @@ namespace ShowPerfExtensions
       }
 
 
-      GameMain.PerformanceCounter.DrawTimeGraph = new Graph(1000);
+      //GameMain.PerformanceCounter.DrawTimeGraph = new Graph(1000);
 
       CUIMain = new CUIMainComponent();
       Capture = new CaptureClass();
@@ -85,8 +85,8 @@ namespace ShowPerfExtensions
 
       Showperf.OnClose += () => CUIMain["showperfButton"].Revealed = true;
 
-      CUIMain["showperfButton"].Click();
-      Showperf.Pages.Open(Showperf.Map);
+      //CUIMain["showperfButton"].Click();
+      //Showperf.Pages.Open(Showperf.Map);
 
 
       //CUIMain.Load(CUITest.NestedScale);
@@ -96,7 +96,7 @@ namespace ShowPerfExtensions
 
       PatchAll();
 
-      //addCommands();
+      AddCommands();
 
       FindLightSourceParents.Find();
 
@@ -108,7 +108,7 @@ namespace ShowPerfExtensions
 
     public void Dispose()
     {
-      //removeCommands();
+      RemoveCommands();
       CUI.Dispose();
       LightSource_Parent.Clear();
       info($"{ModName} Disposed");
