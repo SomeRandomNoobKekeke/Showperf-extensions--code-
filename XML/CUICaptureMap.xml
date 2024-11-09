@@ -1,8 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<CUICaptureMap ChildrenOffset="[88.21599,75.999054,1]" Relative="[0,0,1,1]">
+<CUICaptureMap ChildrenOffset="[-120.78401,19.999054,1]" Relative="[0,0,1,1]">
   <Connections>
     <Connection Start="Showperf.Draw" End="Draw" />
     <Connection Start="Draw.Map" End="Map" />
+    <Connection Start="Map.BackLevel" End="BackLevel" />
     <Connection Start="Map.Lighting" End="Lighting" />
     <Connection Start="Map.BackCharactersItems" End="BackCharactersItems" />
     <Connection Start="Showperf.Update" End="Update" />
@@ -46,7 +47,20 @@
         <MapButton AKA="PostProcess" CState="Showperf.Draw.Map.PostProcess" Text="PostProcess" />
       </CUIVerticalList>
     </MapGroup>
-    <MapGroup AKA="BackCharactersItems" Absolute="[272.392,-30.167976,,54]" ConsumeSwipe="true" Draggable="true">
+    <MapGroup AKA="BackLevel" Absolute="[279.39203,98.83203,,134.99998]" ConsumeSwipe="true" Draggable="true">
+      <MapButton AKA="BackLevel" CState="Showperf.Draw.Map.BackLevel" Text="BackLevel" TextAlign="{X:0.5 Y:0.5}" TextScale="1.2" />
+      <CUIVerticalList Absolute="[,,,113.39999]" AbsoluteMin="[,,131.79999,]" FitContent="[True,True]">
+        <MapButton AKA="SubmarineDrawBack" CState="Showperf.Draw.Map.BackLevel.SubmarineDrawBack" Text="SubmarineDrawBack" />
+        <MapButton AKA="Particles" CState="Showperf.Draw.Map.BackLevel.Particles" Text="Particles" />
+        <MapButton AKA="BackgroundTopSprite" CState="Showperf.Draw.Map.BackLevel.BackgroundTopSprite" Text="BackgroundTopSprite" />
+        <MapButton AKA="LevelObjectsBack" CState="Showperf.Draw.Map.BackLevel.LevelObjectsBack" Text="LevelObjectsBack" />
+        <MapButton AKA="BackgroundCreatures" CState="Showperf.Draw.Map.BackLevel.BackgroundCreatures" Text="BackgroundCreatures" />
+        <MapButton AKA="WaterParticles" CState="Showperf.Draw.Map.BackLevel.WaterParticles" Text="WaterParticles" />
+        <MapButton AKA="RenderWalls" CState="Showperf.Draw.Map.BackLevel.RenderWalls" Text="RenderWalls" />
+        <MapButton AKA="LevelObjectsMid" CState="Showperf.Draw.Map.BackLevel.LevelObjectsMid" Text="LevelObjectsMid" />
+      </CUIVerticalList>
+    </MapGroup>
+    <MapGroup AKA="BackCharactersItems" Absolute="[225.39204,-18.167969,,54]" ConsumeSwipe="true" Draggable="true">
       <MapButton AKA="BackCharactersItems" CState="Showperf.Draw.Map.BackCharactersItems" Text="BackCharactersItems" TextAlign="{X:0.5 Y:0.5}" TextScale="1.2" />
       <CUIVerticalList Absolute="[,,,32.399998]" AbsoluteMin="[,,126.399994,]" FitContent="[True,True]">
         <MapButton AKA="SubmarineDrawBack" CState="Showperf.Draw.Map.BackCharactersItems.SubmarineDrawBack" Text="SubmarineDrawBack" />
@@ -107,7 +121,7 @@
         <MapButton AKA="Store" CState="Showperf.Update.GameSession.Store" Text="Store" />
       </CUIVerticalList>
     </MapGroup>
-    <MapGroup AKA="Lighting" Absolute="[286.06396,149.27994,,167.4]" ConsumeSwipe="true" Draggable="true">
+    <MapGroup AKA="Lighting" Absolute="[274.0639,267.27994,,167.4]" ConsumeSwipe="true" Draggable="true">
       <MapButton AKA="Lighting" CState="Showperf.Draw.Map.Lighting" Text="Lighting" TextAlign="{X:0.5 Y:0.5}" TextScale="1.2" />
       <CUIVerticalList Absolute="[,,,145.79999]" AbsoluteMin="[,,141.7,]" FitContent="[True,True]">
         <MapButton AKA="UpdateHighlights" CState="Showperf.Draw.Map.Lighting.UpdateHighlights" Text="Update Highlights" />

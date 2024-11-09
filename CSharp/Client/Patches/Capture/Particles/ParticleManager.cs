@@ -38,6 +38,7 @@ namespace ShowPerfExtensions
       public static void Draw(CaptureState cs, SpriteBatch spriteBatch, bool inWater, bool? inSub, ParticleBlendState blendState, bool? background = null)
       {
         ParticleManager _ = GameMain.ParticleManager;
+        if (_ == null) return;
 
         if (!cs.IsActive)
         {
@@ -70,7 +71,9 @@ namespace ShowPerfExtensions
             bool isBackgroundParticle = particle.DrawOrder == ParticleDrawOrder.Background;
             if (background.Value != isBackgroundParticle) { continue; }
           }
-          particle.Draw(spriteBatch);
+
+          ParticlePatch.Draw(spriteBatch, particle);
+
           sw.Stop();
           Capture.Draw.AddTicks(sw.ElapsedTicks, cs, particle.ToString());
         }

@@ -29,6 +29,16 @@ namespace ShowPerfExtensions
     {
       public static CaptureState LevelRenderer;
       public static CaptureState FrontLevel;
+      public static CaptureState BackLevel;
+      public static CaptureState BackLevelParticles;
+      public static CaptureState BackLevelLevelObjectsBack;
+      public static CaptureState BackLevelLevelObjectsMid;
+      public static CaptureState BackLevelBackgroundTopSprite;
+      public static CaptureState BackLevelBackgroundCreatures;
+      public static CaptureState BackLevelWaterParticles;
+      public static CaptureState BackLevelRenderWalls;
+
+
       public static void Initialize()
       {
         harmony.Patch(
@@ -47,6 +57,16 @@ namespace ShowPerfExtensions
         );
 
 
+        BackLevel = Capture.Get("Showperf.Draw.Map.BackLevel");
+        BackLevelParticles = Capture.Get("Showperf.Draw.Map.BackLevel.Particles");
+        BackLevelLevelObjectsBack = Capture.Get("Showperf.Draw.Map.BackLevel.LevelObjectsBack");
+        BackLevelLevelObjectsMid = Capture.Get("Showperf.Draw.Map.BackLevel.LevelObjectsMid");
+
+        BackLevelBackgroundTopSprite = Capture.Get("Showperf.Draw.Map.BackLevel.BackgroundTopSprite");
+        BackLevelBackgroundCreatures = Capture.Get("Showperf.Draw.Map.BackLevel.BackgroundCreatures");
+        BackLevelWaterParticles = Capture.Get("Showperf.Draw.Map.BackLevel.WaterParticles");
+        BackLevelRenderWalls = Capture.Get("Showperf.Draw.Map.BackLevel.RenderWalls");
+
         FrontLevel = Capture.Get("Showperf.Draw.Map.FrontLevel");
         LevelRenderer = Capture.Get("Showperf.Update.Level.LevelRenderer");
       }
@@ -59,8 +79,14 @@ namespace ShowPerfExtensions
                 BackgroundCreatureManager backgroundCreatureManager = null,
                 ParticleManager particleManager = null)
       {
+        if (!Showperf.Revealed) return true;
+
+        Capture.Draw.EnsureCategory(BackLevel);
+        Stopwatch sw = new Stopwatch();
+
         LevelRenderer _ = __instance;
 
+        sw.Restart();
         spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.NonPremultiplied, SamplerState.LinearWrap);
 
         Vector2 backgroundPos = cam.WorldViewCenter;
@@ -93,17 +119,32 @@ namespace ShowPerfExtensions
         }
 
         spriteBatch.End();
+        sw.Stop();
+        Capture.Draw.AddTicks(sw.ElapsedTicks, BackLevel, "BackgroundTopSprite");
+        Capture.Draw.AddTicksOnce(sw.ElapsedTicks, BackLevelBackgroundTopSprite, "BackgroundTopSprite");
+        sw.Restart();
+
 
         spriteBatch.Begin(SpriteSortMode.Deferred,
             BlendState.NonPremultiplied,
             SamplerState.LinearWrap, DepthStencilState.DepthRead, null, null,
             cam.Transform);
 
-        backgroundSpriteManager?.DrawObjectsBack(spriteBatch, cam);
+        LevelObjectManagerPatch.DrawObjects(BackLevelLevelObjectsBack, backgroundSpriteManager, spriteBatch, cam, backgroundSpriteManager?.visibleObjectsBack);
+
+        sw.Stop();
+        Capture.Draw.AddTicksOnce(sw.ElapsedTicks, BackLevel, "LevelObjectsBack");
+        sw.Restart();
+
         if (cam.Zoom > 0.05f)
         {
           backgroundCreatureManager?.Draw(spriteBatch, cam);
         }
+
+        sw.Stop();
+        Capture.Draw.AddTicks(sw.ElapsedTicks, BackLevel, "BackgroundCreatures");
+        Capture.Draw.AddTicksOnce(sw.ElapsedTicks, BackLevelBackgroundCreatures, "BackgroundCreatures");
+        sw.Restart();
 
         if (_.level.GenerationParams.WaterParticles != null && cam.Zoom > 0.05f)
         {
@@ -142,30 +183,55 @@ namespace ShowPerfExtensions
           }
         }
 
-        GameMain.ParticleManager?.Draw(spriteBatch, inWater: true, inSub: false, ParticleBlendState.AlphaBlend, background: true);
+
+        sw.Stop();
+        Capture.Draw.AddTicks(sw.ElapsedTicks, BackLevel, "WaterParticles");
+        Capture.Draw.AddTicksOnce(sw.ElapsedTicks, BackLevelWaterParticles, "WaterParticles");
+        sw.Restart();
+
+        ParticleManagerPatch.Draw(BackLevelParticles, spriteBatch, inWater: true, inSub: false, ParticleBlendState.AlphaBlend, background: true);
+
+        sw.Stop();
+        Capture.Draw.AddTicks(sw.ElapsedTicks, BackLevel, "Particles");
+        sw.Restart();
 
         spriteBatch.End();
 
         _.RenderWalls(GameMain.Instance.GraphicsDevice, cam);
 
+        sw.Stop();
+        Capture.Draw.AddTicks(sw.ElapsedTicks, BackLevel, "RenderWalls");
+        Capture.Draw.AddTicksOnce(sw.ElapsedTicks, BackLevelRenderWalls, "RenderWalls");
+        sw.Restart();
+
         spriteBatch.Begin(SpriteSortMode.Deferred,
             BlendState.NonPremultiplied,
             SamplerState.LinearClamp, DepthStencilState.DepthRead, null, null,
             cam.Transform);
-        backgroundSpriteManager?.DrawObjectsMid(spriteBatch, cam);
+
+        LevelObjectManagerPatch.DrawObjects(BackLevelLevelObjectsMid, backgroundSpriteManager, spriteBatch, cam, backgroundSpriteManager?.visibleObjectsMid);
+
         spriteBatch.End();
+
+        sw.Stop();
+        Capture.Draw.AddTicks(sw.ElapsedTicks, BackLevel, "LevelObjectsMid");
+        sw.Restart();
 
         return false;
       }
 
+
+
       public static bool LevelRenderer_DrawForeground_Replace(LevelRenderer __instance, SpriteBatch spriteBatch, Camera cam, LevelObjectManager backgroundSpriteManager = null)
       {
+        if (!FrontLevel.IsActive || !Showperf.Revealed) return true;
+
         spriteBatch.Begin(SpriteSortMode.Deferred,
             BlendState.NonPremultiplied,
             SamplerState.LinearClamp, DepthStencilState.DepthRead, null, null,
             cam.Transform);
         //backgroundSpriteManager?.DrawObjectsFront(spriteBatch, cam);
-        LevelObjectManagerPatch.DrawObjects(FrontLevel, backgroundSpriteManager, spriteBatch, cam, backgroundSpriteManager.visibleObjectsFront);
+        LevelObjectManagerPatch.DrawObjects(FrontLevel, backgroundSpriteManager, spriteBatch, cam, backgroundSpriteManager?.visibleObjectsFront);
 
         spriteBatch.End();
 

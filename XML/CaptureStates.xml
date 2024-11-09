@@ -8,7 +8,16 @@
           <SubmarineDrawBack />
           <DrawCharacters />
         </BackCharactersItems>
-        <BackLevel />
+        <BackLevel>
+          <SubmarineDrawBack />
+          <Particles />
+          <BackgroundTopSprite />
+          <LevelObjectsBack />
+          <BackgroundCreatures />
+          <WaterParticles />
+          <RenderWalls />
+          <LevelObjectsMid />
+        </BackLevel>
         <BackStructures />
         <DeformableCharacters />
         <FrontDamageable />

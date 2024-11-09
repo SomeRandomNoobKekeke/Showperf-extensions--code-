@@ -37,8 +37,7 @@ namespace ShowPerfExtensions
       }
 
 
-      static bool IsFromOutpostDrawnBehindSubs(Entity e)
-            => e.Submarine is { Info.OutpostGenerationParams.DrawBehindSubs: true };
+      //static bool IsFromOutpostDrawnBehindSubs(Entity e) => e.Submarine is { Info.OutpostGenerationParams.DrawBehindSubs: true };
 
 
       public static void DrawBack(CaptureState cs, SpriteBatch spriteBatch, bool editing = false, Predicate<MapEntity> predicate = null)
@@ -96,8 +95,6 @@ namespace ShowPerfExtensions
             }
           }
         }
-
-        sw.Stop();
 
         return false;
       }

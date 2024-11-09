@@ -42,8 +42,10 @@ namespace ShowPerfExtensions
         LevelObjects = Capture.Get("Showperf.Update.Level.LevelObjectManager");
       }
 
-      public static void DrawObjects(CaptureState cs, LevelObjectManager _, SpriteBatch spriteBatch, Camera cam, List<LevelObject> objectList)
+      public static void DrawObjects(CaptureState cs, LevelObjectManager _, SpriteBatch spriteBatch, Camera cam, List<LevelObject> objectList = null)
       {
+        if (_ == null) return;
+
         if (!cs.IsActive)
         {
           _.DrawObjects(spriteBatch, cam, objectList);
@@ -59,6 +61,7 @@ namespace ShowPerfExtensions
         LevelObjectManager _ = __instance;
 
         Stopwatch sw = new Stopwatch();
+        Color HighlightColor = Color.Yellow;
 
         sw.Restart();
 
@@ -102,10 +105,12 @@ namespace ShowPerfExtensions
           camDiff.Y = -camDiff.Y;
 
           Sprite activeSprite = obj.Sprite;
+
           activeSprite?.Draw(
               spriteBatch,
               new Vector2(obj.Position.X, -obj.Position.Y) - camDiff * obj.Position.Z * LevelObjectManager.ParallaxStrength,
-              Color.Lerp(obj.Prefab.SpriteColor, obj.Prefab.SpriteColor.Multiply(Level.Loaded.BackgroundTextureColor), obj.Position.Z / 3000.0f),
+              HighlightColor,
+              //Color.Lerp(obj.Prefab.SpriteColor, obj.Prefab.SpriteColor.Multiply(Level.Loaded.BackgroundTextureColor), obj.Position.Z / 3000.0f),
               activeSprite.Origin,
               obj.CurrentRotation,
               obj.CurrentScale,
@@ -127,7 +132,9 @@ namespace ShowPerfExtensions
                 obj.ActivePrefab.DeformableSprite.Origin,
                 obj.CurrentRotation,
                 obj.CurrentScale,
-                Color.Lerp(obj.Prefab.SpriteColor, obj.Prefab.SpriteColor.Multiply(Level.Loaded.BackgroundTextureColor), obj.Position.Z / 5000.0f));
+                HighlightColor
+            //Color.Lerp(obj.Prefab.SpriteColor, obj.Prefab.SpriteColor.Multiply(Level.Loaded.BackgroundTextureColor), obj.Position.Z / 5000.0f)
+            );
           }
 
 

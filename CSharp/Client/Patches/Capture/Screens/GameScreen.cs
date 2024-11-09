@@ -40,6 +40,8 @@ namespace ShowPerfExtensions
       public static CaptureState BackCharactersItemsDrawCharacters;
       public static CaptureState BackCharactersItemsSubmarineDrawBack;
       public static CaptureState BackLevel;
+      public static CaptureState BackLevelParticles;
+      public static CaptureState BackLevelSubmarine;
       public static CaptureState BackStructures;
       public static CaptureState DeformableCharacters;
       public static CaptureState FrontDamageable;
@@ -97,6 +99,8 @@ namespace ShowPerfExtensions
         BackCharactersItemsDrawCharacters = Capture.Get("Showperf.Draw.Map.BackCharactersItems.DrawCharacters");
         BackCharactersItemsSubmarineDrawBack = Capture.Get("Showperf.Draw.Map.BackCharactersItems.SubmarineDrawBack");
         BackLevel = Capture.Get("Showperf.Draw.Map.BackLevel");
+        BackLevelParticles = Capture.Get("Showperf.Draw.Map.BackLevel.Particles");
+        BackLevelSubmarine = Capture.Get("Showperf.Draw.Map.BackLevel.SubmarineDrawBack");
         BackStructures = Capture.Get("Showperf.Draw.Map.BackStructures");
         DeformableCharacters = Capture.Get("Showperf.Draw.Map.DeformableCharacters");
         FrontDamageable = Capture.Get("Showperf.Draw.Map.FrontDamageable");
@@ -277,6 +281,9 @@ namespace ShowPerfExtensions
         sw.Restart();
 
         //------------------------------------------------------------------------
+        Capture.Draw.EnsureCategory(BackLevel);
+
+
         graphics.SetRenderTarget(_.renderTargetBackground);
         if (Level.Loaded == null)
         {
@@ -288,26 +295,33 @@ namespace ShowPerfExtensions
           Level.Loaded.DrawBack(graphics, spriteBatch, _.cam);
         }
 
-        spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.NonPremultiplied, null, DepthStencilState.None, null, null, _.cam.Transform);
-        SubmarinePatch.DrawBack(BackLevel, spriteBatch, false, e => e is Structure s && (e.SpriteDepth >= 0.9f || s.Prefab.BackgroundSprite != null) && IsFromOutpostDrawnBehindSubs(e));
-        spriteBatch.End();
 
+        sw2.Restart();
+        spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.NonPremultiplied, null, DepthStencilState.None, null, null, _.cam.Transform);
+        SubmarinePatch.DrawBack(BackLevelSubmarine, spriteBatch, false, e => e is Structure s && (e.SpriteDepth >= 0.9f || s.Prefab.BackgroundSprite != null) && IsFromOutpostDrawnBehindSubs(e));
+        spriteBatch.End();
+        sw2.Stop();
+        Capture.Draw.AddTicks(sw2.ElapsedTicks, BackLevel, "SubmarinePatch.DrawBack");
+        sw2.Restart();
         //draw alpha blended particles that are in water and behind subs
 #if LINUX || OSX
 			spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.NonPremultiplied, null, DepthStencilState.None, null, null, _.cam.Transform);
 #else
         spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.NonPremultiplied, null, DepthStencilState.None, null, null, _.cam.Transform);
 #endif
-        ParticleManagerPatch.Draw(BackLevel, spriteBatch, true, false, Barotrauma.Particles.ParticleBlendState.AlphaBlend);
+        ParticleManagerPatch.Draw(BackLevelParticles, spriteBatch, true, false, Barotrauma.Particles.ParticleBlendState.AlphaBlend);
         spriteBatch.End();
 
         //draw additive particles that are in water and behind subs
         spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.Additive, null, DepthStencilState.None, null, null, _.cam.Transform);
-        ParticleManagerPatch.Draw(BackLevel, spriteBatch, true, false, Barotrauma.Particles.ParticleBlendState.Additive);
+        ParticleManagerPatch.Draw(BackLevelParticles, spriteBatch, true, false, Barotrauma.Particles.ParticleBlendState.Additive);
         spriteBatch.End();
         spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.NonPremultiplied, null, DepthStencilState.None);
         spriteBatch.Draw(_.renderTarget, new Rectangle(0, 0, GameMain.GraphicsWidth, GameMain.GraphicsHeight), Color.White);
         spriteBatch.End();
+
+        sw2.Stop();
+        Capture.Draw.AddTicks(sw2.ElapsedTicks, BackLevel, "Particles");
 
         sw.Stop();
         GameMain.PerformanceCounter.AddElapsedTicks("Draw:Map:BackLevel", sw.ElapsedTicks);
@@ -440,7 +454,6 @@ namespace ShowPerfExtensions
             {
               Capture.Draw.AddTicks(sw.ElapsedTicks, cs, c.ToString());
             }
-
           }
         }
 
