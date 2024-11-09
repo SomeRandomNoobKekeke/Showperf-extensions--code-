@@ -468,7 +468,7 @@ namespace ShowPerfExtensions
         spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.NonPremultiplied, SamplerState.LinearWrap, transformMatrix: spriteBatchTransform, effect: GameMain.GameScreen.DamageEffect);
 
         //Submarine.DrawDamageable(spriteBatch, GameMain.GameScreen.DamageEffect);
-        SubmarinePatch.DrawDamageable2(spriteBatch, GameMain.GameScreen.DamageEffect);
+        SubmarinePatch.DrawDamageable(DrawDamageable, spriteBatch, GameMain.GameScreen.DamageEffect);
         spriteBatch.End();
 
         graphics.BlendState = BlendState.Additive;

@@ -85,7 +85,7 @@ namespace ShowPerfExtensions
 
       Showperf.OnClose += () => CUIMain["showperfButton"].Revealed = true;
 
-      //CUIMain["showperfButton"].Click();
+      CUIMain["showperfButton"].Click();
       //Showperf.Pages.Open(Showperf.Map);
 
 

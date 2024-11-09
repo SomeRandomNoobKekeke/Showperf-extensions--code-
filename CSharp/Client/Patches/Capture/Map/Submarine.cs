@@ -40,49 +40,33 @@ namespace ShowPerfExtensions
       static bool IsFromOutpostDrawnBehindSubs(Entity e)
             => e.Submarine is { Info.OutpostGenerationParams.DrawBehindSubs: true };
 
-      public static void DrawBack1(SpriteBatch spriteBatch)
+
+      public static void DrawBack(CaptureState cs, SpriteBatch spriteBatch, bool editing = false, Predicate<MapEntity> predicate = null)
       {
-        if (GameScreenPatch.BackStructures.IsActive)
+        if (!cs.IsActive)
         {
-          Submarine_DrawBack_Alt(GameScreenPatch.BackStructures, spriteBatch, false, e => e is Structure s && (e.SpriteDepth >= 0.9f || s.Prefab.BackgroundSprite != null) && !IsFromOutpostDrawnBehindSubs(e));
+          Submarine.DrawBack(spriteBatch, editing, predicate);
+          return;
         }
-        else
-        {
-          Submarine.DrawBack(spriteBatch, false, e => e is Structure s && (e.SpriteDepth >= 0.9f || s.Prefab.BackgroundSprite != null) && !IsFromOutpostDrawnBehindSubs(e));
-        }
+
+        Capture.Draw.EnsureCategory(cs);
+        Submarine_DrawBack_Alt(cs, spriteBatch, editing, predicate);
       }
 
-      public static void DrawBack2(SpriteBatch spriteBatch)
+      public static void DrawDamageable(CaptureState cs, SpriteBatch spriteBatch, Effect damageEffect, bool editing = false)
       {
-        Submarine.DrawBack(spriteBatch, false, e => e is Structure s && (e.SpriteDepth >= 0.9f || s.Prefab.BackgroundSprite != null) && IsFromOutpostDrawnBehindSubs(e));
-      }
-
-      public static void DrawBack3(SpriteBatch spriteBatch)
-      {
-        if (GameScreenPatch.BackCharactersItemsSubmarineDrawBack.IsActive)
+        if (!cs.IsActive)
         {
-          Submarine_DrawBack_Alt(GameScreenPatch.BackCharactersItemsSubmarineDrawBack, spriteBatch, false, e => !(e is Structure) || e.SpriteDepth < 0.9f);
+          Submarine.DrawDamageable(spriteBatch, damageEffect, editing);
+          return;
         }
-        else
-        {
-          Submarine.DrawBack(spriteBatch, false, e => !(e is Structure) || e.SpriteDepth < 0.9f);
-        }
-      }
 
-      public static void DrawDamageable1(SpriteBatch spriteBatch, Effect damageEffect, bool editing = false)
-      {
-        Submarine_DrawDamageable_Alt(GameScreenPatch.FrontDamageable, spriteBatch, damageEffect, editing);
-      }
-
-      public static void DrawDamageable2(SpriteBatch spriteBatch, Effect damageEffect, bool editing = false)
-      {
-        Submarine_DrawDamageable_Alt(LightManagerPatch.DrawDamageable, spriteBatch, damageEffect, editing);
+        Capture.Draw.EnsureCategory(cs);
+        Submarine_DrawDamageable_Alt(cs, spriteBatch, damageEffect, editing);
       }
 
       public static bool Submarine_DrawBack_Alt(CaptureState cs, SpriteBatch spriteBatch, bool editing = false, Predicate<MapEntity> predicate = null)
       {
-        Capture.Update.EnsureCategory(cs);
-
         var entitiesToRender = !editing && Submarine.visibleEntities != null ? Submarine.visibleEntities : MapEntity.MapEntityList;
 
         Stopwatch sw = new Stopwatch();
@@ -104,11 +88,11 @@ namespace ShowPerfExtensions
           {
             if (cs.ByID || e.Prefab == null)
             {
-              Capture.Update.AddTicks(sw.ElapsedTicks, cs, $"{e.Name} (ID: {e.ID})");
+              Capture.Draw.AddTicks(sw.ElapsedTicks, cs, $"{e.Name} (ID: {e.ID})");
             }
             else
             {
-              Capture.Update.AddTicks(sw.ElapsedTicks, cs, e.Prefab.Identifier);
+              Capture.Draw.AddTicks(sw.ElapsedTicks, cs, e.Prefab.Identifier);
             }
           }
         }
@@ -121,7 +105,6 @@ namespace ShowPerfExtensions
 
       public static bool Submarine_DrawDamageable_Alt(CaptureState cs, SpriteBatch spriteBatch, Effect damageEffect, bool editing = false, Predicate<MapEntity> predicate = null)
       {
-        Capture.Draw.EnsureCategory(cs);
         Stopwatch sw = new Stopwatch();
         Stopwatch sw2 = new Stopwatch();
 

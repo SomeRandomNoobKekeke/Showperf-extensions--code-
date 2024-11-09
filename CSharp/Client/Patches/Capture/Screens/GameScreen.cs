@@ -255,7 +255,7 @@ namespace ShowPerfExtensions
         //(= the background texture that's revealed when a wall is destroyed) into the background render target
         //These will be visible through the LOS effect.
         spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.NonPremultiplied, null, DepthStencilState.None, null, null, _.cam.Transform);
-        SubmarinePatch.DrawBack1(spriteBatch);
+        SubmarinePatch.DrawBack(BackStructures, spriteBatch, false, e => e is Structure s && (e.SpriteDepth >= 0.9f || s.Prefab.BackgroundSprite != null) && !IsFromOutpostDrawnBehindSubs(e));
 
         Submarine.DrawPaintedColors(spriteBatch, false);
         spriteBatch.End();
@@ -289,7 +289,7 @@ namespace ShowPerfExtensions
         }
 
         spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.NonPremultiplied, null, DepthStencilState.None, null, null, _.cam.Transform);
-        SubmarinePatch.DrawBack2(spriteBatch);
+        SubmarinePatch.DrawBack(BackLevel, spriteBatch, false, e => e is Structure s && (e.SpriteDepth >= 0.9f || s.Prefab.BackgroundSprite != null) && IsFromOutpostDrawnBehindSubs(e));
         spriteBatch.End();
 
         //draw alpha blended particles that are in water and behind subs
@@ -311,7 +311,7 @@ namespace ShowPerfExtensions
 
         sw.Stop();
         GameMain.PerformanceCounter.AddElapsedTicks("Draw:Map:BackLevel", sw.ElapsedTicks);
-        Capture.Draw.AddTicksOnce(sw.ElapsedTicks, BackLevel, "BackLevel");
+        //Capture.Draw.AddTicksOnce(sw.ElapsedTicks, BackLevel, "BackLevel");
         Capture.Draw.AddTicksOnce(sw.ElapsedTicks, DrawMap, "BackLevel");
         sw.Restart();
 
@@ -329,19 +329,12 @@ namespace ShowPerfExtensions
         spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.NonPremultiplied, null, DepthStencilState.None, null, null, _.cam.Transform);
 
         sw2.Restart();
-        SubmarinePatch.DrawBack3(spriteBatch);
+        SubmarinePatch.DrawBack(BackCharactersItemsSubmarineDrawBack, spriteBatch, false, e => !(e is Structure) || e.SpriteDepth < 0.9f);
         sw2.Stop();
         Capture.Draw.AddTicksOnce(sw2.ElapsedTicks, BackCharactersItems, "Submarine.DrawBack");
 
         sw2.Restart();
-        if (BackCharactersItemsDrawCharacters.IsActive)
-        {
-          DrawCharactersAlt(BackCharactersItemsDrawCharacters, deformed: false, firstPass: true);
-        }
-        else
-        {
-          DrawCharacters(deformed: false, firstPass: true);
-        }
+        DrawDrawCharactersProxy(BackCharactersItemsDrawCharacters, deformed: false, firstPass: true);
 
         sw2.Stop();
         Capture.Draw.AddTicksOnce(sw2.ElapsedTicks, BackCharactersItems, "DrawCharacters(deformed: false, firstPass: true)");
@@ -384,6 +377,18 @@ namespace ShowPerfExtensions
 
         spriteBatch.End();
 
+        void DrawDrawCharactersProxy(CaptureState cs, bool deformed, bool firstPass)
+        {
+          if (!cs.IsActive)
+          {
+            DrawCharacters(deformed, firstPass);
+            return;
+          }
+
+          Capture.Draw.EnsureCategory(cs);
+          DrawCharactersAlt(cs, deformed, firstPass);
+        }
+
         void DrawCharacters(bool deformed, bool firstPass)
         {
           //backwards order to render the most recently spawned characters in front (characters spawned later have a larger sprite depth)
@@ -406,8 +411,6 @@ namespace ShowPerfExtensions
 
         void DrawCharactersAlt(CaptureState cs, bool deformed, bool firstPass)
         {
-          Capture.Draw.EnsureCategory(cs);
-
           Stopwatch sw = new Stopwatch();
 
           //backwards order to render the most recently spawned characters in front (characters spawned later have a larger sprite depth)
@@ -451,7 +454,7 @@ namespace ShowPerfExtensions
 
         sw.Stop();
         GameMain.PerformanceCounter.AddElapsedTicks("Draw:Map:FrontLevel", sw.ElapsedTicks);
-        Capture.Draw.AddTicksOnce(sw.ElapsedTicks, FrontLevel, "FrontLevel");
+        //Capture.Draw.AddTicksOnce(sw.ElapsedTicks, FrontLevel, "FrontLevel");
         Capture.Draw.AddTicksOnce(sw.ElapsedTicks, DrawMap, "FrontLevel");
 
 
@@ -507,7 +510,7 @@ namespace ShowPerfExtensions
 
         if (FrontDamageable.IsActive)
         {
-          SubmarinePatch.DrawDamageable1(spriteBatch, _.DamageEffect, false);
+          SubmarinePatch.DrawDamageable(FrontDamageable, spriteBatch, _.DamageEffect, false);
         }
         else
         {
