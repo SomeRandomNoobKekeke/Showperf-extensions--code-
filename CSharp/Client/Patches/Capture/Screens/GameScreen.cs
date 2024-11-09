@@ -298,12 +298,12 @@ namespace ShowPerfExtensions
 #else
         spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.NonPremultiplied, null, DepthStencilState.None, null, null, _.cam.Transform);
 #endif
-        GameMain.ParticleManager.Draw(spriteBatch, true, false, Barotrauma.Particles.ParticleBlendState.AlphaBlend);
+        ParticleManagerPatch.Draw(BackLevel, spriteBatch, true, false, Barotrauma.Particles.ParticleBlendState.AlphaBlend);
         spriteBatch.End();
 
         //draw additive particles that are in water and behind subs
         spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.Additive, null, DepthStencilState.None, null, null, _.cam.Transform);
-        GameMain.ParticleManager.Draw(spriteBatch, true, false, Barotrauma.Particles.ParticleBlendState.Additive);
+        ParticleManagerPatch.Draw(BackLevel, spriteBatch, true, false, Barotrauma.Particles.ParticleBlendState.Additive);
         spriteBatch.End();
         spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.NonPremultiplied, null, DepthStencilState.None);
         spriteBatch.Draw(_.renderTarget, new Rectangle(0, 0, GameMain.GraphicsWidth, GameMain.GraphicsHeight), Color.White);
@@ -453,7 +453,7 @@ namespace ShowPerfExtensions
         GameMain.PerformanceCounter.AddElapsedTicks("Draw:Map:FrontLevel", sw.ElapsedTicks);
         Capture.Draw.AddTicksOnce(sw.ElapsedTicks, FrontLevel, "FrontLevel");
         Capture.Draw.AddTicksOnce(sw.ElapsedTicks, DrawMap, "FrontLevel");
-        sw.Restart();
+
 
         //draw the rendertarget and particles that are only supposed to be drawn in water into renderTargetWater
         graphics.SetRenderTarget(_.renderTargetWater);
@@ -465,24 +465,25 @@ namespace ShowPerfExtensions
 
         //draw alpha blended particles that are inside a sub
         spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.NonPremultiplied, null, DepthStencilState.DepthRead, null, null, _.cam.Transform);
-        GameMain.ParticleManager.Draw(spriteBatch, true, true, Barotrauma.Particles.ParticleBlendState.AlphaBlend);
+        ParticleManagerPatch.Draw(FrontParticles, spriteBatch, true, true, Barotrauma.Particles.ParticleBlendState.AlphaBlend);
         spriteBatch.End();
 
         graphics.SetRenderTarget(_.renderTarget);
 
         //draw alpha blended particles that are not in water
         spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.NonPremultiplied, null, DepthStencilState.DepthRead, null, null, _.cam.Transform);
-        GameMain.ParticleManager.Draw(spriteBatch, false, null, Barotrauma.Particles.ParticleBlendState.AlphaBlend);
+        ParticleManagerPatch.Draw(FrontParticles, spriteBatch, false, null, Barotrauma.Particles.ParticleBlendState.AlphaBlend);
         spriteBatch.End();
 
         //draw additive particles that are not in water
         spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.Additive, null, DepthStencilState.None, null, null, _.cam.Transform);
-        GameMain.ParticleManager.Draw(spriteBatch, false, null, Barotrauma.Particles.ParticleBlendState.Additive);
+        ParticleManagerPatch.Draw(FrontParticles, spriteBatch, false, null, Barotrauma.Particles.ParticleBlendState.Additive);
         spriteBatch.End();
 
         graphics.DepthStencilState = DepthStencilState.DepthRead;
         graphics.SetRenderTarget(_.renderTargetFinal);
 
+        sw.Restart();
         WaterRenderer.Instance.ResetBuffers();
         Hull.UpdateVertices(_.cam, WaterRenderer.Instance);
         WaterRenderer.Instance.RenderWater(spriteBatch, _.renderTargetWater, _.cam);
@@ -490,8 +491,10 @@ namespace ShowPerfExtensions
         graphics.DepthStencilState = DepthStencilState.None;
 
         sw.Stop();
+        Capture.Draw.AddTicksOnce(sw.ElapsedTicks, FrontParticles, "RenderWater");
+
         GameMain.PerformanceCounter.AddElapsedTicks("Draw:Map:FrontParticles", sw.ElapsedTicks);
-        Capture.Draw.AddTicksOnce(sw.ElapsedTicks, FrontParticles, "FrontParticles");
+        //Capture.Draw.AddTicksOnce(sw.ElapsedTicks, FrontParticles, "FrontParticles");
         Capture.Draw.AddTicksOnce(sw.ElapsedTicks, DrawMap, "FrontParticles");
         sw.Restart();
 
@@ -527,15 +530,24 @@ namespace ShowPerfExtensions
         GameMain.PerformanceCounter.AddElapsedTicks("Draw:Map:FrontStructuresItems", sw.ElapsedTicks);
         Capture.Draw.AddTicksOnce(sw.ElapsedTicks, FrontStructuresItems, "FrontStructuresItems");
         Capture.Draw.AddTicksOnce(sw.ElapsedTicks, DrawMap, "FrontStructuresItems");
-        sw.Restart();
+
 
         //draw additive particles that are inside a sub
+        Capture.Draw.EnsureCategory(FrontMisc);
+
+
         spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.Additive, null, DepthStencilState.Default, null, null, _.cam.Transform);
-        GameMain.ParticleManager.Draw(spriteBatch, true, true, Barotrauma.Particles.ParticleBlendState.Additive);
+
+        ParticleManagerPatch.Draw(FrontMisc, spriteBatch, true, true, Barotrauma.Particles.ParticleBlendState.Additive);
+        sw.Restart();
         foreach (var discharger in Barotrauma.Items.Components.ElectricalDischarger.List)
         {
           discharger.DrawElectricity(spriteBatch);
         }
+        sw.Stop();
+        Capture.Draw.AddTicks(sw.ElapsedTicks, FrontMisc, "DrawElectricity");
+        sw.Restart();
+
         spriteBatch.End();
         if (GameMain.LightManager.LightingEnabled)
         {
@@ -546,13 +558,28 @@ namespace ShowPerfExtensions
           GraphicsQuad.Render();
         }
 
+        sw.Stop();
+        Capture.Draw.AddTicks(sw.ElapsedTicks, FrontMisc, "GraphicsQuad.Render LightManager");
+
+
         spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.NonPremultiplied, SamplerState.LinearWrap, DepthStencilState.None, null, null, _.cam.Transform);
         foreach (Character c in Character.CharacterList)
         {
+          sw.Restart();
           c.DrawFront(spriteBatch, _.cam);
+          sw.Stop();
+          Capture.Draw.AddTicks(sw.ElapsedTicks, FrontMisc, $"{c} DrawFront");
         }
 
+
+        Capture.Draw.AddTicks(sw.ElapsedTicks, FrontMisc, "Character.DrawFront");
+        sw.Restart();
+
         GameMain.LightManager.DebugDrawVertices(spriteBatch);
+
+        sw.Stop();
+        Capture.Draw.AddTicks(sw.ElapsedTicks, FrontMisc, "LightManager.DebugDrawVertices");
+        sw.Restart();
 
         Level.Loaded?.DrawDebugOverlay(spriteBatch, _.cam);
         if (GameMain.DebugDraw)
@@ -564,11 +591,15 @@ namespace ShowPerfExtensions
             GameMain.GameSession.EventManager.DebugDraw(spriteBatch);
           }
         }
-        spriteBatch.End();
 
         sw.Stop();
+        Capture.Draw.AddTicks(sw.ElapsedTicks, FrontMisc, "Level.DrawDebugOverlay");
+
+        spriteBatch.End();
+
+
         GameMain.PerformanceCounter.AddElapsedTicks("Draw:Map:FrontMisc", sw.ElapsedTicks);
-        Capture.Draw.AddTicksOnce(sw.ElapsedTicks, FrontMisc, "FrontMisc");
+        //Capture.Draw.AddTicks(sw.ElapsedTicks, FrontMisc, "FrontMisc");
         Capture.Draw.AddTicksOnce(sw.ElapsedTicks, DrawMap, "FrontMisc");
         sw.Restart();
 

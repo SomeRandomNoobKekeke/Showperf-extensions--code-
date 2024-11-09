@@ -65,8 +65,6 @@ namespace ShowPerfExtensions
       }
 
 
-
-
       public static void Find()
       {
         try
@@ -126,25 +124,20 @@ namespace ShowPerfExtensions
             }
           }
 
-
-
-          foreach (LightSource l in GameMain.LightManager.Lights)
-          {
-            if (!LightSource_Parent.ContainsKey(l))
-            {
-              l.LightSourceParams.Range = 1000;
-              l.LightSourceParams.Color = Color.White;
-              l.LightSourceParams.Flicker = 1;
-              l.LightSourceParams.FlickerSpeed = 10;
-              l.LightSourceParams.PulseAmount = 1;
-              l.LightSourceParams.BlinkFrequency = 10;
-            }
-          }
+          // foreach (LightSource l in GameMain.LightManager.Lights)
+          // {
+          //   if (!LightSource_Parent.ContainsKey(l))
+          //   {
+          //     l.LightSourceParams.Range = 1000;
+          //     l.LightSourceParams.Color = Color.White;
+          //     l.LightSourceParams.Flicker = 1;
+          //     l.LightSourceParams.FlickerSpeed = 10;
+          //     l.LightSourceParams.PulseAmount = 1;
+          //     l.LightSourceParams.BlinkFrequency = 10;
+          //   }
+          // }
         }
-        catch (Exception e)
-        {
-          error(e);
-        }
+        catch (Exception e) { error(e); }
       }
 
 

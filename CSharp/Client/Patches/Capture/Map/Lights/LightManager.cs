@@ -399,7 +399,7 @@ namespace ShowPerfExtensions
             catch (Exception e) { error(e); }
           }
         }
-        GameMain.ParticleManager.Draw(spriteBatch, true, null, Barotrauma.Particles.ParticleBlendState.Additive);
+        ParticleManagerPatch.Draw(BackgroundLights, spriteBatch, true, null, Barotrauma.Particles.ParticleBlendState.Additive);
         spriteBatch.End();
 
         sw.Stop();
@@ -518,10 +518,12 @@ namespace ShowPerfExtensions
         sw.Stop();
         Capture.Draw.AddTicks(sw.ElapsedTicks, Lighting, "draw the focused item and character to highlight them and light sprites (done before drawing the actual light volumes so we can make characters obstruct the highlights and sprites)");
         //Capture.Draw.AddTicks(sw.ElapsedTicks, DrawHighlights, "Draw highlights");
-        sw.Restart();
 
         //draw characters to obstruct the highlighted items/characters and light sprites
         //---------------------------------------------------------------------------------------------------
+        Capture.Draw.EnsureCategory(CharactersToObstruct);
+        sw.Restart();
+
         if (cam.Zoom > LightManager.ObstructLightsBehindCharactersZoomThreshold)
         {
           _.SolidColorEffect.CurrentTechnique = _.SolidColorEffect.Techniques["SolidVertexColor"];
@@ -538,13 +540,16 @@ namespace ShowPerfExtensions
 
         sw.Stop();
         Capture.Draw.AddTicks(sw.ElapsedTicks, Lighting, "draw characters to obstruct the highlighted items/characters and light sprites");
-        Capture.Draw.AddTicksOnce(sw.ElapsedTicks, CharactersToObstruct, "draw characters to obstruct the highlighted items");
+        //Capture.Draw.AddTicksOnce(sw.ElapsedTicks, CharactersToObstruct, "draw characters to obstruct the highlighted items");
         sw.Restart();
 
         static void DrawCharacters(SpriteBatch spriteBatch, Camera cam, bool drawDeformSprites)
         {
+          Stopwatch swdeep = new Stopwatch();
           foreach (Character character in Character.CharacterList)
           {
+            swdeep.Restart();
+
             if (character.CurrentHull == null || !character.Enabled || !character.IsVisible || character.InvisibleTimer > 0.0f) { continue; }
             if (Character.Controlled?.FocusedCharacter == character) { continue; }
             Color lightColor = character.CurrentHull.AmbientLight == Color.TransparentBlack ?
@@ -559,6 +564,9 @@ namespace ShowPerfExtensions
             {
               heldItem.Draw(spriteBatch, editing: false, overrideColor: Color.Black);
             }
+
+            swdeep.Stop();
+            Capture.Draw.AddTicks(swdeep.ElapsedTicks, CharactersToObstruct, character.Info?.DisplayName ?? character.ToString());
           }
         }
 
@@ -630,7 +638,7 @@ namespace ShowPerfExtensions
 
         _.lightEffect.World = transform;
 
-        GameMain.ParticleManager.Draw(spriteBatch, false, null, Barotrauma.Particles.ParticleBlendState.Additive);
+        ParticleManagerPatch.Draw(LightVolumes, spriteBatch, false, null, Barotrauma.Particles.ParticleBlendState.Additive);
 
         sw2.Stop();
         Capture.Draw.AddTicksOnce(sw2.ElapsedTicks, LightVolumes, "Draw Additive particles");

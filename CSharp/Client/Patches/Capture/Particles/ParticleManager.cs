@@ -11,7 +11,11 @@ using Barotrauma;
 using HarmonyLib;
 
 using Barotrauma.Particles;
-
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace ShowPerfExtensions
 {
@@ -29,6 +33,47 @@ namespace ShowPerfExtensions
         );
 
         UpdateParticles = Capture.Get("Showperf.Update.Particles");
+      }
+
+      public static void Draw(CaptureState cs, SpriteBatch spriteBatch, bool inWater, bool? inSub, ParticleBlendState blendState, bool? background = null)
+      {
+        ParticleManager _ = GameMain.ParticleManager;
+
+        if (!cs.IsActive)
+        {
+          _.Draw(spriteBatch, inWater, inSub, blendState, background);
+          return;
+        }
+
+        Capture.Draw.EnsureCategory(cs);
+        Stopwatch sw = new Stopwatch();
+
+
+        ParticlePrefab.DrawTargetType drawTarget = inWater ? ParticlePrefab.DrawTargetType.Water : ParticlePrefab.DrawTargetType.Air;
+
+        foreach (var particle in _.particlesInCreationOrder)
+        {
+          sw.Restart();
+          if (particle.BlendState != blendState) { continue; }
+          //equivalent to !particles[i].DrawTarget.HasFlag(drawTarget) but garbage free and faster
+          if ((particle.DrawTarget & drawTarget) == 0) { continue; }
+          if (inSub.HasValue)
+          {
+            bool isOutside = particle.CurrentHull == null;
+            if (particle.DrawOrder != ParticleDrawOrder.Foreground && isOutside == inSub.Value)
+            {
+              continue;
+            }
+          }
+          if (background.HasValue)
+          {
+            bool isBackgroundParticle = particle.DrawOrder == ParticleDrawOrder.Background;
+            if (background.Value != isBackgroundParticle) { continue; }
+          }
+          particle.Draw(spriteBatch);
+          sw.Stop();
+          Capture.Draw.AddTicks(sw.ElapsedTicks, cs, particle.ToString());
+        }
       }
 
       public static bool ParticleManager_Update_Replace(float deltaTime, ParticleManager __instance)
