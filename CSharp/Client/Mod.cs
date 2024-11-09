@@ -98,6 +98,7 @@ namespace ShowPerfExtensions
 
       //addCommands();
 
+      FindLightSourceParents.Find();
 
       info($"{ModName} Initialized");
     }
@@ -109,7 +110,7 @@ namespace ShowPerfExtensions
     {
       //removeCommands();
       CUI.Dispose();
-      LightSource_LightComponent.Clear();
+      LightSource_Parent.Clear();
       info($"{ModName} Disposed");
     }
   }

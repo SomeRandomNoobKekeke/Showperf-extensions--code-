@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<CUICaptureMap ChildrenOffset="[180.09563,105.25073,1.144]" Relative="[0,0,1,1]">
+<CUICaptureMap ChildrenOffset="[-205.80835,17.943085,1]" Relative="[0,0,1,1]">
   <Connections>
     <Connection Start="Showperf.Draw" End="Draw" />
     <Connection Start="Draw.Map" End="Map" />
@@ -63,7 +63,7 @@
         <MapButton AKA="Level" CState="Showperf.Update.Level" Text="Level" />
         <MapButton AKA="MapEntity" CState="Showperf.Update.MapEntity" Text="MapEntity" />
         <MapButton AKA="Particles" CState="Showperf.Update.Particles" Text="Particles" />
-        <MapButton AKA="Physics" CState="Showperf.Update.Physics" State="true" Text="Physics" />
+        <MapButton AKA="Physics" CState="Showperf.Update.Physics" Text="Physics" />
         <MapButton AKA="Power" CState="Showperf.Update.Power" Text="Power" />
         <MapButton AKA="Animations" CState="Showperf.Update.Animations" Text="Animations" />
         <MapButton AKA="Ragdolls" CState="Showperf.Update.Ragdolls" Text="Ragdolls" />
@@ -105,18 +105,18 @@
         <MapButton AKA="Store" CState="Showperf.Update.GameSession.Store" Text="Store" />
       </CUIVerticalList>
     </MapGroup>
-    <MapGroup AKA="Lighting" Absolute="[287.0639,147.27992,,167.4]" ConsumeSwipe="true" Draggable="true">
+    <MapGroup AKA="Lighting" Absolute="[286.06396,149.27994,,167.4]" ConsumeSwipe="true" Draggable="true">
       <MapButton AKA="Lighting" CState="Showperf.Draw.Map.Lighting" Text="Lighting" TextAlign="{X:0.5 Y:0.5}" TextScale="1.2" />
-      <CUIVerticalList Absolute="[,,,145.79999]" AbsoluteMin="[,,297.4,]" FitContent="[True,True]">
-        <MapButton AKA="UpdateHighlights" CState="Showperf.Draw.Map.Lighting.UpdateHighlights" Text="UpdateHighlights" />
+      <CUIVerticalList Absolute="[,,,145.79999]" AbsoluteMin="[,,183.09999,]" FitContent="[True,True]">
+        <MapButton AKA="UpdateHighlights" CState="Showperf.Draw.Map.Lighting.UpdateHighlights" Text="Update Highlights" />
         <MapButton AKA="FindActiveLights" CState="Showperf.Draw.Map.Lighting.FindActiveLights" Text="Find active lights" />
-        <MapButton AKA="AttachedToCharacters" CState="Showperf.Draw.Map.Lighting.AttachedToCharacters" Text="draw light sprites attached to characters" />
-        <MapButton AKA="BackgroundLights" CState="Showperf.Draw.Map.Lighting.BackgroundLights" Text="draw background lights" />
-        <MapButton AKA="BlackRectangles" CState="Showperf.Draw.Map.Lighting.BlackRectangles" Text="draw a black rectangle on hulls" />
-        <MapButton AKA="DrawDamageable" CState="Showperf.Draw.Map.Lighting.DrawDamageable" Text="Draw damageable" />
-        <MapButton AKA="DrawHighlights" CState="Showperf.Draw.Map.Lighting.DrawHighlights" Text="Draw highlights" />
-        <MapButton AKA="CharactersToObstruct" CState="Showperf.Draw.Map.Lighting.CharactersToObstruct" Text="draw characters to obstruct the highlighted items" />
-        <MapButton AKA="LightVolumes" CState="Showperf.Draw.Map.Lighting.LightVolumes" Text="draw the actual light volumes, additive particles" />
+        <MapButton AKA="AttachedToCharacters" CState="Showperf.Draw.Map.Lighting.AttachedToCharacters" Text="attached to characters" />
+        <MapButton AKA="BackgroundLights" CState="Showperf.Draw.Map.Lighting.BackgroundLights" Text="background lights" />
+        <MapButton AKA="BlackRectangles" CState="Showperf.Draw.Map.Lighting.BlackRectangles" Text="black rectangle on hulls" />
+        <MapButton AKA="DrawDamageable" CState="Showperf.Draw.Map.Lighting.DrawDamageable" Text="damageable" />
+        <MapButton AKA="DrawHighlights" CState="Showperf.Draw.Map.Lighting.DrawHighlights" Text="highlights" />
+        <MapButton AKA="CharactersToObstruct" CState="Showperf.Draw.Map.Lighting.CharactersToObstruct" Text="obstruct highlight" />
+        <MapButton AKA="LightVolumes" CState="Showperf.Draw.Map.Lighting.LightVolumes" State="true" Text="light volumes" />
       </CUIVerticalList>
     </MapGroup>
   </Children>

@@ -24,7 +24,7 @@ namespace ShowPerfExtensions
 
       public UpdateTicks(double ticks, int category, string name, int hash)
       {
-        Name = name;
+        Name = name ?? "";
         Hash = hash;
         Ticks = ticks;
         Category = category;
@@ -38,8 +38,8 @@ namespace ShowPerfExtensions
       }
       public UpdateTicks(double ticks, int category, string name)
       {
-        Name = name;
-        Hash = name.GetHashCode();
+        Name = name ?? "";
+        Hash = Name.GetHashCode();
         Ticks = ticks;
         Category = category;
       }

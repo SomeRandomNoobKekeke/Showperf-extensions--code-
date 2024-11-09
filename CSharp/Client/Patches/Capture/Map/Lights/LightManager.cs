@@ -325,25 +325,49 @@ namespace ShowPerfExtensions
         //render into a separate rendertarget using alpha blending (instead of on top of everything else with alpha blending)
         //to prevent the lights from showing through other characters or other light sprites attached to the same character
         //---------------------------------------------------------------------------------------------------
+        Capture.Draw.EnsureCategory(AttachedToCharacters);
+
         graphics.SetRenderTarget(_.LimbLightMap);
         graphics.Clear(Color.Black);
         graphics.BlendState = BlendState.NonPremultiplied;
         spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.NonPremultiplied, transformMatrix: spriteBatchTransform);
         foreach (LightSource light in _.activeLights)
         {
+          sw3.Restart();
           if (light.IsBackground || light.CurrentBrightness <= 0.0f) { continue; }
           //draw limb lights at this point, because they were skipped over previously to prevent them from being obstructed
           if (light.ParentBody?.UserData is Limb limb && !limb.Hide) { light.DrawSprite(spriteBatch, cam); }
+          sw3.Stop();
+          if (AttachedToCharacters.IsActive)
+          {
+            try
+            {
+              if (!LightSource_Parent.ContainsKey(light)) continue;
+              LightSourceParentInfo lp = LightSource_Parent[light];
+
+              if (AttachedToCharacters.ByID)
+              {
+                Capture.Draw.AddTicks(sw3.ElapsedTicks, AttachedToCharacters, lp.Name);
+              }
+              else
+              {
+                Capture.Draw.AddTicks(sw3.ElapsedTicks, AttachedToCharacters, lp.GenericName);
+              }
+            }
+            catch (Exception e) { error(e); }
+          }
         }
         spriteBatch.End();
 
         sw.Stop();
         Capture.Draw.AddTicks(sw.ElapsedTicks, Lighting, "draw light sprites attached to characters. Render into a separate rendertarget using alpha blending (instead of on top of everything else with alpha blending) to prevent the lights from showing through other characters or other light sprites attached to the same character");
-        Capture.Draw.AddTicksOnce(sw.ElapsedTicks, AttachedToCharacters, "draw light sprites attached to characters");
+        //Capture.Draw.AddTicks(sw.ElapsedTicks, AttachedToCharacters, "draw light sprites attached to characters");
         sw.Restart();
 
         //draw background lights
         //---------------------------------------------------------------------------------------------------
+        Capture.Draw.EnsureCategory(BackgroundLights);
+
         graphics.SetRenderTarget(_.LightMap);
         graphics.Clear(_.AmbientLight);
         graphics.BlendState = BlendState.Additive;
@@ -351,16 +375,36 @@ namespace ShowPerfExtensions
         Level.Loaded?.BackgroundCreatureManager?.DrawLights(spriteBatch, cam);
         foreach (LightSource light in _.activeLights)
         {
+          sw3.Restart();
           if (!light.IsBackground || light.CurrentBrightness <= 0.0f) { continue; }
           light.DrawLightVolume(spriteBatch, _.lightEffect, transform, recalculationCount < LightManager.MaxLightVolumeRecalculationsPerFrame, ref recalculationCount);
           light.DrawSprite(spriteBatch, cam);
+          sw.Stop();
+          if (BackgroundLights.IsActive)
+          {
+            try
+            {
+              if (!LightSource_Parent.ContainsKey(light)) continue;
+              LightSourceParentInfo lp = LightSource_Parent[light];
+
+              if (BackgroundLights.ByID)
+              {
+                Capture.Draw.AddTicks(sw3.ElapsedTicks, BackgroundLights, lp.Name);
+              }
+              else
+              {
+                Capture.Draw.AddTicks(sw3.ElapsedTicks, BackgroundLights, lp.GenericName);
+              }
+            }
+            catch (Exception e) { error(e); }
+          }
         }
         GameMain.ParticleManager.Draw(spriteBatch, true, null, Barotrauma.Particles.ParticleBlendState.Additive);
         spriteBatch.End();
 
         sw.Stop();
         Capture.Draw.AddTicks(sw.ElapsedTicks, Lighting, "draw background lights");
-        Capture.Draw.AddTicksOnce(sw.ElapsedTicks, BackgroundLights, "draw background lights");
+        //Capture.Draw.AddTicks(sw.ElapsedTicks, BackgroundLights, "draw background lights");
         sw.Restart();
 
         //draw a black rectangle on hulls to hide background lights behind subs
@@ -432,12 +476,35 @@ namespace ShowPerfExtensions
         //draw the focused item and character to highlight them,
         //and light sprites (done before drawing the actual light volumes so we can make characters obstruct the highlights and sprites)
         //---------------------------------------------------------------------------------------------------
+        Capture.Draw.EnsureCategory(DrawHighlights);
+
         spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.Additive, transformMatrix: spriteBatchTransform);
         foreach (LightSource light in _.activeLights)
         {
           //don't draw limb lights at this point, they need to be drawn after lights have been obstructed by characters
+
+          sw3.Restart();
           if (light.IsBackground || light.ParentBody?.UserData is Limb || light.CurrentBrightness <= 0.0f) { continue; }
           light.DrawSprite(spriteBatch, cam);
+          sw3.Stop();
+          if (DrawHighlights.IsActive)
+          {
+            try
+            {
+              if (!LightSource_Parent.ContainsKey(light)) continue;
+              LightSourceParentInfo lp = LightSource_Parent[light];
+
+              if (DrawHighlights.ByID)
+              {
+                Capture.Draw.AddTicks(sw3.ElapsedTicks, DrawHighlights, lp.Name);
+              }
+              else
+              {
+                Capture.Draw.AddTicks(sw3.ElapsedTicks, DrawHighlights, lp.GenericName);
+              }
+            }
+            catch (Exception e) { error(e); }
+          }
         }
         spriteBatch.End();
 
@@ -450,7 +517,7 @@ namespace ShowPerfExtensions
 
         sw.Stop();
         Capture.Draw.AddTicks(sw.ElapsedTicks, Lighting, "draw the focused item and character to highlight them and light sprites (done before drawing the actual light volumes so we can make characters obstruct the highlights and sprites)");
-        Capture.Draw.AddTicksOnce(sw.ElapsedTicks, DrawHighlights, "Draw highlights");
+        //Capture.Draw.AddTicks(sw.ElapsedTicks, DrawHighlights, "Draw highlights");
         sw.Restart();
 
         //draw characters to obstruct the highlighted items/characters and light sprites
@@ -524,19 +591,21 @@ namespace ShowPerfExtensions
           sw3.Stop();
           if (LightVolumes.IsActive)
           {
-            LightComponent lc = Mod.LightSource_LightComponent.GetValueOrDefault(light);
-            if (lc == null) continue;
-
-
-            if (LightVolumes.ByID)
+            try
             {
-              Capture.Draw.AddTicks(sw3.ElapsedTicks, LightVolumes, lc.Item?.ToString());
-            }
-            else
-            {
-              Capture.Draw.AddTicks(sw3.ElapsedTicks, LightVolumes, lc.Item?.Prefab?.Identifier ?? lc.Item?.ToString());
-            }
+              if (!LightSource_Parent.ContainsKey(light)) continue;
+              LightSourceParentInfo lp = LightSource_Parent[light];
 
+              if (LightVolumes.ByID)
+              {
+                Capture.Draw.AddTicks(sw3.ElapsedTicks, LightVolumes, lp.Name);
+              }
+              else
+              {
+                Capture.Draw.AddTicks(sw3.ElapsedTicks, LightVolumes, lp.GenericName);
+              }
+            }
+            catch (Exception e) { error(e); }
           }
         }
 

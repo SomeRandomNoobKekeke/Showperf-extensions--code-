@@ -163,7 +163,14 @@ namespace ShowPerfExtensions
           sw2.Stop();
           if (Capture.ShouldCapture(s))
           {
-            Capture.Draw.AddTicks(sw2.ElapsedTicks, cs, s.ToString());
+            if (cs.ByID)
+            {
+              Capture.Draw.AddTicks(sw2.ElapsedTicks, cs, $"{s} ({s.ID})");
+            }
+            else
+            {
+              Capture.Draw.AddTicks(sw2.ElapsedTicks, cs, s.ToString());
+            }
           }
         }
         if (damageEffect != null)
