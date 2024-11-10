@@ -14,7 +14,7 @@ using HarmonyLib;
 
 namespace CrabUI
 {
-  public static partial class CUI
+  public partial class CUI
   {
 
     public static Dictionary<string, Type> CUITypes = new Dictionary<string, Type>();

@@ -16,9 +16,11 @@ using HarmonyLib;
 
 namespace CrabUI
 {
-  public static partial class CUI
+  public partial class CUI
   {
-    public static CUIMainComponent Main => CUIMainComponent.Main;
+    public static CUI Instance;
+
+    public static CUIMainComponent Main;
     public static CUIInput Input = new CUIInput();
 
     public static string ModDir => ShowPerfExtensions.Plugin.Mod.ModDir;
@@ -30,27 +32,39 @@ namespace CrabUI
       LuaCsLogger.LogMessage($"{msg ?? "null"}", cl * 0.8f, cl);
     }
 
-    private static Harmony harmony;
-    public static bool Initialized;
+    private static Harmony harmony = new Harmony("crabui");
+
     public static void Initialize()
     {
-      if (Initialized) return;
+      if (Instance != null)
+      {
+        Dispose();
+        Instance = null;
+      }
 
-      harmony = new Harmony("crabui");
-      patchAll();
-      AddCommands();
+      Instance = new CUI();
 
-      Initialized = true;
+      CUIComponent.MaxID = 0;
+      CUITypes.Clear();
+      CUITypeMetaData.TypeMetaData.Clear();
+      CUIComponent.ComponentsById.Clear();
+      CUIDebugEventComponent.CapturedIDs.Clear();
+
+      Main = new CUIMainComponent();
+
+      PatchAll();
+      Instance.AddCommands();
     }
 
     public static void Dispose()
     {
-      RemoveCommands();
-      Initialized = false;
+      Instance.RemoveCommands();
     }
 
-    private static void patchAll()
+    private static void PatchAll()
     {
+      harmony.UnpatchAll("crabui");
+
       harmony.Patch(
         original: typeof(GUI).GetMethod("Draw", AccessTools.all),
         prefix: new HarmonyMethod(typeof(CUI).GetMethod("CUIDraw", AccessTools.all))

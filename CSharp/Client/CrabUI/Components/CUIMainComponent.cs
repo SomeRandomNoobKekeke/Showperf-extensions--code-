@@ -15,7 +15,7 @@ namespace CrabUI
 {
   public class CUIMainComponent : CUIComponent
   {
-    public static CUIMainComponent Main;
+    public static CUIMainComponent Main => CUI.Main;
 
     public long DrawTime;
     public long UpdateTime;
@@ -320,9 +320,6 @@ namespace CrabUI
       //IgnoreEvents = true;
       ShouldPassPropsToChildren = false;
       sw = new Stopwatch();
-
-      Main = this;
-      CUI.Initialize();
     }
   }
 }

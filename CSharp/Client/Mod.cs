@@ -31,8 +31,6 @@ namespace ShowPerfExtensions
 
     public static CaptureClass Capture;
     public static CUIShowperf Showperf;
-    public static CUIMainComponent CUIMain;
-
 
     public void InitStatic()
     {
@@ -60,8 +58,12 @@ namespace ShowPerfExtensions
 
       //GameMain.PerformanceCounter.DrawTimeGraph = new Graph(1000);
 
-      CUIMain = new CUIMainComponent();
-
+      CUI.Initialize();
+      CUI.Initialize();
+      CUI.Initialize();
+      CUI.Initialize();
+      CUI.Initialize();
+      CUI.Initialize();
 
       Showperf = new CUIShowperf()
       {
@@ -71,14 +73,14 @@ namespace ShowPerfExtensions
       Showperf.CreateGUI();
 
       Showperf.Absolute = new CUINullRect(
-        CUIAnchor.GetChildPos(CUIMain.Real, new Vector2(1, 0.5f), new Vector2(-1, 0), Showperf.Absolute.Size),
+        CUIAnchor.GetChildPos(CUI.Main.Real, new Vector2(1, 0.5f), new Vector2(-1, 0), Showperf.Absolute.Size),
         Showperf.Absolute.Size
       );
 
       Showperf.States["init"] = Showperf.Clone();
       Showperf.OnUpdate += () => Showperf.Update();
 
-      CUIMain["showperfButton"] = new CUIButton("SHOWPERF")
+      CUI.Main["showperfButton"] = new CUIButton("SHOWPERF")
       {
         Anchor = new Vector2(1, 0.5f),
         Font = GUIStyle.MonospacedFont,
@@ -86,7 +88,7 @@ namespace ShowPerfExtensions
         Wrap = true,
         AddOnMouseDown = (e) =>
         {
-          CUIMain["showperfButton"].Revealed = false;
+          CUI.Main["showperfButton"].Revealed = false;
           Showperf.Open();
         },
         InactiveColor = new Color(0, 0, 32, 128),
@@ -94,9 +96,9 @@ namespace ShowPerfExtensions
         MousePressedColor = new Color(0, 0, 128, 128),
       };
 
-      Showperf.OnClose += () => CUIMain["showperfButton"].Revealed = true;
+      Showperf.OnClose += () => CUI.Main["showperfButton"].Revealed = true;
 
-      CUIMain["showperfButton"].Click();
+      CUI.Main["showperfButton"].Click();
       //Showperf.Pages.Open(Showperf.Map);
 
 

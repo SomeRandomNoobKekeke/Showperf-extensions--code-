@@ -51,6 +51,5 @@ namespace CrabUI
       Parse[typeof(Color)] = typeof(CUIExtensions).GetMethod("ParseColor");
       Parse[typeof(Vector2)] = typeof(CUIExtensions).GetMethod("ParseVector2");
     }
-
   }
 }

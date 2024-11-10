@@ -122,7 +122,6 @@ namespace CrabUI
     }
     #endregion
     #region ------------------ CUIDropDown ------------------
-    public static CUIDropDown Default = new CUIDropDown();
 
     [CUISerializable]
     public GUISoundType ClickSound { get; set; } = GUISoundType.Select;
