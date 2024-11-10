@@ -801,8 +801,8 @@ namespace ShowPerfExtensions
 #if CLIENT
         sw.Start();
         GameMain.LightManager?.Update((float)deltaTime);
-        Capture.Update.AddTicksOnce(sw.ElapsedTicks, UpdateLightManager, "Update.LightManager");
-        Capture.Update.AddTicksOnce(sw.ElapsedTicks, Update, "Update.LightManager");
+        Capture.Update.AddTicksOnce(sw.ElapsedTicks, UpdateLightManager, "LightManager");
+        Capture.Update.AddTicksOnce(sw.ElapsedTicks, Update, "LightManager");
         sw.Stop();
 #endif
 
@@ -894,33 +894,33 @@ namespace ShowPerfExtensions
 #if CLIENT
         sw.Stop();
         GameMain.PerformanceCounter.AddElapsedTicks("Update:GameSession", sw.ElapsedTicks);
-        //Capture.Update.AddTicksOnce(sw.ElapsedTicks, UpdateGameSession, "Update.GameSession");
-        Capture.Update.AddTicksOnce(sw.ElapsedTicks, Update, "Update.GameSession");
+        //Capture.Update.AddTicksOnce(sw.ElapsedTicks, UpdateGameSession, "GameSession");
+        Capture.Update.AddTicksOnce(sw.ElapsedTicks, Update, "GameSession");
         sw.Restart();
 
         GameMain.ParticleManager.Update((float)deltaTime);
 
         sw.Stop();
         GameMain.PerformanceCounter.AddElapsedTicks("Update:Particles", sw.ElapsedTicks);
-        Capture.Update.AddTicksOnce(sw.ElapsedTicks, Update, "Update.Particles");
+        Capture.Update.AddTicksOnce(sw.ElapsedTicks, Update, "Particles");
         sw.Restart();
 
         if (Level.Loaded != null) Level.Loaded.Update((float)deltaTime, _.cam);
 
         sw.Stop();
         GameMain.PerformanceCounter.AddElapsedTicks("Update:Level", sw.ElapsedTicks);
-        Capture.Update.AddTicksOnce(sw.ElapsedTicks, Update, "Update.Level");
+        Capture.Update.AddTicksOnce(sw.ElapsedTicks, Update, "Level");
 
+        sw.Restart();
         Capture.Update.EnsureCategory(UpdateItemsHUD);
         if (Character.Controlled is { } controlled)
         {
           if (controlled.SelectedItem != null && controlled.CanInteractWith(controlled.SelectedItem))
           {
-            sw.Restart();
+            sw2.Restart();
             controlled.SelectedItem.UpdateHUD(_.cam, controlled, (float)deltaTime);
-            sw.Stop();
-            Capture.Update.AddTicks(sw.ElapsedTicks, UpdateItemsHUD, controlled.SelectedItem.ToString());
-            Capture.Update.AddTicks(sw.ElapsedTicks, Update, controlled.SelectedItem.ToString());
+            sw2.Stop();
+            Capture.Update.AddTicks(sw2.ElapsedTicks, UpdateItemsHUD, controlled.SelectedItem.ToString());
           }
           if (controlled.Inventory != null)
           {
@@ -928,15 +928,17 @@ namespace ShowPerfExtensions
             {
               if (controlled.HasEquippedItem(item))
               {
-                sw.Restart();
+                sw2.Restart();
                 item.UpdateHUD(_.cam, controlled, (float)deltaTime);
-                sw.Stop();
-                Capture.Update.AddTicks(sw.ElapsedTicks, UpdateItemsHUD, item.ToString());
-                Capture.Update.AddTicks(sw.ElapsedTicks, Update, item.ToString());
+                sw2.Stop();
+                Capture.Update.AddTicks(sw2.ElapsedTicks, UpdateItemsHUD, item.ToString());
+
               }
             }
           }
         }
+        sw.Stop();
+        Capture.Update.AddTicksOnce(sw.ElapsedTicks, Update, "Equiped items HUD");
 
         sw.Restart();
 
@@ -950,7 +952,7 @@ namespace ShowPerfExtensions
 #if CLIENT
         sw.Stop();
         GameMain.PerformanceCounter.AddElapsedTicks("Update:Character", sw.ElapsedTicks);
-        Capture.Update.AddTicksOnce(sw.ElapsedTicks, Update, "Update.Character");
+        Capture.Update.AddTicksOnce(sw.ElapsedTicks, Update, "Character");
         sw.Restart();
 #endif
 
@@ -959,8 +961,8 @@ namespace ShowPerfExtensions
 #if CLIENT
         sw.Stop();
         GameMain.PerformanceCounter.AddElapsedTicks("Update:StatusEffects", sw.ElapsedTicks);
-        Capture.Update.AddTicksOnce(sw.ElapsedTicks, UpdateStatusEffects, "Update.StatusEffects");
-        Capture.Update.AddTicksOnce(sw.ElapsedTicks, Update, "Update.StatusEffects");
+        Capture.Update.AddTicksOnce(sw.ElapsedTicks, UpdateStatusEffects, "StatusEffects");
+        Capture.Update.AddTicksOnce(sw.ElapsedTicks, Update, "StatusEffects");
         sw.Restart();
 
         if (Character.Controlled != null &&
@@ -1022,13 +1024,13 @@ namespace ShowPerfExtensions
 #if CLIENT
         sw.Stop();
         GameMain.PerformanceCounter.AddElapsedTicks("Update:MapEntity", sw.ElapsedTicks);
-        Capture.Update.AddTicksOnce(sw.ElapsedTicks, Update, "Update.MapEntity");
+        Capture.Update.AddTicksOnce(sw.ElapsedTicks, Update, "MapEntity");
         sw.Restart();
 #endif
         Character.UpdateAnimAll((float)deltaTime);
         sw.Stop();
-        Capture.Update.AddTicksOnce(sw.ElapsedTicks, UpdateAnimations, "Update.Animations");
-        Capture.Update.AddTicksOnce(sw.ElapsedTicks, Update, "Update.Animations");
+        Capture.Update.AddTicksOnce(sw.ElapsedTicks, UpdateAnimations, "Animations");
+        Capture.Update.AddTicksOnce(sw.ElapsedTicks, Update, "Animations");
         sw.Restart();
 
 #if CLIENT
@@ -1040,7 +1042,7 @@ namespace ShowPerfExtensions
 #if CLIENT
         sw.Stop();
         GameMain.PerformanceCounter.AddElapsedTicks("Update:Ragdolls", sw.ElapsedTicks);
-        Capture.Update.AddTicksOnce(sw.ElapsedTicks, Update, "Update.Ragdolls");
+        Capture.Update.AddTicksOnce(sw.ElapsedTicks, Update, "Ragdolls");
         sw.Restart();
 #endif
 
@@ -1056,7 +1058,7 @@ namespace ShowPerfExtensions
 #if CLIENT
         sw.Stop();
         GameMain.PerformanceCounter.AddElapsedTicks("Update:Submarine", sw.ElapsedTicks);
-        Capture.Update.AddTicksOnce(sw.ElapsedTicks, Update, "Update.Submarine");
+        Capture.Update.AddTicksOnce(sw.ElapsedTicks, Update, "Submarine");
         sw.Restart();
 #endif
 
@@ -1087,8 +1089,8 @@ namespace ShowPerfExtensions
 #if CLIENT
         sw.Stop();
         GameMain.PerformanceCounter.AddElapsedTicks("Update:Physics", sw.ElapsedTicks);
-        //Capture.Update.AddTicksOnce(sw.ElapsedTicks, UpdatePhysics, "Update.Physics");
-        Capture.Update.AddTicksOnce(sw.ElapsedTicks, Update, "Update.Physics");
+        //Capture.Update.AddTicksOnce(sw.ElapsedTicks, UpdatePhysics, "Physics");
+        Capture.Update.AddTicksOnce(sw.ElapsedTicks, Update, "Physics");
         _.UpdateProjSpecific(deltaTime);
 #endif
         // it seems that on server side this method is not even compiled because it's empty

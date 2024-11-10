@@ -32,11 +32,6 @@ namespace ShowPerfExtensions
     public static CaptureClass Capture;
     public static CUIShowperf Showperf;
 
-    public void InitStatic()
-    {
-
-    }
-
     public void Initialize()
     {
       Mod = this;
