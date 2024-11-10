@@ -90,7 +90,7 @@ namespace ShowPerfExtensions
 
       Showperf.OnClose += () => CUI.Main["showperfButton"].Revealed = true;
 
-      CUI.Main["showperfButton"].Click();
+      //CUI.Main["showperfButton"].Click();
       //Showperf.Pages.Open(Showperf.Map);
 
 
