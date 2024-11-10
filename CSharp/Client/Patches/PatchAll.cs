@@ -23,7 +23,7 @@ namespace ShowPerfExtensions
 
     public void PatchAll()
     {
-      harmony.UnpatchAll("showperf");
+      //harmony.UnpatchAll("showperf");
 
       PatchCapture();
       PatchTechnical();

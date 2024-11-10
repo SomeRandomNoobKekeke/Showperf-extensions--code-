@@ -32,7 +32,7 @@ namespace CrabUI
       LuaCsLogger.LogMessage($"{msg ?? "null"}", cl * 0.8f, cl);
     }
 
-    private static Harmony harmony = new Harmony("crabui");
+    private Harmony harmony;
 
     public static void Initialize()
     {
@@ -43,6 +43,7 @@ namespace CrabUI
       }
 
       Instance = new CUI();
+      Instance.harmony = new Harmony("crabui");
 
       CUIComponent.MaxID = 0;
       CUITypes.Clear();
@@ -52,7 +53,7 @@ namespace CrabUI
 
       Main = new CUIMainComponent();
 
-      PatchAll();
+      Instance.PatchAll();
       Instance.AddCommands();
     }
 
@@ -61,9 +62,9 @@ namespace CrabUI
       Instance.RemoveCommands();
     }
 
-    private static void PatchAll()
+    private void PatchAll()
     {
-      harmony.UnpatchAll("crabui");
+      //harmony.UnpatchAll("crabui");
 
       harmony.Patch(
         original: typeof(GUI).GetMethod("Draw", AccessTools.all),

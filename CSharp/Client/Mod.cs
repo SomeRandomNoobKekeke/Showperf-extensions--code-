@@ -20,14 +20,14 @@ namespace ShowPerfExtensions
 {
   public partial class Plugin : IAssemblyPlugin
   {
-    public static Harmony harmony = new Harmony("showperf");
     public static string ModName = "Showperf extensions";
     public static Plugin Mod;
 
     public string ModDir = "";
     public string ModVersion = "1.0.0";
     public bool Debug;
-
+    public Harmony __harmony;
+    public static Harmony harmony => Mod.__harmony;
 
     public static CaptureClass Capture;
     public static CUIShowperf Showperf;
@@ -42,6 +42,8 @@ namespace ShowPerfExtensions
         Debug = true;
         info($"found {ModName} in LocalMods, debug: {Debug}");
       }
+
+      __harmony = new Harmony("showperf");
 
       CaptureState.FromHash.Clear();
       LightSource_Parent.Clear();
