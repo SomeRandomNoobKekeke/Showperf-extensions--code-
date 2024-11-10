@@ -195,9 +195,6 @@ namespace ShowPerfExtensions
         }
       }
 
-
-
-
       public CaptureClass()
       {
         OnStateChange += (cs) => Reset();

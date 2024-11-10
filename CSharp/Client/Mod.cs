@@ -28,9 +28,16 @@ namespace ShowPerfExtensions
     public string ModVersion = "1.0.0";
     public bool Debug;
 
-    public static CUIShowperf Showperf;
+
     public static CaptureClass Capture;
+    public static CUIShowperf Showperf;
     public static CUIMainComponent CUIMain;
+
+
+    public void InitStatic()
+    {
+
+    }
 
     public void Initialize()
     {
@@ -43,14 +50,18 @@ namespace ShowPerfExtensions
         info($"found {ModName} in LocalMods, debug: {Debug}");
       }
 
+      CaptureState.FromHash.Clear();
+      LightSource_Parent.Clear();
+      MapButton.Buttons.Clear();
+
+      Capture = new CaptureClass();
+      Capture.LoadFromFile();
+
 
       //GameMain.PerformanceCounter.DrawTimeGraph = new Graph(1000);
 
       CUIMain = new CUIMainComponent();
-      Capture = new CaptureClass();
 
-      Capture.LoadFromFile();
-      //Capture.PrintStates();
 
       Showperf = new CUIShowperf()
       {
@@ -110,7 +121,6 @@ namespace ShowPerfExtensions
     {
       RemoveCommands();
       CUI.Dispose();
-      LightSource_Parent.Clear();
       info($"{ModName} Disposed");
     }
   }

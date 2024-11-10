@@ -15,12 +15,10 @@ namespace ShowPerfExtensions
 {
   public partial class Plugin : IAssemblyPlugin
   {
-    public static List<DebugConsole.Command> AddedCommands = new List<DebugConsole.Command>();
+    public List<DebugConsole.Command> AddedCommands = new List<DebugConsole.Command>();
 
-    public static void AddCommands()
+    public void AddCommands()
     {
-      AddedCommands ??= new List<DebugConsole.Command>();
-
       AddedCommands.Add(new DebugConsole.Command("showperf_frames|s_frames", "", (string[] args) =>
       {
         if (args.Length > 0 && int.TryParse(args[0], out int frames))
@@ -63,21 +61,18 @@ namespace ShowPerfExtensions
         }
       }));
 
-
       DebugConsole.Commands.AddRange(AddedCommands);
     }
 
-    public static void RemoveCommands()
+    public void RemoveCommands()
     {
-      AddedCommands.ForEach(c => DebugConsole.Commands.RemoveAll(which => which.Names.Contains(c.Names[0])));
-
+      AddedCommands.ForEach(c => DebugConsole.Commands.Remove(c));
       AddedCommands.Clear();
-      AddedCommands = null;
     }
 
     public static void PermitCommands(Identifier command, ref bool __result)
     {
-      if (AddedCommands.Any(c => c.Names.Contains(command.Value))) __result = true;
+      if (Mod.AddedCommands.Any(c => c.Names.Contains(command.Value))) __result = true;
     }
   }
 }
