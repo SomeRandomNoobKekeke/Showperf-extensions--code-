@@ -48,7 +48,7 @@ namespace ShowPerfExtensions
         Content = (CUIVerticalList)Children.ElementAtOrDefault(1);
       }
 
-      protected override CUIComponent RawGet(string name) => Content.RawGet(name);
+      public override CUIComponent RawGet(string name) => Content.RawGet(name);
       public MapGroup() : base()
       {
         FitContent = new CUIBool2(true, true);

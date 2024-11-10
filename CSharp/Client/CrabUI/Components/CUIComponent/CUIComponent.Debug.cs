@@ -78,7 +78,7 @@ namespace CrabUI
     }
 
     //TODO Too hacky, rethink
-    protected virtual CUIComponent RawGet(string name) => NamedComponents.GetValueOrDefault(name);
+    public virtual CUIComponent RawGet(string name) => NamedComponents.GetValueOrDefault(name);
     public virtual CUIComponent Get(string name)
     {
       if (name == null) return null;

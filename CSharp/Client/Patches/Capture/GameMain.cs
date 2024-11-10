@@ -488,6 +488,8 @@ namespace ShowPerfExtensions
           CoroutineManager.Update(_.Paused, (float)Timing.Step);
 
           SteamManager.Update((float)Timing.Step);
+
+          // Removed in compiled version
           EosInterface.Core.Update();
 
           TaskPool.Update();
