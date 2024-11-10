@@ -54,11 +54,6 @@ namespace ShowPerfExtensions
       //GameMain.PerformanceCounter.DrawTimeGraph = new Graph(1000);
 
       CUI.Initialize();
-      CUI.Initialize();
-      CUI.Initialize();
-      CUI.Initialize();
-      CUI.Initialize();
-      CUI.Initialize();
 
       Showperf = new CUIShowperf()
       {
