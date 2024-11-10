@@ -13,7 +13,7 @@ namespace ShowPerfExtensions
 {
   partial class Plugin : IAssemblyPlugin
   {
-    public static void FindModFolder()
+    public void FindModFolder()
     {
       bool found = false;
 
@@ -22,8 +22,8 @@ namespace ShowPerfExtensions
         if (p.Name.Contains(ModName))
         {
           found = true;
-          Mod.ModDir = Path.GetFullPath(p.Dir);
-          Mod.ModVersion = p.ModVersion;
+          ModDir = Path.GetFullPath(p.Dir);
+          ModVersion = p.ModVersion;
           break;
         }
       }
