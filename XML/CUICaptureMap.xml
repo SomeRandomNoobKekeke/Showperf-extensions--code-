@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<CUICaptureMap ChildrenOffset="[291.79205,141.57504,1]" Relative="[0,0,1,1]">
+<CUICaptureMap ChildrenOffset="[80.31201,78.367065,1]" Relative="[0,0,1,1]">
   <Connections>
     <Connection Start="Showperf.Draw" End="Draw" />
     <Connection Start="Draw.Map" End="Map" />
@@ -74,7 +74,7 @@
         <MapButton AKA="PhysicBodies" CState="Showperf.Update.PhysicBodies" Text="Interpolate draw position" />
         <MapButton AKA="ItemsHUD" CState="Showperf.Update.ItemsHUD" Text="ItemsHUD" />
         <MapButton AKA="Character" CState="Showperf.Update.Character" Text="Character" />
-        <MapButton AKA="GameSession" CState="Showperf.Update.GameSession" State="true" Text="GameSession" />
+        <MapButton AKA="GameSession" CState="Showperf.Update.GameSession" Text="GameSession" />
         <MapButton AKA="Level" CState="Showperf.Update.Level" Text="Level" />
         <MapButton AKA="MapEntity" CState="Showperf.Update.MapEntity" Text="MapEntity" />
         <MapButton AKA="Particles" CState="Showperf.Update.Particles" Text="Particles" />
@@ -116,7 +116,7 @@
       </CUIVerticalList>
     </MapGroup>
     <MapGroup AKA="GameSession" Absolute="[-174.7121,36.375977,,102.59999]" ConsumeSwipe="true" Draggable="true">
-      <MapButton AKA="GameSession" CState="Showperf.Update.GameSession" State="true" Text="GameSession" TextAlign="{X:0.5 Y:0.5}" TextScale="1.2" />
+      <MapButton AKA="GameSession" CState="Showperf.Update.GameSession" Text="GameSession" TextAlign="{X:0.5 Y:0.5}" TextScale="1.2" />
       <CUIVerticalList Absolute="[,,,80.99999]" AbsoluteMin="[,,70.6,]" FitContent="[True,True]">
         <MapButton AKA="Store" CState="Showperf.Update.GameSession.Store" Text="Store" />
         <MapButton AKA="Events" CState="Showperf.Update.GameSession.Events" Text="Events" />
