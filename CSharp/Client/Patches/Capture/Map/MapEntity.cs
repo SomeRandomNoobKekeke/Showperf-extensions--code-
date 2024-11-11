@@ -30,10 +30,6 @@ namespace ShowPerfExtensions
     [ShowperfPatch]
     public class MapEntityPatch
     {
-      public static Stopwatch sw = new Stopwatch();
-      public static Stopwatch sw2 = new Stopwatch();
-      public static Stopwatch sw3 = new Stopwatch();
-
       public static CaptureState Misc;
       public static CaptureState Items;
       public static CaptureState UpdateMapEntity;
@@ -55,7 +51,7 @@ namespace ShowPerfExtensions
 
         UpdateHulls = Capture.Get("Showperf.Update.MapEntity.Misc.Hulls");
         UpdateGaps = Capture.Get("Showperf.Update.MapEntity.Misc.Gaps");
-        UpdatePower = Capture.Get("Showperf.Update.MapEntity.Misc.Power");
+        UpdatePower = Capture.Get("Showperf.Update.MapEntity.Misc.UpdatePower");
         UpdateStructures = Capture.Get("Showperf.Update.MapEntity.Misc.Structures");
         UpdateWholeSub = Capture.Get("Showperf.Update.MapEntity.WholeSub");
 
@@ -66,6 +62,10 @@ namespace ShowPerfExtensions
       {
         if (!Showperf.Revealed) return true;
 
+        Stopwatch sw = new Stopwatch();
+        Stopwatch sw2 = new Stopwatch();
+        Stopwatch sw3 = new Stopwatch();
+
         Capture.Update.EnsureCategory(UpdateMapEntity);
         Capture.Update.EnsureCategory(UpdateWholeSub);
         Capture.Update.EnsureCategory(Misc);
@@ -74,7 +74,7 @@ namespace ShowPerfExtensions
 
 
 
-        sw.Start();
+        sw.Restart();
 
         if (MapEntity.mapEntityUpdateTick % MapEntity.MapEntityUpdateInterval == 0)
         {
@@ -325,7 +325,6 @@ namespace ShowPerfExtensions
         sw.Stop();
         GameMain.PerformanceCounter.AddElapsedTicks("Update:MapEntity:Items", sw.ElapsedTicks);
         Capture.Update.AddTicks(sw.ElapsedTicks, UpdateMapEntity, "Items");
-        sw.Restart();
 
 
         if (MapEntity.mapEntityUpdateTick % MapEntity.MapEntityUpdateInterval == 0)

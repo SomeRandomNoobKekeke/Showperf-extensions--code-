@@ -41,10 +41,6 @@ namespace ShowPerfExtensions
     [ShowperfPatch]
     public class ItemPatch
     {
-      public static Stopwatch sw = new Stopwatch();
-      public static Stopwatch sw2 = new Stopwatch();
-      public static Stopwatch sw3 = new Stopwatch();
-
       public static CaptureState Components;
       public static void Initialize()
       {
@@ -59,6 +55,10 @@ namespace ShowPerfExtensions
       public static bool Item_Update_Replace(float deltaTime, Camera cam, Item __instance)
       {
         if (!Showperf.Revealed || !Components.IsActive) return true;
+
+        Stopwatch sw = new Stopwatch();
+        Stopwatch sw2 = new Stopwatch();
+        Stopwatch sw3 = new Stopwatch();
 
         Capture.Update.EnsureCategory(Components);
 
