@@ -30,6 +30,10 @@ namespace ShowPerfExtensions
     [ShowperfPatch]
     public class MapEntityPatch
     {
+      public static Stopwatch sw = new Stopwatch();
+      public static Stopwatch sw2 = new Stopwatch();
+      public static Stopwatch sw3 = new Stopwatch();
+
       public static CaptureState Misc;
       public static CaptureState Items;
       public static CaptureState UpdateMapEntity;
@@ -61,177 +65,284 @@ namespace ShowPerfExtensions
       public static bool MapEntity_UpdateAll_Replace(float deltaTime, Camera cam)
       {
         if (!Showperf.Revealed) return true;
-        if (!UpdateMapEntity.IsActive && !Items.IsActive && !Misc.IsActive &&
-        !UpdateHulls.IsActive && !UpdateGaps.IsActive &&
-        !UpdatePower.IsActive && !UpdateStructures.IsActive && !UpdateWholeSub.IsActive) return true;
 
-        Capture.Update.EnsureCategory(UpdateWholeSub);
         Capture.Update.EnsureCategory(UpdateMapEntity);
+        Capture.Update.EnsureCategory(UpdateWholeSub);
         Capture.Update.EnsureCategory(Misc);
-        Capture.Update.EnsureCategory(Items);
-        Capture.Update.EnsureCategory(UpdateHulls);
-        Capture.Update.EnsureCategory(UpdateStructures);
-        Capture.Update.EnsureCategory(UpdateGaps);
-
-
 
         MapEntity.mapEntityUpdateTick++;
 
-#if CLIENT
-        Stopwatch sw = new Stopwatch();
-        Stopwatch sw2 = new Stopwatch();
-        Stopwatch sw3 = new Stopwatch();
+
+
         sw.Start();
-#endif
 
         if (MapEntity.mapEntityUpdateTick % MapEntity.MapEntityUpdateInterval == 0)
         {
           sw2.Restart();
 
-          foreach (Hull hull in Hull.HullList)
+          if (UpdateHulls.IsActive)
           {
-            sw3.Restart();
-            hull.Update(deltaTime * MapEntity.MapEntityUpdateInterval, cam);
-            sw3.Stop();
-            if (Capture.ShouldCapture(hull))
+            Capture.Update.EnsureCategory(UpdateHulls);
+
+            foreach (Hull hull in Hull.HullList)
             {
-              Capture.Update.AddTicks(sw3.ElapsedTicks, UpdateHulls, $"{hull}");
+              sw3.Restart();
+              hull.Update(deltaTime * MapEntity.MapEntityUpdateInterval, cam);
+              sw3.Stop();
+
+              if (Capture.ShouldCapture(hull))
+              {
+                Capture.Update.AddTicks(sw3.ElapsedTicks, UpdateHulls, hull.ToString());
+              }
+
+              Capture.Update.AddTicks(sw3.ElapsedTicks, UpdateWholeSub, hull.Submarine?.ToString() ?? "Things in open water");
             }
-            Capture.Update.AddTicks(sw3.ElapsedTicks, UpdateWholeSub, hull.Submarine?.ToString() ?? "Things in open water");
+
           }
-#if CLIENT
+          else
+          {
+            foreach (Hull hull in Hull.HullList)
+            {
+              hull.Update(deltaTime * MapEntity.MapEntityUpdateInterval, cam);
+            }
+          }
+
+
           Hull.UpdateCheats(deltaTime * MapEntity.MapEntityUpdateInterval, cam);
-#endif
+
           sw2.Stop();
           Capture.Update.AddTicks(sw2.ElapsedTicks, Misc, "Hulls");
-          sw2.Restart();
 
-          foreach (Structure structure in Structure.WallList)
+          sw2.Restart();
+          if (UpdateStructures.IsActive)
           {
-            sw3.Restart();
-            structure.Update(deltaTime * MapEntity.MapEntityUpdateInterval, cam);
-            sw3.Stop();
-            if (Capture.ShouldCapture(structure))
+            Capture.Update.EnsureCategory(UpdateStructures);
+
+            foreach (Structure structure in Structure.WallList)
             {
-              Capture.Update.AddTicks(sw3.ElapsedTicks, UpdateStructures, $"{structure}");
+              sw3.Restart();
+              structure.Update(deltaTime * MapEntity.MapEntityUpdateInterval, cam);
+              sw3.Stop();
+
+              if (Capture.ShouldCapture(structure))
+              {
+                Capture.Update.AddTicks(sw3.ElapsedTicks, UpdateStructures, structure.ToString());
+              }
+
+              Capture.Update.AddTicks(sw3.ElapsedTicks, UpdateWholeSub, structure.Submarine?.ToString() ?? "Things in open water");
             }
-            Capture.Update.AddTicks(sw3.ElapsedTicks, UpdateWholeSub, structure.Submarine?.ToString() ?? "Things in open water");
+          }
+          else
+          {
+            foreach (Structure structure in Structure.WallList)
+            {
+              structure.Update(deltaTime * MapEntity.MapEntityUpdateInterval, cam);
+            }
           }
           sw2.Stop();
           Capture.Update.AddTicks(sw2.ElapsedTicks, Misc, "Structures");
         }
-
 
         //update gaps in random order, because otherwise in rooms with multiple gaps
         //the water/air will always tend to flow through the first gap in the list,
         //which may lead to weird behavior like water draining down only through
         //one gap in a room even if there are several
         sw2.Restart();
-        foreach (Gap gap in Gap.GapList.OrderBy(g => Rand.Int(int.MaxValue)))
+        if (UpdateGaps.IsActive)
         {
-          sw3.Restart();
-          gap.Update(deltaTime, cam);
-          sw3.Stop();
-          if (Capture.ShouldCapture(gap))
+          Capture.Update.EnsureCategory(UpdateGaps);
+
+          foreach (Gap gap in Gap.GapList.OrderBy(g => Rand.Int(int.MaxValue)))
           {
-            Capture.Update.AddTicks(sw3.ElapsedTicks, UpdateGaps, $"{gap.Submarine?.Info?.Name}({gap.Submarine?.IdOffset}).Gap({gap.ID})");
+            sw3.Restart();
+            gap.Update(deltaTime, cam);
+            sw3.Stop();
+
+            if (Capture.ShouldCapture(gap))
+            {
+              Capture.Update.AddTicks(sw3.ElapsedTicks, UpdateGaps, $"Gap ({gap.ID})");
+            }
+
+            Capture.Update.AddTicks(sw3.ElapsedTicks, UpdateWholeSub, gap.Submarine?.ToString() ?? "Things in open water");
           }
-          Capture.Update.AddTicks(sw3.ElapsedTicks, UpdateWholeSub, gap.Submarine?.ToString() ?? "Things in open water");
+        }
+        else
+        {
+          foreach (Gap gap in Gap.GapList.OrderBy(g => Rand.Int(int.MaxValue)))
+          {
+            gap.Update(deltaTime, cam);
+          }
         }
         sw2.Stop();
         Capture.Update.AddTicks(sw2.ElapsedTicks, Misc, "Gaps");
-        sw2.Restart();
 
+        sw2.Restart();
         if (MapEntity.mapEntityUpdateTick % MapEntity.PoweredUpdateInterval == 0)
         {
           Powered.UpdatePower(deltaTime * MapEntity.PoweredUpdateInterval);
         }
         sw2.Stop();
-        Capture.Update.AddTicks(sw2.ElapsedTicks, Misc, "UpdatePower");
+        Capture.Update.AddTicks(sw2.ElapsedTicks, Misc, "Powered");
+        Capture.Update.AddTicksOnce(sw2.ElapsedTicks, UpdatePower, "Powered");
 
 
-#if CLIENT
         sw.Stop();
         GameMain.PerformanceCounter.AddElapsedTicks("Update:MapEntity:Misc", sw.ElapsedTicks);
-        Capture.Update.AddTicks(sw.ElapsedTicks, UpdateMapEntity, "MapEntity.Misc");
+        Capture.Update.AddTicks(sw.ElapsedTicks, UpdateMapEntity, "Misc");
         sw.Restart();
-#endif
 
 
-        Item.UpdatePendingConditionUpdates(deltaTime);
-        if (MapEntity.mapEntityUpdateTick % MapEntity.MapEntityUpdateInterval == 0)
+        if (Items.IsActive)
         {
-          Item lastUpdatedItem = null;
+          Capture.Update.EnsureCategory(Items);
 
-          try
+          Item.UpdatePendingConditionUpdates(deltaTime);
+          if (MapEntity.mapEntityUpdateTick % MapEntity.MapEntityUpdateInterval == 0)
           {
-            foreach (Item item in Item.ItemList)
+            Item lastUpdatedItem = null;
+
+            try
             {
-              if (GameMain.LuaCs.Game.UpdatePriorityItems.Contains(item)) { continue; }
-              lastUpdatedItem = item;
+              if (Items.ByID)
+              {
+                foreach (Item item in Item.ItemList)
+                {
+                  if (GameMain.LuaCs.Game.UpdatePriorityItems.Contains(item)) { continue; }
+                  lastUpdatedItem = item;
+                  sw2.Restart();
+                  item.Update(deltaTime * MapEntity.MapEntityUpdateInterval, cam);
+                  sw2.Stop();
+
+                  if (Capture.ShouldCapture(item))
+                  {
+                    Capture.Update.AddTicks(sw2.ElapsedTicks, Items, item.ToString());
+                  }
+                  Capture.Update.AddTicks(sw2.ElapsedTicks, UpdateWholeSub, item.Submarine?.ToString() ?? "Things in open water");
+                }
+              }
+              else
+              {
+                foreach (Item item in Item.ItemList)
+                {
+                  if (GameMain.LuaCs.Game.UpdatePriorityItems.Contains(item)) { continue; }
+                  lastUpdatedItem = item;
+                  sw2.Restart();
+                  item.Update(deltaTime * MapEntity.MapEntityUpdateInterval, cam);
+                  sw2.Stop();
+
+                  if (Capture.ShouldCapture(item))
+                  {
+                    Capture.Update.AddTicks(sw2.ElapsedTicks, Items, item.Prefab.Identifier);
+                  }
+                  Capture.Update.AddTicks(sw2.ElapsedTicks, UpdateWholeSub, item.Submarine?.ToString() ?? "Things in open water");
+                }
+              }
+
+
+            }
+            catch (InvalidOperationException e)
+            {
+              GameAnalyticsManager.AddErrorEventOnce(
+                  "MapEntity.UpdateAll:ItemUpdateInvalidOperation",
+                  GameAnalyticsManager.ErrorSeverity.Critical,
+                  $"Error while updating item {lastUpdatedItem?.Name ?? "null"}: {e.Message}");
+              throw new InvalidOperationException($"Error while updating item {lastUpdatedItem?.Name ?? "null"}", innerException: e);
+            }
+          }
+
+          if (Items.ByID)
+          {
+            foreach (var item in GameMain.LuaCs.Game.UpdatePriorityItems)
+            {
+              if (item.Removed) continue;
+
               sw2.Restart();
-              item.Update(deltaTime * MapEntity.MapEntityUpdateInterval, cam);
+              item.Update(deltaTime, cam);
               sw2.Stop();
+
               if (Capture.ShouldCapture(item))
               {
-                if (Items.ByID)
-                {
-                  Capture.Update.AddTicks(sw2.ElapsedTicks, Items, $"{item}");
-                }
-                else
-                {
-                  Capture.Update.AddTicks(sw2.ElapsedTicks, Items, item.Prefab.Identifier);
-                }
+                Capture.Update.AddTicks(sw2.ElapsedTicks, Items, item.ToString());
               }
               Capture.Update.AddTicks(sw2.ElapsedTicks, UpdateWholeSub, item.Submarine?.ToString() ?? "Things in open water");
             }
           }
-          catch (InvalidOperationException e)
+          else
           {
-            GameAnalyticsManager.AddErrorEventOnce(
-                "MapEntity.UpdateAll:ItemUpdateInvalidOperation",
-                GameAnalyticsManager.ErrorSeverity.Critical,
-                $"Error while updating item {lastUpdatedItem?.Name ?? "null"}: {e.Message}");
-            throw new InvalidOperationException($"Error while updating item {lastUpdatedItem?.Name ?? "null"}", innerException: e);
-          }
-        }
+            foreach (var item in GameMain.LuaCs.Game.UpdatePriorityItems)
+            {
+              if (item.Removed) continue;
 
-        foreach (var item in GameMain.LuaCs.Game.UpdatePriorityItems)
+              sw2.Restart();
+              item.Update(deltaTime, cam);
+              sw2.Stop();
+
+              if (Capture.ShouldCapture(item))
+              {
+                Capture.Update.AddTicks(sw2.ElapsedTicks, Items, item.Prefab.Identifier);
+              }
+              Capture.Update.AddTicks(sw2.ElapsedTicks, UpdateWholeSub, item.Submarine?.ToString() ?? "Things in open water");
+            }
+          }
+
+
+        }
+        else
         {
-          if (item.Removed) continue;
-
-          sw2.Restart();
-          item.Update(deltaTime, cam);
-          sw2.Stop();
-          if (Capture.ShouldCapture(item))
+          Item.UpdatePendingConditionUpdates(deltaTime);
+          if (MapEntity.mapEntityUpdateTick % MapEntity.MapEntityUpdateInterval == 0)
           {
-            if (Items.ByID)
+            Item lastUpdatedItem = null;
+
+            try
             {
-              Capture.Update.AddTicks(sw2.ElapsedTicks, Items, $"{item}");
+              foreach (Item item in Item.ItemList)
+              {
+                if (GameMain.LuaCs.Game.UpdatePriorityItems.Contains(item)) { continue; }
+                lastUpdatedItem = item;
+                item.Update(deltaTime * MapEntity.MapEntityUpdateInterval, cam);
+              }
             }
-            else
+            catch (InvalidOperationException e)
             {
-              Capture.Update.AddTicks(sw2.ElapsedTicks, Items, item.Prefab.Identifier);
+              GameAnalyticsManager.AddErrorEventOnce(
+                  "MapEntity.UpdateAll:ItemUpdateInvalidOperation",
+                  GameAnalyticsManager.ErrorSeverity.Critical,
+                  $"Error while updating item {lastUpdatedItem?.Name ?? "null"}: {e.Message}");
+              throw new InvalidOperationException($"Error while updating item {lastUpdatedItem?.Name ?? "null"}", innerException: e);
             }
           }
-          Capture.Update.AddTicks(sw2.ElapsedTicks, UpdateWholeSub, item.Submarine?.ToString() ?? "Things in open water");
+
+          foreach (var item in GameMain.LuaCs.Game.UpdatePriorityItems)
+          {
+            if (item.Removed) continue;
+
+            item.Update(deltaTime, cam);
+          }
         }
 
-#if CLIENT
+
         sw.Stop();
         GameMain.PerformanceCounter.AddElapsedTicks("Update:MapEntity:Items", sw.ElapsedTicks);
-        Capture.Update.AddTicks(sw.ElapsedTicks, UpdateMapEntity, "MapEntity.Items");
+        Capture.Update.AddTicks(sw.ElapsedTicks, UpdateMapEntity, "Items");
         sw.Restart();
-#endif
+
 
         if (MapEntity.mapEntityUpdateTick % MapEntity.MapEntityUpdateInterval == 0)
         {
+          sw.Restart();
           MapEntity.UpdateAllProjSpecific(deltaTime * MapEntity.MapEntityUpdateInterval);
+          sw.Stop();
+          Capture.Update.AddTicks(sw.ElapsedTicks, UpdateMapEntity, "UpdateAllProjSpecific");
 
+          sw.Restart();
           MapEntity.Spawner?.Update();
+          sw.Stop();
+
+          Capture.Update.AddTicks(sw.ElapsedTicks, UpdateMapEntity, "Spawner");
         }
-        sw.Stop();
-        Capture.Update.AddTicks(sw.ElapsedTicks, UpdateMapEntity, "MapEntity.Spawner");
+
+
 
         return false;
       }
