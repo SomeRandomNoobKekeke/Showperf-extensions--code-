@@ -70,6 +70,10 @@ namespace ShowPerfExtensions
       public static CaptureState UpdateSetPrevTransform;
       public static CaptureState UpdateSubmarine;
 
+      public static Stopwatch sw = new Stopwatch();
+      public static Stopwatch sw2 = new Stopwatch();
+      public static Stopwatch sw3 = new Stopwatch();
+
 
 
       public static void Initialize()
@@ -140,13 +144,18 @@ namespace ShowPerfExtensions
       {
         if (!Showperf.Revealed) return true;
 
-        Stopwatch sw = new Stopwatch();
+        Capture.Draw.EnsureCategory(Draw);
 
         GameScreen _ = __instance;
 
+
+        sw.Restart();
         _.cam.UpdateTransform(true);
         Submarine.CullEntities(_.cam);
+        sw.Stop();
+        Capture.Draw.AddTicks(sw.ElapsedTicks, Draw, "CullEntities");
 
+        sw.Restart();
         foreach (Character c in Character.CharacterList)
         {
           c.AnimController.Limbs.ForEach(l => l.body.UpdateDrawPosition());
@@ -163,18 +172,17 @@ namespace ShowPerfExtensions
             }
           }
         }
-
-
-        sw.Start();
-
-        _.DrawMap(graphics, spriteBatch, deltaTime);
-
         sw.Stop();
-        GameMain.PerformanceCounter.AddElapsedTicks("Draw:Map", sw.ElapsedTicks);
-        //Capture.Draw.AddTicksOnce(sw.ElapsedTicks, DrawMap, "Draw.Map");
-        Capture.Draw.AddTicksOnce(sw.ElapsedTicks, Draw, "Draw.Map");
-        sw.Restart();
+        Capture.Draw.AddTicks(sw.ElapsedTicks, Draw, "Character UpdateDrawPosition");
 
+        sw.Restart();
+        _.DrawMap(graphics, spriteBatch, deltaTime);
+        sw.Stop();
+
+        GameMain.PerformanceCounter.AddElapsedTicks("Draw:Map", sw.ElapsedTicks);
+        Capture.Draw.AddTicks(sw.ElapsedTicks, Draw, "Map");
+
+        sw.Restart();
         spriteBatch.Begin(SpriteSortMode.Deferred, null, GUI.SamplerState, null, GameMain.ScissorTestEnable);
 
         if (Character.Controlled != null && _.cam != null) { Character.Controlled.DrawHUD(spriteBatch, _.cam); }
@@ -200,9 +208,8 @@ namespace ShowPerfExtensions
 
         sw.Stop();
         GameMain.PerformanceCounter.AddElapsedTicks("Draw:HUD", sw.ElapsedTicks);
-        Capture.Draw.AddTicksOnce(sw.ElapsedTicks, DrawHUD, "Draw.HUD");
-        Capture.Draw.AddTicksOnce(sw.ElapsedTicks, Draw, "Draw.HUD");
-        sw.Restart();
+        Capture.Draw.AddTicksOnce(sw.ElapsedTicks, DrawHUD, "HUD");
+        Capture.Draw.AddTicks(sw.ElapsedTicks, Draw, "HUD");
 
         return false;
       }
@@ -213,10 +220,6 @@ namespace ShowPerfExtensions
       public static bool GameScreen_DrawMap_Replace(GraphicsDevice graphics, SpriteBatch spriteBatch, double deltaTime, GameScreen __instance)
       {
         if (!Showperf.Revealed) return true;
-
-        Stopwatch sw = new Stopwatch();
-        Stopwatch sw2 = new Stopwatch();
-        Stopwatch sw3 = new Stopwatch();
 
         GameScreen _ = __instance;
 
@@ -766,9 +769,6 @@ namespace ShowPerfExtensions
         Capture.Update.EnsureCategory(Update);
 
         GameScreen _ = __instance;
-
-        Stopwatch sw = new Stopwatch();
-        Stopwatch sw2 = new Stopwatch();
 
 #if RUN_PHYSICS_IN_SEPARATE_THREAD
         physicsTime += deltaTime;
