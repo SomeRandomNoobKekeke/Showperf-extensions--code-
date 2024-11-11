@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<CUICaptureMap ChildrenOffset="[80.31201,78.367065,1]" Relative="[0,0,1,1]">
+<CUICaptureMap ChildrenOffset="[75.95215,83.94299,1]" Relative="[0,0,1,1]">
   <Connections>
     <Connection Start="Showperf.Draw" End="Draw" />
     <Connection Start="Draw.Map" End="Map" />
@@ -11,7 +11,8 @@
     <Connection Start="Update.Level" End="Level" />
     <Connection Start="Update.GameSession" End="GameSession" />
     <Connection Start="MapEntity.Misc" End="Misc" />
-    <Connection Start="MapEntity" End="WholeSub" />
+    <Connection Start="Update.MapEntity" End="WholeSub" />
+    <Connection Start="MapEntity.Items" End="ItemComponents" />
   </Connections>
   <Children>
     <MapButton AKA="MonoGame" Absolute="[-266.82416,-27.40802,,]" CState="MonoGame" ConsumeDragAndDrop="true" ConsumeSwipe="true" Draggable="true" Text="MonoGame Metrics" TextScale="1.6" />
@@ -105,7 +106,8 @@
         <MapButton AKA="Misc" CState="Showperf.Update.MapEntity.Misc" Text="Misc" />
       </CUIVerticalList>
     </MapGroup>
-    <MapButton AKA="WholeSub" Absolute="[-328.62408,194.85602,,]" CState="Showperf.Update.MapEntity.WholeSub" ConsumeDragAndDrop="true" ConsumeSwipe="true" Draggable="true" Text="Whole Submaine Update" TextAlign="{X:0.5 Y:0.5}" TextScale="1.2" />
+    <MapButton AKA="ItemComponents" Absolute="[-275.76013,252.16006,,]" CState="Showperf.Update.MapEntity.Items.Components" ConsumeDragAndDrop="true" ConsumeSwipe="true" Draggable="true" Text="Item Components" />
+    <MapButton AKA="WholeSub" Absolute="[-314.62408,179.85602,,]" CState="Showperf.Update.MapEntity.WholeSub" ConsumeDragAndDrop="true" ConsumeSwipe="true" Draggable="true" Text="Whole Submaine Update" TextAlign="{X:0.5 Y:0.5}" TextScale="1.2" />
     <MapGroup AKA="Misc" Absolute="[-153.86429,297.8559,,86.399994]" ConsumeSwipe="true" Draggable="true">
       <MapButton AKA="Misc" CState="Showperf.Update.MapEntity.Misc" Text="Misc" TextAlign="{X:0.5 Y:0.5}" TextScale="1.2" />
       <CUIVerticalList Absolute="[,,,64.799995]" AbsoluteMin="[,,84.1,]" FitContent="[True,True]">

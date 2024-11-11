@@ -41,7 +41,11 @@ namespace ShowPerfExtensions
     [ShowperfPatch]
     public class ItemPatch
     {
-      public static CaptureState Power;
+      public static Stopwatch sw = new Stopwatch();
+      public static Stopwatch sw2 = new Stopwatch();
+      public static Stopwatch sw3 = new Stopwatch();
+
+      public static CaptureState Components;
       public static void Initialize()
       {
         harmony.Patch(
@@ -49,14 +53,21 @@ namespace ShowPerfExtensions
           prefix: new HarmonyMethod(typeof(ItemPatch).GetMethod("Item_Update_Replace"))
         );
 
+        Components = Capture.Get("Showperf.Update.MapEntity.Items.Components");
       }
 
       public static bool Item_Update_Replace(float deltaTime, Camera cam, Item __instance)
       {
+        if (!Showperf.Revealed || !Components.IsActive) return true;
+
+        Capture.Update.EnsureCategory(Components);
+
         Item _ = __instance;
 
         if (!_.isActive || _.IsLayerHidden) { return false; }
 
+
+        sw.Restart();
         if (_.impactQueue != null)
         {
           while (_.impactQueue.TryDequeue(out float impact))
@@ -75,19 +86,63 @@ namespace ShowPerfExtensions
             }
           }
         }
+        sw.Stop();
+        if (Components.ByID)
+        {
+          if (Capture.ShouldCapture(_)) Capture.Update.AddTicks(sw.ElapsedTicks, Components, $"{_.Prefab.Name}.HandleCollision");
+        }
+        else
+        {
+          if (Capture.ShouldCapture(_)) Capture.Update.AddTicks(sw.ElapsedTicks, Components, "HandleCollision");
+        }
 
+
+        sw.Restart();
         if (_.aiTarget != null && _.aiTarget.NeedsUpdate)
         {
           _.aiTarget.Update(deltaTime);
         }
+        sw.Stop();
+        if (Components.ByID)
+        {
+          if (Capture.ShouldCapture(_)) Capture.Update.AddTicks(sw.ElapsedTicks, Components, $"{_.Prefab.Name}.AITargets");
+        }
+        else
+        {
+          if (Capture.ShouldCapture(_)) Capture.Update.AddTicks(sw.ElapsedTicks, Components, "AITargets");
+        }
 
         var containedEffectType = _.parentInventory == null ? ActionType.OnNotContained : ActionType.OnContained;
 
+        sw.Restart();
         _.ApplyStatusEffects(ActionType.Always, deltaTime, character: (_.parentInventory as CharacterInventory)?.Owner as Character);
+        sw.Stop();
+        if (Components.ByID)
+        {
+          if (Capture.ShouldCapture(_)) Capture.Update.AddTicks(sw.ElapsedTicks, Components, $"{_.Prefab.Name}.ApplyStatusEffects.ActionType.Always");
+        }
+        else
+        {
+          if (Capture.ShouldCapture(_)) Capture.Update.AddTicks(sw.ElapsedTicks, Components, "ApplyStatusEffects.ActionType.Always");
+        }
+
+        sw.Restart();
         _.ApplyStatusEffects(containedEffectType, deltaTime, character: (_.parentInventory as CharacterInventory)?.Owner as Character);
+        sw.Stop();
+        if (Components.ByID)
+        {
+          if (Capture.ShouldCapture(_)) Capture.Update.AddTicks(sw.ElapsedTicks, Components, $"{_.Prefab.Name}.ApplyStatusEffects.containedEffectType");
+        }
+        else
+        {
+          if (Capture.ShouldCapture(_)) Capture.Update.AddTicks(sw.ElapsedTicks, Components, "ApplyStatusEffects.containedEffectType");
+        }
+
 
         for (int i = 0; i < _.updateableComponents.Count; i++)
         {
+          sw.Restart();
+
           ItemComponent ic = _.updateableComponents[i];
 
           bool isParentInActive = ic.InheritParentIsActive && ic.Parent is { IsActive: false };
@@ -154,10 +209,22 @@ namespace ShowPerfExtensions
 #endif
             }
           }
+
+
+          sw.Stop();
+          if (Components.ByID)
+          {
+            if (Capture.ShouldCapture(_)) Capture.Update.AddTicks(sw.ElapsedTicks, Components, $"{_.Prefab.Name}.{ic.name}");
+          }
+          else
+          {
+            if (Capture.ShouldCapture(_)) Capture.Update.AddTicks(sw.ElapsedTicks, Components, ic.name);
+          }
         }
 
         if (_.Removed) { return false; }
 
+        sw.Restart();
         bool needsWaterCheck = _.hasInWaterStatusEffects || _.hasNotInWaterStatusEffects;
         if (_.body != null && _.body.Enabled)
         {
@@ -227,6 +294,16 @@ namespace ShowPerfExtensions
           _.positionBuffer.Clear();
 #endif
           _.isActive = false;
+        }
+
+        sw.Stop();
+        if (Components.ByID)
+        {
+          if (Capture.ShouldCapture(_)) Capture.Update.AddTicks(sw.ElapsedTicks, Components, $"{_.Prefab.Name}.CheckInWater");
+        }
+        else
+        {
+          if (Capture.ShouldCapture(_)) Capture.Update.AddTicks(sw.ElapsedTicks, Components, "CheckInWater");
         }
 
         return false;

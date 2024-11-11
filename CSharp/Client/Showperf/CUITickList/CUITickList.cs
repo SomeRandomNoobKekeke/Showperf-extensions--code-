@@ -76,8 +76,12 @@ namespace ShowPerfExtensions
 
       public void Update()
       {
-        if (!Capture.Frozen && !GameMain.Instance.Paused)
+
+
+        if (!Capture.Frozen && !GameMain.Instance.Paused && (Timing.TotalTime - Showperf.lastUpdateTime >= Showperf.UpdateInterval))
         {
+          Showperf.lastUpdateTime = Timing.TotalTime;
+
           Clear();
 
           foreach (int cat in Capture.Draw.TotalTicks.Keys)

@@ -29,6 +29,16 @@ namespace ShowPerfExtensions
         log($"Capture.Frames = {Capture.Frames}");
       }));
 
+      AddedCommands.Add(new DebugConsole.Command("showperf_fps|s_fps", "", (string[] args) =>
+      {
+        if (args.Length > 0 && double.TryParse(args[0], out double fps))
+        {
+          Showperf.FPS = fps;
+        }
+
+        log($"Showperf.FPS = {Showperf.FPS}");
+      }));
+
       AddedCommands.Add(new DebugConsole.Command("showperf_exposure|s_exposure", "showperf_exposure size [graph]", (string[] args) =>
       {
         bool draw = true;

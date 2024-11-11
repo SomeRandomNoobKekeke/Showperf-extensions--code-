@@ -70,11 +70,6 @@ namespace ShowPerfExtensions
       public static CaptureState UpdateSetPrevTransform;
       public static CaptureState UpdateSubmarine;
 
-      public static Stopwatch sw = new Stopwatch();
-      public static Stopwatch sw2 = new Stopwatch();
-      public static Stopwatch sw3 = new Stopwatch();
-
-
 
       public static void Initialize()
       {
@@ -143,6 +138,10 @@ namespace ShowPerfExtensions
       public static bool GameScreen_Draw_Replace(double deltaTime, GraphicsDevice graphics, SpriteBatch spriteBatch, GameScreen __instance)
       {
         if (!Showperf.Revealed) return true;
+
+        Stopwatch sw = new Stopwatch();
+        Stopwatch sw2 = new Stopwatch();
+        Stopwatch sw3 = new Stopwatch();
 
         Capture.Draw.EnsureCategory(Draw);
 
@@ -220,6 +219,10 @@ namespace ShowPerfExtensions
       public static bool GameScreen_DrawMap_Replace(GraphicsDevice graphics, SpriteBatch spriteBatch, double deltaTime, GameScreen __instance)
       {
         if (!Showperf.Revealed) return true;
+
+        Stopwatch sw = new Stopwatch();
+        Stopwatch sw2 = new Stopwatch();
+        Stopwatch sw3 = new Stopwatch();
 
         GameScreen _ = __instance;
 
@@ -757,15 +760,15 @@ namespace ShowPerfExtensions
       }
 
 
-
-
-
-
-
       // https://github.com/evilfactory/LuaCsForBarotrauma/blob/master/Barotrauma/BarotraumaShared/SharedSource/Screens/GameScreen.cs#L99
       public static bool GameScreen_Update_Replace(double deltaTime, GameScreen __instance)
       {
         if (!Showperf.Revealed) return true;
+
+        Stopwatch sw = new Stopwatch();
+        Stopwatch sw2 = new Stopwatch();
+        Stopwatch sw3 = new Stopwatch();
+
         Capture.Update.EnsureCategory(Update);
 
         GameScreen _ = __instance;

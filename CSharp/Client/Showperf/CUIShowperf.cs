@@ -48,11 +48,23 @@ namespace ShowPerfExtensions
         CategoryLine.Text = s;
       }
 
+
+      public double FPS
+      {
+        get => 1.0 / UpdateInterval;
+        set => UpdateInterval = Math.Max(0, 1.0 / value);
+      }
+      public double UpdateInterval = 0;
+      public double lastUpdateTime;
+
       public void Update()
       {
         try
         {
-          if (Revealed) TickList.Update();
+          if (Revealed)
+          {
+            TickList.Update();
+          }
         }
         catch (Exception e)
         {
