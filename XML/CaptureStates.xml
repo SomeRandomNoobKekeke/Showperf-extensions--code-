@@ -63,7 +63,13 @@
       <MapEntity>
         <WholeSub />
         <Items>
-          <Components />
+          <Components>
+            <Turret>
+              <UpdateAutoOperate>
+                <TargetItems />
+              </UpdateAutoOperate>
+            </Turret>
+          </Components>
         </Items>
         <Misc />
       </MapEntity>
