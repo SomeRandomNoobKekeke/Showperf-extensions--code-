@@ -1104,6 +1104,7 @@ namespace ShowPerfExtensions
 #endif
 
         Capture.Farseer.Update();
+        Capture.Update.Update();
 
         return false;
       }

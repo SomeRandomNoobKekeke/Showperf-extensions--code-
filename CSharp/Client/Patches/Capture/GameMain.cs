@@ -25,10 +25,8 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
-// this is cursed, don't use it
 // [assembly: IgnoresAccessChecksTo("MonoGame.Framework.Windows.NetStandard")]
 // [assembly: IgnoresAccessChecksTo("MonoGame.Framework.Linux.NetStandard")]
-
 
 namespace ShowPerfExtensions
 {
@@ -43,19 +41,19 @@ namespace ShowPerfExtensions
       public static void Initialize()
       {
         harmony.Patch(
-          original: typeof(GameMain).GetMethod("Update", AccessTools.all),
-          prefix: ShowperfMethod(typeof(GameMainPatch).GetMethod("GameMain_Update_Replace"))
-        );
-
-        harmony.Patch(
           original: typeof(GameMain).GetMethod("Draw", AccessTools.all),
           prefix: ShowperfMethod(typeof(GameMainPatch).GetMethod("GameMain_Draw_Replace"))
         );
 
-        Harmony.ReversePatch(
-          original: typeof(Game).GetMethod("Update", AccessTools.all),
-          standin: new HarmonyMethod(typeof(GameMainPatch).GetMethod("Game_Update_ReversePatch"))
-        );
+        // harmony.Patch(
+        //   original: typeof(GameMain).GetMethod("Update", AccessTools.all),
+        //   prefix: ShowperfMethod(typeof(GameMainPatch).GetMethod("GameMain_Update_Replace"))
+        // );
+
+        // Harmony.ReversePatch(
+        //   original: typeof(Game).GetMethod("Update", AccessTools.all),
+        //   standin: new HarmonyMethod(typeof(GameMainPatch).GetMethod("Game_Update_ReversePatch"))
+        // );
 
         ShowperfDraw = Capture.Get("Showperf.Draw");
         ShowperfUpdate = Capture.Get("Showperf.Update");
@@ -175,6 +173,7 @@ namespace ShowPerfExtensions
 
 
       //https://github.com/evilfactory/LuaCsForBarotrauma/blob/master/Barotrauma/BarotraumaClient/ClientSource/GameMain.cs#L692
+      /*
       public static bool GameMain_Update_Replace(GameTime gameTime, GameMain __instance)
       {
         if (!Showperf.Revealed) return true;
@@ -538,6 +537,7 @@ namespace ShowPerfExtensions
         return false;
       }
 
+      */
     }
   }
 }
