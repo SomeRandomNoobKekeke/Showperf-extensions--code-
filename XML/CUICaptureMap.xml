@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<CUICaptureMap ChildrenOffset="[81.29628,79.958984,1]" Relative="[0,0,1,1]">
+<CUICaptureMap ChildrenOffset="[78.648254,85.678894,1]" Relative="[0,0,1,1]">
   <Connections>
     <Connection Start="Showperf.Draw" End="Draw" />
     <Connection Start="Draw.Map" End="Map" />
@@ -15,6 +15,7 @@
     <Connection Start="MapEntity.Items" End="ItemComponents" />
     <Connection Start="ItemComponents" End="Turret" />
     <Connection Start="Turret" End="TurretUpdateAutoOperate" />
+    <Connection Start="Lighting.LightVolumes" End="DrawLightVolume" />
   </Connections>
   <Children>
     <MapButton AKA="MonoGame" Absolute="[-266.82416,-27.40802,,]" CState="MonoGame" ConsumeDragAndDrop="true" ConsumeSwipe="true" Draggable="true" Text="MonoGame Metrics" TextScale="1.6" />
@@ -150,5 +151,6 @@
         <MapButton AKA="LightVolumes" CState="Showperf.Draw.Map.Lighting.LightVolumes" Text="light volumes" />
       </CUIVerticalList>
     </MapGroup>
+    <MapButton AKA="DrawLightVolume" Absolute="[443.88007,419.28003,,]" CState="Showperf.Draw.Map.Lighting.LightVolumes.DrawLightVolume" ConsumeDragAndDrop="true" ConsumeSwipe="true" Draggable="true" Text="LightSource.DrawLightVolume" />
   </Children>
 </CUICaptureMap>

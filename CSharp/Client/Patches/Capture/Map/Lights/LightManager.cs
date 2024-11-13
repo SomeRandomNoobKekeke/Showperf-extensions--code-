@@ -594,36 +594,35 @@ namespace ShowPerfExtensions
         }
         sw2.Stop();
         Capture.Draw.AddTicksOnce(sw2.ElapsedTicks, LightVolumes, "DrawElectricity");
-        sw2.Restart();
 
-        foreach (LightSource light in _.activeLights)
+
+        if (!LightVolumes.ByID || !LightVolumes.IsActive)
         {
-          if (light.IsBackground || light.CurrentBrightness <= 0.0f) { continue; }
-          sw3.Restart();
-          light.DrawLightVolume(spriteBatch, _.lightEffect, transform, recalculationCount < LightManager.MaxLightVolumeRecalculationsPerFrame, ref recalculationCount);
-          sw3.Stop();
-          if (LightVolumes.IsActive)
+          sw2.Restart();
+          foreach (LightSource light in _.activeLights)
           {
-            try
-            {
-              if (!LightSource_Parent.ContainsKey(light)) continue;
-              LightSourceParentInfo lp = LightSource_Parent[light];
+            if (light.IsBackground || light.CurrentBrightness <= 0.0f) { continue; }
+            light.DrawLightVolume(spriteBatch, _.lightEffect, transform, recalculationCount < LightManager.MaxLightVolumeRecalculationsPerFrame, ref recalculationCount);
+          }
+          sw2.Stop();
+          Capture.Draw.AddTicksOnce(sw2.ElapsedTicks, LightVolumes, "Light Volumes");
+        }
+        else
+        {
+          foreach (LightSource light in _.activeLights)
+          {
+            if (light.IsBackground || light.CurrentBrightness <= 0.0f) { continue; }
+            sw3.Restart();
+            light.DrawLightVolume(spriteBatch, _.lightEffect, transform, recalculationCount < LightManager.MaxLightVolumeRecalculationsPerFrame, ref recalculationCount);
+            sw3.Stop();
+            if (!LightSource_Parent.ContainsKey(light)) continue;
 
-              if (LightVolumes.ByID)
-              {
-                Capture.Draw.AddTicks(sw3.ElapsedTicks, LightVolumes, lp.Name);
-              }
-              else
-              {
-                Capture.Draw.AddTicks(sw3.ElapsedTicks, LightVolumes, lp.GenericName);
-              }
-            }
-            catch (Exception e) { error(e); }
+            LightSourceParentInfo lp = LightSource_Parent[light];
+            Capture.Draw.AddTicks(sw3.ElapsedTicks, LightVolumes, lp.GenericName);
           }
         }
 
-        sw2.Stop();
-        //Capture.Draw.AddTicksOnce(sw2.ElapsedTicks, LightVolumes, "DrawLightVolumes");
+
         sw2.Restart();
 
         if (ConnectionPanel.ShouldDebugDrawWiring)
@@ -688,7 +687,6 @@ namespace ShowPerfExtensions
 
         sw.Stop();
         Capture.Draw.AddTicks(sw.ElapsedTicks, Lighting, "draw the actual light volumes, additive particles, hull ambient lights and the halo around the player");
-        // Capture.Draw.AddTicksOnce(sw.ElapsedTicks, LightVolumes, "draw the actual light volumes, additive particles");
         sw.Restart();
 
         //draw the actual light volumes, additive particles, hull ambient lights and the halo around the player

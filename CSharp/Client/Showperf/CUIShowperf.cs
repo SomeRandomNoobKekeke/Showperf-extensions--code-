@@ -220,6 +220,11 @@ namespace ShowPerfExtensions
       public CUICaptureMap LoadMap()
       {
         MapButton.Buttons.Clear();
+
+        foreach (CaptureState cs in Capture.Active)
+        {
+          cs.IsActive = false;
+        }
         Capture.Active.Clear();
 
         Map = CUIComponent.LoadFromFile<CUICaptureMap>(Mod.ModDir + "/XML/CUICaptureMap.xml");
