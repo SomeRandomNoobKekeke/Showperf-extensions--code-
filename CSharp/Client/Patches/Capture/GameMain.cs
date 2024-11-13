@@ -25,10 +25,9 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
-// If it's not enough GameMain.Update will throw names of assemblies to add
-// you can try using reflection, but i'm a bit too lazy for that 
-[assembly: IgnoresAccessChecksTo("MonoGame.Framework.Windows.NetStandard")]
-[assembly: IgnoresAccessChecksTo("MonoGame.Framework.Linux.NetStandard")]
+// this is cursed, don't use it
+// [assembly: IgnoresAccessChecksTo("MonoGame.Framework.Windows.NetStandard")]
+// [assembly: IgnoresAccessChecksTo("MonoGame.Framework.Linux.NetStandard")]
 
 
 namespace ShowPerfExtensions
@@ -53,10 +52,24 @@ namespace ShowPerfExtensions
           prefix: ShowperfMethod(typeof(GameMainPatch).GetMethod("GameMain_Draw_Replace"))
         );
 
+        Harmony.ReversePatch(
+          original: typeof(Game).GetMethod("Update", AccessTools.all),
+          standin: new HarmonyMethod(typeof(GameMainPatch).GetMethod("Game_Update_ReversePatch"))
+        );
+
         ShowperfDraw = Capture.Get("Showperf.Draw");
         ShowperfUpdate = Capture.Get("Showperf.Update");
         UpdateMonoGame = Capture.Get("MonoGame");
       }
+
+
+      public static void Game_Update_ReversePatch(object instance, GameTime gameTime)
+      {
+        log("guh...");
+      }
+
+
+
 
       // https://docs.monogame.net/api/Microsoft.Xna.Framework.Graphics.GraphicsMetrics.html
       public static void AddMonoGameMetrics()
@@ -211,15 +224,13 @@ namespace ShowPerfExtensions
           //  instead of base.Update(fixedTime);
           try
           {
-            _._updateables.ForEachFilteredItem(Game.UpdateAction, _.fixedTime);
+            Game_Update_ReversePatch(_, _.fixedTime);
           }
           catch (Exception e)
           {
             log(Assembly.GetAssembly(typeof(Game)).FullName, Color.Yellow);
             log(e, Color.Orange);
           }
-          //typeof(Game).GetMethod("Update", AccessTools.all).Invoke(_, new object[] { _.fixedTime });
-
 
           PlayerInput.Update(Timing.Step);
 
@@ -489,8 +500,8 @@ namespace ShowPerfExtensions
 
           SteamManager.Update((float)Timing.Step);
 
-          // Removed in compiled version
-          EosInterface.Core.Update();
+          // Can't compile with it :(
+          //EosInterface.Core.Update();
 
           TaskPool.Update();
 
