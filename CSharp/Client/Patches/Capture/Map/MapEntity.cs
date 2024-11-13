@@ -80,7 +80,7 @@ namespace ShowPerfExtensions
         {
           sw2.Restart();
 
-          if (UpdateHulls.IsActive)
+          if (UpdateHulls.IsActive || UpdateWholeSub.IsActive)
           {
             Capture.Update.EnsureCategory(UpdateHulls);
 
@@ -114,7 +114,7 @@ namespace ShowPerfExtensions
           Capture.Update.AddTicks(sw2.ElapsedTicks, Misc, "Hulls");
 
           sw2.Restart();
-          if (UpdateStructures.IsActive)
+          if (UpdateStructures.IsActive || UpdateWholeSub.IsActive)
           {
             Capture.Update.EnsureCategory(UpdateStructures);
 
@@ -148,7 +148,7 @@ namespace ShowPerfExtensions
         //which may lead to weird behavior like water draining down only through
         //one gap in a room even if there are several
         sw2.Restart();
-        if (UpdateGaps.IsActive)
+        if (UpdateGaps.IsActive || UpdateWholeSub.IsActive)
         {
           Capture.Update.EnsureCategory(UpdateGaps);
 
@@ -192,7 +192,7 @@ namespace ShowPerfExtensions
         sw.Restart();
 
 
-        if (Items.IsActive)
+        if (Items.IsActive || UpdateWholeSub.IsActive)
         {
           Capture.Update.EnsureCategory(Items);
 
