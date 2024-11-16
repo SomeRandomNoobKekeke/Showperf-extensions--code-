@@ -26,12 +26,20 @@ namespace ShowPerfExtensions
       public double Slope;
       public double TopValue;
       public HashSet<string> Tracked = new HashSet<string>();
+      public HashSet<string> Highlighted = new HashSet<string>();
+      public bool ToggleHighlight(string name)
+      {
+        bool was = Highlighted.Contains(name);
+        if (was) Highlighted.Remove(name);
+        else Highlighted.Add(name);
+        return was;
+      }
       public bool ToggleTracking(string name)
       {
-        bool wasTracked = Tracked.Contains(name);
-        if (wasTracked) Tracked.Remove(name);
+        bool was = Tracked.Contains(name);
+        if (was) Tracked.Remove(name);
         else Tracked.Add(name);
-        return wasTracked;
+        return was;
       }
 
       public void Clear()
@@ -50,6 +58,11 @@ namespace ShowPerfExtensions
       String.Format("{0:0.000000}", t * TicksToMs) :
       String.Format("{0:000000}", t);
 
+      public bool IsTracked(UpdateTicks t)
+      {
+        return Tracked.Count == 0 || Tracked.Any(s => t.Name.Contains(s));
+      }
+
       public string GetName(UpdateTicks t)
       {
         return $"{ConverToUnits(t.Ticks)} {t.Name}";
@@ -57,7 +70,7 @@ namespace ShowPerfExtensions
       public Color GetColor(UpdateTicksView t)
       {
         Color cl = ShowperfGradient(t.Ticks / TopValue);
-        return Tracked.Count != 0 && !Tracked.Contains(t.OriginalName) ? Color.DarkSlateGray : cl;
+        return Highlighted.Count != 0 && !Highlighted.Any(s => t.OriginalName.Contains(s)) ? Color.DarkSlateGray : cl;
       }
       public Color ShowperfGradient(double f) => ShowperfGradient((float)f);
 
@@ -76,8 +89,6 @@ namespace ShowPerfExtensions
 
       public void Update()
       {
-
-
         if (!Capture.Frozen && !GameMain.Instance.Paused && (Timing.TotalTime - Showperf.lastUpdateTime >= Showperf.UpdateInterval))
         {
           Showperf.lastUpdateTime = Timing.TotalTime;
@@ -89,6 +100,7 @@ namespace ShowPerfExtensions
             foreach (int id in Capture.Draw.TotalTicks[cat].Keys)
             {
               UpdateTicks t = Capture.Draw.GetTotal(cat, id);
+              if (!IsTracked(t)) continue;
               Values.Add(new UpdateTicksView(t, GetName(t)));
               Sum += t.Ticks;
 
@@ -101,6 +113,7 @@ namespace ShowPerfExtensions
             foreach (int id in Capture.Update.TotalTicks[cat].Keys)
             {
               UpdateTicks t = Capture.Update.GetTotal(cat, id);
+              if (!IsTracked(t)) continue;
               Values.Add(new UpdateTicksView(t, GetName(t)));
               Sum += t.Ticks;
 
@@ -115,6 +128,7 @@ namespace ShowPerfExtensions
             foreach (int id in Capture.MonoGame.TotalTicks[cat].Keys)
             {
               UpdateTicks t = Capture.MonoGame.GetTotal(cat, id);
+              if (!IsTracked(t)) continue;
               Values.Add(new UpdateTicksView(t, $"{Math.Round(t.Ticks)} {t.Name}"));
 
               TopValue = 1000;
@@ -126,7 +140,7 @@ namespace ShowPerfExtensions
             foreach (int id in Capture.Farseer.TotalTicks[cat].Keys)
             {
               UpdateTicks t = Capture.Farseer.GetTotal(cat, id);
-
+              if (!IsTracked(t)) continue;
               Values.Add(new UpdateTicksView(t, $"{String.Format("{0:0000.0000}", t.Ticks)} {t.Name}"));
 
               TopValue = 1000;
@@ -171,7 +185,7 @@ namespace ShowPerfExtensions
         {
           if (e.CurrentKeyboardState.IsKeyDown(Keys.LeftShift))
           {
-            Tracked.Clear();
+            Highlighted.Clear();
             e.ClickConsumed = true;
           }
         };
@@ -183,7 +197,7 @@ namespace ShowPerfExtensions
             int i = (int)Math.Floor((e.MousePosition.Y - Real.Top - Scroll) / TickBlock.StringHeight);
             if (i >= 0 && i <= Values.Count - 1)
             {
-              ToggleTracking(Values[i].OriginalName);
+              ToggleHighlight(Values[i].OriginalName);
             }
           }
         };

@@ -47,7 +47,9 @@
       <LightManager />
       <PhysicBodies />
       <ItemsHUD />
-      <Character />
+      <Character>
+        <Update />
+      </Character>
       <GameSession>
         <Store />
         <Events />
