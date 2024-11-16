@@ -39,6 +39,46 @@ namespace ShowPerfExtensions
         log($"Showperf.FPS = {Showperf.FPS}");
       }));
 
+      AddedCommands.Add(new DebugConsole.Command("showperf_highlight|s_highlight|s_h", "", (string[] args) =>
+      {
+        if (args.Length == 0)
+        {
+          Showperf.TickList.Highlighted.Clear();
+          log("highlight cleared");
+          return;
+        }
+
+        if (Showperf.TickList.ToggleHighlight(args[0]))
+        {
+          log($"{args[0]} unhighlighted");
+        }
+        else
+        {
+          log($"{args[0]} highlighted");
+        }
+      }));
+
+      AddedCommands.Add(new DebugConsole.Command("showperf_track|s_track|s_t", "", (string[] args) =>
+      {
+        if (args.Length == 0)
+        {
+          Showperf.TickList.Tracked.Clear();
+          log("all untracked");
+          return;
+        }
+
+        if (Showperf.TickList.ToggleTracking(args[0]))
+        {
+          log($"{args[0]} untracked");
+        }
+        else
+        {
+          log($"{args[0]} tracked");
+        }
+      }));
+
+
+
       AddedCommands.Add(new DebugConsole.Command("showperf_exposure|s_exposure", "showperf_exposure size [graph]", (string[] args) =>
       {
         bool draw = true;
