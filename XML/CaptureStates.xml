@@ -68,6 +68,7 @@
         <WholeSub />
         <Items>
           <Components>
+            <Controller />
             <Turret>
               <UpdateAutoOperate>
                 <TargetItems />

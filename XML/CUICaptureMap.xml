@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<CUICaptureMap ChildrenOffset="[78.648254,85.678894,1]" Relative="[0,0,1,1]">
+<CUICaptureMap ChildrenOffset="[517.0564,-122.0728,1]" Relative="[0,0,1,1]">
   <Connections>
     <Connection Start="Showperf.Draw" End="Draw" />
     <Connection Start="Draw.Map" End="Map" />
@@ -14,6 +14,7 @@
     <Connection Start="Update.MapEntity" End="WholeSub" />
     <Connection Start="MapEntity.Items" End="ItemComponents" />
     <Connection Start="ItemComponents" End="Turret" />
+    <Connection Start="ItemComponents" End="Controller" />
     <Connection Start="Turret" End="TurretUpdateAutoOperate" />
     <Connection Start="Lighting.LightVolumes" End="DrawLightVolume" />
     <Connection Start="Update.Character" End="CharacterUpdate" />
@@ -111,9 +112,10 @@
         <MapButton AKA="Misc" CState="Showperf.Update.MapEntity.Misc" Text="Misc" />
       </CUIVerticalList>
     </MapGroup>
-    <MapButton AKA="ItemComponents" Absolute="[-297.76013,254.1601,,]" CState="Showperf.Update.MapEntity.Items.Components" ConsumeDragAndDrop="true" ConsumeSwipe="true" Draggable="true" Text="Item Components" />
-    <MapButton AKA="Turret" Absolute="[-274.128,314.088,,]" CState="Showperf.Update.MapEntity.Items.Components.Turret" ConsumeDragAndDrop="true" ConsumeSwipe="true" Draggable="true" Text="Turret" TextAlign="{X:0.5 Y:0.5}" TextScale="1.2" />
-    <MapGroup AKA="TurretUpdateAutoOperate" Absolute="[-460.58414,312.33594,,37.8]" ConsumeSwipe="true" Draggable="true">
+    <MapButton AKA="ItemComponents" Absolute="[-294.65616,327.3681,,]" CState="Showperf.Update.MapEntity.Items.Components" ConsumeDragAndDrop="true" ConsumeSwipe="true" Draggable="true" Text="Item Components" />
+    <MapButton AKA="Turret" Absolute="[-347.23193,360.71204,,]" CState="Showperf.Update.MapEntity.Items.Components.Turret" ConsumeDragAndDrop="true" ConsumeSwipe="true" Draggable="true" Text="Turret" TextAlign="{X:0.5 Y:0.5}" TextScale="1.2" />
+    <MapButton AKA="Controller" Absolute="[-452.23193,360.71204,,]" CState="Showperf.Update.MapEntity.Items.Components.Controller" ConsumeDragAndDrop="true" ConsumeSwipe="true" Draggable="true" State="true" Text="Controller" TextAlign="{X:0.5 Y:0.5}" TextScale="1.2" />
+    <MapGroup AKA="TurretUpdateAutoOperate" Absolute="[-401.04807,403.56793,,37.8]" ConsumeSwipe="true" Draggable="true">
       <MapButton AKA="TurretUpdateAutoOperate" CState="Showperf.Update.MapEntity.Items.Components.Turret.UpdateAutoOperate" Text="UpdateAutoOperate" TextAlign="{X:0.5 Y:0.5}" TextScale="1.2" />
       <CUIVerticalList Absolute="[,,,16.199999]" AbsoluteMin="[,,76.9,]" FitContent="[True,True]">
         <MapButton AKA="TargetItems" CState="Showperf.Update.MapEntity.Items.Components.Turret.UpdateAutoOperate.TargetItems" Text="TargetItems" />
