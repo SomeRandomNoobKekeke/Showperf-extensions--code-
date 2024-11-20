@@ -79,17 +79,18 @@ namespace ShowPerfExtensions
 
       AddedCommands.Add(new DebugConsole.Command("showperf_fakelag|s_fakelag", "showperf_fakelag ticks [draw|update]", (string[] args) =>
       {
-        if (args.Length == 0) return;
-
-        long ticks = 0;
-        if (long.TryParse(args[0], out ticks))
+        if (args.Length != 0)
         {
-          if (args.ElementAtOrDefault(1) != "update") Capture.DrawFakeLag = new TimeSpan(ticks);
-          if (args.ElementAtOrDefault(1) != "draw") Capture.UpdateFakeLag = new TimeSpan(ticks);
+          long ticks = 0;
+          if (long.TryParse(args[0], out ticks))
+          {
+            if (args.ElementAtOrDefault(1) != "update") Capture.DrawFakeLag = new TimeSpan(ticks);
+            if (args.ElementAtOrDefault(1) != "draw") Capture.UpdateFakeLag = new TimeSpan(ticks);
+          }
         }
 
-        log(Capture.DrawFakeLag);
-        log(Capture.UpdateFakeLag);
+        log($"Draw: {Capture.DrawFakeLag}");
+        log($"Update: {Capture.UpdateFakeLag}");
       }, () => new string[][] { new string[0], new string[] { "update", "draw" } }));
 
 
