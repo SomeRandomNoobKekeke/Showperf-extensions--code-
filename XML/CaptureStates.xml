@@ -68,6 +68,7 @@
         <WholeSub />
         <Items>
           <Components>
+            <MotionSensor />
             <Controller />
             <Turret>
               <UpdateAutoOperate>
