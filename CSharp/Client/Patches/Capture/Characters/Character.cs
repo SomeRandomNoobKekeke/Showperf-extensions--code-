@@ -315,9 +315,9 @@ namespace ShowPerfExtensions
         }
         _.speechImpedimentSet = false;
 
+        sw.Restart();
         if (_.NeedsAir)
         {
-          sw.Restart();
           //implode if not protected from pressure, and either outside or in a high-pressure hull
           if (!_.IsProtectedFromPressure && (_.AnimController.CurrentHull == null || _.AnimController.CurrentHull.LethalPressure >= 80.0f))
           {
@@ -412,11 +412,18 @@ namespace ShowPerfExtensions
         {
           _.UpdateOxygen(deltaTime);
         }
+        sw.Stop();
+        CaptureCharacter2(sw.ElapsedTicks, _, "UpdateOxygen");
 
+        sw.Restart();
         _.CalculateHealthMultiplier();
+        sw.Stop();
+        CaptureCharacter2(sw.ElapsedTicks, _, "CalculateHealthMultiplier");
+
+        sw.Restart();
         _.CharacterHealth.Update(deltaTime);
         sw.Stop();
-        CaptureCharacter2(sw.ElapsedTicks, _, "Health");
+        CaptureCharacter2(sw.ElapsedTicks, _, "CharacterHealth.Update");
 
 
 
@@ -463,6 +470,7 @@ namespace ShowPerfExtensions
                 //falling down counts as going too fast
                 (!_.InWater && body.LinearVelocity.Y < -5.0f);
           }
+
           if (_.ragdollingLockTimer > 0.0f)
           {
             _.ragdollingLockTimer -= deltaTime;
@@ -484,6 +492,7 @@ namespace ShowPerfExtensions
         sw.Stop();
         CaptureCharacter2(sw.ElapsedTicks, _, "Ragdoll Input");
 
+
         _.lowPassMultiplier = MathHelper.Lerp(_.lowPassMultiplier, 1.0f, 0.1f);
 
         if (_.IsRagdolled || !_.CanMove)
@@ -504,9 +513,12 @@ namespace ShowPerfExtensions
 
         //AI and control stuff
         sw.Restart();
-
         _.Control(deltaTime, cam);
+        sw.Stop();
+        CaptureCharacter2(sw.ElapsedTicks, _, "Control");
 
+
+        sw.Restart();
         bool isNotControlled = Character.Controlled != _;
 
         if (isNotControlled && (!(_ is AICharacter) || _.IsRemotePlayer))
@@ -514,15 +526,22 @@ namespace ShowPerfExtensions
           Vector2 mouseSimPos = ConvertUnits.ToSimUnits(_.cursorPosition);
           _.DoInteractionUpdate(deltaTime, mouseSimPos);
         }
+        sw.Stop();
+        CaptureCharacter2(sw.ElapsedTicks, _, "DoInteractionUpdate");
 
+        sw.Restart();
         if (MustDeselect(_.SelectedItem))
         {
           _.SelectedItem = null;
         }
+
         if (MustDeselect(_.SelectedSecondaryItem))
         {
           _.ReleaseSecondaryItem();
         }
+        sw.Stop();
+        CaptureCharacter2(sw.ElapsedTicks, _, "MustDeselect");
+
 
         if (!_.IsDead) { _.LockHands = false; }
 
@@ -543,8 +562,7 @@ namespace ShowPerfExtensions
           return !hasSelectableComponent;
         }
 
-        sw.Stop();
-        CaptureCharacter2(sw.ElapsedTicks, _, "AI and control stuff");
+
 
         return false;
       }
