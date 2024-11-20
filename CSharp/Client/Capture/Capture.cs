@@ -19,6 +19,10 @@ namespace ShowPerfExtensions
 
     public class CaptureClass
     {
+      public TimeSpan DrawFakeLag = new TimeSpan(0);
+      public TimeSpan UpdateFakeLag = new TimeSpan(0);
+
+
       public CaptureWindow Draw = new CaptureWindow();
       public CaptureWindow Update = new CaptureWindow()
       {

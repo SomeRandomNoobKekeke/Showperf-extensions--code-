@@ -21,6 +21,8 @@ using System.Linq;
 
 using Microsoft.Xna.Framework;
 using FarseerPhysics.Dynamics;
+using System.Threading;
+
 
 
 namespace ShowPerfExtensions
@@ -138,6 +140,8 @@ namespace ShowPerfExtensions
       public static bool GameScreen_Draw_Replace(double deltaTime, GraphicsDevice graphics, SpriteBatch spriteBatch, GameScreen __instance)
       {
         if (!Showperf.Revealed) return true;
+
+        Thread.Sleep(Capture.DrawFakeLag);
 
         Stopwatch sw = new Stopwatch();
         Stopwatch sw2 = new Stopwatch();
@@ -764,6 +768,8 @@ namespace ShowPerfExtensions
       public static bool GameScreen_Update_Replace(double deltaTime, GameScreen __instance)
       {
         if (!Showperf.Revealed) return true;
+
+        Thread.Sleep(Capture.UpdateFakeLag);
 
         Stopwatch sw = new Stopwatch();
         Stopwatch sw2 = new Stopwatch();
