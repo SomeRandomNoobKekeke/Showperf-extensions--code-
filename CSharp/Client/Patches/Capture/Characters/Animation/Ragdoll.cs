@@ -63,7 +63,7 @@ namespace ShowPerfExtensions
         Capture.Update.EnsureCategory(UpdateRagdoll);
 
         Stopwatch sw = new Stopwatch();
-        Stopwatch sw2 = new Stopwatch();
+
 
         Ragdoll _ = __instance;
 
@@ -77,50 +77,47 @@ namespace ShowPerfExtensions
         }
         sw.Stop();
         CaptureRagdoll(_, sw.ElapsedTicks, "Apply Impacts");
+
+
+
         sw.Restart();
-
-        sw2.Restart();
-
         _.CheckValidity();
-        sw2.Stop();
+        sw.Stop();
         CaptureRagdoll(_, sw.ElapsedTicks, "CheckValidity");
-        sw2.Restart();
 
+        sw.Restart();
         _.UpdateNetPlayerPosition(deltaTime);
-        sw2.Stop();
+        sw.Stop();
         CaptureRagdoll(_, sw.ElapsedTicks, "UpdateNetPlayerPosition");
-        sw2.Restart();
 
+        sw.Restart();
         _.CheckDistFromCollider();
-        sw2.Stop();
+        sw.Stop();
         CaptureRagdoll(_, sw.ElapsedTicks, "CheckDistFromCollider");
-        sw2.Restart();
 
+        sw.Restart();
         _.UpdateCollisionCategories();
-        sw2.Stop();
+        sw.Stop();
         CaptureRagdoll(_, sw.ElapsedTicks, "UpdateCollisionCategories");
-        sw2.Restart();
 
+        sw.Restart();
         _.FindHull();
-        sw2.Stop();
+        sw.Stop();
         CaptureRagdoll(_, sw.ElapsedTicks, "FindHull");
-        sw2.Restart();
 
+        sw.Restart();
         _.PreventOutsideCollision();
-        sw2.Stop();
+        sw.Stop();
         CaptureRagdoll(_, sw.ElapsedTicks, "PreventOutsideCollision");
-        sw2.Restart();
 
+        sw.Restart();
         _.CheckBodyInRest(deltaTime);
-        sw2.Stop();
+        sw.Stop();
         CaptureRagdoll(_, sw.ElapsedTicks, "CheckBodyInRest");
 
         _.splashSoundTimer -= deltaTime;
 
-        sw.Stop();
-        //Capture.Update.AddTicksOnce(sw.ElapsedTicks, UpdateRagdoll, "Checks");
         sw.Restart();
-
         if (_.character.Submarine == null && Level.Loaded != null)
         {
           if (_.Collider.SimPosition.Y > Level.Loaded.TopBarrier.Position.Y)
@@ -146,11 +143,10 @@ namespace ShowPerfExtensions
             }
           }
         }
-
         sw.Stop();
         CaptureRagdoll(_, sw.ElapsedTicks, "Check Out ouf bounds");
-        sw.Restart();
 
+        sw.Restart();
         if (_.forceStanding)
         {
           _.inWater = false;
@@ -200,28 +196,25 @@ namespace ShowPerfExtensions
             }
           }
         }
-
         sw.Stop();
         CaptureRagdoll(_, sw.ElapsedTicks, "Update inWater");
+
         sw.Restart();
-
         _.UpdateHullFlowForces(deltaTime);
-
         sw.Stop();
         CaptureRagdoll(_, sw.ElapsedTicks, "UpdateHullFlowForces");
-        sw.Restart();
 
+        sw.Restart();
         if (_.currentHull == null ||
             _.currentHull.WaterVolume > _.currentHull.Volume * 0.95f ||
             ConvertUnits.ToSimUnits(_.currentHull.Surface) > _.Collider.SimPosition.Y)
         {
           _.Collider.ApplyWaterForces();
         }
-
         sw.Stop();
         CaptureRagdoll(_, sw.ElapsedTicks, "ApplyWaterForces");
-        sw.Restart();
 
+        sw.Restart();
         foreach (Limb limb in _.Limbs)
         {
           //find the room which the limb is in
@@ -271,11 +264,10 @@ namespace ShowPerfExtensions
           limb.Hull = newHull;
           limb.Update(deltaTime);
         }
-
         sw.Stop();
         CaptureRagdoll(_, sw.ElapsedTicks, "limb.Update");
-        sw.Restart();
 
+        sw.Restart();
         bool isAttachedToController =
             _.character.SelectedItem?.GetComponent<Barotrauma.Items.Components.Controller>() is { } controller &&
             controller.User == _.character &&
@@ -325,17 +317,16 @@ namespace ShowPerfExtensions
             }
           }
         }
-
         sw.Stop();
         CaptureRagdoll(_, sw.ElapsedTicks, "levitatingCollider");
-        sw.Restart();
+
 
 #if CLIENT
+        sw.Restart();
         _.UpdateProjSpecific(deltaTime, cam);
-#endif
         sw.Stop();
         CaptureRagdoll(_, sw.ElapsedTicks, "Update sprite deformations");
-        sw.Restart();
+#endif
 
         _.forceNotStanding = false;
 
