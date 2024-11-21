@@ -177,10 +177,10 @@ namespace ShowPerfExtensions
         }
 
 #if CLIENT
-      sw.Restart();
-      Character.UpdateSpeechBubbles(deltaTime);
-      sw.Stop();
-      Capture.Update.AddTicks(sw.ElapsedTicks, CaptureUpdateAll, "UpdateSpeechBubbles");
+        sw.Restart();
+        Character.UpdateSpeechBubbles(deltaTime);
+        sw.Stop();
+        Capture.Update.AddTicks(sw.ElapsedTicks, CaptureUpdateAll, "UpdateSpeechBubbles");
 #endif
 
         return false;
