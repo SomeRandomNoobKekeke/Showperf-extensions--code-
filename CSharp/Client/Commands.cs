@@ -77,6 +77,25 @@ namespace ShowPerfExtensions
         }
       }));
 
+      AddedCommands.Add(new DebugConsole.Command("showperf_ignore|s_ignore|s_i", "", (string[] args) =>
+      {
+        if (args.Length == 0)
+        {
+          Showperf.TickList.Ignored.Clear();
+          log("all unignored");
+          return;
+        }
+
+        if (Showperf.TickList.ToggleIgnore(args[0]))
+        {
+          log($"{args[0]} unignored");
+        }
+        else
+        {
+          log($"{args[0]} ignored");
+        }
+      }));
+
       AddedCommands.Add(new DebugConsole.Command("showperf_fakelag|s_fakelag", "showperf_fakelag ticks [draw|update]", (string[] args) =>
       {
         if (args.Length != 0)

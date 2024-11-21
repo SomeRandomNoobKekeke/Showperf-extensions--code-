@@ -26,6 +26,7 @@ namespace ShowPerfExtensions
       public double Slope;
       public double TopValue;
       public HashSet<string> Tracked = new HashSet<string>();
+      public HashSet<string> Ignored = new HashSet<string>();
       public HashSet<string> Highlighted = new HashSet<string>();
       public bool ToggleHighlight(string name)
       {
@@ -39,6 +40,14 @@ namespace ShowPerfExtensions
         bool was = Tracked.Contains(name);
         if (was) Tracked.Remove(name);
         else Tracked.Add(name);
+        return was;
+      }
+
+      public bool ToggleIgnore(string name)
+      {
+        bool was = Ignored.Contains(name);
+        if (was) Ignored.Remove(name);
+        else Ignored.Add(name);
         return was;
       }
 
@@ -60,7 +69,9 @@ namespace ShowPerfExtensions
 
       public bool IsTracked(UpdateTicks t)
       {
-        return Tracked.Count == 0 || Tracked.Any(s => t.Name.Contains(s));
+        return (Tracked.Count == 0 && Ignored.Count == 0) ||
+        Tracked.Any(s => t.Name.Contains(s)) ||
+        !Ignored.Any(s => t.Name.Contains(s));
       }
 
       public string GetName(UpdateTicks t)

@@ -255,6 +255,9 @@ namespace ShowPerfExtensions
           }
         }
 
+        TickList.Tracked.Clear();
+        TickList.Highlighted.Clear();
+
         ById.SetState(cs.ByID);
         SetCategoryText();
 
