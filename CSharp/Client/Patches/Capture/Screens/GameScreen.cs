@@ -321,12 +321,18 @@ namespace ShowPerfExtensions
 #else
         spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.NonPremultiplied, null, DepthStencilState.None, null, null, _.cam.Transform);
 #endif
-        ParticleManagerPatch.Draw(BackLevelParticles, spriteBatch, true, false, Barotrauma.Particles.ParticleBlendState.AlphaBlend);
+
+        //TODO investigate these draw calls
+        GameMain.ParticleManager.Draw(spriteBatch, true, false, Barotrauma.Particles.ParticleBlendState.AlphaBlend);
+        //ParticleManagerPatch.Draw(BackLevelParticles, spriteBatch, true, false, Barotrauma.Particles.ParticleBlendState.AlphaBlend);
         spriteBatch.End();
 
         //draw additive particles that are in water and behind subs
         spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.Additive, null, DepthStencilState.None, null, null, _.cam.Transform);
-        ParticleManagerPatch.Draw(BackLevelParticles, spriteBatch, true, false, Barotrauma.Particles.ParticleBlendState.Additive);
+
+        GameMain.ParticleManager.Draw(spriteBatch, true, false, Barotrauma.Particles.ParticleBlendState.Additive);
+        //ParticleManagerPatch.Draw(BackLevelParticles, spriteBatch, true, false, Barotrauma.Particles.ParticleBlendState.Additive);
+
         spriteBatch.End();
         spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.NonPremultiplied, null, DepthStencilState.None);
         spriteBatch.Draw(_.renderTarget, new Rectangle(0, 0, GameMain.GraphicsWidth, GameMain.GraphicsHeight), Color.White);
