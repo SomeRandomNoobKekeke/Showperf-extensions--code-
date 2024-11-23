@@ -58,7 +58,9 @@
         <GUI />
       </GameSession>
       <Level>
-        <LevelObjectManager />
+        <LevelObjectManager>
+          <Sounds />
+        </LevelObjectManager>
         <Walls />
         <BackgroundCreatureManager />
         <WaterRenderer />

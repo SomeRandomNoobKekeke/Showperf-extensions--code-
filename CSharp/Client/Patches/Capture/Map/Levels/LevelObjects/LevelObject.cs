@@ -31,6 +31,7 @@ namespace ShowPerfExtensions
     public class LevelObjectPatch
     {
       public static CaptureState LevelObjects;
+      public static CaptureState LevelObjectSounds;
       public static void Initialize()
       {
         harmony.Patch(
@@ -39,15 +40,17 @@ namespace ShowPerfExtensions
         );
 
         LevelObjects = Capture.Get("Showperf.Update.Level.LevelObjectManager");
+        LevelObjectSounds = Capture.Get("Showperf.Update.Level.LevelObjectManager.Sounds");
       }
 
       public static bool LevelObject_Update_Replace(float deltaTime, LevelObject __instance)
       {
-        if (!LevelObjects.IsActive || !Showperf.Revealed) return true;
+        if (!LevelObjects.IsActive && !LevelObjectSounds.IsActive || !Showperf.Revealed) return true;
 
         LevelObject _ = __instance;
 
         Stopwatch sw = new Stopwatch();
+        Stopwatch sw2 = new Stopwatch();
 
         sw.Restart();
         _.CurrentRotation = _.Rotation;
@@ -145,6 +148,8 @@ namespace ShowPerfExtensions
         }
 
 
+        if (LevelObjectSounds.IsActive) Capture.Update.EnsureCategory(LevelObjectSounds);
+
         sw.Restart();
         for (int i = 0; i < _.Sounds.Length; i++)
         {
@@ -158,7 +163,11 @@ namespace ShowPerfExtensions
             {
               if (_.SoundChannels[i] == null || !_.SoundChannels[i].IsPlaying)
               {
+                sw2.Restart();
                 _.SoundChannels[i] = roundSound.Sound.Play(roundSound.Volume, roundSound.Range, roundSound.GetRandomFrequencyMultiplier(), soundPos);
+                sw2.Stop();
+                Capture.Update.AddTicks(sw2.ElapsedTicks, LevelObjectSounds, $"{_} roundSound.Sound.Play");
+
               }
               _.SoundChannels[i].Position = new Vector3(soundPos.X, soundPos.Y, 0.0f);
             }
@@ -169,6 +178,8 @@ namespace ShowPerfExtensions
             _.SoundChannels[i] = null;
           }
         }
+
+
         sw.Stop();
         if (LevelObjects.ByID)
         {
