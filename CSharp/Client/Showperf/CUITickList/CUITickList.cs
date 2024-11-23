@@ -69,9 +69,29 @@ namespace ShowPerfExtensions
 
       public bool IsTracked(UpdateTicks t)
       {
-        return (Tracked.Count == 0 && Ignored.Count == 0) ||
-        Tracked.Any(s => t.Name.Contains(s)) ||
-        !Ignored.Any(s => t.Name.Contains(s));
+        // guh, at least it's explicit
+        if (Tracked.Count == 0)
+        {
+          if (Ignored.Count == 0)
+          {
+            return true;
+          }
+          else
+          {
+            return !Ignored.Any(s => t.Name.Contains(s));
+          }
+        }
+        else
+        {
+          if (Ignored.Count == 0)
+          {
+            return Tracked.Any(s => t.Name.Contains(s));
+          }
+          else
+          {
+            return Tracked.Any(s => t.Name.Contains(s)) && !Ignored.Any(s => t.Name.Contains(s));
+          }
+        }
       }
 
       public string GetName(UpdateTicks t)
