@@ -347,7 +347,7 @@ namespace ShowPerfExtensions
               try
               {
                 if (!LightSource_Parent.ContainsKey(light)) continue;
-                LightSourceParentInfo lp = LightSource_Parent[light];
+                ParentInfo lp = LightSource_Parent[light];
 
                 if (AttachedToCharacters.ByID)
                 {
@@ -390,7 +390,7 @@ namespace ShowPerfExtensions
             try
             {
               if (!LightSource_Parent.ContainsKey(light)) continue;
-              LightSourceParentInfo lp = LightSource_Parent[light];
+              ParentInfo lp = LightSource_Parent[light];
 
               if (BackgroundLights.ByID)
               {
@@ -497,7 +497,7 @@ namespace ShowPerfExtensions
             try
             {
               if (!LightSource_Parent.ContainsKey(light)) continue;
-              LightSourceParentInfo lp = LightSource_Parent[light];
+              ParentInfo lp = LightSource_Parent[light];
 
               if (DrawHighlights.ByID)
               {
@@ -617,7 +617,7 @@ namespace ShowPerfExtensions
             sw3.Stop();
             if (!LightSource_Parent.ContainsKey(light)) continue;
 
-            LightSourceParentInfo lp = LightSource_Parent[light];
+            ParentInfo lp = LightSource_Parent[light];
             Capture.Draw.AddTicks(sw3.ElapsedTicks, LightVolumes, lp.GenericName);
           }
         }

@@ -176,6 +176,8 @@ namespace ShowPerfExtensions
         LevelObjectManager _ = __instance;
 
         Stopwatch sw = new Stopwatch();
+        Stopwatch sw2 = new Stopwatch();
+
         Capture.Update.EnsureCategory(LevelObjects);
 
         _.GlobalForceDecreaseTimer += deltaTime;
@@ -200,14 +202,18 @@ namespace ShowPerfExtensions
             }
             if (obj.Prefab.HideWhenBroken && obj.Health <= 0.0f) { continue; }
 
-
+            long tiggersUpdateTicks = 0;
             sw.Restart();
             if (obj.Triggers != null)
             {
               obj.ActivePrefab = obj.Prefab;
               for (int i = 0; i < obj.Triggers.Count; i++)
               {
+                sw2.Restart();
                 obj.Triggers[i].Update(deltaTime);
+                sw2.Stop();
+                tiggersUpdateTicks += sw2.ElapsedTicks;
+
                 if (obj.Triggers[i].IsTriggered && obj.Prefab.OverrideProperties[i] != null)
                 {
                   obj.ActivePrefab = obj.Prefab.OverrideProperties[i];
@@ -217,11 +223,13 @@ namespace ShowPerfExtensions
             sw.Stop();
             if (LevelObjects.ByID)
             {
-              Capture.Update.AddTicks(sw.ElapsedTicks, LevelObjects, $"{obj}.Triggers");
+              Capture.Update.AddTicks(tiggersUpdateTicks, LevelObjects, $"{obj}.Triggers");
+              Capture.Update.AddTicks(sw.ElapsedTicks - tiggersUpdateTicks, LevelObjects, $"{obj}.Triggers prefab juggling");
             }
             else
             {
-              Capture.Update.AddTicks(sw.ElapsedTicks, LevelObjects, $"Triggers");
+              Capture.Update.AddTicks(tiggersUpdateTicks, LevelObjects, $"Triggers");
+              Capture.Update.AddTicks(sw.ElapsedTicks - tiggersUpdateTicks, LevelObjects, $"Triggers prefab juggling");
             }
 
             if (obj.PhysicsBody != null)

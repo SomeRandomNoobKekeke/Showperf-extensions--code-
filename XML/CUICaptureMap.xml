@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<CUICaptureMap ChildrenOffset="[73.911804,87.3432,1]" Relative="[0,0,1,1]">
+<CUICaptureMap ChildrenOffset="[79.911804,95.3432,1]" Relative="[0,0,1,1]">
   <Connections>
     <Connection Start="Showperf.Draw" End="Draw" />
     <Connection Start="Draw.Map" End="Map" />
@@ -20,6 +20,7 @@
     <Connection Start="Lighting.LightVolumes" End="DrawLightVolume" />
     <Connection Start="Update.Character" End="CharacterUpdate" />
     <Connection Start="Level.LevelObjectManager" End="LevelObjectSounds" />
+    <Connection Start="Level.LevelObjectManager" End="LevelObjectTriggers" />
   </Connections>
   <Children>
     <MapButton AKA="MonoGame" Absolute="[-275.4162,-67.50402,,]" CState="MonoGame" ConsumeDragAndDrop="true" ConsumeSwipe="true" Draggable="true" Text="MonoGame Metrics" TextScale="1.6" />
@@ -107,7 +108,8 @@
         <MapButton AKA="LevelRenderer" CState="Showperf.Update.Level.LevelRenderer" Text="Level Renderer" />
       </CUIVerticalList>
     </MapGroup>
-    <MapButton AKA="LevelObjectSounds" Absolute="[-599.40814,204.91208,,]" CState="Showperf.Update.Level.LevelObjectManager.Sounds" ConsumeDragAndDrop="true" ConsumeSwipe="true" Draggable="true" Text="LevelObject Sounds" />
+    <MapButton AKA="LevelObjectSounds" Absolute="[-604.40814,227.91208,,]" CState="Showperf.Update.Level.LevelObjectManager.Sounds" ConsumeDragAndDrop="true" ConsumeSwipe="true" Draggable="true" Text="LevelObject Sounds" />
+    <MapButton AKA="LevelObjectTriggers" Absolute="[-607.40814,173.91208,,]" CState="Showperf.Update.Level.LevelObjectManager.Triggers" ConsumeDragAndDrop="true" ConsumeSwipe="true" Draggable="true" Text="LevelObject Triggers" />
     <MapGroup AKA="MapEntity" Absolute="[-155.86406,231.97607,,54]" ConsumeSwipe="true" Draggable="true">
       <MapButton AKA="MapEntity" CState="Showperf.Update.MapEntity" Text="MapEntity" TextAlign="{X:0.5 Y:0.5}" TextScale="1.2" />
       <CUIVerticalList Absolute="[,,,32.399998]" AbsoluteMin="[,,37.3,]" FitContent="[True,True]">

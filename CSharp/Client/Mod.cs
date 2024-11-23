@@ -104,6 +104,7 @@ namespace ShowPerfExtensions
       AddCommands();
 
       FindLightSourceParents.Find();
+      FindLevelTriggerParents.Find();
 
       info($"{ModName} Initialized");
     }

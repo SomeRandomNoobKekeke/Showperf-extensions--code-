@@ -25,18 +25,18 @@ namespace ShowPerfExtensions
   public partial class Plugin
   {
 
-    public struct LightSourceParentInfo
+    public struct ParentInfo
     {
       public string Name;
       public string GenericName;
-      public LightSourceParentInfo(string name, string genericName = null)
+      public ParentInfo(string name, string genericName = null)
       {
         Name = name ?? "???";
         GenericName = genericName ?? Name;
       }
     }
 
-    public static Dictionary<LightSource, LightSourceParentInfo> LightSource_Parent = new Dictionary<LightSource, LightSourceParentInfo>();
+    public static Dictionary<LightSource, ParentInfo> LightSource_Parent = new Dictionary<LightSource, ParentInfo>();
 
     [ShowperfPatch]
     public class FindLightSourceParents
@@ -79,7 +79,7 @@ namespace ShowPerfExtensions
               {
                 foreach (LightSource l in o.LightSources)
                 {
-                  LightSource_Parent[l] = new LightSourceParentInfo(o.ToString());
+                  LightSource_Parent[l] = new ParentInfo(o.ToString());
                 }
               }
             }
@@ -91,7 +91,7 @@ namespace ShowPerfExtensions
             {
               if (lc.Light != null)
               {
-                LightSource_Parent[lc.Light] = new LightSourceParentInfo(
+                LightSource_Parent[lc.Light] = new ParentInfo(
                   i.ToString(),
                   i.Prefab?.Identifier.Value ?? i.ToString()
                 );
@@ -103,7 +103,7 @@ namespace ShowPerfExtensions
           {
             foreach (LightSource l in s.Lights)
             {
-              LightSource_Parent[l] = new LightSourceParentInfo(
+              LightSource_Parent[l] = new ParentInfo(
                 $"{s} ({s.ID})",
                 s.ToString()
               );
@@ -117,7 +117,7 @@ namespace ShowPerfExtensions
             foreach (Limb l in c.AnimController.Limbs)
             {
               if (l.LightSource == null) continue;
-              LightSource_Parent[l.LightSource] = new LightSourceParentInfo(
+              LightSource_Parent[l.LightSource] = new ParentInfo(
                 $"{c} {l.Name}",
                 l.Name
               );
@@ -147,7 +147,7 @@ namespace ShowPerfExtensions
         {
           if (__instance.Light == null) return;
 
-          LightSource_Parent[__instance.Light] = new LightSourceParentInfo(
+          LightSource_Parent[__instance.Light] = new ParentInfo(
             __instance.Item?.ToString(),
             __instance.Item?.Prefab?.Identifier.Value ?? __instance.Item?.ToString()
           );
@@ -161,7 +161,7 @@ namespace ShowPerfExtensions
         {
           foreach (LightSource l in __instance.Lights)
           {
-            LightSource_Parent[l] = new LightSourceParentInfo(
+            LightSource_Parent[l] = new ParentInfo(
                 $"{__instance} ({__instance.ID})",
                 __instance.ToString()
               );
@@ -178,7 +178,7 @@ namespace ShowPerfExtensions
 
           foreach (LightSource l in __instance.LightSources)
           {
-            LightSource_Parent[l] = new LightSourceParentInfo(__instance.ToString());
+            LightSource_Parent[l] = new ParentInfo(__instance.ToString());
           }
 
         }
@@ -190,7 +190,7 @@ namespace ShowPerfExtensions
         try
         {
           if (__instance.LightSource == null) return;
-          LightSource_Parent[__instance.LightSource] = new LightSourceParentInfo(
+          LightSource_Parent[__instance.LightSource] = new ParentInfo(
             $"{__instance.character} {__instance.Name}",
             __instance.Name
           );

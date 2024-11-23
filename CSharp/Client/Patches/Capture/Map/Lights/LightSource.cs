@@ -53,7 +53,7 @@ namespace ShowPerfExtensions
         sw.Restart();
 
         LightSource _ = __instance;
-        LightSourceParentInfo lp = LightSource_Parent.GetValueOrDefault(_);
+        ParentInfo lp = LightSource_Parent.GetValueOrDefault(_);
 
         if (_.Range < 1.0f || _.Color.A < 1 || _.CurrentBrightness <= 0.0f) { return false; }
 
