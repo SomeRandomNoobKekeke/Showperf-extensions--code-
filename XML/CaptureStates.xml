@@ -50,6 +50,7 @@
       <Character>
         <Update>
           <AIController />
+          <Control />
         </Update>
       </Character>
       <GameSession>
