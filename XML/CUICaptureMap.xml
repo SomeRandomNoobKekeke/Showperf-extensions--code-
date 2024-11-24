@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<CUICaptureMap ChildrenOffset="[381.9438,-115.5768,1]" Relative="[0,0,1,1]">
+<CUICaptureMap ChildrenOffset="[465.15186,-53.75299,1]" Relative="[0,0,1,1]">
   <Connections>
     <Connection Start="Showperf.Draw" End="Draw" />
     <Connection Start="Draw.Map" End="Map" />
@@ -14,6 +14,7 @@
     <Connection Start="Update.MapEntity" End="WholeSub" />
     <Connection Start="MapEntity.Items" End="ItemComponents" />
     <Connection Start="MapEntity.Items" End="ItemUse" />
+    <Connection Start="ItemUse" End="RepairToolUse" />
     <Connection Start="ItemComponents" End="Turret" />
     <Connection Start="ItemComponents" End="Controller" />
     <Connection Start="ItemComponents" End="MotionSensor" />
@@ -103,7 +104,7 @@
     <MapButton AKA="CharacterUpdate" Absolute="[-165.17621,117.4321,,]" CState="Showperf.Update.Character.Update" ConsumeDragAndDrop="true" ConsumeSwipe="true" Draggable="true" Text="Update" />
     <MapButton AKA="CharacterAIController" Absolute="[-144.17621,78.4321,,]" CState="Showperf.Update.Character.Update.AIController" ConsumeDragAndDrop="true" ConsumeSwipe="true" Draggable="true" Text="AIController" />
     <MapButton AKA="CharacterControl" Absolute="[-205.17621,78.4321,,]" CState="Showperf.Update.Character.Update.Control" ConsumeDragAndDrop="true" ConsumeSwipe="true" Draggable="true" Text="Control" />
-    <MapGroup AKA="Level" Absolute="[-460.95227,181.85596,,102.59999]" ConsumeSwipe="true" Draggable="true">
+    <MapGroup AKA="Level" Absolute="[-498.18433,45.81597,,102.59999]" ConsumeSwipe="true" Draggable="true">
       <MapButton AKA="Level" CState="Showperf.Update.Level" Text="Level" TextAlign="{X:0.5 Y:0.5}" TextScale="1.2" />
       <CUIVerticalList Absolute="[,,,80.99999]" AbsoluteMin="[,,134.5,]" FitContent="[True,True]">
         <MapButton AKA="LevelObjectManager" CState="Showperf.Update.Level.LevelObjectManager" Text="Level Objects" />
@@ -113,28 +114,29 @@
         <MapButton AKA="LevelRenderer" CState="Showperf.Update.Level.LevelRenderer" Text="Level Renderer" />
       </CUIVerticalList>
     </MapGroup>
-    <MapButton AKA="LevelObjectSounds" Absolute="[-604.40814,227.91208,,]" CState="Showperf.Update.Level.LevelObjectManager.Sounds" ConsumeDragAndDrop="true" ConsumeSwipe="true" Draggable="true" Text="LevelObject Sounds" />
-    <MapButton AKA="LevelObjectTriggers" Absolute="[-607.40814,173.91208,,]" CState="Showperf.Update.Level.LevelObjectManager.Triggers" ConsumeDragAndDrop="true" ConsumeSwipe="true" Draggable="true" Text="LevelObject Triggers" />
-    <MapGroup AKA="MapEntity" Absolute="[-151.86407,257.97607,,54]" ConsumeSwipe="true" Draggable="true">
+    <MapButton AKA="LevelObjectSounds" Absolute="[-651.4081,98.91208,,]" CState="Showperf.Update.Level.LevelObjectManager.Sounds" ConsumeDragAndDrop="true" ConsumeSwipe="true" Draggable="true" Text="LevelObject Sounds" />
+    <MapButton AKA="LevelObjectTriggers" Absolute="[-654.4081,23.912079,,]" CState="Showperf.Update.Level.LevelObjectManager.Triggers" ConsumeDragAndDrop="true" ConsumeSwipe="true" Draggable="true" Text="LevelObject Triggers" />
+    <MapGroup AKA="MapEntity" Absolute="[-159.86407,251.97607,,54]" ConsumeSwipe="true" Draggable="true">
       <MapButton AKA="MapEntity" CState="Showperf.Update.MapEntity" Text="MapEntity" TextAlign="{X:0.5 Y:0.5}" TextScale="1.2" />
       <CUIVerticalList Absolute="[,,,32.399998]" AbsoluteMin="[,,37.3,]" FitContent="[True,True]">
         <MapButton AKA="Items" CState="Showperf.Update.MapEntity.Items" Text="Items" />
         <MapButton AKA="Misc" CState="Showperf.Update.MapEntity.Misc" Text="Misc" />
       </CUIVerticalList>
     </MapGroup>
-    <MapButton AKA="ItemComponents" Absolute="[-301.65607,310.3681,,]" CState="Showperf.Update.MapEntity.Items.Components" ConsumeDragAndDrop="true" ConsumeSwipe="true" Draggable="true" Text="Item Components" />
-    <MapButton AKA="ItemUse" Absolute="[-275.65607,253.36812,,]" CState="Showperf.Update.MapEntity.Items.Use" ConsumeDragAndDrop="true" ConsumeSwipe="true" Draggable="true" State="true" Text="Item Use" />
-    <MapButton AKA="Turret" Absolute="[-347.23193,360.71204,,]" CState="Showperf.Update.MapEntity.Items.Components.Turret" ConsumeDragAndDrop="true" ConsumeSwipe="true" Draggable="true" Text="Turret" TextAlign="{X:0.5 Y:0.5}" TextScale="1.2" />
-    <MapButton AKA="Controller" Absolute="[-448.0799,361.13605,,]" CState="Showperf.Update.MapEntity.Items.Components.Controller" ConsumeDragAndDrop="true" ConsumeSwipe="true" Draggable="true" Text="Controller" TextAlign="{X:0.5 Y:0.5}" TextScale="1.2" />
-    <MapButton AKA="MotionSensor" Absolute="[-582.23193,359.71204,,]" CState="Showperf.Update.MapEntity.Items.Components.MotionSensor" ConsumeDragAndDrop="true" ConsumeSwipe="true" Draggable="true" Text="MotionSensor" TextAlign="{X:0.5 Y:0.5}" TextScale="1.2" />
-    <MapGroup AKA="TurretUpdateAutoOperate" Absolute="[-401.04807,403.56793,,37.8]" ConsumeSwipe="true" Draggable="true">
+    <MapButton AKA="ItemComponents" Absolute="[-353.656,245.3681,,]" CState="Showperf.Update.MapEntity.Items.Components" ConsumeDragAndDrop="true" ConsumeSwipe="true" Draggable="true" Text="Item Components" TextScale="1.2" />
+    <MapButton AKA="ItemUse" Absolute="[-318.77612,298.0481,,]" CState="Showperf.Update.MapEntity.Items.Use" ConsumeDragAndDrop="true" ConsumeSwipe="true" Draggable="true" Text="Item Use" TextScale="1.2" />
+    <MapButton AKA="RepairToolUse" Absolute="[-342.23175,367.71198,,]" CState="Showperf.Update.MapEntity.Items.Use.RepairToolUse" ConsumeDragAndDrop="true" ConsumeSwipe="true" Draggable="true" State="true" Text="RepairTool.Use" TextAlign="{X:0.5 Y:0.5}" TextScale="1.2" />
+    <MapButton AKA="Turret" Absolute="[-585.5919,240.744,,]" CState="Showperf.Update.MapEntity.Items.Components.Turret" ConsumeDragAndDrop="true" ConsumeSwipe="true" Draggable="true" Text="Turret" TextAlign="{X:0.5 Y:0.5}" TextScale="1.2" />
+    <MapButton AKA="Controller" Absolute="[-467.43185,204.18402,,]" CState="Showperf.Update.MapEntity.Items.Components.Controller" ConsumeDragAndDrop="true" ConsumeSwipe="true" Draggable="true" Text="Controller" TextAlign="{X:0.5 Y:0.5}" TextScale="1.2" />
+    <MapButton AKA="MotionSensor" Absolute="[-483.55994,277.656,,]" CState="Showperf.Update.MapEntity.Items.Components.MotionSensor" ConsumeDragAndDrop="true" ConsumeSwipe="true" Draggable="true" Text="MotionSensor" TextAlign="{X:0.5 Y:0.5}" TextScale="1.2" />
+    <MapGroup AKA="TurretUpdateAutoOperate" Absolute="[-644.2959,179.67197,,37.8]" ConsumeSwipe="true" Draggable="true">
       <MapButton AKA="TurretUpdateAutoOperate" CState="Showperf.Update.MapEntity.Items.Components.Turret.UpdateAutoOperate" Text="UpdateAutoOperate" TextAlign="{X:0.5 Y:0.5}" TextScale="1.2" />
       <CUIVerticalList Absolute="[,,,16.199999]" AbsoluteMin="[,,76.9,]" FitContent="[True,True]">
         <MapButton AKA="TargetItems" CState="Showperf.Update.MapEntity.Items.Components.Turret.UpdateAutoOperate.TargetItems" Text="TargetItems" />
       </CUIVerticalList>
     </MapGroup>
-    <MapButton AKA="WholeSub" Absolute="[-314.6241,202.76799,,]" CState="Showperf.Update.MapEntity.WholeSub" ConsumeDragAndDrop="true" ConsumeSwipe="true" Draggable="true" Text="Whole Submaine Update" TextAlign="{X:0.5 Y:0.5}" TextScale="1.2" />
-    <MapGroup AKA="Misc" Absolute="[-147.86432,376.8559,,86.399994]" ConsumeSwipe="true" Draggable="true">
+    <MapButton AKA="WholeSub" Absolute="[-362.62408,206.768,,]" CState="Showperf.Update.MapEntity.WholeSub" ConsumeDragAndDrop="true" ConsumeSwipe="true" Draggable="true" Text="Whole Submaine Update" TextAlign="{X:0.5 Y:0.5}" TextScale="1.2" />
+    <MapGroup AKA="Misc" Absolute="[-157.86432,314.8559,,86.399994]" ConsumeSwipe="true" Draggable="true">
       <MapButton AKA="Misc" CState="Showperf.Update.MapEntity.Misc" Text="Misc" TextAlign="{X:0.5 Y:0.5}" TextScale="1.2" />
       <CUIVerticalList Absolute="[,,,64.799995]" AbsoluteMin="[,,84.1,]" FitContent="[True,True]">
         <MapButton AKA="Hulls" CState="Showperf.Update.MapEntity.Misc.Hulls" Text="Hulls" />
