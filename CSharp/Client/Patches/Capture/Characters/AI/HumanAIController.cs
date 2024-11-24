@@ -26,17 +26,36 @@ namespace ShowPerfExtensions
     [ShowperfPatch]
     public class HumanAIControllerPatch
     {
+      public static CaptureState AIControllerState;
       public static void Initialize()
       {
         harmony.Patch(
           original: typeof(HumanAIController).GetMethod("Update", AccessTools.all),
           prefix: new HarmonyMethod(typeof(HumanAIControllerPatch).GetMethod("HumanAIController_Update_Replace"))
         );
+
+        AIControllerState = Capture.Get("Showperf.Update.Character.Update.AIController");
+      }
+
+      public static void CaptureAIController(long ticks, Character character, string text)
+      {
+        if (AIControllerState.ByID)
+        {
+          Capture.Update.AddTicks(ticks, AIControllerState, $"{character.ID}|{character}{character.Info?.DisplayName} {text}");
+        }
+        else
+        {
+          Capture.Update.AddTicks(ticks, AIControllerState, text);
+        }
       }
 
 
       public static bool HumanAIController_Update_Replace(float deltaTime, HumanAIController __instance)
       {
+        if (!AIControllerState.IsActive || !Showperf.Revealed) return true;
+        Capture.Update.EnsureCategory(AIControllerState);
+        Stopwatch sw = new Stopwatch();
+
         HumanAIController _ = __instance;
 
         if (HumanAIController.DisableCrewAI || _.Character.Removed) { return false; }
@@ -50,6 +69,7 @@ namespace ShowPerfExtensions
 
         _.wasConscious = true;
 
+        sw.Restart();
         _.respondToAttackTimer -= deltaTime;
         if (_.respondToAttackTimer <= 0.0f)
         {
@@ -69,8 +89,11 @@ namespace ShowPerfExtensions
           _.previousAttackResults.Clear();
           _.respondToAttackTimer = HumanAIController.RespondToAttackInterval;
         }
+        sw.Stop();
+        CaptureAIController(sw.ElapsedTicks, _.Character, "RespondToAttack");
 
         //base.Update(deltaTime);
+        sw.Restart();
         AIControllerPatch.Update(deltaTime, _);
 
         foreach (var values in _.knownHulls)
@@ -89,6 +112,8 @@ namespace ShowPerfExtensions
           _.UnreachableHulls.Clear();
           _.IgnoredItems.Clear();
         }
+        sw.Stop();
+        CaptureAIController(sw.ElapsedTicks, _.Character, "Hulls");
 
         // Note: returns false when useTargetSub is 'true' and the target is outside (targetSub is 'null')
         bool IsCloseEnoughToTarget(float threshold, bool targetSub = true)
@@ -113,6 +138,7 @@ namespace ShowPerfExtensions
           return Vector2.DistanceSquared(_.Character.WorldPosition, target.WorldPosition) < MathUtils.Pow2(threshold);
         }
 
+        sw.Restart();
         bool isOutside = _.Character.Submarine == null;
         if (isOutside)
         {
@@ -188,7 +214,10 @@ namespace ShowPerfExtensions
           _.UseOutsideWaypoints = false;
           _.isBlocked = false;
         }
+        sw.Stop();
+        CaptureAIController(sw.ElapsedTicks, _.Character, "Outside steering");
 
+        sw.Restart();
         if (isOutside || _.Character.IsOnPlayerTeam && !_.Character.IsEscorted && !_.Character.IsOnFriendlyTeam(_.Character.Submarine.TeamID))
         {
           // Spot enemies while staying outside or inside an enemy ship.
@@ -200,6 +229,10 @@ namespace ShowPerfExtensions
             _.enemyCheckTimer = _.enemyCheckInterval * Rand.Range(0.75f, 1.25f);
           }
         }
+        sw.Stop();
+        CaptureAIController(sw.ElapsedTicks, _.Character, "Outside CheckEnemies");
+
+        sw.Restart();
         bool useInsideSteering = !isOutside || _.isBlocked || _.HasValidPath() || IsCloseEnoughToTarget(_.steeringBuffer);
         if (useInsideSteering)
         {
@@ -228,11 +261,17 @@ namespace ShowPerfExtensions
           _.steeringBuffer = _.minSteeringBuffer;
         }
         _.steeringBuffer = Math.Clamp(_.steeringBuffer, _.minSteeringBuffer, _.maxSteeringBuffer);
+        sw.Stop();
+        CaptureAIController(sw.ElapsedTicks, _.Character, "More steering, idk, guh");
 
+        sw.Restart();
         _.AnimController.Crouching = _.shouldCrouch;
         _.CheckCrouching(deltaTime);
         _.Character.ClearInputs();
+        sw.Stop();
+        CaptureAIController(sw.ElapsedTicks, _.Character, "CheckCrouching");
 
+        sw.Restart();
         if (_.SortTimer > 0.0f)
         {
           _.SortTimer -= deltaTime;
@@ -242,9 +281,18 @@ namespace ShowPerfExtensions
           _.objectiveManager.SortObjectives();
           _.SortTimer = HumanAIController.sortObjectiveInterval;
         }
-        _.objectiveManager.UpdateObjectives(deltaTime);
+        sw.Stop();
+        CaptureAIController(sw.ElapsedTicks, _.Character, "SortObjectives");
 
+        sw.Restart();
+        _.objectiveManager.UpdateObjectives(deltaTime);
+        sw.Stop();
+        CaptureAIController(sw.ElapsedTicks, _.Character, "UpdateObjectives");
+
+        sw.Restart();
         _.UpdateDragged(deltaTime);
+        sw.Stop();
+        CaptureAIController(sw.ElapsedTicks, _.Character, "UpdateDragged");
 
         if (_.reportProblemsTimer > 0)
         {
@@ -256,12 +304,20 @@ namespace ShowPerfExtensions
           if (_.findItemState != HumanAIController.FindItemState.None)
           {
             // Update every frame only when seeking items
+            sw.Restart();
             _.UnequipUnnecessaryItems();
+            sw.Stop();
+            CaptureAIController(sw.ElapsedTicks, _.Character, "UnequipUnnecessaryItems");
           }
         }
         else
         {
+          sw.Restart();
           _.Character.UpdateTeam();
+          sw.Stop();
+          CaptureAIController(sw.ElapsedTicks, _.Character, "UpdateTeam");
+
+          sw.Restart();
           if (_.Character.CurrentHull != null)
           {
             if (_.Character.IsOnPlayerTeam)
@@ -286,12 +342,15 @@ namespace ShowPerfExtensions
             }
           }
           _.dirtyHullSafetyCalculations.Clear();
+          sw.Stop();
+          CaptureAIController(sw.ElapsedTicks, _.Character, "RefreshHullSafety");
+
+          sw.Restart();
           if (_.reportProblemsTimer <= 0.0f)
           {
             if (_.Character.Submarine != null && (_.Character.Submarine.TeamID == _.Character.TeamID || _.Character.Submarine.TeamID == _.Character.OriginalTeamID || _.Character.IsEscorted) && !_.Character.Submarine.Info.IsWreck)
             {
               _.ReportProblems();
-
             }
             else
             {
@@ -307,11 +366,18 @@ namespace ShowPerfExtensions
           _.SpeakAboutIssues();
           _.UnequipUnnecessaryItems();
           _.reactTimer = HumanAIController.GetReactionTime();
+          sw.Stop();
+          CaptureAIController(sw.ElapsedTicks, _.Character, "ReportProblems");
         }
 
         if (_.objectiveManager.CurrentObjective == null) { return false; }
 
+        sw.Restart();
         _.objectiveManager.DoCurrentObjective(deltaTime);
+        sw.Stop();
+        CaptureAIController(sw.ElapsedTicks, _.Character, "DoCurrentObjective");
+
+        sw.Restart();
         var currentObjective = _.objectiveManager.CurrentObjective;
         bool run = !currentObjective.ForceWalk && (currentObjective.ForceRun || _.objectiveManager.GetCurrentPriority() > AIObjectiveManager.RunPriority);
         if (currentObjective is AIObjectiveGoTo goTo)
@@ -342,13 +408,19 @@ namespace ShowPerfExtensions
             }
           }
         }
+        sw.Stop();
+        CaptureAIController(sw.ElapsedTicks, _.Character, "currentObjective is AIObjectiveGoTo");
 
         //if someone is grabbing the bot and the bot isn't trying to run anywhere, let them keep dragging and "control" the bot
+        sw.Restart();
         if (_.Character.SelectedBy == null || run)
         {
           _.steeringManager.Update(_.Character.AnimController.GetCurrentSpeed(run && _.Character.CanRun));
         }
+        sw.Stop();
+        CaptureAIController(sw.ElapsedTicks, _.Character, "being grabbed");
 
+        sw.Restart();
         bool ignorePlatforms = _.Character.AnimController.TargetMovement.Y < -0.5f && (-_.Character.AnimController.TargetMovement.Y > Math.Abs(_.Character.AnimController.TargetMovement.X));
         if (_.steeringManager == _.insideSteering)
         {
@@ -369,7 +441,10 @@ namespace ShowPerfExtensions
           }
         }
         _.Character.AnimController.IgnorePlatforms = ignorePlatforms;
+        sw.Stop();
+        CaptureAIController(sw.ElapsedTicks, _.Character, "climbing");
 
+        sw.Restart();
         Vector2 targetMovement = _.AnimController.TargetMovement;
         if (!_.Character.AnimController.InWater)
         {
@@ -408,9 +483,18 @@ namespace ShowPerfExtensions
           }
         }
         _.AutoFaceMovement = true;
+        sw.Stop();
+        CaptureAIController(sw.ElapsedTicks, _.Character, "swimming");
 
+        sw.Restart();
         _.MentalStateManager?.Update(deltaTime);
+        sw.Stop();
+        CaptureAIController(sw.ElapsedTicks, _.Character, "MentalStateManager");
+
+        sw.Restart();
         _.ShipCommandManager?.Update(deltaTime);
+        sw.Stop();
+        CaptureAIController(sw.ElapsedTicks, _.Character, "ShipCommandManager");
 
         return false;
       }

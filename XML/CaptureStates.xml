@@ -48,7 +48,9 @@
       <PhysicBodies />
       <ItemsHUD />
       <Character>
-        <Update />
+        <Update>
+          <AIController />
+        </Update>
       </Character>
       <GameSession>
         <Store />

@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<CUICaptureMap ChildrenOffset="[79.911804,95.3432,1]" Relative="[0,0,1,1]">
+<CUICaptureMap ChildrenOffset="[280.9118,57.3432,1]" Relative="[0,0,1,1]">
   <Connections>
     <Connection Start="Showperf.Draw" End="Draw" />
     <Connection Start="Draw.Map" End="Map" />
@@ -19,6 +19,7 @@
     <Connection Start="Turret" End="TurretUpdateAutoOperate" />
     <Connection Start="Lighting.LightVolumes" End="DrawLightVolume" />
     <Connection Start="Update.Character" End="CharacterUpdate" />
+    <Connection Start="CharacterUpdate" End="CharacterAIController" />
     <Connection Start="Level.LevelObjectManager" End="LevelObjectSounds" />
     <Connection Start="Level.LevelObjectManager" End="LevelObjectTriggers" />
   </Connections>
@@ -98,6 +99,7 @@
       </CUIVerticalList>
     </MapGroup>
     <MapButton AKA="CharacterUpdate" Absolute="[-135.17616,133.4321,,]" CState="Showperf.Update.Character.Update" ConsumeDragAndDrop="true" ConsumeSwipe="true" Draggable="true" Text="Update" />
+    <MapButton AKA="CharacterAIController" Absolute="[-149.17621,101.4321,,]" CState="Showperf.Update.Character.Update.AIController" ConsumeDragAndDrop="true" ConsumeSwipe="true" Draggable="true" State="true" Text="AIController" />
     <MapGroup AKA="Level" Absolute="[-460.95227,181.85596,,102.59999]" ConsumeSwipe="true" Draggable="true">
       <MapButton AKA="Level" CState="Showperf.Update.Level" Text="Level" TextAlign="{X:0.5 Y:0.5}" TextScale="1.2" />
       <CUIVerticalList Absolute="[,,,80.99999]" AbsoluteMin="[,,134.5,]" FitContent="[True,True]">
