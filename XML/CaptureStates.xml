@@ -73,6 +73,7 @@
       <MapEntity>
         <WholeSub />
         <Items>
+          <Use />
           <Components>
             <MotionSensor />
             <Controller />

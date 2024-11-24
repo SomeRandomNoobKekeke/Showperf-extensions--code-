@@ -41,6 +41,7 @@ namespace ShowPerfExtensions
     [ShowperfPatch]
     public class ItemPatch
     {
+      public static CaptureState UseState;
       public static CaptureState Components;
       public static void Initialize()
       {
@@ -49,7 +50,13 @@ namespace ShowPerfExtensions
           prefix: new HarmonyMethod(typeof(ItemPatch).GetMethod("Item_Update_Replace"))
         );
 
+        harmony.Patch(
+          original: typeof(Item).GetMethod("Use", AccessTools.all),
+          prefix: new HarmonyMethod(typeof(ItemPatch).GetMethod("Item_Use_Replace"))
+        );
+
         Components = Capture.Get("Showperf.Update.MapEntity.Items.Components");
+        UseState = Capture.Get("Showperf.Update.MapEntity.Items.Use");
       }
 
       public static bool Item_Update_Replace(float deltaTime, Camera cam, Item __instance)
@@ -309,6 +316,75 @@ namespace ShowPerfExtensions
         return false;
       }
 
+      public static void CaptureItemUse(long ticks, string text, Item item, ItemComponent ic)
+      {
+        Capture.Update.AddTicks(ticks, UseState, $"{item}.{ic.name} {text}");
+      }
+
+
+      public static bool Item_Use_Replace(Item __instance, float deltaTime, Character user = null, Limb targetLimb = null, Entity useTarget = null, Character userForOnUsedEvent = null)
+      {
+        if (!UseState.IsActive || !Showperf.Revealed) return true;
+        Capture.Update.EnsureCategory(UseState);
+        Stopwatch sw = new Stopwatch();
+
+        Item _ = __instance;
+
+        if (_.RequireAimToUse && (user == null || !user.IsKeyDown(InputType.Aim)))
+        {
+          return false;
+        }
+
+        if (_.condition <= 0.0f) { return false; }
+
+        var should = GameMain.LuaCs.Hook.Call<bool?>("item.use", new object[] { _, user, targetLimb, useTarget });
+
+        if (should != null && should.Value) { return false; }
+
+        bool remove = false;
+
+        foreach (ItemComponent ic in _.components)
+        {
+          bool isControlled = false;
+#if CLIENT
+          isControlled = user == Character.Controlled;
+#endif
+          if (!ic.HasRequiredContainedItems(user, isControlled)) { continue; }
+
+          sw.Restart();
+          bool useResult = ic.Use(deltaTime, user);
+          sw.Stop();
+          CaptureItemUse(sw.ElapsedTicks, "Use", _, ic);
+
+          if (useResult)
+          {
+            ic.WasUsed = true;
+#if CLIENT
+            sw.Restart();
+            ic.PlaySound(ActionType.OnUse, user);
+            sw.Stop();
+            CaptureItemUse(sw.ElapsedTicks, "PlaySound", _, ic);
+#endif
+            sw.Restart();
+            ic.ApplyStatusEffects(ActionType.OnUse, deltaTime, user, targetLimb, useTarget: useTarget, user: user);
+            sw.Stop();
+            CaptureItemUse(sw.ElapsedTicks, "ApplyStatusEffects(ActionType.OnUse", _, ic);
+
+            sw.Restart();
+            ic.OnUsed.Invoke(new ItemComponent.ItemUseInfo(_, user ?? userForOnUsedEvent));
+            if (ic.DeleteOnUse) { remove = true; }
+            sw.Stop();
+            CaptureItemUse(sw.ElapsedTicks, "OnUsed.Invoke", _, ic);
+          }
+        }
+
+        if (remove)
+        {
+          Item.Spawner.AddItemToRemoveQueue(_);
+        }
+
+        return false;
+      }
 
     }
   }
