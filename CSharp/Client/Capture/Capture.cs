@@ -30,6 +30,7 @@ namespace ShowPerfExtensions
       };
       public CaptureWindow MonoGame = new CaptureWindow();
       public CaptureWindow Farseer = new CaptureWindow();
+      public CaptureWindow RawCount = new CaptureWindow();
 
 
       public bool Frozen { get; set; }
@@ -42,6 +43,7 @@ namespace ShowPerfExtensions
           MonoGame.Frames = value;
           Update.Frames = value;
           Farseer.Frames = value;
+          RawCount.Frames = value;
         }
       }
 
@@ -52,6 +54,7 @@ namespace ShowPerfExtensions
         MonoGame.Reset();
         Update.Reset();
         Farseer.Reset();
+        RawCount.Reset();
       }
 
       public event Action<CaptureMode> OnModeChanged;

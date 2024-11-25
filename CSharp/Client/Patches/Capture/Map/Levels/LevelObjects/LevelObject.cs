@@ -43,6 +43,8 @@ namespace ShowPerfExtensions
         LevelObjectSounds = Capture.Get("Showperf.Update.Level.LevelObjectManager.Sounds");
       }
 
+      public static int ID = 0;
+
       public static bool LevelObject_Update_Replace(float deltaTime, LevelObject __instance)
       {
         if (!LevelObjects.IsActive && !LevelObjectSounds.IsActive || !Showperf.Revealed) return true;
@@ -51,6 +53,7 @@ namespace ShowPerfExtensions
 
         Stopwatch sw = new Stopwatch();
         Stopwatch sw2 = new Stopwatch();
+        Stopwatch sw3 = new Stopwatch();
 
         sw.Restart();
         _.CurrentRotation = _.Rotation;
@@ -150,6 +153,10 @@ namespace ShowPerfExtensions
 
         if (LevelObjectSounds.IsActive) Capture.Update.EnsureCategory(LevelObjectSounds);
 
+        long roundSoundSoundPlay = 0;
+
+
+
         sw.Restart();
         for (int i = 0; i < _.Sounds.Length; i++)
         {
@@ -166,6 +173,7 @@ namespace ShowPerfExtensions
                 sw2.Restart();
                 _.SoundChannels[i] = roundSound.Sound.Play(roundSound.Volume, roundSound.Range, roundSound.GetRandomFrequencyMultiplier(), soundPos);
                 sw2.Stop();
+                roundSoundSoundPlay += sw2.ElapsedTicks;
                 Capture.Update.AddTicks(sw2.ElapsedTicks, LevelObjectSounds, $"{_} roundSound.Sound.Play");
 
               }
@@ -178,9 +186,9 @@ namespace ShowPerfExtensions
             _.SoundChannels[i] = null;
           }
         }
-
-
         sw.Stop();
+        Capture.Update.AddTicks(sw.ElapsedTicks - roundSoundSoundPlay, LevelObjectSounds, $"{_} rest");
+
         if (LevelObjects.ByID)
         {
           Capture.Update.AddTicks(sw.ElapsedTicks, LevelObjects, $"{_}.Sounds");
@@ -189,6 +197,15 @@ namespace ShowPerfExtensions
         {
           Capture.Update.AddTicks(sw.ElapsedTicks, LevelObjects, $"Sounds");
         }
+
+        // if (LevelObjects.ByID)
+        // {
+        //   Capture.RawCount.AddTicksOnce(_.Sounds.Length, LevelObjects, $"{_}.Sounds.Length");
+        // }
+        // else
+        // {
+        //   Capture.RawCount.AddTicksOnce(_.Sounds.Length, LevelObjects, $"Sounds.Length");
+        // }
 
         return false;
       }
