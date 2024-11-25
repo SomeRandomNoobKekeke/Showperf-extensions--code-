@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<CUICaptureMap ChildrenOffset="[714.15186,106.24701,1]" Relative="[0,0,1,1]">
+<CUICaptureMap ChildrenOffset="[85.91998,89.479065,1]" Relative="[0,0,1,1]">
   <Connections>
     <Connection Start="Showperf.Draw" End="Draw" />
     <Connection Start="Draw.Map" End="Map" />
@@ -107,7 +107,7 @@
     <MapGroup AKA="Level" Absolute="[-498.18433,45.81597,,102.59999]" ConsumeSwipe="true" Draggable="true">
       <MapButton AKA="Level" CState="Showperf.Update.Level" Text="Level" TextAlign="{X:0.5 Y:0.5}" TextScale="1.2" />
       <CUIVerticalList Absolute="[,,,80.99999]" AbsoluteMin="[,,134.5,]" FitContent="[True,True]">
-        <MapButton AKA="LevelObjectManager" CState="Showperf.Update.Level.LevelObjectManager" State="true" Text="Level Objects" />
+        <MapButton AKA="LevelObjectManager" CState="Showperf.Update.Level.LevelObjectManager" Text="Level Objects" />
         <MapButton AKA="Walls" CState="Showperf.Update.Level.Walls" Text="Walls" />
         <MapButton AKA="BackgroundCreatureManager" CState="Showperf.Update.Level.BackgroundCreatureManager" Text="Background Creatures" />
         <MapButton AKA="WaterRenderer" CState="Showperf.Update.Level.WaterRenderer" Text="Water Renderer" />
