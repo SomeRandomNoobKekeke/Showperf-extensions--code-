@@ -1,5 +1,6 @@
 <CaptureStates>
   <MonoGame />
+  <SoundChannel />
   <Showperf>
     <Draw>
       <HUD />

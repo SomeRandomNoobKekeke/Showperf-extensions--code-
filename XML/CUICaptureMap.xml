@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<CUICaptureMap ChildrenOffset="[465.15186,-53.75299,1]" Relative="[0,0,1,1]">
+<CUICaptureMap ChildrenOffset="[714.15186,106.24701,1]" Relative="[0,0,1,1]">
   <Connections>
     <Connection Start="Showperf.Draw" End="Draw" />
     <Connection Start="Draw.Map" End="Map" />
@@ -107,14 +107,15 @@
     <MapGroup AKA="Level" Absolute="[-498.18433,45.81597,,102.59999]" ConsumeSwipe="true" Draggable="true">
       <MapButton AKA="Level" CState="Showperf.Update.Level" Text="Level" TextAlign="{X:0.5 Y:0.5}" TextScale="1.2" />
       <CUIVerticalList Absolute="[,,,80.99999]" AbsoluteMin="[,,134.5,]" FitContent="[True,True]">
-        <MapButton AKA="LevelObjectManager" CState="Showperf.Update.Level.LevelObjectManager" Text="Level Objects" />
+        <MapButton AKA="LevelObjectManager" CState="Showperf.Update.Level.LevelObjectManager" State="true" Text="Level Objects" />
         <MapButton AKA="Walls" CState="Showperf.Update.Level.Walls" Text="Walls" />
         <MapButton AKA="BackgroundCreatureManager" CState="Showperf.Update.Level.BackgroundCreatureManager" Text="Background Creatures" />
         <MapButton AKA="WaterRenderer" CState="Showperf.Update.Level.WaterRenderer" Text="Water Renderer" />
         <MapButton AKA="LevelRenderer" CState="Showperf.Update.Level.LevelRenderer" Text="Level Renderer" />
       </CUIVerticalList>
     </MapGroup>
-    <MapButton AKA="LevelObjectSounds" Absolute="[-651.4081,98.91208,,]" CState="Showperf.Update.Level.LevelObjectManager.Sounds" ConsumeDragAndDrop="true" ConsumeSwipe="true" Draggable="true" Text="LevelObject Sounds" />
+    <MapButton AKA="LevelObjectSounds" Absolute="[-650.4081,98.91208,,]" CState="Showperf.Update.Level.LevelObjectManager.Sounds" ConsumeDragAndDrop="true" ConsumeSwipe="true" Draggable="true" Text="LevelObject Sounds" />
+    <MapButton AKA="SoundChannelConstuctor" Absolute="[-832.4081,97.91208,,]" CState="SoundChannel" ConsumeDragAndDrop="true" ConsumeSwipe="true" Draggable="true" Text="SoundChannel Constuctor" />
     <MapButton AKA="LevelObjectTriggers" Absolute="[-654.4081,23.912079,,]" CState="Showperf.Update.Level.LevelObjectManager.Triggers" ConsumeDragAndDrop="true" ConsumeSwipe="true" Draggable="true" Text="LevelObject Triggers" />
     <MapGroup AKA="MapEntity" Absolute="[-159.86407,251.97607,,54]" ConsumeSwipe="true" Draggable="true">
       <MapButton AKA="MapEntity" CState="Showperf.Update.MapEntity" Text="MapEntity" TextAlign="{X:0.5 Y:0.5}" TextScale="1.2" />
@@ -125,7 +126,7 @@
     </MapGroup>
     <MapButton AKA="ItemComponents" Absolute="[-353.656,245.3681,,]" CState="Showperf.Update.MapEntity.Items.Components" ConsumeDragAndDrop="true" ConsumeSwipe="true" Draggable="true" Text="Item Components" TextScale="1.2" />
     <MapButton AKA="ItemUse" Absolute="[-318.77612,298.0481,,]" CState="Showperf.Update.MapEntity.Items.Use" ConsumeDragAndDrop="true" ConsumeSwipe="true" Draggable="true" Text="Item Use" TextScale="1.2" />
-    <MapButton AKA="RepairToolUse" Absolute="[-342.23175,367.71198,,]" CState="Showperf.Update.MapEntity.Items.Use.RepairToolUse" ConsumeDragAndDrop="true" ConsumeSwipe="true" Draggable="true" State="true" Text="RepairTool.Use" TextAlign="{X:0.5 Y:0.5}" TextScale="1.2" />
+    <MapButton AKA="RepairToolUse" Absolute="[-342.23175,367.71198,,]" CState="Showperf.Update.MapEntity.Items.Use.RepairToolUse" ConsumeDragAndDrop="true" ConsumeSwipe="true" Draggable="true" Text="RepairTool.Use" TextAlign="{X:0.5 Y:0.5}" TextScale="1.2" />
     <MapButton AKA="Turret" Absolute="[-585.5919,240.744,,]" CState="Showperf.Update.MapEntity.Items.Components.Turret" ConsumeDragAndDrop="true" ConsumeSwipe="true" Draggable="true" Text="Turret" TextAlign="{X:0.5 Y:0.5}" TextScale="1.2" />
     <MapButton AKA="Controller" Absolute="[-467.43185,204.18402,,]" CState="Showperf.Update.MapEntity.Items.Components.Controller" ConsumeDragAndDrop="true" ConsumeSwipe="true" Draggable="true" Text="Controller" TextAlign="{X:0.5 Y:0.5}" TextScale="1.2" />
     <MapButton AKA="MotionSensor" Absolute="[-483.55994,277.656,,]" CState="Showperf.Update.MapEntity.Items.Components.MotionSensor" ConsumeDragAndDrop="true" ConsumeSwipe="true" Draggable="true" Text="MotionSensor" TextAlign="{X:0.5 Y:0.5}" TextScale="1.2" />

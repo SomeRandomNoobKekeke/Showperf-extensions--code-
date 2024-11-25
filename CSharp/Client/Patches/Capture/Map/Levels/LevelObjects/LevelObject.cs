@@ -43,8 +43,6 @@ namespace ShowPerfExtensions
         LevelObjectSounds = Capture.Get("Showperf.Update.Level.LevelObjectManager.Sounds");
       }
 
-      public static int ID = 0;
-
       public static bool LevelObject_Update_Replace(float deltaTime, LevelObject __instance)
       {
         if (!LevelObjects.IsActive && !LevelObjectSounds.IsActive || !Showperf.Revealed) return true;
@@ -53,7 +51,6 @@ namespace ShowPerfExtensions
 
         Stopwatch sw = new Stopwatch();
         Stopwatch sw2 = new Stopwatch();
-        Stopwatch sw3 = new Stopwatch();
 
         sw.Restart();
         _.CurrentRotation = _.Rotation;

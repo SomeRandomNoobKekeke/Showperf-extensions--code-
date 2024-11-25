@@ -60,7 +60,7 @@ namespace ShowPerfExtensions
         Slope = 0;
       }
 
-      public static double TicksToMs = 1000.0 / Stopwatch.Frequency;
+
       public bool ShowInMs = true;
       public string UnitsName { get => ShowInMs ? "ms" : "ticks"; }
       public string ConverToUnits(double t) => ShowInMs ?
@@ -148,6 +148,18 @@ namespace ShowPerfExtensions
               Values.Add(new UpdateTicksView(t, GetName(t)));
               Sum += t.Ticks;
 
+              TopValue = Math.Max(TopValue, t.Ticks);
+            }
+          }
+
+          foreach (int cat in Capture.RawCount.TotalTicks.Keys)
+          {
+            foreach (int id in Capture.RawCount.TotalTicks[cat].Keys)
+            {
+              UpdateTicks t = Capture.RawCount.GetTotal(cat, id);
+              if (!IsTracked(t)) continue;
+              Values.Add(new UpdateTicksView(t, $"{String.Format("{0:0000}", t.Ticks)} {t.Name}"));
+              Sum += t.Ticks;
               TopValue = Math.Max(TopValue, t.Ticks);
             }
           }

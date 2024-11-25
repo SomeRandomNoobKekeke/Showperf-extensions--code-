@@ -5,6 +5,7 @@ using System.Runtime.CompilerServices;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
+using System.IO;
 
 using Barotrauma;
 using HarmonyLib;
@@ -22,16 +23,26 @@ namespace ShowPerfExtensions
     [ShowperfPatch]
     public class SoundChannelPatch
     {
+      public static CaptureState SoundChannelState;
       public static void Initialize()
       {
         harmony.Patch(
           original: typeof(SoundChannel).GetConstructors()[0],
           prefix: new HarmonyMethod(typeof(SoundChannelPatch).GetMethod("SoundChannel_Constuctor_Replace"))
         );
+
+        SoundChannelState = Capture.Get("SoundChannel");
       }
 
       public static bool SoundChannel_Constuctor_Replace(SoundChannel __instance, Sound sound, float gain, Vector3? position, float freqMult, float near, float far, string category, bool muffle = false)
       {
+        if (!SoundChannelState.IsActive || !Showperf.Revealed) return true;
+        Capture.Update.EnsureCategory(SoundChannelState);
+        Stopwatch sw = new Stopwatch();
+
+        string path = Path.GetRelativePath(@"C:\Program Files (x86)\Steam\steamapps\common\Barotrauma\Content", sound.Filename);
+        Capture.Update.AddTicks(1, SoundChannelState, $"SoundChannel Created {path}");
+
         SoundChannel _ = __instance;
 
         _.Sound = sound;
@@ -53,6 +64,7 @@ namespace ShowPerfExtensions
           typeof(SoundChannel).GetField("mutex", AccessTools.all).SetValue(_, new object());
         }
 
+        sw.Restart();
 #if !DEBUG
         try
         {
@@ -144,9 +156,11 @@ namespace ShowPerfExtensions
           }
 #if !DEBUG
         }
-        catch
+        catch (Exception e)
         {
-          throw;
+          //error(e);
+          Capture.Update.AddTicks(1, SoundChannelState, e.Message);
+          // throw;
         }
         finally
         {
@@ -155,6 +169,9 @@ namespace ShowPerfExtensions
 #if !DEBUG
         }
 #endif
+
+        sw.Stop();
+        Capture.Update.AddTicks(sw.ElapsedTicks, SoundChannelState, $"Create buffers {path}");
 
         void SetProperties()
         {
@@ -167,7 +184,10 @@ namespace ShowPerfExtensions
           _.Category = category;
         }
 
+        sw.Restart();
         _.Sound.Owner.Update();
+        sw.Stop();
+        Capture.Update.AddTicks(sw.ElapsedTicks, SoundChannelState, $"Create buffers {path}");
 
         return false;
       }
