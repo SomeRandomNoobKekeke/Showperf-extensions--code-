@@ -29,6 +29,8 @@ namespace ShowPerfExtensions
     public Harmony __harmony;
     public static Harmony harmony => Mod.__harmony;
 
+
+    public static double TicksToMs = 1000.0 / Stopwatch.Frequency;
     public static CaptureClass Capture;
     public static CUIShowperf Showperf;
 
