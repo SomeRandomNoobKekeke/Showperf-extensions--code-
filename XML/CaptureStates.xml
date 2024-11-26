@@ -75,7 +75,9 @@
         <WholeSub />
         <Items>
           <Use>
-            <RepairToolUse />
+            <RepairTool>
+              <Repair />
+            </RepairTool>
           </Use>
           <Components>
             <MotionSensor />

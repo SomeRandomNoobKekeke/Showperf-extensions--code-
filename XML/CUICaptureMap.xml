@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<CUICaptureMap ChildrenOffset="[85.91998,89.479065,1]" Relative="[0,0,1,1]">
+<CUICaptureMap ChildrenOffset="[420.91998,-127.520935,1]" Relative="[0,0,1,1]">
   <Connections>
     <Connection Start="Showperf.Draw" End="Draw" />
     <Connection Start="Draw.Map" End="Map" />
@@ -15,6 +15,7 @@
     <Connection Start="MapEntity.Items" End="ItemComponents" />
     <Connection Start="MapEntity.Items" End="ItemUse" />
     <Connection Start="ItemUse" End="RepairToolUse" />
+    <Connection Start="RepairToolUse" End="RepairToolRepair" />
     <Connection Start="ItemComponents" End="Turret" />
     <Connection Start="ItemComponents" End="Controller" />
     <Connection Start="ItemComponents" End="MotionSensor" />
@@ -125,8 +126,9 @@
       </CUIVerticalList>
     </MapGroup>
     <MapButton AKA="ItemComponents" Absolute="[-353.656,245.3681,,]" CState="Showperf.Update.MapEntity.Items.Components" ConsumeDragAndDrop="true" ConsumeSwipe="true" Draggable="true" Text="Item Components" TextScale="1.2" />
-    <MapButton AKA="ItemUse" Absolute="[-318.77612,298.0481,,]" CState="Showperf.Update.MapEntity.Items.Use" ConsumeDragAndDrop="true" ConsumeSwipe="true" Draggable="true" Text="Item Use" TextScale="1.2" />
-    <MapButton AKA="RepairToolUse" Absolute="[-342.23175,367.71198,,]" CState="Showperf.Update.MapEntity.Items.Use.RepairToolUse" ConsumeDragAndDrop="true" ConsumeSwipe="true" Draggable="true" Text="RepairTool.Use" TextAlign="{X:0.5 Y:0.5}" TextScale="1.2" />
+    <MapButton AKA="ItemUse" Absolute="[-319.77618,298.0481,,]" CState="Showperf.Update.MapEntity.Items.Use" ConsumeDragAndDrop="true" ConsumeSwipe="true" Draggable="true" Text="Item Use" TextScale="1.2" />
+    <MapButton AKA="RepairToolUse" Absolute="[-343.23175,357.71198,,]" CState="Showperf.Update.MapEntity.Items.Use.RepairTool" ConsumeDragAndDrop="true" ConsumeSwipe="true" Draggable="true" Text="RepairTool.Use" TextAlign="{X:0.5 Y:0.5}" TextScale="1.2" />
+    <MapButton AKA="RepairToolRepair" Absolute="[-353.23175,400.71198,,]" CState="Showperf.Update.MapEntity.Items.Use.RepairTool.Repair" ConsumeDragAndDrop="true" ConsumeSwipe="true" Draggable="true" State="true" Text="RepairTool.Repair" TextAlign="{X:0.5 Y:0.5}" TextScale="1.2" />
     <MapButton AKA="Turret" Absolute="[-585.5919,240.744,,]" CState="Showperf.Update.MapEntity.Items.Components.Turret" ConsumeDragAndDrop="true" ConsumeSwipe="true" Draggable="true" Text="Turret" TextAlign="{X:0.5 Y:0.5}" TextScale="1.2" />
     <MapButton AKA="Controller" Absolute="[-467.43185,204.18402,,]" CState="Showperf.Update.MapEntity.Items.Components.Controller" ConsumeDragAndDrop="true" ConsumeSwipe="true" Draggable="true" Text="Controller" TextAlign="{X:0.5 Y:0.5}" TextScale="1.2" />
     <MapButton AKA="MotionSensor" Absolute="[-483.55994,277.656,,]" CState="Showperf.Update.MapEntity.Items.Components.MotionSensor" ConsumeDragAndDrop="true" ConsumeSwipe="true" Draggable="true" Text="MotionSensor" TextAlign="{X:0.5 Y:0.5}" TextScale="1.2" />
