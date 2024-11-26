@@ -788,8 +788,6 @@ namespace ShowPerfExtensions
 
         Capture.Update.EnsureCategory(Update);
 
-        Capture.RawCount.AddTicksOnce(1, Update, "Guh");
-
         GameScreen _ = __instance;
 
 #if RUN_PHYSICS_IN_SEPARATE_THREAD

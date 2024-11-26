@@ -173,6 +173,15 @@ namespace ShowPerfExtensions
                 roundSoundSoundPlay += sw2.ElapsedTicks;
                 Capture.Update.AddTicks(sw2.ElapsedTicks, LevelObjectSounds, $"{_} roundSound.Sound.Play");
 
+                // if (LevelObjects.ByID)
+                // {
+                //   Capture.RawCount.AddTicksOnce(1, LevelObjects, $"{_} roundSound.Sound.Play calls");
+                // }
+                // else
+                // {
+                //   Capture.RawCount.AddTicksOnce(1, LevelObjects, $"roundSound.Sound.Play calls");
+                // }
+
               }
               _.SoundChannels[i].Position = new Vector3(soundPos.X, soundPos.Y, 0.0f);
             }
