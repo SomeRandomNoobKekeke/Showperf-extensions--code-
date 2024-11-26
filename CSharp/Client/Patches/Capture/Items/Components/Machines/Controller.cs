@@ -29,6 +29,7 @@ namespace ShowPerfExtensions
     public class ControllerPatch
     {
       public static CaptureState ControllerState;
+      public static CaptureState ControllerUseState;
       public static void Initialize()
       {
         harmony.Patch(
@@ -36,7 +37,13 @@ namespace ShowPerfExtensions
           prefix: new HarmonyMethod(typeof(ControllerPatch).GetMethod("Controller_Update_Replace"))
         );
 
+        harmony.Patch(
+          original: typeof(Controller).GetMethod("Use", AccessTools.all),
+          prefix: new HarmonyMethod(typeof(ControllerPatch).GetMethod("Controller_Use_Replace"))
+        );
+
         ControllerState = Capture.Get("Showperf.Update.MapEntity.Items.Components.Controller");
+        ControllerUseState = Capture.Get("Showperf.Update.MapEntity.Items.Use.Controller");
       }
 
       public static void CaptureController(long ticks, Controller _, string name)
@@ -48,6 +55,18 @@ namespace ShowPerfExtensions
         else
         {
           Capture.Update.AddTicks(ticks, ControllerState, name);
+        }
+      }
+
+      public static void CaptureController2(long ticks, Controller _, string name)
+      {
+        if (ControllerUseState.ByID)
+        {
+          Capture.Update.AddTicks(ticks, ControllerUseState, $"{_.Item} {name}");
+        }
+        else
+        {
+          Capture.Update.AddTicks(ticks, ControllerUseState, name);
         }
       }
 
@@ -333,6 +352,67 @@ namespace ShowPerfExtensions
         return false;
       }
 
+
+      public static bool Controller_Use_Replace(Controller __instance, ref bool __result, float deltaTime, Character activator = null)
+      {
+        if (!Showperf.Revealed || !ControllerUseState.IsActive) return true;
+        Capture.Update.EnsureCategory(ControllerUseState);
+        Stopwatch sw = new Stopwatch();
+
+        Controller _ = __instance;
+
+        if (activator != _.user)
+        {
+          __result = false; return false;
+        }
+
+        sw.Restart();
+        if (_.user == null || _.user.Removed || !_.user.IsAnySelectedItem(_.item) || !_.user.CanInteractWith(_.item))
+        {
+          sw.Stop();
+          CaptureController2(sw.ElapsedTicks, _, "CanInteractWith");
+          _.user = null;
+          __result = false; return false;
+        }
+        sw.Stop();
+        CaptureController2(sw.ElapsedTicks, _, "CanInteractWith");
+
+        sw.Restart();
+        if (_.IsOutOfPower())
+        {
+          sw.Stop();
+          CaptureController2(sw.ElapsedTicks, _, "IsOutOfPower");
+          __result = false; return false;
+        }
+        sw.Stop();
+        CaptureController2(sw.ElapsedTicks, _, "IsOutOfPower");
+
+        sw.Restart();
+        if (_.IsToggle && (activator == null || _.lastUsed < Timing.TotalTime - 0.1))
+        {
+          if (GameMain.NetworkMember == null || GameMain.NetworkMember.IsServer)
+          {
+            _.State = !_.State;
+#if SERVER
+          _.item.CreateServerEvent(_);
+#endif
+          }
+        }
+        else if (!string.IsNullOrEmpty(_.output))
+        {
+          _.item.SendSignal(new Signal(_.output, sender: _.user), "trigger_out");
+        }
+        sw.Stop();
+        CaptureController2(sw.ElapsedTicks, _, "SendSignal");
+
+        sw.Restart();
+        _.lastUsed = Timing.TotalTime;
+        _.ApplyStatusEffects(ActionType.OnUse, 1.0f, activator);
+        sw.Stop();
+        CaptureController2(sw.ElapsedTicks, _, "ApplyStatusEffects(ActionType.OnUse");
+
+        __result = true; return false;
+      }
     }
   }
 }

@@ -75,6 +75,7 @@
         <WholeSub />
         <Items>
           <Use>
+            <Controller />
             <RepairTool>
               <Repair />
             </RepairTool>

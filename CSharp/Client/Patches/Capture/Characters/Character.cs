@@ -66,7 +66,7 @@ namespace ShowPerfExtensions
       {
         if (UpdateAllState.ByID)
         {
-          string info = character.Info?.DisplayName ?? "";
+          string info = character.Info?.DisplayName == null ? "" : " " + character.Info?.DisplayName;
           string enabled = character.Enabled ? "Enabled" : "Disabled";
           string alive = character.IsDead ? "Dead" : "Alive";
           string simplified = character.AnimController.SimplePhysicsEnabled ? "Simple" : "Complex";
