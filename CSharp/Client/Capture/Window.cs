@@ -58,7 +58,9 @@ namespace ShowPerfExtensions
         {
           if (Frames == 1)
           {
-            TotalTicks.ReplaceWithMax(FirstSlice);
+            TotalTicks.Clear();
+            TotalTicks.Add(FirstSlice);
+            FirstSlice.Clear();
           }
           else
           {
