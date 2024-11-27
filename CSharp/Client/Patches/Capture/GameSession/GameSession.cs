@@ -72,7 +72,7 @@ namespace ShowPerfExtensions
         _.GameMode?.Update(deltaTime);
         sw.Stop();
         Capture.Update.AddTicks(sw.ElapsedTicks, UpdateGameSession, "GameMode");
-        Capture.Update.AddTicksOnce(sw.ElapsedTicks, UpdateGameMode, "GameMode");
+        Capture.Update.AddTicksOnce(sw.ElapsedTicks, UpdateGameMode, _.GameMode.ToString());
 
         sw.Restart();
         //backwards for loop because the missions may get completed and removed from the list in Update()
