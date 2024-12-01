@@ -23,7 +23,7 @@ namespace CrabUI
     public static CUIMainComponent Main;
     public static CUIInput Input = new CUIInput();
 
-    public static string ModDir => ShowPerfExtensions.Plugin.Mod.ModDir;
+    public static string ModDir => ShowPerfExtensions.Plugin.Instance.ModDir;
     public static string IgnoreDir => ModDir + "/Ignore";
 
     public static void log(object msg, Color? cl = null)

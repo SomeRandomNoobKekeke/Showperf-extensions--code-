@@ -117,7 +117,7 @@ namespace ShowPerfExtensions
         {
           AddOnMouseDown = (e) =>
           {
-            SaveToFile(Mod.ModDir + "/XML/CUICaptureMap.xml");
+            SaveToFile(Instance.ModDir + "/XML/CUICaptureMap.xml");
             MemorizedOffset = ChildrenOffset;
           },
           InactiveColor = CUIPallete.Default.Tertiary.Off,

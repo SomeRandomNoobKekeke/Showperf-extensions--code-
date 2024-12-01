@@ -26,7 +26,7 @@ namespace ShowPerfExtensions
 #endif
     public static void info(object msg, [CallerFilePath] string source = "", [CallerLineNumber] int lineNumber = 0)
     {
-      if (Mod.Debug)
+      if (Instance.Debug)
       {
         var fi = new FileInfo(source);
 
@@ -40,7 +40,7 @@ namespace ShowPerfExtensions
 #endif
     public static void error(object msg, [CallerFilePath] string source = "", [CallerLineNumber] int lineNumber = 0)
     {
-      if (Mod.Debug)
+      if (Instance.Debug)
       {
         var fi = new FileInfo(source);
 

@@ -21,22 +21,26 @@ namespace ShowPerfExtensions
   public partial class Plugin : IAssemblyPlugin
   {
     public static string ModName = "Showperf extensions";
-    public static Plugin Mod;
+    public static Plugin Instance;
+    public float MemoryUsage => LuaCsPerformanceCounter.MemoryUsage;
+
+    public static double TicksToMs = 1000.0 / Stopwatch.Frequency;
+
+    public static CaptureClass Capture => Instance.capture;
+    public static CUIShowperf Showperf => Instance.showperf;
+    public static Harmony harmony => Instance.__harmony;
 
     public string ModDir = "";
     public string ModVersion = "1.0.0";
     public bool Debug;
+
     public Harmony __harmony;
-    public static Harmony harmony => Mod.__harmony;
-
-
-    public static double TicksToMs = 1000.0 / Stopwatch.Frequency;
-    public static CaptureClass Capture;
-    public static CUIShowperf Showperf;
+    public CaptureClass capture;
+    public CUIShowperf showperf;
 
     public void Initialize()
     {
-      Mod = this;
+      Instance = this;
       FindModFolder();
 
       if (ModDir.Contains("LocalMods"))
@@ -51,7 +55,7 @@ namespace ShowPerfExtensions
       LightSource_Parent.Clear();
       MapButton.Buttons.Clear();
 
-      Capture = new CaptureClass();
+      capture = new CaptureClass();
       Capture.LoadFromFile();
 
 
@@ -59,7 +63,7 @@ namespace ShowPerfExtensions
 
       CUI.Initialize();
 
-      Showperf = new CUIShowperf()
+      showperf = new CUIShowperf()
       {
         Absolute = new CUINullRect(null, null, 350, 550),
       };
@@ -108,6 +112,7 @@ namespace ShowPerfExtensions
       FindLightSourceParents.Find();
       FindLevelTriggerParents.Find();
 
+      log($"Process.PrivateMemorySize64: {MemoryUsage}MB", Color.Lime);
       info($"{ModName} Initialized");
     }
 
@@ -118,6 +123,15 @@ namespace ShowPerfExtensions
     {
       RemoveCommands();
       CUI.Dispose();
+
+      __harmony = null;
+      capture = null;
+      showperf = null;
+      lightSource_parent.Clear();
+      lightSource_parent = null;
+      levelTrigger_parent.Clear();
+      levelTrigger_parent = null;
+
       info($"{ModName} Disposed");
     }
   }

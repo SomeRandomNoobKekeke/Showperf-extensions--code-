@@ -227,7 +227,7 @@ namespace ShowPerfExtensions
         }
         Capture.Active.Clear();
 
-        Map = CUIComponent.LoadFromFile<CUICaptureMap>(Mod.ModDir + "/XML/CUICaptureMap.xml");
+        Map = CUIComponent.LoadFromFile<CUICaptureMap>(Instance.ModDir + "/XML/CUICaptureMap.xml");
         OnGlobalCaptureStateChange();
 
         return Map;

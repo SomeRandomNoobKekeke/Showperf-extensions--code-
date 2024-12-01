@@ -39,6 +39,7 @@ namespace ShowPerfExtensions
         log($"Showperf.FPS = {Showperf.FPS}");
       }));
 
+
       AddedCommands.Add(new DebugConsole.Command("showperf_highlight|s_highlight|s_h", "", (string[] args) =>
       {
         if (args.Length == 0)
@@ -146,6 +147,11 @@ namespace ShowPerfExtensions
         }
       }));
 
+      AddedCommands.Add(new DebugConsole.Command("memoryusage", "", (string[] args) =>
+      {
+        log($"Process.PrivateMemorySize64: {MemoryUsage}MB", Color.Lime);
+      }));
+
       DebugConsole.Commands.AddRange(AddedCommands);
     }
 
@@ -153,11 +159,12 @@ namespace ShowPerfExtensions
     {
       AddedCommands.ForEach(c => DebugConsole.Commands.Remove(c));
       AddedCommands.Clear();
+      AddedCommands = null;
     }
 
     public static void PermitCommands(Identifier command, ref bool __result)
     {
-      if (Mod.AddedCommands.Any(c => c.Names.Contains(command.Value))) __result = true;
+      if (Instance.AddedCommands.Any(c => c.Names.Contains(command.Value))) __result = true;
     }
   }
 }

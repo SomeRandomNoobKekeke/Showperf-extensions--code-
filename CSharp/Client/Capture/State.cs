@@ -16,6 +16,7 @@ namespace ShowPerfExtensions
   {
     public class CaptureState
     {
+      //Danger
       public static Dictionary<int, CaptureState> FromHash = new Dictionary<int, CaptureState>();
 
 

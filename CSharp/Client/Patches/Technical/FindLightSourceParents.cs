@@ -36,7 +36,8 @@ namespace ShowPerfExtensions
       }
     }
 
-    public static Dictionary<LightSource, ParentInfo> LightSource_Parent = new Dictionary<LightSource, ParentInfo>();
+    public static Dictionary<LightSource, ParentInfo> LightSource_Parent => Instance.lightSource_parent;
+    public Dictionary<LightSource, ParentInfo> lightSource_parent = new Dictionary<LightSource, ParentInfo>();
 
     [ShowperfPatch]
     public class FindLightSourceParents

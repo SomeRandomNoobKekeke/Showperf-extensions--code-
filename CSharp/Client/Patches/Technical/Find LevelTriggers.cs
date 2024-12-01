@@ -25,7 +25,8 @@ namespace ShowPerfExtensions
   public partial class Plugin
   {
 
-    public static Dictionary<LevelTrigger, ParentInfo> LevelTrigger_Parent = new Dictionary<LevelTrigger, ParentInfo>();
+    public static Dictionary<LevelTrigger, ParentInfo> LevelTrigger_Parent => Instance.levelTrigger_parent;
+    public Dictionary<LevelTrigger, ParentInfo> levelTrigger_parent = new Dictionary<LevelTrigger, ParentInfo>();
 
     [ShowperfPatch]
     public class FindLevelTriggerParents
