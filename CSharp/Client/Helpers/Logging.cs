@@ -48,5 +48,12 @@ namespace ShowPerfExtensions
         log(msg, Color.Orange);
       }
     }
+
+
+    public static void PrintMemoryUsage(string when = "")
+    {
+      if (when != "") when = " on " + when;
+      log($"Memory usage{when}: {MemoryUsage}MB", Color.Lime);
+    }
   }
 }

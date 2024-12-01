@@ -149,7 +149,7 @@ namespace ShowPerfExtensions
 
       AddedCommands.Add(new DebugConsole.Command("memoryusage", "", (string[] args) =>
       {
-        log($"Process.PrivateMemorySize64: {MemoryUsage}MB", Color.Lime);
+        PrintMemoryUsage();
       }));
 
       DebugConsole.Commands.AddRange(AddedCommands);

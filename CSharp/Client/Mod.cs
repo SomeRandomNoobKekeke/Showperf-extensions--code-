@@ -22,7 +22,7 @@ namespace ShowPerfExtensions
   {
     public static string ModName = "Showperf extensions";
     public static Plugin Instance;
-    public float MemoryUsage => LuaCsPerformanceCounter.MemoryUsage;
+    public static float MemoryUsage => LuaCsPerformanceCounter.MemoryUsage;
 
     public static double TicksToMs = 1000.0 / Stopwatch.Frequency;
 
@@ -112,7 +112,6 @@ namespace ShowPerfExtensions
       FindLightSourceParents.Find();
       FindLevelTriggerParents.Find();
 
-      log($"Process.PrivateMemorySize64: {MemoryUsage}MB", Color.Lime);
       info($"{ModName} Initialized");
     }
 
