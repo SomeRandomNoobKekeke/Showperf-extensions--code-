@@ -47,56 +47,53 @@ namespace ShowPerfExtensions
       public void Rotate()
       {
         Reseted = false;
-        if (Capture.Mode == CaptureMode.Sum)
+        switch (Capture.Mode)
         {
-          TotalTicks.Add(FirstSlice);
-          FirstSlice.Clear();
-          return;
-        }
-
-        if (Capture.Mode == CaptureMode.Spike)
-        {
-          if (Frames == 1)
-          {
-            TotalTicks.Clear();
+          case CaptureMode.Sum:
             TotalTicks.Add(FirstSlice);
             FirstSlice.Clear();
-          }
-          else
-          {
-            Slice lastSlice = PartialSums.Dequeue();
+            break;
 
-            TotalTicks.RemoveMatches(lastSlice);
-            TotalTicks.ReplaceWithMax(FirstSlice);
+          case CaptureMode.Spike:
+            if (Frames == 1)
+            {
+              TotalTicks.ReplaceWithMax(FirstSlice);
+              FirstSlice.Clear();
+            }
+            else
+            {
+              Slice lastSlice = PartialSums.Dequeue();
 
-            lastSlice.Clear();
-            FirstSlice = lastSlice;
-            PartialSums.Enqueue(lastSlice);
-          }
+              TotalTicks.RemoveMatches(lastSlice);
+              TotalTicks.ReplaceWithMax(FirstSlice);
 
-          return;
-        }
+              lastSlice.Clear();
+              FirstSlice = lastSlice;
+              PartialSums.Enqueue(lastSlice);
+            }
+            break;
 
-        if (Capture.Mode == CaptureMode.Mean)
-        {
-          if (Frames == 1)
-          {
-            TotalTicks.Clear();
-            TotalTicks.Add(FirstSlice);
-            FirstSlice.Clear();
-          }
-          else
-          {
-            Slice lastSlice = PartialSums.Dequeue();
+          case CaptureMode.Mean:
+            if (Frames == 1)
+            {
+              TotalTicks.Clear();
+              TotalTicks.Add(FirstSlice);
+              FirstSlice.Clear();
+            }
+            else
+            {
+              Slice lastSlice = PartialSums.Dequeue();
 
-            TotalTicks.Add(FirstSlice);
-            TotalTicks.Substract(lastSlice);
+              TotalTicks.Add(FirstSlice);
+              TotalTicks.Substract(lastSlice);
 
-            lastSlice.Clear();
-            FirstSlice = lastSlice;
-            PartialSums.Enqueue(lastSlice);
-          }
-          return;
+              lastSlice.Clear();
+              FirstSlice = lastSlice;
+              PartialSums.Enqueue(lastSlice);
+            }
+            break;
+
+
         }
       }
 
