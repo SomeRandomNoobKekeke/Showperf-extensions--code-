@@ -76,7 +76,7 @@ namespace ShowPerfExtensions
       );
 
       Showperf.States["init"] = Showperf.Clone();
-      Showperf.OnUpdate += () => Showperf.Update();
+      Showperf.OnUpdate += () => Showperf?.Update();
 
       CUI.Main["showperfButton"] = new CUIButton("SHOWPERF")
       {
