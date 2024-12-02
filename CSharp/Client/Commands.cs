@@ -152,6 +152,27 @@ namespace ShowPerfExtensions
         PrintMemoryUsage();
       }));
 
+      AddedCommands.Add(new DebugConsole.Command("showperf_dump|s_dump", "", (string[] args) =>
+      {
+        string path = args.ElementAtOrDefault(0) ?? ShowperfLogPath;
+
+        try
+        {
+          using (StreamWriter writer = new StreamWriter(path, false))
+          {
+            foreach (UpdateTicksView t in Showperf.TickList.Values)
+            {
+              writer.WriteLine(t.Name);
+            }
+          }
+          log($"Saved to {path}");
+        }
+        catch (Exception e)
+        {
+          log(e.Message);
+        }
+      }));
+
       DebugConsole.Commands.AddRange(AddedCommands);
     }
 
