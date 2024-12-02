@@ -13,6 +13,8 @@ namespace ShowPerfExtensions
 {
   partial class Plugin : IAssemblyPlugin
   {
+
+    public static string ShowperfLogPath = "Showperf.log";
     public void FindModFolder()
     {
       bool found = false;

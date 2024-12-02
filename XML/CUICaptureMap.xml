@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<CUICaptureMap ChildrenOffset="[73.91998,88.479065,1]" Relative="[0,0,1,1]">
+<CUICaptureMap ChildrenOffset="[74.92001,95.90307,1]" Relative="[0,0,1,1]">
   <Connections>
     <Connection Start="Showperf.Draw" End="Draw" />
     <Connection Start="Draw.Map" End="Map" />
@@ -24,6 +24,7 @@
     <Connection Start="Lighting.LightVolumes" End="DrawLightVolume" />
     <Connection Start="Update.Character" End="CharacterUpdate" />
     <Connection Start="CharacterUpdate" End="CharacterAIController" />
+    <Connection Start="CharacterUpdate" End="CharacterTalents" />
     <Connection Start="CharacterUpdate" End="CharacterControl" />
     <Connection Start="Level.LevelObjectManager" End="LevelObjectSounds" />
     <Connection Start="Level.LevelObjectManager" End="LevelObjectTriggers" />
@@ -103,9 +104,10 @@
         <MapButton AKA="Submarine" CState="Showperf.Update.Submarine" Text="Submarine" />
       </CUIVerticalList>
     </MapGroup>
-    <MapButton AKA="CharacterUpdate" Absolute="[-165.17621,117.4321,,]" CState="Showperf.Update.Character.Update" ConsumeDragAndDrop="true" ConsumeSwipe="true" Draggable="true" Text="Update" />
-    <MapButton AKA="CharacterAIController" Absolute="[-144.17621,78.4321,,]" CState="Showperf.Update.Character.Update.AIController" ConsumeDragAndDrop="true" ConsumeSwipe="true" Draggable="true" Text="AIController" />
-    <MapButton AKA="CharacterControl" Absolute="[-205.17621,78.4321,,]" CState="Showperf.Update.Character.Update.Control" ConsumeDragAndDrop="true" ConsumeSwipe="true" Draggable="true" Text="Control" />
+    <MapButton AKA="CharacterUpdate" Absolute="[-174.17621,116.4321,,]" CState="Showperf.Update.Character.Update" ConsumeDragAndDrop="true" ConsumeSwipe="true" Draggable="true" Text="Update" />
+    <MapButton AKA="CharacterAIController" Absolute="[-138.17621,82.4321,,]" CState="Showperf.Update.Character.Update.AIController" ConsumeDragAndDrop="true" ConsumeSwipe="true" Draggable="true" Text="AIController" />
+    <MapButton AKA="CharacterTalents" Absolute="[-174.17621,55.4321,,]" CState="Showperf.Update.Character.Update.Talents" ConsumeDragAndDrop="true" ConsumeSwipe="true" Draggable="true" Text="Talents" />
+    <MapButton AKA="CharacterControl" Absolute="[-213.17621,81.4321,,]" CState="Showperf.Update.Character.Update.Control" ConsumeDragAndDrop="true" ConsumeSwipe="true" Draggable="true" Text="Control" />
     <MapGroup AKA="Level" Absolute="[-498.18433,45.81597,,102.59999]" ConsumeSwipe="true" Draggable="true">
       <MapButton AKA="Level" CState="Showperf.Update.Level" Text="Level" TextAlign="{X:0.5 Y:0.5}" TextScale="1.2" />
       <CUIVerticalList Absolute="[,,,80.99999]" AbsoluteMin="[,,134.5,]" FitContent="[True,True]">

@@ -39,6 +39,7 @@ namespace ShowPerfExtensions
       public static CaptureState UpdateAllState;
       public static CaptureState UpdateState;
       public static CaptureState ControlState;
+      public static CaptureState TalentsState;
 
       public static void Initialize()
       {
@@ -60,6 +61,7 @@ namespace ShowPerfExtensions
         UpdateAllState = Capture.Get("Showperf.Update.Character");
         UpdateState = Capture.Get("Showperf.Update.Character.Update");
         ControlState = Capture.Get("Showperf.Update.Character.Update.Control");
+        TalentsState = Capture.Get("Showperf.Update.Character.Update.Talents");
       }
 
       public static void CaptureCharacter(long ticks, Character character)
@@ -197,10 +199,11 @@ namespace ShowPerfExtensions
 
       public static bool Character_Update_Replace(float deltaTime, Camera cam, Character __instance)
       {
-        if (!UpdateState.IsActive || !Showperf.Revealed) return true;
+        if (!Showperf.Revealed || (!UpdateState.IsActive && !TalentsState.IsActive)) return true;
         Capture.Update.EnsureCategory(UpdateState);
 
         Stopwatch sw = new Stopwatch();
+        Stopwatch sw2 = new Stopwatch();
 
         Character _ = __instance;
 
@@ -292,10 +295,41 @@ namespace ShowPerfExtensions
         CaptureCharacter2(sw.ElapsedTicks, _, "UpdateAttackers");
 
         sw.Restart();
-        foreach (var characterTalent in _.characterTalents)
+        if (TalentsState.IsActive)
         {
-          characterTalent.UpdateTalent(deltaTime);
+
+          Capture.Update.EnsureCategory(TalentsState);
+
+          if (TalentsState.ByID)
+          {
+            foreach (var characterTalent in _.characterTalents)
+            {
+              sw2.Restart();
+              characterTalent.UpdateTalent(deltaTime);
+              sw2.Stop();
+              Capture.Update.AddTicks(sw2.ElapsedTicks, TalentsState, $"{_.Info?.DisplayName ?? _.ToString()} - {characterTalent.Prefab.OriginalName}");
+            }
+          }
+          else
+          {
+            foreach (var characterTalent in _.characterTalents)
+            {
+              sw2.Restart();
+              characterTalent.UpdateTalent(deltaTime);
+              sw2.Stop();
+              Capture.Update.AddTicks(sw2.ElapsedTicks, TalentsState, characterTalent.Prefab.OriginalName);
+            }
+          }
         }
+        else
+        {
+          foreach (var characterTalent in _.characterTalents)
+          {
+            characterTalent.UpdateTalent(deltaTime);
+          }
+        }
+
+
         sw.Stop();
         CaptureCharacter2(sw.ElapsedTicks, _, "UpdateTalents");
 

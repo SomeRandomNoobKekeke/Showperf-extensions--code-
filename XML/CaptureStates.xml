@@ -50,6 +50,7 @@
       <ItemsHUD />
       <Character>
         <Update>
+          <Talents />
           <AIController />
           <Control />
         </Update>
