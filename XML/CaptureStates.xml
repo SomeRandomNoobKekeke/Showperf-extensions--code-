@@ -79,6 +79,7 @@
             <Controller />
             <RepairTool>
               <Repair />
+              <FixBody />
             </RepairTool>
           </Use>
           <Components>
