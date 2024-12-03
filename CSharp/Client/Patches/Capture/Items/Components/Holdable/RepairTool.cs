@@ -494,6 +494,7 @@ namespace ShowPerfExtensions
         if (!Showperf.Revealed || !FixBodyState.IsActive) return true;
         Capture.Update.EnsureCategory(FixBodyState);
         Stopwatch sw = new Stopwatch();
+        Stopwatch sw2 = new Stopwatch();
 
         RepairTool _ = __instance;
 
@@ -501,17 +502,46 @@ namespace ShowPerfExtensions
 
         if (targetBody.UserData is Structure targetStructure)
         {
+          bool guh;
+          sw.Restart();
           if (targetStructure.IsPlatform) { __result = false; return false; }
+
+          sw2.Restart();
           int sectionIndex = targetStructure.FindSectionIndex(ConvertUnits.ToDisplayUnits(_.pickedPosition));
+          sw2.Stop();
+          Capture.Update.AddTicks(sw2.ElapsedTicks, FixBodyState, "targetStructure.FindSectionIndex");
+
           if (sectionIndex < 0) { __result = false; return false; }
 
-          if (!_.fixableEntities.Contains("structure") && !_.fixableEntities.Contains(targetStructure.Prefab.Identifier)) { __result = true; return false; }
-          if (_.nonFixableEntities.Contains(targetStructure.Prefab.Identifier) || _.nonFixableEntities.Any(t => targetStructure.Tags.Contains(t))) { __result = false; return false; }
+          sw2.Restart();
+          guh = !_.fixableEntities.Contains("structure") && !_.fixableEntities.Contains(targetStructure.Prefab.Identifier);
+          sw2.Stop();
+          Capture.Update.AddTicks(sw2.ElapsedTicks, FixBodyState, "!fixableEntities.Contains");
+          if (guh) { __result = true; return false; }
 
+          sw2.Restart();
+          guh = _.nonFixableEntities.Contains(targetStructure.Prefab.Identifier) || _.nonFixableEntities.Any(t => targetStructure.Tags.Contains(t));
+          sw2.Stop();
+          Capture.Update.AddTicks(sw2.ElapsedTicks, FixBodyState, "nonFixableEntities.Contains");
+
+          if (guh) { __result = false; return false; }
+
+          sw2.Restart();
           _.ApplyStatusEffectsOnTarget(user, deltaTime, ActionType.OnUse, structure: targetStructure);
-          _.ApplyStatusEffectsOnTarget(user, deltaTime, ActionType.OnSuccess, structure: targetStructure);
-          _.FixStructureProjSpecific(user, deltaTime, targetStructure, sectionIndex);
+          sw2.Stop();
+          Capture.Update.AddTicks(sw2.ElapsedTicks, FixBodyState, "ApplyStatusEffectsOnTarget OnUse");
 
+          sw2.Restart();
+          _.ApplyStatusEffectsOnTarget(user, deltaTime, ActionType.OnSuccess, structure: targetStructure);
+          sw2.Stop();
+          Capture.Update.AddTicks(sw2.ElapsedTicks, FixBodyState, "ApplyStatusEffectsOnTarget OnSuccess");
+
+          sw2.Restart();
+          _.FixStructureProjSpecific(user, deltaTime, targetStructure, sectionIndex);
+          sw2.Stop();
+          Capture.Update.AddTicks(sw2.ElapsedTicks, FixBodyState, "FixStructureProjSpecific");
+
+          sw2.Restart();
           float structureFixAmount = _.StructureFixAmount;
           if (structureFixAmount >= 0f)
           {
@@ -523,16 +553,29 @@ namespace ShowPerfExtensions
             structureFixAmount *= 1 + user.GetStatValue(StatTypes.RepairToolStructureDamageMultiplier);
             structureFixAmount *= 1 + _.item.GetQualityModifier(Quality.StatType.RepairToolStructureDamageMultiplier);
           }
+          sw2.Stop();
+          Capture.Update.AddTicks(sw2.ElapsedTicks, FixBodyState, "structureFixAmount");
 
+          sw2.Restart();
           var didLeak = targetStructure.SectionIsLeakingFromOutside(sectionIndex);
+          sw2.Stop();
+          Capture.Update.AddTicks(sw2.ElapsedTicks, FixBodyState, "SectionIsLeakingFromOutside");
 
+          sw2.Restart();
           targetStructure.AddDamage(sectionIndex, -structureFixAmount * degreeOfSuccess, user);
+          sw2.Stop();
+          Capture.Update.AddTicks(sw2.ElapsedTicks, FixBodyState, "AddDamage");
 
+          sw2.Restart();
           if (didLeak && !targetStructure.SectionIsLeakingFromOutside(sectionIndex))
           {
             user.CheckTalents(AbilityEffectType.OnRepairedOutsideLeak);
           }
+          sw2.Stop();
+          Capture.Update.AddTicks(sw2.ElapsedTicks, FixBodyState, "user.CheckTalents(AbilityEffectType.OnRepairedOutsideLeak)");
 
+
+          sw2.Restart();
           //if the next section is small enough, apply the effect to it as well
           //(to make it easier to fix a small "left-over" section)
           for (int i = -1; i < 2; i += 2)
@@ -546,23 +589,35 @@ namespace ShowPerfExtensions
               targetStructure.AddDamage(sectionIndex + i, -structureFixAmount * degreeOfSuccess);
             }
           }
+          sw2.Stop();
+          Capture.Update.AddTicks(sw2.ElapsedTicks, FixBodyState, "if the next section is small enough");
+
+          sw.Stop();
+          Capture.Update.AddTicks(sw.ElapsedTicks, FixBodyState, "UserData is Structure");
           __result = true; return false;
         }
         else if (targetBody.UserData is Voronoi2.VoronoiCell cell && cell.IsDestructible)
         {
+          sw.Restart();
           if (Level.Loaded?.ExtraWalls.Find(w => w.Body == cell.Body) is DestructibleLevelWall levelWall)
           {
             levelWall.AddDamage(-_.LevelWallFixAmount * deltaTime, ConvertUnits.ToDisplayUnits(hitPosition));
           }
+          sw.Stop();
+          Capture.Update.AddTicks(sw.ElapsedTicks, FixBodyState, "UserData is Voronoi2");
           __result = true; return false;
         }
         else if (targetBody.UserData is LevelObject levelObject && levelObject.Prefab.TakeLevelWallDamage)
         {
+          sw.Restart();
           levelObject.AddDamage(-_.LevelWallFixAmount, deltaTime, _.item);
+          sw.Stop();
+          Capture.Update.AddTicks(sw.ElapsedTicks, FixBodyState, "UserData is LevelObject");
           __result = true; return false;
         }
         else if (targetBody.UserData is Character targetCharacter)
         {
+          sw.Restart();
           if (targetCharacter.Removed) { __result = false; return false; }
           targetCharacter.LastDamageSource = _.item;
           Limb closestLimb = null;
@@ -588,10 +643,14 @@ namespace ShowPerfExtensions
           _.ApplyStatusEffectsOnTarget(user, deltaTime, ActionType.OnUse, character: targetCharacter, limb: closestLimb);
           _.ApplyStatusEffectsOnTarget(user, deltaTime, ActionType.OnSuccess, character: targetCharacter, limb: closestLimb);
           _.FixCharacterProjSpecific(user, deltaTime, targetCharacter);
+
+          sw.Stop();
+          Capture.Update.AddTicks(sw.ElapsedTicks, FixBodyState, "UserData is Character");
           __result = true; return false;
         }
         else if (targetBody.UserData is Limb targetLimb)
         {
+          sw.Restart();
           if (targetLimb.character == null || targetLimb.character.Removed) { __result = false; return false; }
 
           if (!MathUtils.NearlyEqual(_.TargetForce, 0.0f))
@@ -605,10 +664,14 @@ namespace ShowPerfExtensions
           _.ApplyStatusEffectsOnTarget(user, deltaTime, ActionType.OnUse, character: targetLimb.character, limb: targetLimb);
           _.ApplyStatusEffectsOnTarget(user, deltaTime, ActionType.OnSuccess, character: targetLimb.character, limb: targetLimb);
           _.FixCharacterProjSpecific(user, deltaTime, targetLimb.character);
+
+          sw.Stop();
+          Capture.Update.AddTicks(sw.ElapsedTicks, FixBodyState, "UserData is Limb");
           __result = true; return false;
         }
         else if (targetBody.UserData is Item targetItem)
         {
+          sw.Restart();
           if (!_.HitItems || !targetItem.IsInteractable(user)) { __result = false; return false; }
 
           var levelResource = targetItem.GetComponent<LevelResource>();
@@ -660,14 +723,19 @@ namespace ShowPerfExtensions
           }
 
           _.FixItemProjSpecific(user, deltaTime, targetItem, showProgressBar: true);
+          sw.Stop();
+          Capture.Update.AddTicks(sw.ElapsedTicks, FixBodyState, "UserData is Item");
           __result = true; return false;
         }
         else if (targetBody.UserData is BallastFloraBranch branch)
         {
+          sw.Restart();
           if (branch.ParentBallastFlora is { } ballastFlora)
           {
             ballastFlora.DamageBranch(branch, _.FireDamage * deltaTime, BallastFloraBehavior.AttackType.Fire, user);
           }
+          sw.Stop();
+          Capture.Update.AddTicks(sw.ElapsedTicks, FixBodyState, "UserData is BallastFloraBranch");
         }
         __result = false; return false;
       }
