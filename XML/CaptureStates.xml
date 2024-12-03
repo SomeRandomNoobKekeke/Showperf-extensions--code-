@@ -74,6 +74,10 @@
       </Level>
       <MapEntity>
         <WholeSub />
+        <Structure>
+          <AddDamage />
+          <SetDamage />
+        </Structure>
         <Items>
           <Use>
             <Controller />

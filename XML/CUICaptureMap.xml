@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<CUICaptureMap ChildrenOffset="[370.60004,-150.03297,1]" Relative="[0,0,1,1]">
+<CUICaptureMap ChildrenOffset="[375.60004,-224.03297,1]" Relative="[0,0,1,1]">
   <Connections>
     <Connection Start="Showperf.Draw" End="Draw" />
     <Connection Start="Draw.Map" End="Map" />
@@ -18,6 +18,8 @@
     <Connection Start="ItemUse" End="ControllerUse" />
     <Connection Start="RepairToolUse" End="RepairToolRepair" />
     <Connection Start="RepairToolRepair" End="RepairToolFixBody" />
+    <Connection Start="RepairToolFixBody" End="StructureAddDamage" />
+    <Connection Start="StructureAddDamage" End="StructureSetDamage" />
     <Connection Start="ItemComponents" End="Turret" />
     <Connection Start="ItemComponents" End="Controller" />
     <Connection Start="ItemComponents" End="MotionSensor" />
@@ -134,7 +136,9 @@
     <MapButton AKA="ControllerUse" Absolute="[-431.23175,353.71198,,]" CState="Showperf.Update.MapEntity.Items.Use.Controller" ConsumeDragAndDrop="true" ConsumeSwipe="true" Draggable="true" Text="Controller.Use" TextAlign="{X:0.5 Y:0.5}" TextScale="1.2" />
     <MapButton AKA="RepairToolUse" Absolute="[-292.23175,352.71198,,]" CState="Showperf.Update.MapEntity.Items.Use.RepairTool" ConsumeDragAndDrop="true" ConsumeSwipe="true" Draggable="true" Text="RepairTool.Use" TextAlign="{X:0.5 Y:0.5}" TextScale="1.2" />
     <MapButton AKA="RepairToolRepair" Absolute="[-315.23175,409.71198,,]" CState="Showperf.Update.MapEntity.Items.Use.RepairTool.Repair" ConsumeDragAndDrop="true" ConsumeSwipe="true" Draggable="true" Text="RepairTool.Repair" TextAlign="{X:0.5 Y:0.5}" TextScale="1.2" />
-    <MapButton AKA="RepairToolFixBody" Absolute="[-318.23175,457.71198,,]" CState="Showperf.Update.MapEntity.Items.Use.RepairTool.FixBody" ConsumeDragAndDrop="true" ConsumeSwipe="true" Draggable="true" State="true" Text="RepairTool.FixBody" TextAlign="{X:0.5 Y:0.5}" TextScale="1.2" />
+    <MapButton AKA="RepairToolFixBody" Absolute="[-318.23175,457.71198,,]" CState="Showperf.Update.MapEntity.Items.Use.RepairTool.FixBody" ConsumeDragAndDrop="true" ConsumeSwipe="true" Draggable="true" Text="RepairTool.FixBody" TextAlign="{X:0.5 Y:0.5}" TextScale="1.2" />
+    <MapButton AKA="StructureAddDamage" Absolute="[-323.23175,503.71198,,]" CState="Showperf.Update.MapEntity.Structure.AddDamage" ConsumeDragAndDrop="true" ConsumeSwipe="true" Draggable="true" Text="Structure.AddDamage" TextAlign="{X:0.5 Y:0.5}" TextScale="1.2" />
+    <MapButton AKA="StructureSetDamage" Absolute="[-321.23175,543.712,,]" CState="Showperf.Update.MapEntity.Structure.SetDamage" ConsumeDragAndDrop="true" ConsumeSwipe="true" Draggable="true" State="true" Text="Structure.SetDamage" TextAlign="{X:0.5 Y:0.5}" TextScale="1.2" />
     <MapButton AKA="Turret" Absolute="[-585.5919,240.744,,]" CState="Showperf.Update.MapEntity.Items.Components.Turret" ConsumeDragAndDrop="true" ConsumeSwipe="true" Draggable="true" Text="Turret" TextAlign="{X:0.5 Y:0.5}" TextScale="1.2" />
     <MapButton AKA="Controller" Absolute="[-467.43185,204.18402,,]" CState="Showperf.Update.MapEntity.Items.Components.Controller" ConsumeDragAndDrop="true" ConsumeSwipe="true" Draggable="true" Text="Controller" TextAlign="{X:0.5 Y:0.5}" TextScale="1.2" />
     <MapButton AKA="MotionSensor" Absolute="[-483.55994,277.656,,]" CState="Showperf.Update.MapEntity.Items.Components.MotionSensor" ConsumeDragAndDrop="true" ConsumeSwipe="true" Draggable="true" Text="MotionSensor" TextAlign="{X:0.5 Y:0.5}" TextScale="1.2" />
