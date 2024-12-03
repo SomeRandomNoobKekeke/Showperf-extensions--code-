@@ -306,11 +306,13 @@ namespace ShowPerfExtensions
         _.HasDamage = _.Sections.Any(s => s.damage > 0.0f);
 
 
-        sw.Restart();
+
         if (attacker != null && damageDiff != 0.0f)
         {
+          sw.Restart();
           HumanAIController.StructureDamaged(_, damageDiff, attacker);
-
+          sw.Stop();
+          Capture.Update.AddTicks(sw.ElapsedTicks, SetDamageState, "HumanAIController.StructureDamaged");
 #if SERVER
         _.OnHealthChangedProjSpecific(attacker, damageDiff);
 #endif
@@ -324,8 +326,7 @@ namespace ShowPerfExtensions
             }
           }
         }
-        sw.Stop();
-        Capture.Update.AddTicks(sw.ElapsedTicks, SetDamageState, "HumanAIController.StructureDamaged");
+
 
         bool hasHole = _.SectionBodyDisabled(sectionIndex);
 
