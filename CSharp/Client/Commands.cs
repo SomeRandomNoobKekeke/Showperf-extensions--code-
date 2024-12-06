@@ -152,6 +152,13 @@ namespace ShowPerfExtensions
         PrintMemoryUsage();
       }));
 
+
+      AddedCommands.Add(new DebugConsole.Command("showperf_freeze|s_freeze", "", (string[] args) =>
+      {
+        Capture.Frozen = !Capture.Frozen;
+        log($"Capture.Frozen = {Capture.Frozen}");
+      }));
+
       AddedCommands.Add(new DebugConsole.Command("showperf_dump|s_dump", "", (string[] args) =>
       {
         string path = args.ElementAtOrDefault(0) ?? ShowperfLogPath;
