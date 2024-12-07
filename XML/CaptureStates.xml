@@ -89,6 +89,9 @@
           <Components>
             <MotionSensor />
             <Controller />
+            <ItemContainer>
+              <StatusEffects />
+            </ItemContainer>
             <Turret>
               <UpdateAutoOperate>
                 <TargetItems />
