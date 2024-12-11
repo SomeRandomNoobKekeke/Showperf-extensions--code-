@@ -544,7 +544,12 @@ namespace ShowPerfExtensions
           {
             humanAnimController.Crouching = false;
           }
-          if (_.IsRagdolled) { _.AnimController.IgnorePlatforms = true; }
+          //ragdolling manually makes the character go through platforms
+          //EXCEPT for clients, they rely on the server telling whether platforms should be ignored or not
+          if (_.IsRagdolled && GameMain.NetworkMember is not { IsClient: true })
+          {
+            _.AnimController.IgnorePlatforms = true;
+          }
           _.AnimController.ResetPullJoints();
           _.SelectedItem = _.SelectedSecondaryItem = null;
 
@@ -651,8 +656,9 @@ namespace ShowPerfExtensions
         CaptureCharacter3(sw.ElapsedTicks, _, "SmoothedCursorPosition");
 
         sw.Restart();
-        bool aiControlled = _ is AICharacter && Character.Controlled != _ && !_.IsRemotelyControlled;
-        if (!aiControlled)
+        bool aiControlled = _ is AICharacter && Character.Controlled != _ && !_.IsRemotePlayer;
+        bool controlledByServer = GameMain.NetworkMember is { IsClient: true } && _.IsRemotelyControlled;
+        if (!aiControlled && !controlledByServer)
         {
           Vector2 targetMovement = _.GetTargetMovement();
           _.AnimController.TargetMovement = targetMovement;
@@ -687,7 +693,8 @@ namespace ShowPerfExtensions
           {
             _.AnimController.TargetDir = Direction.Right;
           }
-          else
+          //only humanoids' flipping is controlled by the cursor, monster flipping is driven by their movement in FishAnimController
+          else if (_.AnimController is HumanoidAnimController)
           {
             if (_.CursorPosition.X < _.AnimController.Collider.Position.X - Character.cursorFollowMargin)
             {
@@ -759,17 +766,9 @@ namespace ShowPerfExtensions
         }
         else if (_.IsKeyDown(InputType.Attack))
         {
-          if (GameMain.NetworkMember != null && GameMain.NetworkMember.IsClient && Character.Controlled != _)
-          {
-            if ((_.currentAttackTarget.DamageTarget as Entity)?.Removed ?? false)
-            {
-              _.currentAttackTarget = default;
-            }
-
-            AttackResult attackResult;
-            _.currentAttackTarget.AttackLimb?.UpdateAttack(deltaTime, _.currentAttackTarget.AttackPos, _.currentAttackTarget.DamageTarget, out attackResult);
-          }
-          else if (_.IsPlayer)
+          //normally the attack target, where to aim the attack and such is handled by EnemyAIController,
+          //but in the case of player-controlled monsters, we handle it here
+          if (_.IsPlayer)
           {
             float dist = -1;
             Vector2 attackPos = _.SimPosition + ConvertUnits.ToSimUnits(_.cursorPosition - _.Position);
@@ -814,13 +813,16 @@ namespace ShowPerfExtensions
               }
             }
             var currentContexts = _.GetAttackContexts();
-            var validLimbs = _.AnimController.Limbs.Where(l =>
+            var attackLimbs = _.AnimController.Limbs.Where(static l => l.attack != null);
+            bool hasAttacksWithoutRootForce = attackLimbs.Any(static l => !l.attack.HasRootForce);
+            var validLimbs = attackLimbs.Where(l =>
             {
               if (l.IsSevered || l.IsStuck) { return false; }
               if (l.Disabled) { return false; }
               var attack = l.attack;
-              if (attack == null) { return false; }
               if (attack.CoolDownTimer > 0) { return false; }
+              //disallow attacks with root force if there's any other attacks available
+              if (hasAttacksWithoutRootForce && attack.HasRootForce) { return false; }
               if (!attack.IsValidContext(currentContexts)) { return false; }
               if (attackTarget != null)
               {
@@ -857,6 +859,16 @@ namespace ShowPerfExtensions
                 _.attackCoolDown = 1.0f;
               }
             }
+          }
+          else if (GameMain.NetworkMember is { IsClient: true } && Character.Controlled != _)
+          {
+            if (_.currentAttackTarget.DamageTarget is Entity { Removed: true })
+            {
+              _.currentAttackTarget = default;
+            }
+
+            AttackResult attackResult;
+            _.currentAttackTarget.AttackLimb?.UpdateAttack(deltaTime, _.currentAttackTarget.AttackPos, _.currentAttackTarget.DamageTarget, out attackResult);
           }
         }
         sw.Stop();

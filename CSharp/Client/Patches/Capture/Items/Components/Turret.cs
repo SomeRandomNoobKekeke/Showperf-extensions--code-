@@ -316,7 +316,7 @@ namespace ShowPerfExtensions
           if (CaptureAutoOperateTargetItems.IsActive)
           {
             Capture.Update.EnsureCategory(CaptureAutoOperateTargetItems);
-            foreach (Item targetItem in Item.ItemList)
+            foreach (Item targetItem in Item.TurretTargetItems)
             {
               sw2.Restart();
 
@@ -370,7 +370,7 @@ namespace ShowPerfExtensions
           }
           else
           {
-            foreach (Item targetItem in Item.ItemList)
+            foreach (Item targetItem in Item.TurretTargetItems)
             {
               if (!Turret.IsValidTarget(targetItem)) { continue; }
               float priority = _.isSlowTurret ? targetItem.Prefab.AISlowTurretPriority : targetItem.Prefab.AITurretPriority;

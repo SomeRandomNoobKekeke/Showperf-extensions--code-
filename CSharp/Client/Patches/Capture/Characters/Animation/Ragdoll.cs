@@ -147,6 +147,14 @@ namespace ShowPerfExtensions
         CaptureRagdoll(_, sw.ElapsedTicks, "Check Out ouf bounds");
 
         sw.Restart();
+        float MaxVel = NetConfig.MaxPhysicsBodyVelocity;
+        _.Collider.LinearVelocity = new Vector2(
+            NetConfig.Quantize(_.Collider.LinearVelocity.X, -MaxVel, MaxVel, 12),
+            NetConfig.Quantize(_.Collider.LinearVelocity.Y, -MaxVel, MaxVel, 12));
+        sw.Stop();
+        CaptureRagdoll(_, sw.ElapsedTicks, "Limit velocity");
+
+        sw.Restart();
         if (_.forceStanding)
         {
           _.inWater = false;

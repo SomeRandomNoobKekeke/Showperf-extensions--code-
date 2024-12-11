@@ -22,7 +22,7 @@ using System.Linq;
 using Microsoft.Xna.Framework;
 using FarseerPhysics.Dynamics;
 using System.Threading;
-
+using System.Transactions;
 
 
 namespace ShowPerfExtensions
@@ -270,7 +270,7 @@ namespace ShowPerfExtensions
         //Draw background structures and wall background sprites 
         //(= the background texture that's revealed when a wall is destroyed) into the background render target
         //These will be visible through the LOS effect.
-        spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.NonPremultiplied, null, DepthStencilState.None, null, null, _.cam.Transform);
+        spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.NonPremultiplied, depthStencilState: DepthStencilState.None, transformMatrix: _.cam.Transform);
         SubmarinePatch.DrawBack(BackStructures, spriteBatch, false, e => e is Structure s && (e.SpriteDepth >= 0.9f || s.Prefab.BackgroundSprite != null) && !IsFromOutpostDrawnBehindSubs(e));
 
         Submarine.DrawPaintedColors(spriteBatch, false);
@@ -283,8 +283,31 @@ namespace ShowPerfExtensions
         Capture.Draw.AddTicks(sw.ElapsedTicks, DrawMap, "BackStructures");
         sw.Restart();
 
+
+
+        graphics.SetRenderTarget(_.renderTargetDamageable);
+        graphics.Clear(Color.Transparent);
+        _.DamageEffect.CurrentTechnique = _.DamageEffect.Techniques["StencilShader"];
+        spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.NonPremultiplied, SamplerState.LinearWrap, effect: _.DamageEffect, transformMatrix: _.cam.Transform);
+
+        if (FrontDamageable.IsActive)
+        {
+          SubmarinePatch.DrawDamageable(FrontDamageable, spriteBatch, _.DamageEffect, false);
+        }
+        else
+        {
+          Submarine.DrawDamageable(spriteBatch, _.DamageEffect, false);
+        }
+
+        spriteBatch.End();
+
+        sw.Stop();
+        GameMain.PerformanceCounter.AddElapsedTicks("Draw:Map:FrontDamageable", sw.ElapsedTicks);
+        Capture.Draw.AddTicks(sw.ElapsedTicks, DrawMap, "FrontDamageable");
+        sw.Restart();
+
         graphics.SetRenderTarget(null);
-        GameMain.LightManager.RenderLightMap(graphics, spriteBatch, _.cam, _.renderTarget);
+        GameMain.LightManager.RenderLightMap(graphics, spriteBatch, _.cam, _.renderTargetDamageable);
 
         sw.Stop();
         GameMain.PerformanceCounter.AddElapsedTicks("Draw:Map:Lighting", sw.ElapsedTicks);
@@ -309,7 +332,7 @@ namespace ShowPerfExtensions
 
 
         sw2.Restart();
-        spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.NonPremultiplied, null, DepthStencilState.None, null, null, _.cam.Transform);
+        spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.NonPremultiplied, depthStencilState: DepthStencilState.None, transformMatrix: _.cam.Transform);
         SubmarinePatch.DrawBack(BackLevelSubmarine, spriteBatch, false, e => e is Structure s && (e.SpriteDepth >= 0.9f || s.Prefab.BackgroundSprite != null) && IsFromOutpostDrawnBehindSubs(e));
         spriteBatch.End();
         sw2.Stop();
@@ -317,9 +340,9 @@ namespace ShowPerfExtensions
         sw2.Restart();
         //draw alpha blended particles that are in water and behind subs
 #if LINUX || OSX
-			spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.NonPremultiplied, null, DepthStencilState.None, null, null, _.cam.Transform);
+			  spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.NonPremultiplied, depthStencilState: DepthStencilState.None, transformMatrix: _.cam.Transform);
 #else
-        spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.NonPremultiplied, null, DepthStencilState.None, null, null, _.cam.Transform);
+        spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.NonPremultiplied, depthStencilState: DepthStencilState.None, transformMatrix: _.cam.Transform);
 #endif
 
         //TODO investigate these draw calls
@@ -328,13 +351,13 @@ namespace ShowPerfExtensions
         spriteBatch.End();
 
         //draw additive particles that are in water and behind subs
-        spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.Additive, null, DepthStencilState.None, null, null, _.cam.Transform);
+        spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.Additive, depthStencilState: DepthStencilState.None, transformMatrix: _.cam.Transform);
 
         GameMain.ParticleManager.Draw(spriteBatch, true, false, Barotrauma.Particles.ParticleBlendState.Additive);
         //ParticleManagerPatch.Draw(BackLevelParticles, spriteBatch, true, false, Barotrauma.Particles.ParticleBlendState.Additive);
 
         spriteBatch.End();
-        spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.NonPremultiplied, null, DepthStencilState.None);
+        spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.NonPremultiplied, depthStencilState: DepthStencilState.None);
         spriteBatch.Draw(_.renderTarget, new Rectangle(0, 0, GameMain.GraphicsWidth, GameMain.GraphicsHeight), Color.White);
         spriteBatch.End();
 
@@ -359,10 +382,10 @@ namespace ShowPerfExtensions
         GraphicsQuad.Render();
 
         //Draw the rest of the structures, characters and front structures
-        spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.NonPremultiplied, null, DepthStencilState.None, null, null, _.cam.Transform);
+        spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.NonPremultiplied, depthStencilState: DepthStencilState.None, transformMatrix: _.cam.Transform);
 
         sw2.Restart();
-        SubmarinePatch.DrawBack(BackCharactersItemsSubmarineDrawBack, spriteBatch, false, e => !(e is Structure) || e.SpriteDepth < 0.9f);
+        SubmarinePatch.DrawBack(BackCharactersItemsSubmarineDrawBack, spriteBatch, false, e => e is not Structure || e.SpriteDepth < 0.9f);
         sw2.Stop();
         Capture.Draw.AddTicks(sw2.ElapsedTicks, BackCharactersItems, "Submarine.DrawBack");
 
@@ -382,7 +405,7 @@ namespace ShowPerfExtensions
         Capture.Draw.AddTicks(sw.ElapsedTicks, DrawMap, "BackCharactersItems");
         sw.Restart();
 
-        spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.NonPremultiplied, null, DepthStencilState.None, null, null, _.cam.Transform);
+        spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.NonPremultiplied, depthStencilState: DepthStencilState.None, transformMatrix: _.cam.Transform);
 
         if (DeformableCharacters.IsActive)
         {
@@ -501,19 +524,19 @@ namespace ShowPerfExtensions
         GraphicsQuad.Render();
 
         //draw alpha blended particles that are inside a sub
-        spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.NonPremultiplied, null, DepthStencilState.DepthRead, null, null, _.cam.Transform);
+        spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.NonPremultiplied, depthStencilState: DepthStencilState.DepthRead, transformMatrix: _.cam.Transform);
         ParticleManagerPatch.Draw(FrontParticles, spriteBatch, true, true, Barotrauma.Particles.ParticleBlendState.AlphaBlend);
         spriteBatch.End();
 
         graphics.SetRenderTarget(_.renderTarget);
 
         //draw alpha blended particles that are not in water
-        spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.NonPremultiplied, null, DepthStencilState.DepthRead, null, null, _.cam.Transform);
+        spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.NonPremultiplied, depthStencilState: DepthStencilState.DepthRead, transformMatrix: _.cam.Transform);
         ParticleManagerPatch.Draw(FrontParticles, spriteBatch, false, null, Barotrauma.Particles.ParticleBlendState.AlphaBlend);
         spriteBatch.End();
 
         //draw additive particles that are not in water
-        spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.Additive, null, DepthStencilState.None, null, null, _.cam.Transform);
+        spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.Additive, depthStencilState: DepthStencilState.None, transformMatrix: _.cam.Transform);
         ParticleManagerPatch.Draw(FrontParticles, spriteBatch, false, null, Barotrauma.Particles.ParticleBlendState.Additive);
         spriteBatch.End();
 
@@ -535,31 +558,10 @@ namespace ShowPerfExtensions
         Capture.Draw.AddTicks(sw.ElapsedTicks, DrawMap, "FrontParticles");
         sw.Restart();
 
-        _.DamageEffect.CurrentTechnique = _.DamageEffect.Techniques["StencilShader"];
-        spriteBatch.Begin(SpriteSortMode.Immediate,
-            BlendState.NonPremultiplied, SamplerState.LinearWrap,
-            null, null,
-            _.DamageEffect,
-            _.cam.Transform);
+        GraphicsQuad.UseBasicEffect(_.renderTargetDamageable);
+        GraphicsQuad.Render();
 
-        if (FrontDamageable.IsActive)
-        {
-          SubmarinePatch.DrawDamageable(FrontDamageable, spriteBatch, _.DamageEffect, false);
-        }
-        else
-        {
-          Submarine.DrawDamageable(spriteBatch, _.DamageEffect, false);
-        }
-
-        spriteBatch.End();
-
-        sw.Stop();
-        GameMain.PerformanceCounter.AddElapsedTicks("Draw:Map:FrontDamageable", sw.ElapsedTicks);
-        //Capture.Draw.AddTicksOnce(sw.ElapsedTicks, FrontDamageable, "FrontDamageable");
-        Capture.Draw.AddTicks(sw.ElapsedTicks, DrawMap, "FrontDamageable");
-        sw.Restart();
-
-        spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.NonPremultiplied, null, DepthStencilState.None, null, null, _.cam.Transform);
+        spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.NonPremultiplied, depthStencilState: DepthStencilState.None, transformMatrix: _.cam.Transform);
         Submarine.DrawFront(spriteBatch, false, null);
         spriteBatch.End();
 
@@ -573,7 +575,7 @@ namespace ShowPerfExtensions
         Capture.Draw.EnsureCategory(FrontMisc);
 
 
-        spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.Additive, null, DepthStencilState.Default, null, null, _.cam.Transform);
+        spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.Additive, depthStencilState: DepthStencilState.Default, transformMatrix: _.cam.Transform);
 
         ParticleManagerPatch.Draw(FrontMisc, spriteBatch, true, true, Barotrauma.Particles.ParticleBlendState.Additive);
         sw.Restart();
@@ -599,7 +601,7 @@ namespace ShowPerfExtensions
         Capture.Draw.AddTicks(sw.ElapsedTicks, FrontMisc, "GraphicsQuad.Render LightManager");
 
 
-        spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.NonPremultiplied, SamplerState.LinearWrap, DepthStencilState.None, null, null, _.cam.Transform);
+        spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.NonPremultiplied, SamplerState.LinearWrap, depthStencilState: DepthStencilState.None, transformMatrix: _.cam.Transform);
         foreach (Character c in Character.CharacterList)
         {
           sw.Restart();

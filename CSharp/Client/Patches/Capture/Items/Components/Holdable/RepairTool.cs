@@ -230,7 +230,7 @@ namespace ShowPerfExtensions
 
         RepairTool _ = __instance;
 
-        var collisionCategories = Physics.CollisionWall | Physics.CollisionItem | Physics.CollisionLevel | Physics.CollisionRepairableWall;
+        var collisionCategories = Physics.CollisionWall | Physics.CollisionItem | Physics.CollisionLevel | Physics.CollisionRepairableWall | Physics.CollisionItemBlocking; ;
         if (!_.IgnoreCharacters)
         {
           collisionCategories |= Physics.CollisionCharacter;
@@ -669,8 +669,9 @@ namespace ShowPerfExtensions
           Capture.Update.AddTicks(sw.ElapsedTicks, FixBodyState, "UserData is Limb");
           __result = true; return false;
         }
-        else if (targetBody.UserData is Item targetItem)
+        else if (targetBody.UserData is Barotrauma.Item or Holdable)
         {
+          Item targetItem = targetBody.UserData is Holdable holdable ? holdable.Item : (Item)targetBody.UserData;
           sw.Restart();
           if (!_.HitItems || !targetItem.IsInteractable(user)) { __result = false; return false; }
 

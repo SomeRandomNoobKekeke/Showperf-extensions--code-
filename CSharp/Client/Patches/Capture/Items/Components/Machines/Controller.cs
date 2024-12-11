@@ -102,14 +102,7 @@ namespace ShowPerfExtensions
           _.user.SelectedItem = _.item;
         }
         _.forceSelectNextFrame = false;
-
-        // bool condition1 = _.user == null;
-        // bool condition2 = _.user.Removed;
-        // bool condition3 = !_.user.IsAnySelectedItem(_.item);
-        // bool condition4 = (_.item.ParentInventory != null && !_.IsAttachedUser(_.user));
-        // bool condition5 = !_.user.CanInteractWith(_.item);
-        // bool condition6 = (_.UsableIn == Controller.UseEnvironment.Water && !_.user.AnimController.InWater);
-        // bool condition7 = (_.UsableIn == Controller.UseEnvironment.Air && _.user.AnimController.InWater);
+        _.userCanInteractCheckTimer -= deltaTime;
 
 
         bool condition1 = false;
@@ -156,7 +149,7 @@ namespace ShowPerfExtensions
           if (!shouldCancelUsing)
           {
             sw2.Restart();
-            shouldCancelUsing |= !_.user.CanInteractWith(_.item);
+            shouldCancelUsing |= (_.UsableIn == Controller.UseEnvironment.Water && !_.user.AnimController.InWater);
             sw2.Stop();
             CaptureController(sw2.ElapsedTicks, _, "CancelUsing condition5");
           }
@@ -164,7 +157,7 @@ namespace ShowPerfExtensions
           if (!shouldCancelUsing)
           {
             sw2.Restart();
-            shouldCancelUsing |= (_.UsableIn == Controller.UseEnvironment.Water && !_.user.AnimController.InWater);
+            shouldCancelUsing |= (_.UsableIn == Controller.UseEnvironment.Air && _.user.AnimController.InWater);
             sw2.Stop();
             CaptureController(sw2.ElapsedTicks, _, "CancelUsing condition6");
           }
@@ -172,7 +165,7 @@ namespace ShowPerfExtensions
           if (!shouldCancelUsing)
           {
             sw2.Restart();
-            shouldCancelUsing |= (_.UsableIn == Controller.UseEnvironment.Air && _.user.AnimController.InWater);
+            shouldCancelUsing |= !_.CheckUserCanInteract();
             sw2.Stop();
             CaptureController(sw2.ElapsedTicks, _, "CancelUsing condition7");
           }
@@ -180,25 +173,9 @@ namespace ShowPerfExtensions
         catch (Exception e) { error(e); }
 
 
-        // bool condition1 = _.user == null;
-        // bool condition2 = _.user.Removed;
-        // bool condition3 = !_.user.IsAnySelectedItem(_.item);
-        // bool condition4 = (_.item.ParentInventory != null && !_.IsAttachedUser(_.user));
-        // bool condition5 = !_.user.CanInteractWith(_.item);
-        // bool condition6 = (_.UsableIn == Controller.UseEnvironment.Water && !_.user.AnimController.InWater);
-        // bool condition7 = (_.UsableIn == Controller.UseEnvironment.Air && _.user.AnimController.InWater);
-
         sw.Restart();
         if (shouldCancelUsing)
         {
-          // if (_.user == null
-          //     || _.user.Removed
-          //     || !_.user.IsAnySelectedItem(_.item)
-          //     || (_.item.ParentInventory != null && !_.IsAttachedUser(_.user))
-          //     || !_.user.CanInteractWith(_.item)
-          //     || (_.UsableIn == Controller.UseEnvironment.Water && !_.user.AnimController.InWater)
-          //     || (_.UsableIn == Controller.UseEnvironment.Air && _.user.AnimController.InWater))
-          // {
           if (_.user != null)
           {
             _.CancelUsing(_.user);

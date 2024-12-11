@@ -104,63 +104,68 @@ namespace ShowPerfExtensions
       {
         Stopwatch sw = new Stopwatch();
         Stopwatch sw2 = new Stopwatch();
-
-        var entitiesToRender = !editing && Submarine.visibleEntities != null ? Submarine.visibleEntities : MapEntity.MapEntityList;
-
-        sw.Restart();
-
-        Submarine.depthSortedDamageable.Clear();
-
-        //insertion sort according to draw depth
-        foreach (MapEntity e in entitiesToRender)
+        if (!editing && Submarine.visibleEntities != null)
         {
-          if (e is Structure structure && structure.DrawDamageEffect)
+          foreach (MapEntity e in Submarine.visibleEntities)
           {
-            if (predicate != null)
+            if (e is Structure structure && structure.DrawDamageEffect)
             {
-              if (!predicate(e)) { continue; }
-            }
-            float drawDepth = structure.GetDrawDepth();
-            int i = 0;
-            while (i < Submarine.depthSortedDamageable.Count)
-            {
-              float otherDrawDepth = Submarine.depthSortedDamageable[i].GetDrawDepth();
-              if (otherDrawDepth < drawDepth) { break; }
-              i++;
-            }
-            Submarine.depthSortedDamageable.Insert(i, structure);
-          }
-        }
-
-        sw.Stop();
-        Capture.Draw.AddTicks(sw.ElapsedTicks, cs, "insertion sort according to draw depth");
-        sw.Restart();
-
-        foreach (Structure s in Submarine.depthSortedDamageable)
-        {
-          sw2.Restart();
-          s.DrawDamage(spriteBatch, damageEffect, editing);
-          sw2.Stop();
-          if (Capture.ShouldCapture(s))
-          {
-            if (cs.ByID)
-            {
-              Capture.Draw.AddTicks(sw2.ElapsedTicks, cs, $"{s} ({s.ID})");
-            }
-            else
-            {
-              Capture.Draw.AddTicks(sw2.ElapsedTicks, cs, s.ToString());
+              if (predicate != null)
+              {
+                if (!predicate(structure)) { continue; }
+              }
+              sw.Restart();
+              structure.DrawDamage(spriteBatch, damageEffect, editing);
+              sw.Stop();
+              if (Capture.ShouldCapture(structure))
+              {
+                if (cs.ByID)
+                {
+                  Capture.Draw.AddTicks(sw.ElapsedTicks, cs, $"{structure} ({structure.ID})");
+                }
+                else
+                {
+                  Capture.Draw.AddTicks(sw.ElapsedTicks, cs, structure.ToString());
+                }
+              }
             }
           }
         }
+        else
+        {
+          foreach (Structure structure in Structure.WallList)
+          {
+            if (structure.DrawDamageEffect)
+            {
+              if (predicate != null)
+              {
+                if (!predicate(structure)) { continue; }
+              }
+              sw.Restart();
+              structure.DrawDamage(spriteBatch, damageEffect, editing);
+              sw.Stop();
+              if (Capture.ShouldCapture(structure))
+              {
+                if (cs.ByID)
+                {
+                  Capture.Draw.AddTicks(sw.ElapsedTicks, cs, $"{structure} ({structure.ID})");
+                }
+                else
+                {
+                  Capture.Draw.AddTicks(sw.ElapsedTicks, cs, structure.ToString());
+                }
+              }
+            }
+          }
+        }
+
+
         if (damageEffect != null)
         {
           damageEffect.Parameters["aCutoff"].SetValue(0.0f);
           damageEffect.Parameters["cCutoff"].SetValue(0.0f);
           Submarine.DamageEffectCutoff = 0.0f;
         }
-        sw.Stop();
-        //Capture.Draw.AddTicks(sw.ElapsedTicks, cs, "DrawDamage");
 
         return false;
       }
