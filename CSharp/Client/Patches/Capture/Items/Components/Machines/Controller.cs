@@ -335,7 +335,11 @@ namespace ShowPerfExtensions
         Controller _ = __instance;
         try
         {
-          if (!Showperf.Revealed || !ControllerUseState.IsActive) return Controller_Use_FullVanillaWithTryCatch(__instance, deltaTime, activator);
+          if (!Showperf.Revealed || !ControllerUseState.IsActive)
+          {
+            __result = Controller_Use_FullVanillaWithTryCatch(__instance, deltaTime, activator);
+            return false;
+          }
           Capture.Update.EnsureCategory(ControllerUseState);
           Stopwatch sw = new Stopwatch();
 
