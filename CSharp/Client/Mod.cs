@@ -123,13 +123,13 @@ namespace ShowPerfExtensions
       RemoveCommands();
       CUI.Dispose();
 
-      __harmony = null;
-      capture = null;
-      showperf = null;
+      //__harmony = null;
+      //capture = null;
+      //showperf = null;
       lightSource_parent.Clear();
-      lightSource_parent = null;
+      //lightSource_parent = null;
       levelTrigger_parent.Clear();
-      levelTrigger_parent = null;
+      //levelTrigger_parent = null;
 
       info($"{ModName} Disposed");
     }
