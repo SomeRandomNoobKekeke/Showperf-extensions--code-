@@ -332,138 +332,63 @@ namespace ShowPerfExtensions
 
       public static bool Controller_Use_Replace(Controller __instance, ref bool __result, float deltaTime, Character activator = null)
       {
+        if (!Showperf.Revealed || !ControllerUseState.IsActive) return true;
+        Capture.Update.EnsureCategory(ControllerUseState);
+        Stopwatch sw = new Stopwatch();
+
         Controller _ = __instance;
-        try
+
+        if (activator != _.user)
         {
-          if (!Showperf.Revealed || !ControllerUseState.IsActive)
-          {
-            __result = Controller_Use_FullVanillaWithTryCatch(__instance, deltaTime, activator);
-            return false;
-          }
-          Capture.Update.EnsureCategory(ControllerUseState);
-          Stopwatch sw = new Stopwatch();
-
-          if (activator != _.user)
-          {
-            __result = false; return false;
-          }
-
-          sw.Restart();
-          if (_.user == null || _.user.Removed || !_.user.IsAnySelectedItem(_.item) || !_.user.CanInteractWith(_.item))
-          {
-            sw.Stop();
-            CaptureController2(sw.ElapsedTicks, _, "CanInteractWith");
-            _.user = null;
-            __result = false; return false;
-          }
-          sw.Stop();
-          CaptureController2(sw.ElapsedTicks, _, "CanInteractWith");
-
-          sw.Restart();
-          if (_.IsOutOfPower())
-          {
-            sw.Stop();
-            CaptureController2(sw.ElapsedTicks, _, "IsOutOfPower");
-            __result = false; return false;
-          }
-          sw.Stop();
-          CaptureController2(sw.ElapsedTicks, _, "IsOutOfPower");
-
-          sw.Restart();
-          if (_.IsToggle && (activator == null || _.lastUsed < Timing.TotalTime - 0.1))
-          {
-            if (GameMain.NetworkMember == null || GameMain.NetworkMember.IsServer)
-            {
-              _.State = !_.State;
-#if SERVER
-              _.item.CreateServerEvent(_);
-#endif
-            }
-          }
-          else if (!string.IsNullOrEmpty(_.output))
-          {
-            _.item.SendSignal(new Signal(_.output, sender: _.user), "trigger_out");
-          }
-          sw.Stop();
-          CaptureController2(sw.ElapsedTicks, _, "SendSignal");
-
-          sw.Restart();
-          _.lastUsed = Timing.TotalTime;
-          _.ApplyStatusEffects(ActionType.OnUse, 1.0f, activator);
-          sw.Stop();
-          CaptureController2(sw.ElapsedTicks, _, "ApplyStatusEffects(ActionType.OnUse");
-
-          __result = true; return false;
-        }
-        catch (Exception e)
-        {
-          DebugConsole.IsOpen = true;
-          error($"Mysterious {e.Message} in Controller_Use_Replace just happened");
-          log($"Controller item is {_.item}", Color.Orange);
-          log($"Controller user is {_.user}[{_.user?.ID}] {_.user?.Info?.DisplayName}", Color.Orange);
-          log($"activator is {activator}[{activator?.ID}] {activator?.Info?.DisplayName}", Color.Orange);
-          log($"Controller.output is {_.output}", Color.Orange);
-          log($"Controller.State is {_.State}", Color.Orange);
-          log($"Controller.IsOutOfPower is {_.IsOutOfPower()}", Color.Orange);
-          log($"Report this to Showperf Extensions steam page or github", Color.Yellow);
-
           __result = false; return false;
         }
-      }
 
-
-
-      public static bool Controller_Use_FullVanillaWithTryCatch(Controller __instance, float deltaTime, Character activator = null)
-      {
-        Controller _ = __instance;
-        try
+        sw.Restart();
+        if (_.user == null || _.user.Removed || !_.user.IsAnySelectedItem(_.item) || !_.user.CanInteractWith(_.item))
         {
-          if (activator != _.user)
-          {
-            return false;
-          }
-          if (_.user == null || _.user.Removed || !_.user.IsAnySelectedItem(_.item) || !_.user.CanInteractWith(_.item))
-          {
-            _.user = null;
-            return false;
-          }
+          sw.Stop();
+          CaptureController2(sw.ElapsedTicks, _, "CanInteractWith");
+          _.user = null;
+          __result = false; return false;
+        }
+        sw.Stop();
+        CaptureController2(sw.ElapsedTicks, _, "CanInteractWith");
 
-          if (_.IsOutOfPower()) { return false; }
+        sw.Restart();
+        if (_.IsOutOfPower())
+        {
+          sw.Stop();
+          CaptureController2(sw.ElapsedTicks, _, "IsOutOfPower");
+          __result = false; return false;
+        }
+        sw.Stop();
+        CaptureController2(sw.ElapsedTicks, _, "IsOutOfPower");
 
-          if (_.IsToggle && (activator == null || _.lastUsed < Timing.TotalTime - 0.1))
+        sw.Restart();
+        if (_.IsToggle && (activator == null || _.lastUsed < Timing.TotalTime - 0.1))
+        {
+          if (GameMain.NetworkMember == null || GameMain.NetworkMember.IsServer)
           {
-            if (GameMain.NetworkMember == null || GameMain.NetworkMember.IsServer)
-            {
-              _.State = !_.State;
+            _.State = !_.State;
 #if SERVER
-              _.item.CreateServerEvent(_);
+          _.item.CreateServerEvent(_);
 #endif
-            }
           }
-          else if (!string.IsNullOrEmpty(_.output))
-          {
-            _.item.SendSignal(new Signal(_.output, sender: _.user), "trigger_out");
-          }
-
-          _.lastUsed = Timing.TotalTime;
-          _.ApplyStatusEffects(ActionType.OnUse, 1.0f, activator);
-
-          return true;
         }
-        catch (Exception e)
+        else if (!string.IsNullOrEmpty(_.output))
         {
-          DebugConsole.IsOpen = true;
-          error($"Mysterious {e.Message} in Controller_Use_Replace just happened");
-          log($"Controller item is {_.item}", Color.Orange);
-          log($"Controller user is {_.user}[{_.user?.ID}] {_.user?.Info?.DisplayName}", Color.Orange);
-          log($"activator is {activator}[{activator?.ID}] {activator?.Info?.DisplayName}", Color.Orange);
-          log($"Controller.output is {_.output}", Color.Orange);
-          log($"Controller.State is {_.State}", Color.Orange);
-          log($"Controller.IsOutOfPower is {_.IsOutOfPower()}", Color.Orange);
-          log($"Report this to Showperf Extensions steam page or github", Color.Yellow);
-
-          return false;
+          _.item.SendSignal(new Signal(_.output, sender: _.user), "trigger_out");
         }
+        sw.Stop();
+        CaptureController2(sw.ElapsedTicks, _, "SendSignal");
+
+        sw.Restart();
+        _.lastUsed = Timing.TotalTime;
+        _.ApplyStatusEffects(ActionType.OnUse, 1.0f, activator);
+        sw.Stop();
+        CaptureController2(sw.ElapsedTicks, _, "ApplyStatusEffects(ActionType.OnUse");
+
+        __result = true; return false;
       }
     }
   }
