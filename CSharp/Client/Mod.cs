@@ -26,15 +26,14 @@ namespace ShowPerfExtensions
 
     public static double TicksToMs = 1000.0 / Stopwatch.Frequency;
 
-    public static CaptureClass Capture => Instance.capture;
-    public static CUIShowperf Showperf => Instance.showperf;
-    public static Harmony harmony => Instance.__harmony;
+    public static CaptureClass Capture => Instance?.capture;
+    public static CUIShowperf Showperf => Instance?.showperf;
+    public static Harmony harmony = new Harmony("showperf");
 
     public string ModDir = "";
     public string ModVersion = "1.0.0";
     public bool Debug;
 
-    public Harmony __harmony;
     public CaptureClass capture;
     public CUIShowperf showperf;
 
@@ -48,8 +47,6 @@ namespace ShowPerfExtensions
         Debug = true;
         info($"found {ModName} in LocalMods, debug: {Debug}");
       }
-
-      __harmony = new Harmony("showperf");
 
       CaptureState.FromHash.Clear();
       LightSource_Parent.Clear();
@@ -125,11 +122,10 @@ namespace ShowPerfExtensions
 
     public void Dispose()
     {
-      harmony.UnpatchAll();
+      harmony.UnpatchAll(harmony.Id);
       RemoveCommands();
       CUI.Dispose();
 
-      //__harmony = null;
       //capture = null;
       //showperf = null;
       lightSource_parent.Clear();

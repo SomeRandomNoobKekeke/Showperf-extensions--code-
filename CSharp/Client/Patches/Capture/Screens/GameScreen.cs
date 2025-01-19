@@ -139,6 +139,7 @@ namespace ShowPerfExtensions
       // https://github.com/evilfactory/LuaCsForBarotrauma/blob/master/Barotrauma/BarotraumaClient/ClientSource/Screens/GameScreen.cs#L98
       public static bool GameScreen_Draw_Replace(double deltaTime, GraphicsDevice graphics, SpriteBatch spriteBatch, GameScreen __instance)
       {
+        DispelCurse();
         if (Showperf == null || !Showperf.Revealed) return true;
 
         Thread.Sleep(Capture.DrawFakeLag);
@@ -780,6 +781,7 @@ namespace ShowPerfExtensions
       // https://github.com/evilfactory/LuaCsForBarotrauma/blob/master/Barotrauma/BarotraumaShared/SharedSource/Screens/GameScreen.cs#L99
       public static bool GameScreen_Update_Replace(double deltaTime, GameScreen __instance)
       {
+        DispelCurse();
         if (Showperf == null || !Showperf.Revealed) return true;
 
         Thread.Sleep(Capture.UpdateFakeLag);
