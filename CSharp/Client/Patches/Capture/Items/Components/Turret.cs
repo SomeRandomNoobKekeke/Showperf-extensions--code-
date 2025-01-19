@@ -55,7 +55,7 @@ namespace ShowPerfExtensions
       // https://github.com/evilfactory/LuaCsForBarotrauma/blob/master/Barotrauma/BarotraumaShared/SharedSource/Items/Components/Turret.cs#L438
       public static bool Turret_Update_Replace(float deltaTime, Camera cam, Turret __instance)
       {
-        if (!CaptureTurret.IsActive || !Showperf.Revealed) return true;
+        if (Showperf == null || !Showperf.Revealed || !CaptureTurret.IsActive) return true;
         Capture.Update.EnsureCategory(CaptureTurret);
         Stopwatch sw = new Stopwatch();
 
@@ -235,7 +235,7 @@ namespace ShowPerfExtensions
       {
         Turret _ = __instance;
 
-        if (!Showperf.Revealed || !Capture.ShouldCapture(_.Item)) return true;
+        if (Showperf == null || !Showperf.Revealed || !Capture.ShouldCapture(_.Item)) return true;
         Capture.Update.EnsureCategory(CaptureAutoOperate);
         Stopwatch sw = new Stopwatch();
         Stopwatch sw2 = new Stopwatch();

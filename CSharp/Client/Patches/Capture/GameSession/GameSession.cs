@@ -52,7 +52,7 @@ namespace ShowPerfExtensions
 
       public static bool GameSession_Update_Replace(float deltaTime, GameSession __instance)
       {
-        if (!Showperf.Revealed) return true;
+        if (Showperf == null || !Showperf.Revealed) return true;
 
 
         Capture.Update.EnsureCategory(UpdateGameSession);

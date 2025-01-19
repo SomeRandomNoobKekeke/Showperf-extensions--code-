@@ -79,7 +79,7 @@ namespace ShowPerfExtensions
                 BackgroundCreatureManager backgroundCreatureManager = null,
                 ParticleManager particleManager = null)
       {
-        if (!Showperf.Revealed) return true;
+        if (Showperf == null || !Showperf.Revealed) return true;
 
         Capture.Draw.EnsureCategory(BackLevel);
         Stopwatch sw = new Stopwatch();
@@ -224,7 +224,7 @@ namespace ShowPerfExtensions
 
       public static bool LevelRenderer_DrawForeground_Replace(LevelRenderer __instance, SpriteBatch spriteBatch, Camera cam, LevelObjectManager backgroundSpriteManager = null)
       {
-        if (!FrontLevel.IsActive || !Showperf.Revealed) return true;
+        if (Showperf == null || !Showperf.Revealed || !FrontLevel.IsActive) return true;
 
         spriteBatch.Begin(SpriteSortMode.Deferred,
             BlendState.NonPremultiplied,
@@ -240,7 +240,7 @@ namespace ShowPerfExtensions
 
       public static bool LevelRenderer_Update_Replace(float deltaTime, Camera cam, LevelRenderer __instance)
       {
-        if (!LevelRenderer.IsActive || !Showperf.Revealed) return true;
+        if (Showperf == null || !Showperf.Revealed || !LevelRenderer.IsActive) return true;
 
         LevelRenderer _ = __instance;
         Stopwatch sw = new Stopwatch();

@@ -42,7 +42,7 @@ namespace ShowPerfExtensions
       // https://github.com/evilfactory/LuaCsForBarotrauma/blob/master/Barotrauma/BarotraumaShared/SharedSource/Items/Components/Power/Powered.cs#L425
       public static bool Powered_UpdatePower_Replace(float deltaTime)
       {
-        if (!Showperf.Revealed) return true;
+        if (Showperf == null || !Showperf.Revealed) return true;
 
         //Don't update the power if the round is ending
         if (GameMain.GameSession != null && GameMain.GameSession.RoundEnding)

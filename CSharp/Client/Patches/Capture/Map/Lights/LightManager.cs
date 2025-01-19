@@ -71,7 +71,7 @@ namespace ShowPerfExtensions
       // https://github.com/evilfactory/LuaCsForBarotrauma/blob/master/Barotrauma/BarotraumaClient/ClientSource/Map/Lights/LightManager.cs#L246
       public static bool LightManager_RenderLightMap_Replace(GraphicsDevice graphics, SpriteBatch spriteBatch, Camera cam, RenderTarget2D backgroundObstructor, LightManager __instance)
       {
-        if (!Showperf.Revealed) return true;
+        if (Showperf == null || !Showperf.Revealed) return true;
         Capture.Draw.EnsureCategory(Lighting);
 
         Stopwatch sw = new Stopwatch();
@@ -577,7 +577,7 @@ namespace ShowPerfExtensions
       // https://github.com/evilfactory/LuaCsForBarotrauma/blob/master/Barotrauma/BarotraumaClient/ClientSource/Map/Lights/LightManager.cs#L555
       public static bool LightManager_UpdateHighlights_Replace(GraphicsDevice graphics, SpriteBatch spriteBatch, Matrix spriteBatchTransform, Camera cam, LightManager __instance, ref bool __result)
       {
-        if (!Showperf.Revealed) return true;
+        if (Showperf == null || !Showperf.Revealed) return true;
 
         LightManager _ = __instance;
 

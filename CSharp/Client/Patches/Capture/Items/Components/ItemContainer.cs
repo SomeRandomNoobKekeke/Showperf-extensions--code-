@@ -70,7 +70,7 @@ namespace ShowPerfExtensions
 
       public static bool ItemContainer_Update_Replace(ItemContainer __instance, float deltaTime, Camera cam)
       {
-        if (!Showperf.Revealed || (!ItemContainerState.IsActive && !ItemContainerStatusEffectsState.IsActive)) return true;
+        if (Showperf == null || !Showperf.Revealed || (!ItemContainerState.IsActive && !ItemContainerStatusEffectsState.IsActive)) return true;
         Capture.Update.EnsureCategory(ItemContainerState);
 
         Stopwatch sw = new Stopwatch();

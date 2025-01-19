@@ -52,7 +52,7 @@ namespace ShowPerfExtensions
 
       public static bool HumanAIController_Update_Replace(float deltaTime, HumanAIController __instance)
       {
-        if (!AIControllerState.IsActive || !Showperf.Revealed) return true;
+        if (Showperf == null || !Showperf.Revealed || !AIControllerState.IsActive) return true;
         Capture.Update.EnsureCategory(AIControllerState);
         Stopwatch sw = new Stopwatch();
 

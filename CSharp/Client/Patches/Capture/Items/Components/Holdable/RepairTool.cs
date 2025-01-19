@@ -58,7 +58,7 @@ namespace ShowPerfExtensions
 
       public static bool RepairTool_Use_Replace(RepairTool __instance, ref bool __result, float deltaTime, Character character = null)
       {
-        if (!UseState.IsActive || !Showperf.Revealed) return true;
+        if (Showperf == null || !Showperf.Revealed || !UseState.IsActive) return true;
         Capture.Update.EnsureCategory(UseState);
         Stopwatch sw = new Stopwatch();
 
@@ -223,7 +223,7 @@ namespace ShowPerfExtensions
 
       public static bool RepairTool_Repair_Replace(RepairTool __instance, Vector2 rayStart, Vector2 rayEnd, float deltaTime, Character user, float degreeOfSuccess, List<Body> ignoredBodies)
       {
-        if (!RepairState.IsActive || !Showperf.Revealed) return true;
+        if (Showperf == null || !Showperf.Revealed || !RepairState.IsActive) return true;
         Capture.Update.EnsureCategory(RepairState);
         Stopwatch sw = new Stopwatch();
         Stopwatch sw2 = new Stopwatch();
@@ -491,7 +491,7 @@ namespace ShowPerfExtensions
 
       public static bool RepairTool_FixBody_Replace(RepairTool __instance, ref bool __result, Character user, Vector2 hitPosition, float deltaTime, float degreeOfSuccess, Body targetBody)
       {
-        if (!Showperf.Revealed || !FixBodyState.IsActive) return true;
+        if (Showperf == null || !Showperf.Revealed || !FixBodyState.IsActive) return true;
         Capture.Update.EnsureCategory(FixBodyState);
         Stopwatch sw = new Stopwatch();
         Stopwatch sw2 = new Stopwatch();

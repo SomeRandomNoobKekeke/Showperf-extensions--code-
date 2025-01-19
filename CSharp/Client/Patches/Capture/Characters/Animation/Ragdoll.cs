@@ -59,7 +59,7 @@ namespace ShowPerfExtensions
 
       public static bool Ragdoll_UpdateRagdoll_Replace(float deltaTime, Camera cam, Ragdoll __instance)
       {
-        if (!UpdateRagdoll.IsActive || !Showperf.Revealed) return true;
+        if (Showperf == null || !Showperf.Revealed || !UpdateRagdoll.IsActive) return true;
         Capture.Update.EnsureCategory(UpdateRagdoll);
 
         Stopwatch sw = new Stopwatch();

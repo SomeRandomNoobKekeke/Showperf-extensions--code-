@@ -171,7 +171,7 @@ namespace ShowPerfExtensions
 
       public static bool LevelObjectManager_Update_Replace(float deltaTime, LevelObjectManager __instance)
       {
-        if (!LevelObjects.IsActive || !Showperf.Revealed) return true;
+        if (Showperf == null || !Showperf.Revealed || !LevelObjects.IsActive) return true;
 
         LevelObjectManager _ = __instance;
 

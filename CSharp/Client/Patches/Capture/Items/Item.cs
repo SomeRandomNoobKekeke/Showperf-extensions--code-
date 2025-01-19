@@ -61,7 +61,7 @@ namespace ShowPerfExtensions
 
       public static bool Item_Update_Replace(float deltaTime, Camera cam, Item __instance)
       {
-        if (!Showperf.Revealed || !Components.IsActive) return true;
+        if (Showperf == null || !Showperf.Revealed || !Components.IsActive) return true;
 
         Stopwatch sw = new Stopwatch();
         Stopwatch sw2 = new Stopwatch();
@@ -324,7 +324,7 @@ namespace ShowPerfExtensions
 
       public static bool Item_Use_Replace(Item __instance, float deltaTime, Character user = null, Limb targetLimb = null, Entity useTarget = null, Character userForOnUsedEvent = null)
       {
-        if (!UseState.IsActive || !Showperf.Revealed) return true;
+        if (Showperf == null || !Showperf.Revealed || !UseState.IsActive) return true;
         Capture.Update.EnsureCategory(UseState);
         Stopwatch sw = new Stopwatch();
 

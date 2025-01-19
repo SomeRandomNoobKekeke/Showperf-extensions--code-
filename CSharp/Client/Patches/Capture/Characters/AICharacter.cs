@@ -61,7 +61,7 @@ namespace ShowPerfExtensions
 
       public static bool AICharacter_Update_Replace(float deltaTime, Camera cam, AICharacter __instance)
       {
-        if (!CaptureUpdate.IsActive || !Showperf.Revealed) return true;
+        if (Showperf == null || !Showperf.Revealed || !CaptureUpdate.IsActive) return true;
         Capture.Update.EnsureCategory(CaptureUpdate);
 
         Stopwatch sw = new Stopwatch();

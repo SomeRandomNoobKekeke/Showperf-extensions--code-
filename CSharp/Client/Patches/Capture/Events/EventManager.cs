@@ -40,7 +40,7 @@ namespace ShowPerfExtensions
 
       public static bool EventManager_Update_Replace(EventManager __instance, float deltaTime)
       {
-        if (!UpdateEvents.IsActive || !Showperf.Revealed) return true;
+        if (Showperf == null || !Showperf.Revealed || !UpdateEvents.IsActive) return true;
         Capture.Update.EnsureCategory(UpdateEvents);
 
         Stopwatch sw = new Stopwatch();

@@ -69,7 +69,7 @@ namespace ShowPerfExtensions
 
       public static bool LevelTrigger_Update_Replace(float deltaTime, LevelTrigger __instance)
       {
-        if (!LevelObjectTriggers.IsActive || !Showperf.Revealed) return true;
+        if (Showperf == null || !Showperf.Revealed || !LevelObjectTriggers.IsActive) return true;
 
         Capture.Update.EnsureCategory(LevelObjectTriggers);
 

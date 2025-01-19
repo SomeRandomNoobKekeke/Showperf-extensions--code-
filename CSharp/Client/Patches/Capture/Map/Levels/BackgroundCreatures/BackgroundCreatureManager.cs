@@ -38,7 +38,7 @@ namespace ShowPerfExtensions
 
       public static bool BackgroundCreatureManager_Update_Replace(float deltaTime, Camera cam, BackgroundCreatureManager __instance)
       {
-        if (!BackCreatures.IsActive || !Showperf.Revealed) return true;
+        if (Showperf == null || !Showperf.Revealed || !BackCreatures.IsActive) return true;
 
         BackgroundCreatureManager _ = __instance;
 

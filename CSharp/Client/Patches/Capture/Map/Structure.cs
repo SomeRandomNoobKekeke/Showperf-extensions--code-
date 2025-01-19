@@ -62,7 +62,7 @@ namespace ShowPerfExtensions
 
       public static bool Structure_AddDamage_Replace(Structure __instance, int sectionIndex, float damage, Character attacker = null, bool emitParticles = true, bool createWallDamageProjectiles = false)
       {
-        if (!Showperf.Revealed || !AddDamageState.IsActive) return true;
+        if (Showperf == null || !Showperf.Revealed || !AddDamageState.IsActive) return true;
         Capture.Update.EnsureCategory(AddDamageState);
         Stopwatch sw = new Stopwatch();
         bool guh;
@@ -127,7 +127,7 @@ namespace ShowPerfExtensions
               bool createExplosionEffect = true,
               bool createWallDamageProjectiles = false)
       {
-        if (!Showperf.Revealed || !SetDamageState.IsActive) return true;
+        if (Showperf == null || !Showperf.Revealed || !SetDamageState.IsActive) return true;
         Capture.Update.EnsureCategory(SetDamageState);
         Stopwatch sw = new Stopwatch();
         bool guh;

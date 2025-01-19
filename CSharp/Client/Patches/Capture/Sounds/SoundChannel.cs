@@ -36,7 +36,7 @@ namespace ShowPerfExtensions
 
       public static bool SoundChannel_Constuctor_Replace(SoundChannel __instance, Sound sound, float gain, Vector3? position, float freqMult, float near, float far, string category, bool muffle = false)
       {
-        if (!SoundChannelState.IsActive || !Showperf.Revealed) return true;
+        if (Showperf == null || !Showperf.Revealed || !SoundChannelState.IsActive) return true;
         Capture.Update.EnsureCategory(SoundChannelState);
         Stopwatch sw = new Stopwatch();
 

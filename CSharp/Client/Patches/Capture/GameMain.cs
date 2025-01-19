@@ -91,7 +91,7 @@ namespace ShowPerfExtensions
       //https://github.com/evilfactory/LuaCsForBarotrauma/blob/master/Barotrauma/BarotraumaClient/ClientSource/GameMain.cs#L1057
       public static bool GameMain_Draw_Replace(GameTime gameTime, GameMain __instance)
       {
-        if (!Showperf.Revealed) return true;
+        if (Showperf == null || !Showperf.Revealed) return true;
 
         GameMain _ = __instance;
 
@@ -176,7 +176,7 @@ namespace ShowPerfExtensions
       /*
       public static bool GameMain_Update_Replace(GameTime gameTime, GameMain __instance)
       {
-        if (!Showperf.Revealed) return true;
+        if (Showperf == null || !Showperf.Revealed) return true;
 
         GameMain _ = __instance;
 

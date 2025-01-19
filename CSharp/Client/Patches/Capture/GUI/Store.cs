@@ -45,7 +45,7 @@ namespace ShowPerfExtensions
       // https://github.com/evilfactory/LuaCsForBarotrauma/blob/master/Barotrauma/BarotraumaClient/ClientSource/GUI/Store.cs#L2270
       public static bool Store_Update_Replace(float deltaTime, Store __instance)
       {
-        if (!Showperf.Revealed) return true;
+        if (Showperf == null || !Showperf.Revealed) return true;
 
         Store _ = __instance;
 

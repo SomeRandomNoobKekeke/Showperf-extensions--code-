@@ -60,7 +60,7 @@ namespace ShowPerfExtensions
       // https://github.com/evilfactory/LuaCsForBarotrauma/blob/master/Barotrauma/BarotraumaShared/SharedSource/Map/MapEntity.cs#L616
       public static bool MapEntity_UpdateAll_Replace(float deltaTime, Camera cam)
       {
-        if (!Showperf.Revealed) return true;
+        if (Showperf == null || !Showperf.Revealed) return true;
 
         Stopwatch sw = new Stopwatch();
         Stopwatch sw2 = new Stopwatch();

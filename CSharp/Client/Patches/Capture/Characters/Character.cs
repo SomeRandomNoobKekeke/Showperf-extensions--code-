@@ -95,7 +95,7 @@ namespace ShowPerfExtensions
 
       public static bool Character_UpdateAll_Replace(float deltaTime, Camera cam)
       {
-        if (!UpdateAllState.IsActive || !Showperf.Revealed) return true;
+        if (Showperf == null || !Showperf.Revealed || !UpdateAllState.IsActive) return true;
         Capture.Update.EnsureCategory(UpdateAllState);
 
         Stopwatch sw = new Stopwatch();
@@ -199,7 +199,7 @@ namespace ShowPerfExtensions
 
       public static bool Character_Update_Replace(float deltaTime, Camera cam, Character __instance)
       {
-        if (!Showperf.Revealed || (!UpdateState.IsActive && !TalentsState.IsActive)) return true;
+        if (Showperf == null || !Showperf.Revealed || (!UpdateState.IsActive && !TalentsState.IsActive)) return true;
         Capture.Update.EnsureCategory(UpdateState);
 
         Stopwatch sw = new Stopwatch();
@@ -629,7 +629,7 @@ namespace ShowPerfExtensions
 
       public static bool Character_Control_Replace(float deltaTime, Camera cam, Character __instance)
       {
-        if (!ControlState.IsActive || !Showperf.Revealed) return true;
+        if (Showperf == null || !Showperf.Revealed || !ControlState.IsActive) return true;
         Capture.Update.EnsureCategory(ControlState);
         Stopwatch sw = new Stopwatch();
 

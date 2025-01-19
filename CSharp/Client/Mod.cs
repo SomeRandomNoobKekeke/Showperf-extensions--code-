@@ -61,6 +61,29 @@ namespace ShowPerfExtensions
 
       //GameMain.PerformanceCounter.DrawTimeGraph = new Graph(1000);
 
+      CreateGUI();
+
+      //CUI.Main["showperfButton"].Click();
+      //Showperf.Pages.Open(Showperf.Map);
+
+
+      //CUIMain.Load(CUITest.NestedScale);
+
+      //CUIDebugWindow.Open();
+
+
+      PatchAll();
+
+      AddCommands();
+
+      FindLightSourceParents.Find();
+      FindLevelTriggerParents.Find();
+
+      info($"{ModName} Initialized");
+    }
+
+    public void CreateGUI()
+    {
       CUI.Initialize();
 
       showperf = new CUIShowperf()
@@ -95,24 +118,6 @@ namespace ShowPerfExtensions
       };
 
       Showperf.OnClose += () => CUI.Main["showperfButton"].Revealed = true;
-
-      //CUI.Main["showperfButton"].Click();
-      //Showperf.Pages.Open(Showperf.Map);
-
-
-      //CUIMain.Load(CUITest.NestedScale);
-
-      //CUIDebugWindow.Open();
-
-
-      PatchAll();
-
-      AddCommands();
-
-      FindLightSourceParents.Find();
-      FindLevelTriggerParents.Find();
-
-      info($"{ModName} Initialized");
     }
 
     public void OnLoadCompleted() { }
@@ -120,6 +125,7 @@ namespace ShowPerfExtensions
 
     public void Dispose()
     {
+      harmony.UnpatchAll();
       RemoveCommands();
       CUI.Dispose();
 

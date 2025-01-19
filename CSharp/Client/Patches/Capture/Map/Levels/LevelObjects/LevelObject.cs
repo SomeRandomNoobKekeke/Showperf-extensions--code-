@@ -45,7 +45,7 @@ namespace ShowPerfExtensions
 
       public static bool LevelObject_Update_Replace(float deltaTime, LevelObject __instance)
       {
-        if (!LevelObjects.IsActive && !LevelObjectSounds.IsActive || !Showperf.Revealed) return true;
+        if (Showperf == null || !Showperf.Revealed || !LevelObjects.IsActive && !LevelObjectSounds.IsActive) return true;
 
         LevelObject _ = __instance;
 

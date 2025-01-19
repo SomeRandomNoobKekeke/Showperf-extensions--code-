@@ -41,7 +41,7 @@ namespace ShowPerfExtensions
 
       public static bool MotionSensor_Update_Replace(float deltaTime, Camera cam, MotionSensor __instance)
       {
-        if (!CaptureMotionSensor.IsActive || !Showperf.Revealed) return true;
+        if (Showperf == null || !Showperf.Revealed || !CaptureMotionSensor.IsActive) return true;
         Capture.Update.EnsureCategory(CaptureMotionSensor);
 
         Stopwatch sw = new Stopwatch();

@@ -72,7 +72,7 @@ namespace ShowPerfExtensions
 
       public static bool Controller_Update_Replace(float deltaTime, Camera cam, Controller __instance)
       {
-        if (!ControllerState.IsActive || !Showperf.Revealed) return true;
+        if (Showperf == null || !Showperf.Revealed || !ControllerState.IsActive) return true;
         Capture.Update.EnsureCategory(ControllerState);
 
         Stopwatch sw = new Stopwatch();
@@ -332,7 +332,7 @@ namespace ShowPerfExtensions
 
       public static bool Controller_Use_Replace(Controller __instance, ref bool __result, float deltaTime, Character activator = null)
       {
-        if (!Showperf.Revealed || !ControllerUseState.IsActive) return true;
+        if (Showperf == null || !Showperf.Revealed || !ControllerUseState.IsActive) return true;
         Capture.Update.EnsureCategory(ControllerUseState);
         Stopwatch sw = new Stopwatch();
 
