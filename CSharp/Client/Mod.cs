@@ -86,6 +86,7 @@ namespace ShowPerfExtensions
       showperf = new CUIShowperf()
       {
         Absolute = new CUINullRect(null, null, 350, 550),
+        Revealed = false,
       };
 
       Showperf.CreateGUI();
