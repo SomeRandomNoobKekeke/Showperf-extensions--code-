@@ -944,7 +944,7 @@ namespace ShowPerfExtensions
             sw2.Restart();
             controlled.SelectedItem.UpdateHUD(_.cam, controlled, (float)deltaTime);
             sw2.Stop();
-            Capture.Update.AddTicks(sw2.ElapsedTicks, UpdateItemsHUD, controlled.SelectedItem.ToString());
+            Capture.Update.AddTicks(sw2.ElapsedTicks, UpdateItemsHUD, $"{controlled.SelectedItem}");
           }
           if (controlled.Inventory != null)
           {
