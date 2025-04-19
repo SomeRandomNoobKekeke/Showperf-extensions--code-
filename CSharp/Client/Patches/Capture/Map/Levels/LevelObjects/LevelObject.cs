@@ -43,7 +43,7 @@ namespace ShowPerfExtensions
         LevelObjectSounds = Capture.Get("Showperf.Update.Level.LevelObjectManager.Sounds");
       }
 
-      public static bool LevelObject_Update_Replace(float deltaTime, LevelObject __instance)
+      public static bool LevelObject_Update_Replace(LevelObject __instance, float deltaTime, Camera cam)
       {
         if (Showperf == null || !Showperf.Revealed || !LevelObjects.IsActive && !LevelObjectSounds.IsActive) return true;
 
@@ -94,11 +94,17 @@ namespace ShowPerfExtensions
         sw.Restart();
         if (_.LightSources != null)
         {
+          Vector2 position2D = new Vector2(_.Position.X, _.Position.Y);
+          Vector2 camDiff = position2D - cam.WorldViewCenter;
           for (int i = 0; i < _.LightSources.Length; i++)
           {
-            if (_.LightSourceTriggers[i] != null) _.LightSources[i].Enabled = _.LightSourceTriggers[i].IsTriggered;
+            if (_.LightSourceTriggers[i] != null)
+            {
+              _.LightSources[i].Enabled = _.LightSourceTriggers[i].IsTriggered;
+            }
             _.LightSources[i].Rotation = -_.CurrentRotation;
             _.LightSources[i].SpriteScale = _.CurrentScale;
+            _.LightSources[i].Position = position2D - camDiff * _.Position.Z * LevelObjectManager.ParallaxStrength;
           }
         }
         sw.Stop();
@@ -183,7 +189,10 @@ namespace ShowPerfExtensions
                 // }
 
               }
-              _.SoundChannels[i].Position = new Vector3(soundPos.X, soundPos.Y, 0.0f);
+              if (_.SoundChannels[i] != null)
+              {
+                _.SoundChannels[i].Position = new Vector3(soundPos.X, soundPos.Y, 0.0f);
+              }
             }
           }
           else if (_.SoundChannels[i] != null && _.SoundChannels[i].IsPlaying)

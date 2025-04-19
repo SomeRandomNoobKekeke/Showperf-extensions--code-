@@ -88,7 +88,7 @@ namespace ShowPerfExtensions
         Stopwatch sw2 = new Stopwatch();
 
         sw.Restart();
-        _.LevelObjectManager.Update(deltaTime);
+        _.LevelObjectManager.Update(deltaTime, cam);
         sw.Stop();
         Capture.Update.AddTicksOnce(sw.ElapsedTicks, UpdateLevel, "Level Objects");
 

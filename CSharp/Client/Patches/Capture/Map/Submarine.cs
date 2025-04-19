@@ -159,14 +159,6 @@ namespace ShowPerfExtensions
           }
         }
 
-
-        if (damageEffect != null)
-        {
-          damageEffect.Parameters["aCutoff"].SetValue(0.0f);
-          damageEffect.Parameters["cCutoff"].SetValue(0.0f);
-          Submarine.DamageEffectCutoff = 0.0f;
-        }
-
         return false;
       }
 

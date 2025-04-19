@@ -45,7 +45,13 @@ namespace ShowPerfExtensions
 
         Color currColor = new Color(_.color.ToVector4() * _.ColorMultiplier);
 
-        Vector2 drawPos = new Vector2(_.drawPosition.X, -_.drawPosition.Y);
+        Vector2 drawPos = _.drawPosition;
+        if (_.currentHull?.Submarine is Submarine sub)
+        {
+          drawPos += sub.DrawPosition;
+        }
+
+        drawPos = new Vector2(drawPos.X, -drawPos.Y);
         if (_.prefab.Sprites[_.spriteIndex] is SpriteSheet sheet)
         {
           sheet.Draw(

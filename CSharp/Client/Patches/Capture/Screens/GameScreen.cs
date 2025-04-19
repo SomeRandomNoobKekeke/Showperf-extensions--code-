@@ -23,7 +23,8 @@ using Microsoft.Xna.Framework;
 using FarseerPhysics.Dynamics;
 using System.Threading;
 using System.Transactions;
-
+using FarseerPhysics;
+using Barotrauma.Sounds;
 
 namespace ShowPerfExtensions
 {
@@ -289,6 +290,7 @@ namespace ShowPerfExtensions
         graphics.SetRenderTarget(_.renderTargetDamageable);
         graphics.Clear(Color.Transparent);
         _.DamageEffect.CurrentTechnique = _.DamageEffect.Techniques["StencilShader"];
+        _.DamageEffect.CurrentTechnique.Passes[0].Apply();
         spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.NonPremultiplied, SamplerState.LinearWrap, effect: _.DamageEffect, transformMatrix: _.cam.Transform);
 
         if (FrontDamageable.IsActive)
@@ -299,6 +301,10 @@ namespace ShowPerfExtensions
         {
           Submarine.DrawDamageable(spriteBatch, _.DamageEffect, false);
         }
+        _.DamageEffect.Parameters["aCutoff"].SetValue(0.0f);
+        _.DamageEffect.Parameters["cCutoff"].SetValue(0.0f);
+        Submarine.DamageEffectCutoff = 0.0f;
+        _.DamageEffect.CurrentTechnique.Passes[0].Apply();
 
         spriteBatch.End();
 
@@ -993,21 +999,27 @@ namespace ShowPerfExtensions
             Barotrauma.Lights.LightManager.ViewTarget != null)
         {
           Vector2 targetPos = Barotrauma.Lights.LightManager.ViewTarget.WorldPosition;
-          if (Barotrauma.Lights.LightManager.ViewTarget == Character.Controlled &&
-              (CharacterHealth.OpenHealthWindow != null || CrewManager.IsCommandInterfaceOpen || ConversationAction.IsDialogOpen))
+          if (Barotrauma.Lights.LightManager.ViewTarget == Character.Controlled)
           {
-            Vector2 screenTargetPos = new Vector2(GameMain.GraphicsWidth, GameMain.GraphicsHeight) * 0.5f;
-            if (CharacterHealth.OpenHealthWindow != null)
+            //take the NetworkPositionErrorOffset into account, meaning the camera is positioned
+            //where we've smoothed out the draw position of the character after a positional correction,
+            //instead of where the character's collider actually is
+            targetPos += ConvertUnits.ToDisplayUnits(Character.Controlled.AnimController.Collider.NetworkPositionErrorOffset);
+            if (CharacterHealth.OpenHealthWindow != null || CrewManager.IsCommandInterfaceOpen || ConversationAction.IsDialogOpen)
             {
-              screenTargetPos.X = GameMain.GraphicsWidth * (CharacterHealth.OpenHealthWindow.Alignment == Alignment.Left ? 0.6f : 0.4f);
+              Vector2 screenTargetPos = new Vector2(GameMain.GraphicsWidth, GameMain.GraphicsHeight) * 0.5f;
+              if (CharacterHealth.OpenHealthWindow != null)
+              {
+                screenTargetPos.X = GameMain.GraphicsWidth * (CharacterHealth.OpenHealthWindow.Alignment == Alignment.Left ? 0.6f : 0.4f);
+              }
+              else if (ConversationAction.IsDialogOpen)
+              {
+                screenTargetPos.Y = GameMain.GraphicsHeight * 0.4f;
+              }
+              Vector2 screenOffset = screenTargetPos - new Vector2(GameMain.GraphicsWidth / 2, GameMain.GraphicsHeight / 2);
+              screenOffset.Y = -screenOffset.Y;
+              targetPos -= screenOffset / _.cam.Zoom;
             }
-            else if (ConversationAction.IsDialogOpen)
-            {
-              screenTargetPos.Y = GameMain.GraphicsHeight * 0.4f;
-            }
-            Vector2 screenOffset = screenTargetPos - new Vector2(GameMain.GraphicsWidth / 2, GameMain.GraphicsHeight / 2);
-            screenOffset.Y = -screenOffset.Y;
-            targetPos -= screenOffset / _.cam.Zoom;
           }
           _.cam.TargetPos = targetPos;
         }

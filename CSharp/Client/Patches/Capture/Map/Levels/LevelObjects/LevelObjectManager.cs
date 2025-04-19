@@ -169,7 +169,7 @@ namespace ShowPerfExtensions
       }
 
 
-      public static bool LevelObjectManager_Update_Replace(float deltaTime, LevelObjectManager __instance)
+      public static bool LevelObjectManager_Update_Replace(LevelObjectManager __instance, float deltaTime, Camera cam)
       {
         if (Showperf == null || !Showperf.Revealed || !LevelObjects.IsActive) return true;
 
@@ -241,7 +241,9 @@ namespace ShowPerfExtensions
           }
         }
 
-        _.UpdateProjSpecific(deltaTime);
+#if CLIENT
+        _.UpdateProjSpecific(deltaTime,cam);
+#endif
 
         return false;
       }

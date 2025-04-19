@@ -143,11 +143,17 @@ namespace ShowPerfExtensions
 
             if (worldBorders.Intersects(detectRect))
             {
-              _.MotionDetected = true;
-
-              sw.Stop();
-              Capture.Update.AddTicks(sw.ElapsedTicks, CaptureMotionSensor, "Detect sub walls");
-              return false;
+              foreach (Structure wall in Structure.WallList)
+              {
+                if (wall.Submarine == sub &&
+                    wall.WorldRect.Intersects(detectRect))
+                {
+                  _.MotionDetected = true;
+                  sw.Stop();
+                  Capture.Update.AddTicks(sw.ElapsedTicks, CaptureMotionSensor, "Detect sub walls");
+                  return false;
+                }
+              }
             }
           }
           sw.Stop();

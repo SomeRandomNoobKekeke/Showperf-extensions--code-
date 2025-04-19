@@ -123,7 +123,7 @@ namespace ShowPerfExtensions
 
     public void Dispose()
     {
-      harmony.UnpatchAll(harmony.Id);
+      harmony.UnpatchSelf();
       RemoveCommands();
       CUI.Dispose();
 

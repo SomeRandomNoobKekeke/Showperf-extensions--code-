@@ -60,7 +60,7 @@ namespace CrabUI
     public static void Dispose()
     {
       Instance.RemoveCommands();
-      Instance.harmony.UnpatchAll(Instance.harmony.Id);
+      Instance.harmony.UnpatchSelf();
     }
 
     private void PatchAll()

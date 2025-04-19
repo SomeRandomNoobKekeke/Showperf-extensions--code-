@@ -19,7 +19,7 @@ using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using PlayerBalanceElement = Barotrauma.CampaignUI.PlayerBalanceElement;
-
+using Microsoft.Xna.Framework.Input;
 
 namespace ShowPerfExtensions
 {
@@ -50,6 +50,15 @@ namespace ShowPerfExtensions
         Store _ = __instance;
 
         _.updateStopwatch.Restart();
+
+        if (GameMain.DevMode)
+        {
+          if (PlayerInput.KeyDown(Keys.D0))
+          {
+            _.CreateUI();
+            _.needsRefresh = true;
+          }
+        }
 
         if (GameMain.GraphicsWidth != _.resolutionWhenCreated.X || GameMain.GraphicsHeight != _.resolutionWhenCreated.Y)
         {

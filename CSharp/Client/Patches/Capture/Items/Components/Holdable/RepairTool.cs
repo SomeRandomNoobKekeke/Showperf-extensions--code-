@@ -144,7 +144,7 @@ namespace ShowPerfExtensions
           var barrelHull = Hull.FindHull(ConvertUnits.ToDisplayUnits(rayStartWorld), _.item.CurrentHull, useWorldCoordinates: true);
           if (barrelHull != null && barrelHull != _.item.CurrentHull)
           {
-            if (MathUtils.GetLineRectangleIntersection(ConvertUnits.ToDisplayUnits(sourcePos), ConvertUnits.ToDisplayUnits(rayStart), _.item.CurrentHull.Rect, out Vector2 hullIntersection))
+            if (MathUtils.GetLineWorldRectangleIntersection(ConvertUnits.ToDisplayUnits(sourcePos), ConvertUnits.ToDisplayUnits(rayStart), _.item.CurrentHull.Rect, out Vector2 hullIntersection))
             {
               if (!_.item.CurrentHull.ConnectedGaps.Any(g => g.Open > 0.0f && Submarine.RectContains(g.Rect, hullIntersection)))
               {
@@ -212,9 +212,11 @@ namespace ShowPerfExtensions
         sw.Stop();
         Capture.Update.AddTicks(sw.ElapsedTicks, UseState, "Repair");
 
-        //TODO test in multiplayer, this is probably not compiled on server side
         sw.Restart();
+        // not compiled on server
+#if CLIENT
         _.UseProjSpecific(deltaTime, rayStartWorld);
+#endif
         sw.Stop();
         Capture.Update.AddTicks(sw.ElapsedTicks, UseState, "UseProjSpecific");
 
@@ -537,7 +539,10 @@ namespace ShowPerfExtensions
           Capture.Update.AddTicks(sw2.ElapsedTicks, FixBodyState, "ApplyStatusEffectsOnTarget OnSuccess");
 
           sw2.Restart();
+          //not compiled on server  
+#if CLIENT
           _.FixStructureProjSpecific(user, deltaTime, targetStructure, sectionIndex);
+#endif
           sw2.Stop();
           Capture.Update.AddTicks(sw2.ElapsedTicks, FixBodyState, "FixStructureProjSpecific");
 
@@ -642,7 +647,10 @@ namespace ShowPerfExtensions
 
           _.ApplyStatusEffectsOnTarget(user, deltaTime, ActionType.OnUse, character: targetCharacter, limb: closestLimb);
           _.ApplyStatusEffectsOnTarget(user, deltaTime, ActionType.OnSuccess, character: targetCharacter, limb: closestLimb);
+          //not compiled on server  
+#if CLIENT
           _.FixCharacterProjSpecific(user, deltaTime, targetCharacter);
+#endif
 
           sw.Stop();
           Capture.Update.AddTicks(sw.ElapsedTicks, FixBodyState, "UserData is Character");
@@ -663,7 +671,10 @@ namespace ShowPerfExtensions
           targetLimb.character.LastDamageSource = _.item;
           _.ApplyStatusEffectsOnTarget(user, deltaTime, ActionType.OnUse, character: targetLimb.character, limb: targetLimb);
           _.ApplyStatusEffectsOnTarget(user, deltaTime, ActionType.OnSuccess, character: targetLimb.character, limb: targetLimb);
+          //not compiled on server  
+#if CLIENT
           _.FixCharacterProjSpecific(user, deltaTime, targetLimb.character);
+#endif
 
           sw.Stop();
           Capture.Update.AddTicks(sw.ElapsedTicks, FixBodyState, "UserData is Limb");
@@ -695,8 +706,10 @@ namespace ShowPerfExtensions
                   levelResource.DeattachTimer / levelResource.DeattachDuration,
                   GUIStyle.Red, GUIStyle.Green, "progressbar.deattaching");
             }
-#endif
+
+            //  not compiled on server
             _.FixItemProjSpecific(user, deltaTime, targetItem, showProgressBar: false);
+#endif
             __result = true; return false;
           }
 
@@ -723,7 +736,10 @@ namespace ShowPerfExtensions
             targetItem.body.ApplyForce(dir * _.TargetForce, maxVelocity: 10.0f);
           }
 
+          //not compiled on server
+#if CLIENT
           _.FixItemProjSpecific(user, deltaTime, targetItem, showProgressBar: true);
+#endif
           sw.Stop();
           Capture.Update.AddTicks(sw.ElapsedTicks, FixBodyState, "UserData is Item");
           __result = true; return false;

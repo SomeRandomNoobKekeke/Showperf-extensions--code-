@@ -27,7 +27,7 @@ namespace ShowPerfExtensions
         else
         {
           log($"Showperf mod is dead\nAttempting clean up", new Color(100, 0, 0));
-          harmony.UnpatchAll(harmony.Id);
+          harmony.UnpatchSelf();
           StaticRemoveCommands();
           CUI.Dispose();
         }

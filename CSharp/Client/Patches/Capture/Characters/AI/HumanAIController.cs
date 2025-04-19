@@ -225,7 +225,7 @@ namespace ShowPerfExtensions
           _.enemyCheckTimer -= deltaTime;
           if (_.enemyCheckTimer < 0)
           {
-            _.CheckEnemies();
+            _.SpotEnemies();
             _.enemyCheckTimer = _.enemyCheckInterval * Rand.Range(0.75f, 1.25f);
           }
         }
@@ -382,31 +382,7 @@ namespace ShowPerfExtensions
         bool run = !currentObjective.ForceWalk && (currentObjective.ForceRun || _.objectiveManager.GetCurrentPriority() > AIObjectiveManager.RunPriority);
         if (currentObjective is AIObjectiveGoTo goTo)
         {
-          if (run && goTo == _.objectiveManager.ForcedOrder && goTo.IsWaitOrder && !_.Character.IsOnPlayerTeam)
-          {
-            // NPCs with a wait order don't run.
-            run = false;
-          }
-          else if (goTo.Target != null)
-          {
-            if (_.Character.CurrentHull == null)
-            {
-              run = Vector2.DistanceSquared(_.Character.WorldPosition, goTo.Target.WorldPosition) > 300 * 300;
-            }
-            else
-            {
-              float yDiff = goTo.Target.WorldPosition.Y - _.Character.WorldPosition.Y;
-              if (Math.Abs(yDiff) > 100)
-              {
-                run = true;
-              }
-              else
-              {
-                float xDiff = goTo.Target.WorldPosition.X - _.Character.WorldPosition.X;
-                run = Math.Abs(xDiff) > 500;
-              }
-            }
-          }
+          run = goTo.ShouldRun(run);
         }
         sw.Stop();
         CaptureAIController(sw.ElapsedTicks, _.Character, "currentObjective is AIObjectiveGoTo");

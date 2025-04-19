@@ -132,7 +132,10 @@ namespace ShowPerfExtensions
           _.currentChargingState = Turret.ChargingState.WindingUp;
         }
 
+        // Not compiled on server
+#if CLIENT
         _.UpdateProjSpecific(deltaTime);
+#endif
 
         if (MathUtils.NearlyEqual(_.minRotation, _.maxRotation))
         {
@@ -264,7 +267,7 @@ namespace ShowPerfExtensions
           if (_.updateTimer < 0.0f)
           {
 #if SERVER
-            _.item.CreateServerEvent(this);
+            _.item.CreateServerEvent(_);
 #endif
             _.prevTargetRotation = _.targetRotation;
             _.updateTimer = 0.25f;
@@ -469,7 +472,7 @@ namespace ShowPerfExtensions
         {
           Vector2 barrelDir = _.GetBarrelDir();
           Vector2 intersection;
-          if (!MathUtils.GetLineRectangleIntersection(_.item.WorldPosition, _.item.WorldPosition + barrelDir * _.AIRange, targetHull.WorldRect, out intersection))
+          if (!MathUtils.GetLineWorldRectangleIntersection(_.item.WorldPosition, _.item.WorldPosition + barrelDir * _.AIRange, targetHull.WorldRect, out intersection))
           {
             return false;
           }

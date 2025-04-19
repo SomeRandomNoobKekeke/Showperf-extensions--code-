@@ -47,18 +47,29 @@ namespace ShowPerfExtensions
 
         if (_.checkVisibleTimer < 0.0f)
         {
+          _.visibleCreatures.Clear();
           int margin = 500;
           foreach (BackgroundCreature creature in _.creatures)
           {
             sw.Restart();
             Rectangle extents = creature.GetExtents(cam);
-            bool wasVisible = creature.Visible;
             creature.Visible =
                 extents.Right >= cam.WorldView.X - margin &&
                 extents.X <= cam.WorldView.Right + margin &&
                 extents.Bottom >= cam.WorldView.Y - cam.WorldView.Height - margin &&
                 extents.Y <= cam.WorldView.Y + margin;
 
+            if (creature.Visible)
+            {
+              //insertion sort according to depth
+              int i = 0;
+              while (i < _.visibleCreatures.Count)
+              {
+                if (_.visibleCreatures[i].Depth < creature.Depth) { break; }
+                i++;
+              }
+              _.visibleCreatures.Insert(i, creature);
+            }
             sw.Stop();
             if (BackCreatures.ByID)
             {
@@ -78,9 +89,8 @@ namespace ShowPerfExtensions
           _.checkVisibleTimer -= deltaTime;
         }
 
-        foreach (BackgroundCreature creature in _.creatures)
+        foreach (BackgroundCreature creature in _.visibleCreatures)
         {
-          if (!creature.Visible) { continue; }
           sw.Restart();
           creature.Update(deltaTime);
           sw.Stop();
