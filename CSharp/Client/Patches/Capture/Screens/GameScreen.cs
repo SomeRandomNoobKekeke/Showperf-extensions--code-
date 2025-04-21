@@ -1,4 +1,4 @@
-#define CLIENT
+
 using System;
 using System.Reflection;
 using System.Diagnostics;
@@ -15,11 +15,12 @@ using Barotrauma.Extensions;
 using Barotrauma.Lights;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 using System;
 using System.Diagnostics;
 using System.Linq;
 
-using Microsoft.Xna.Framework;
+
 using FarseerPhysics.Dynamics;
 using System.Threading;
 using System.Transactions;
@@ -812,7 +813,7 @@ namespace ShowPerfExtensions
           {
             if (GameMain.GameSession.Level != null && GameMain.GameSession.Submarine != null)
             {
-              Submarine closestSub = Submarine.FindClosest(cam.WorldViewCenter) ?? GameMain.GameSession.Submarine;
+              Submarine closestSub = Submarine.FindClosest(_.cam.WorldViewCenter) ?? GameMain.GameSession.Submarine;
 
               Vector2 targetMovement = Vector2.Zero;
               if (PlayerInput.KeyDown(Keys.I)) { targetMovement.Y += 1.0f; }

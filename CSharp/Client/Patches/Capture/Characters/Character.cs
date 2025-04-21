@@ -1,3 +1,4 @@
+
 using System;
 using System.Reflection;
 using System.Diagnostics;
@@ -742,7 +743,7 @@ namespace ShowPerfExtensions
         if (PlayerInput.KeyHit(Microsoft.Xna.Framework.Input.Keys.F))
         {
             _.AnimController.ReleaseStuckLimbs();
-            if (AIController != null && AIController is EnemyAIController enemyAI)
+            if (_.AIController != null && _.AIController is EnemyAIController enemyAI)
             {
                 enemyAI.LatchOntoAI?.DeattachFromBody(reset: true);
             }
