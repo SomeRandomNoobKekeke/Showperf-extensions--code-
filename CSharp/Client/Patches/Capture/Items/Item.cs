@@ -71,8 +71,7 @@ namespace ShowPerfExtensions
 
         Item _ = __instance;
 
-        if (!_.isActive || _.IsLayerHidden) { return false; }
-
+        if (!_.isActive || _.IsLayerHidden || _.IsInRemoveQueue) { return false; }
 
         sw.Restart();
         if (_.impactQueue != null)

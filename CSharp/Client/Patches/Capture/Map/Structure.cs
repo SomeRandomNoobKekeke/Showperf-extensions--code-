@@ -230,7 +230,7 @@ namespace ShowPerfExtensions
             gapRect.Width += 20;
             gapRect.Height += 20;
 
-            bool rotatedEnoughToChangeOrientation = (MathUtils.WrapAngleTwoPi(_.rotationRad - MathHelper.PiOver4) % MathHelper.Pi < MathHelper.PiOver2);
+            bool rotatedEnoughToChangeOrientation = (MathUtils.WrapAngleTwoPi(_.RotationRad - MathHelper.PiOver4) % MathHelper.Pi < MathHelper.PiOver2);
             if (rotatedEnoughToChangeOrientation)
             {
               var center = gapRect.Location + gapRect.Size.FlipY() / new Point(2);
@@ -295,6 +295,9 @@ namespace ShowPerfExtensions
           if (gapOpen - prevGapOpenState > 0.25f && createExplosionEffect && !gap.IsRoomToRoom)
           {
             Structure.CreateWallDamageExplosion(gap, attacker, createWallDamageProjectiles);
+#if CLIENT
+            SteamTimelineManager.OnHullBreached(_);
+#endif
           }
 
 

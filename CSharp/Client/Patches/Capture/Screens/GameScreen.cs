@@ -909,7 +909,7 @@ namespace ShowPerfExtensions
 
         foreach (PhysicsBody body in PhysicsBody.List)
         {
-          if (body.Enabled && body.BodyType != FarseerPhysics.BodyType.Static) { body.Update(); }
+          if ((body.Enabled || body.UserData is Character) && body.BodyType != BodyType.Static) { body.Update(); }
         }
 
         MapEntity.ClearHighlightedEntities();

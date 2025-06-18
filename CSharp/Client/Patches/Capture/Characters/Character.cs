@@ -885,7 +885,7 @@ namespace ShowPerfExtensions
             {
               if (!_.CanInteractWith(item)) { continue; }
 
-              if (_.SelectedItem?.OwnInventory != null && _.SelectedItem.OwnInventory.CanBePut(item))
+              if (_.SelectedItem?.OwnInventory != null && !_.SelectedItem.OwnInventory.Locked && _.SelectedItem.OwnInventory.CanBePut(item))
               {
                 _.SelectedItem.OwnInventory.TryPutItem(item, _);
               }
