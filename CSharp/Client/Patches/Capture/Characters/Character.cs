@@ -878,8 +878,10 @@ namespace ShowPerfExtensions
 
         if (_.Inventory != null)
         {
+          //this doesn't need to be run by the server, clients sync the contents of their inventory with the server instead of the inputs used to manipulate the inventory
+#if CLIENT
           sw.Restart();
-          if (_.IsKeyHit(InputType.DropItem) && Screen.Selected is { IsEditor: false })
+          if (_.IsKeyHit(InputType.DropItem) && Screen.Selected is { IsEditor: false }&&  CharacterHUD.ShouldDrawInventory(_))
           {
             foreach (Item item in _.HeldItems)
             {
@@ -899,6 +901,7 @@ namespace ShowPerfExtensions
           }
           sw.Stop();
           CaptureCharacter3(sw.ElapsedTicks, _, "Drop item");
+#endif
 
           sw.Restart();
           bool CanUseItemsWhenSelected(Item item) => item == null || !item.Prefab.DisableItemUsageWhenSelected;

@@ -78,7 +78,7 @@ namespace ShowPerfExtensions
         {
           while (_.impactQueue.TryDequeue(out float impact))
           {
-            _.HandleCollision(impact);
+            _.ReceiveImpact(impact);
           }
         }
         if (_.isDroppedStackOwner && _.body != null)
@@ -196,7 +196,7 @@ namespace ShowPerfExtensions
 
           if (ic.IsActive || ic.UpdateWhenInactive)
           {
-            if (_.condition <= 0.0f)
+            if (!ic.UpdateWhenBroken && _.condition <= 0.0f)
             {
               ic.UpdateBroken(deltaTime, cam);
             }

@@ -103,58 +103,50 @@ namespace ShowPerfExtensions
       public static bool Submarine_DrawDamageable_Alt(CaptureState cs, SpriteBatch spriteBatch, Effect damageEffect, bool editing = false, Predicate<MapEntity> predicate = null)
       {
         Stopwatch sw = new Stopwatch();
-        Stopwatch sw2 = new Stopwatch();
-        if (!editing && Submarine.visibleEntities != null)
+
+        var entitiesToRender = !editing && Submarine.visibleEntities != null ? Submarine.visibleEntities : MapEntity.MapEntityList;
+
+        Submarine.depthSortedDamageable.Clear();
+
+        sw.Restart();
+        //insertion sort according to draw depth
+        foreach (MapEntity e in entitiesToRender)
         {
-          foreach (MapEntity e in Submarine.visibleEntities)
+          if (e is Structure structure && structure.DrawDamageEffect)
           {
-            if (e is Structure structure && structure.DrawDamageEffect)
+            if (predicate != null)
             {
-              if (predicate != null)
-              {
-                if (!predicate(structure)) { continue; }
-              }
-              sw.Restart();
-              structure.DrawDamage(spriteBatch, damageEffect, editing);
-              sw.Stop();
-              if (Capture.ShouldCapture(structure))
-              {
-                if (cs.ByID)
-                {
-                  Capture.Draw.AddTicks(sw.ElapsedTicks, cs, $"{structure} ({structure.ID})");
-                }
-                else
-                {
-                  Capture.Draw.AddTicks(sw.ElapsedTicks, cs, structure.ToString());
-                }
-              }
+              if (!predicate(e)) { continue; }
             }
+            float drawDepth = structure.GetDrawDepth();
+            int i = 0;
+            while (i < Submarine.depthSortedDamageable.Count)
+            {
+              float otherDrawDepth = Submarine.depthSortedDamageable[i].GetDrawDepth();
+              if (otherDrawDepth < drawDepth) { break; }
+              i++;
+            }
+            Submarine.depthSortedDamageable.Insert(i, structure);
           }
         }
-        else
+        sw.Stop();
+        Capture.Draw.AddTicks(sw.ElapsedTicks, cs, "insertion sort according to draw depth");
+
+        foreach (Structure s in Submarine.depthSortedDamageable)
         {
-          foreach (Structure structure in Structure.WallList)
+          sw.Restart();
+          s.DrawDamage(spriteBatch, damageEffect, editing);
+          sw.Stop();
+
+          if (Capture.ShouldCapture(s))
           {
-            if (structure.DrawDamageEffect)
+            if (cs.ByID)
             {
-              if (predicate != null)
-              {
-                if (!predicate(structure)) { continue; }
-              }
-              sw.Restart();
-              structure.DrawDamage(spriteBatch, damageEffect, editing);
-              sw.Stop();
-              if (Capture.ShouldCapture(structure))
-              {
-                if (cs.ByID)
-                {
-                  Capture.Draw.AddTicks(sw.ElapsedTicks, cs, $"{structure} ({structure.ID})");
-                }
-                else
-                {
-                  Capture.Draw.AddTicks(sw.ElapsedTicks, cs, structure.ToString());
-                }
-              }
+              Capture.Draw.AddTicks(sw.ElapsedTicks, cs, $"{s} ({s.ID})");
+            }
+            else
+            {
+              Capture.Draw.AddTicks(sw.ElapsedTicks, cs, s.ToString());
             }
           }
         }

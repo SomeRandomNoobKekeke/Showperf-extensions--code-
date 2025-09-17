@@ -365,6 +365,12 @@ namespace ShowPerfExtensions
         CaptureController2(sw.ElapsedTicks, _, "IsOutOfPower");
 
         sw.Restart();
+        _.lastUsed = Timing.TotalTime;
+        _.ApplyStatusEffects(ActionType.OnUse, 1.0f, activator);
+        sw.Stop();
+        CaptureController2(sw.ElapsedTicks, _, "ApplyStatusEffects(ActionType.OnUse");
+
+        sw.Restart();
         if (_.IsToggle && (activator == null || _.lastUsed < Timing.TotalTime - 0.1))
         {
           if (GameMain.NetworkMember == null || GameMain.NetworkMember.IsServer)
@@ -381,12 +387,6 @@ namespace ShowPerfExtensions
         }
         sw.Stop();
         CaptureController2(sw.ElapsedTicks, _, "SendSignal");
-
-        sw.Restart();
-        _.lastUsed = Timing.TotalTime;
-        _.ApplyStatusEffects(ActionType.OnUse, 1.0f, activator);
-        sw.Stop();
-        CaptureController2(sw.ElapsedTicks, _, "ApplyStatusEffects(ActionType.OnUse");
 
         __result = true; return false;
       }
