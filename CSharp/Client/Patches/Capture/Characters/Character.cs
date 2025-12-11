@@ -102,17 +102,22 @@ namespace ShowPerfExtensions
         Stopwatch sw = new Stopwatch();
 
         sw.Restart();
-        if (GameMain.NetworkMember == null || !GameMain.NetworkMember.IsClient)
+        if (GameMain.NetworkMember == null || !GameMain.NetworkMember.IsClient) // single player or server
         {
           foreach (Character c in Character.CharacterList)
           {
-            if (c is not AICharacter && !c.IsRemotePlayer) { continue; }
-
-            if (c.IsPlayer || (c.IsBot && !c.IsDead))
+            // TODO: The logic below seems to be overly complicated and quite confusing
+            if (c is not AICharacter && !c.IsRemotePlayer) { continue; } // confusing -> what this line is intended for? local player? But that's handled below...
+            if (c.IsRemotePlayer)
+            {
+              // Let the client tell when to enable the character. If we force it enabled here, it may e.g. get killed while still loading a round.
+              continue;
+            }
+            if (c.IsLocalPlayer || (c.IsBot && !c.IsDead))
             {
               c.Enabled = true;
             }
-            else if (GameMain.NetworkMember != null && GameMain.NetworkMember.IsServer)
+            else if (GameMain.NetworkMember != null && GameMain.NetworkMember.IsServer) // mp server
             {
               //disable AI characters that are far away from all clients and the host's character and not controlled by anyone
               float closestPlayerDist = c.GetDistanceToClosestPlayer();
@@ -129,7 +134,7 @@ namespace ShowPerfExtensions
                 c.Enabled = true;
               }
             }
-            else if (Submarine.MainSub != null)
+            else if (Submarine.MainSub != null) // sp only?
             {
               //disable AI characters that are far away from the sub and the controlled character
               float distSqr = Vector2.DistanceSquared(Submarine.MainSub.WorldPosition, c.WorldPosition);
@@ -180,7 +185,7 @@ namespace ShowPerfExtensions
         foreach (Character character in GameMain.LuaCs.Game.UpdatePriorityCharacters)
         {
           if (character.Removed) { continue; }
-
+          System.Diagnostics.Debug.Assert(character is { Removed: false });
           sw.Restart();
           character.Update(deltaTime, cam);
           sw.Stop();

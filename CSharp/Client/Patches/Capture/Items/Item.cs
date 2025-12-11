@@ -71,7 +71,7 @@ namespace ShowPerfExtensions
 
         Item _ = __instance;
 
-        if (!_.isActive || _.IsLayerHidden || _.IsInRemoveQueue) { return false; }
+        if (!_.IsActive || _.IsLayerHidden || _.IsInRemoveQueue) { return false; }
 
         sw.Restart();
         if (_.impactQueue != null)
@@ -299,7 +299,7 @@ namespace ShowPerfExtensions
 #if CLIENT
           _.positionBuffer.Clear();
 #endif
-          _.isActive = false;
+          _.IsActive = false;
         }
 
         sw.Stop();
