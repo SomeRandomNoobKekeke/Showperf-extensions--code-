@@ -45,7 +45,7 @@ namespace ShowPerfExtensions
         }
         else
         {
-          Capture.Update.AddTicks(ticks, SEState, text);
+          Capture.Update.AddTicks(ticks, SEState, $"{character.ToString()}.{text}");
         }
       }
 
@@ -72,9 +72,13 @@ namespace ShowPerfExtensions
           CaptureCharacter4(sw.ElapsedTicks, _, "OnEating");
         }
 
+        sw.Restart();
+        List<StatusEffect> statusEffectList = null;
+        bool hasValue = _.statusEffects.TryGetValue(actionType, out statusEffectList);
+        sw.Stop();
+        CaptureCharacter4(sw.ElapsedTicks, _, "TryGetValue statusEffectList");
 
-
-        if (_.statusEffects.TryGetValue(actionType, out var statusEffectList))
+        if (hasValue)
         {
 
           foreach (StatusEffect statusEffect in statusEffectList)
@@ -91,8 +95,7 @@ namespace ShowPerfExtensions
               }
             }
 
-            if (statusEffect.HasTargetType(StatusEffect.TargetType.NearbyItems) ||
-                statusEffect.HasTargetType(StatusEffect.TargetType.NearbyCharacters))
+            if (statusEffect.HasTargetType(StatusEffect.TargetType.NearbyItems))
             {
               sw.Restart();
 
@@ -101,15 +104,18 @@ namespace ShowPerfExtensions
               statusEffect.Apply(actionType, deltaTime, _, _.targets);
 
               sw.Stop();
+              CaptureCharacter4(sw.ElapsedTicks, _, $"{actionType} target:[NearbyItems]");
+            }
+            else if (statusEffect.HasTargetType(StatusEffect.TargetType.NearbyCharacters))
+            {
+              sw.Restart();
 
-              if (statusEffect.HasTargetType(StatusEffect.TargetType.NearbyItems))
-              {
-                CaptureCharacter4(sw.ElapsedTicks, _, $"type:[{actionType}] target:[NearbyItems]");
-              }
-              if (statusEffect.HasTargetType(StatusEffect.TargetType.NearbyCharacters))
-              {
-                CaptureCharacter4(sw.ElapsedTicks, _, $"type:[{actionType}] target:[NearbyCharacters]");
-              }
+              _.targets.Clear();
+              statusEffect.AddNearbyTargets(_.WorldPosition, _.targets);
+              statusEffect.Apply(actionType, deltaTime, _, _.targets);
+
+              sw.Stop();
+              CaptureCharacter4(sw.ElapsedTicks, _, $"{actionType} target:[NearbyCharacters]");
             }
             else if (statusEffect.targetLimbs != null)
             {
@@ -130,7 +136,7 @@ namespace ShowPerfExtensions
                   }
 
                   sw.Stop();
-                  CaptureCharacter4(sw.ElapsedTicks, _, $"type:[{actionType}] target:[AllLimbs]");
+                  CaptureCharacter4(sw.ElapsedTicks, _, $"{actionType} target:[AllLimbs]");
                 }
                 else if (statusEffect.HasTargetType(StatusEffect.TargetType.Limb))
                 {
@@ -144,7 +150,7 @@ namespace ShowPerfExtensions
                   }
 
                   sw.Stop();
-                  CaptureCharacter4(sw.ElapsedTicks, _, $"type:[{actionType}] target:[Limb]");
+                  CaptureCharacter4(sw.ElapsedTicks, _, $"{actionType} target:[Limb]");
                 }
                 else if (statusEffect.HasTargetType(StatusEffect.TargetType.LastLimb))
                 {
@@ -157,7 +163,7 @@ namespace ShowPerfExtensions
                   }
 
                   sw.Stop();
-                  CaptureCharacter4(sw.ElapsedTicks, _, $"type:[{actionType}] target:[LastLimb]");
+                  CaptureCharacter4(sw.ElapsedTicks, _, $"{actionType} target:[LastLimb]");
                 }
               }
             }
@@ -173,15 +179,44 @@ namespace ShowPerfExtensions
               }
 
               sw.Stop();
-              CaptureCharacter4(sw.ElapsedTicks, _, $"type:[{actionType}] target:[AllLimbs]");
+              CaptureCharacter4(sw.ElapsedTicks, _, $"{actionType} target:[AllLimbs]");
             }
-            if (statusEffect.HasTargetType(StatusEffect.TargetType.This) || statusEffect.HasTargetType(StatusEffect.TargetType.Character))
+
+            if (statusEffect.HasTargetType(StatusEffect.TargetType.This))
             {
+              sw.Restart();
               statusEffect.Apply(actionType, deltaTime, _, _);
+              sw.Stop();
+              CaptureCharacter4(sw.ElapsedTicks, _, $"{actionType} target:[This]");
             }
+            if (statusEffect.HasTargetType(StatusEffect.TargetType.Character))
+            {
+              sw.Restart();
+              statusEffect.Apply(actionType, deltaTime, _, _);
+              sw.Stop();
+
+
+              string propEffects = string.Join(", ", statusEffect.PropertyEffects.Select(
+                effect => $"{effect.propertyName} = {effect.value}"
+              ));
+
+              string Afflictions = string.Join(", ", statusEffect.Afflictions.Select(
+                affliction => affliction.ToString()
+              ));
+
+              string Conditionals = string.Join(", ", statusEffect.propertyConditionals.Select(
+                c => $"[{c.AttributeName} {c.ComparisonOperator} {c.AttributeValue}]"
+              ));
+
+              CaptureCharacter4(sw.ElapsedTicks, _, $"{actionType} target:[Character] {propEffects} {Afflictions} {Conditionals}");
+            }
+
             if (statusEffect.HasTargetType(StatusEffect.TargetType.Hull) && _.CurrentHull != null)
             {
+              sw.Restart();
               statusEffect.Apply(actionType, deltaTime, _, _.CurrentHull);
+              sw.Stop();
+              CaptureCharacter4(sw.ElapsedTicks, _, $"{actionType} target:[Hull]");
             }
           }
 
@@ -196,7 +231,7 @@ namespace ShowPerfExtensions
               limb.ApplyStatusEffects(actionType, deltaTime);
             }
             sw.Stop();
-            CaptureCharacter4(sw.ElapsedTicks, _, $" Limb.{actionType}");
+            CaptureCharacter4(sw.ElapsedTicks, _, $"Limb.{actionType}");
           }
 
         }
@@ -208,7 +243,7 @@ namespace ShowPerfExtensions
           sw.Restart();
           _.CharacterHealth.ApplyAfflictionStatusEffects(actionType);
           sw.Stop();
-          CaptureCharacter4(sw.ElapsedTicks, _, $" CharacterHealth.{actionType}");
+          CaptureCharacter4(sw.ElapsedTicks, _, $"CharacterHealth.{actionType}");
         }
 
 

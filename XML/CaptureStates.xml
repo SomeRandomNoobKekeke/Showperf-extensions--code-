@@ -53,7 +53,10 @@
           <Talents />
           <AIController />
           <Control />
-          <StatusEffects />
+          <StatusEffects>
+            <CharacterHealth />
+            <Limb />
+          </StatusEffects>
         </Update>
       </Character>
       <GameSession>
