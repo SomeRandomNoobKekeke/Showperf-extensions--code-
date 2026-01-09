@@ -39,9 +39,16 @@ namespace ShowPerfExtensions
     {
       public static CaptureState UpdateAllState;
       public static CaptureState UpdateState;
+      public static CaptureState UpdateControlledState;
+      public static CaptureState ControlLocalPlayerState;
+      public static CaptureState DoInteractionUpdateState;
+      public static CaptureState CanInteractWithState;
+      public static CaptureState UpdateInteractablesInRangeState;
       public static CaptureState ControlState;
       public static CaptureState TalentsState;
       public static CaptureState SEState;
+
+
 
       public static void Initialize()
       {
@@ -65,11 +72,45 @@ namespace ShowPerfExtensions
           prefix: new HarmonyMethod(typeof(CharacterPatch).GetMethod("Character_ApplyStatusEffects_Replace"))
         );
 
+        harmony.Patch(
+          original: typeof(Character).GetMethod("UpdateControlled", AccessTools.all),
+          prefix: new HarmonyMethod(typeof(CharacterPatch).GetMethod("Character_UpdateControlled_Replace"))
+        );
+
+        harmony.Patch(
+          original: typeof(Character).GetMethod("ControlLocalPlayer", AccessTools.all),
+          prefix: new HarmonyMethod(typeof(CharacterPatch).GetMethod("Character_ControlLocalPlayer_Replace"))
+        );
+
+        harmony.Patch(
+          original: typeof(Character).GetMethod("DoInteractionUpdate", AccessTools.all),
+          prefix: new HarmonyMethod(typeof(CharacterPatch).GetMethod("Character_DoInteractionUpdate_Replace"))
+        );
+
+        harmony.Patch(
+          original: typeof(Character).GetMethod("UpdateInteractablesInRange", AccessTools.all),
+          prefix: new HarmonyMethod(typeof(CharacterPatch).GetMethod("Character_UpdateInteractablesInRange_Replace"))
+        );
+
+        harmony.Patch(
+          original: typeof(Character).GetMethod("CanInteractWith", AccessTools.all, new Type[]{
+            typeof(Item),
+            typeof(float).MakeByRefType(),
+            typeof(bool),
+          }),
+          prefix: new HarmonyMethod(typeof(CharacterPatch).GetMethod("Character_CanInteractWith_Item_Replace"))
+        );
+
         UpdateAllState = Capture.Get("Showperf.Update.Character");
         UpdateState = Capture.Get("Showperf.Update.Character.Update");
-        ControlState = Capture.Get("Showperf.Update.Character.Update.Control");
-        TalentsState = Capture.Get("Showperf.Update.Character.Update.Talents");
-        SEState = Capture.Get("Showperf.Update.Character.Update.StatusEffects");
+        ControlState = Capture.Get("Showperf.Update.Character.Control");
+        TalentsState = Capture.Get("Showperf.Update.Character.Talents");
+        SEState = Capture.Get("Showperf.Update.Character.StatusEffects");
+        UpdateControlledState = Capture.Get("Showperf.Update.Character.UpdateControlled");
+        ControlLocalPlayerState = Capture.Get("Showperf.Update.Character.ControlLocalPlayer");
+        DoInteractionUpdateState = Capture.Get("Showperf.Update.Character.DoInteractionUpdate");
+        UpdateInteractablesInRangeState = Capture.Get("Showperf.Update.Character.UpdateInteractablesInRange");
+        CanInteractWithState = Capture.Get("Showperf.Update.Character.CanInteractWith");
       }
     }
   }

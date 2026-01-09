@@ -49,14 +49,19 @@
       <PhysicBodies />
       <ItemsHUD />
       <Character>
+        <UpdateControlled />
+        <CanInteractWith />
+        <ControlLocalPlayer />
+        <DoInteractionUpdate />
+        <UpdateInteractablesInRange />
+        <Talents />
+        <Control />
+        <StatusEffects>
+          <CharacterHealth />
+          <Limb />
+        </StatusEffects>
         <Update>
-          <Talents />
           <AIController />
-          <Control />
-          <StatusEffects>
-            <CharacterHealth />
-            <Limb />
-          </StatusEffects>
         </Update>
       </Character>
       <GameSession>
