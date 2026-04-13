@@ -83,7 +83,7 @@ namespace ShowPerfExtensions
         {
           if (statusEffect.ShouldWaitForInterval(_.character, deltaTime))
           {
-            return false;
+            continue;
           }
 
           statusEffect.sourceBody = _.body;

@@ -97,9 +97,9 @@ namespace ShowPerfExtensions
         CaptureController(sw.ElapsedTicks, _, "SendSignal");
 
 
-        if (_.forceSelectNextFrame && _.user != null)
+        if (_.forceSelectNextFrame && _.User != null)
         {
-          _.user.SelectedItem = _.item;
+          _.User.SelectedItem = _.item;
         }
         _.forceSelectNextFrame = false;
         _.userCanInteractCheckTimer -= deltaTime;
@@ -118,14 +118,14 @@ namespace ShowPerfExtensions
         try
         {
           sw2.Restart();
-          shouldCancelUsing |= _.user == null;
+          shouldCancelUsing |= _.User == null;
           sw2.Stop();
           CaptureController(sw2.ElapsedTicks, _, "CancelUsing condition1");
 
           if (!shouldCancelUsing)
           {
             sw2.Restart();
-            shouldCancelUsing |= _.user.Removed;
+            shouldCancelUsing |= _.User.Removed;
             sw2.Stop();
             CaptureController(sw2.ElapsedTicks, _, "CancelUsing condition2");
           }
@@ -133,7 +133,7 @@ namespace ShowPerfExtensions
           if (!shouldCancelUsing)
           {
             sw2.Restart();
-            shouldCancelUsing |= !_.user.IsAnySelectedItem(_.item);
+            shouldCancelUsing |= (((_.User.Stun <= 0f && !_.User.IsKnockedDownOrRagdolled && !_.User.LockHands) || !_.ForceUserToStayAttached) && (!_.User.IsAnySelectedItem(_.item) || !_.CheckUserCanInteract()));
             sw2.Stop();
             CaptureController(sw2.ElapsedTicks, _, "CancelUsing condition3");
           }
@@ -141,7 +141,7 @@ namespace ShowPerfExtensions
           if (!shouldCancelUsing)
           {
             sw2.Restart();
-            shouldCancelUsing |= (_.item.ParentInventory != null && !_.IsAttachedUser(_.user));
+            shouldCancelUsing |= (_.item.ParentInventory != null && !_.IsAttachedUser(_.User));
             sw2.Stop();
             CaptureController(sw2.ElapsedTicks, _, "CancelUsing condition4");
           }
@@ -149,7 +149,7 @@ namespace ShowPerfExtensions
           if (!shouldCancelUsing)
           {
             sw2.Restart();
-            shouldCancelUsing |= (_.UsableIn == Controller.UseEnvironment.Water && !_.user.AnimController.InWater);
+            shouldCancelUsing |= (_.UsableIn == Controller.UseEnvironment.Water && !_.User.AnimController.InWater);
             sw2.Stop();
             CaptureController(sw2.ElapsedTicks, _, "CancelUsing condition5");
           }
@@ -157,7 +157,7 @@ namespace ShowPerfExtensions
           if (!shouldCancelUsing)
           {
             sw2.Restart();
-            shouldCancelUsing |= (_.UsableIn == Controller.UseEnvironment.Air && _.user.AnimController.InWater);
+            shouldCancelUsing |= (_.UsableIn == Controller.UseEnvironment.Air && _.User.AnimController.InWater);
             sw2.Stop();
             CaptureController(sw2.ElapsedTicks, _, "CancelUsing condition6");
           }
@@ -165,7 +165,7 @@ namespace ShowPerfExtensions
           if (!shouldCancelUsing)
           {
             sw2.Restart();
-            shouldCancelUsing |= !_.CheckUserCanInteract();
+            shouldCancelUsing |= !_.CheckSpawnItem();
             sw2.Stop();
             CaptureController(sw2.ElapsedTicks, _, "CancelUsing condition7");
           }
@@ -176,10 +176,10 @@ namespace ShowPerfExtensions
         sw.Restart();
         if (shouldCancelUsing)
         {
-          if (_.user != null)
+          if (_.User != null)
           {
-            _.CancelUsing(_.user);
-            _.user = null;
+            _.CancelUsing(_.User);
+            _.User = null;
           }
 
           if (_.item.Connections == null || !_.IsToggle || string.IsNullOrEmpty(signal)) { _.IsActive = false; }
@@ -192,39 +192,57 @@ namespace ShowPerfExtensions
         CaptureController(sw.ElapsedTicks, _, "CancelUsing");
 
         sw.Restart();
-        if (_.ForceUserToStayAttached && Vector2.DistanceSquared(_.item.WorldPosition, _.user.WorldPosition) > 0.1f)
+        if (_.ForceUserToStayAttached)
         {
-          _.user.TeleportTo(_.item.WorldPosition);
-          _.user.AnimController.Collider.ResetDynamics();
-          foreach (var limb in _.user.AnimController.Limbs)
+          _.teleportTransition = MathF.Min(_.teleportTransition + deltaTime * Controller.TeleportTransitionSpeed, 1f);
+
+          if (_.teleportTransition >= 1f)
           {
-            if (limb.Removed || limb.IsSevered) { continue; }
-            limb.body?.ResetDynamics();
+            // Transition is complete, if someone was holding this character, force them to deselect
+            // so they aren't holding the character that is now attached to the controller
+            if (_.User.SelectedBy != null)
+            {
+              _.User.SelectedBy.SelectedCharacter = null;
+            }
+          }
+
+          if (_.User == Character.Controlled
+              || _.teleportTransition < 1f
+              || Vector2.DistanceSquared(_.item.WorldPosition, _.User.WorldPosition) > 0.1f)
+          {
+            var targetPosition = Vector2.Lerp(_.teleportStartPosition, _.item.WorldPosition, _.teleportTransition);
+            _.User.TeleportTo(targetPosition);
+            _.User.AnimController.Collider.ResetDynamics();
+            foreach (var limb in _.User.AnimController.Limbs)
+            {
+              if (limb.Removed || limb.IsSevered) { continue; }
+              limb.body?.ResetDynamics();
+            }
           }
         }
         sw.Stop();
         CaptureController(sw.ElapsedTicks, _, "limb.body?.ResetDynamics");
 
         sw.Restart();
-        _.user.AnimController.StartUsingItem();
+        _.User.AnimController.StartUsingItem();
         sw.Stop();
-        CaptureController(sw.ElapsedTicks, _, "limb.body?.ResetDynamics");
+        CaptureController(sw.ElapsedTicks, _, "_.User.AnimController.StartUsingItem()");
 
         sw.Restart();
         if (_.userPos != Vector2.Zero)
         {
-          Vector2 diff = (_.item.WorldPosition + _.userPos) - _.user.WorldPosition;
+          Vector2 diff = (_.item.WorldPosition + _.userPos) - _.User.WorldPosition;
 
-          if (_.user.AnimController.InWater)
+          if (_.User.AnimController.InWater)
           {
             if (diff.LengthSquared() > 30.0f * 30.0f)
             {
-              _.user.AnimController.TargetMovement = Vector2.Clamp(diff * 0.01f, -Vector2.One, Vector2.One);
-              _.user.AnimController.TargetDir = diff.X > 0.0f ? Direction.Right : Direction.Left;
+              _.User.AnimController.TargetMovement = Vector2.Clamp(diff * 0.01f, -Vector2.One, Vector2.One);
+              _.User.AnimController.TargetDir = diff.X > 0.0f ? Direction.Right : Direction.Left;
             }
             else
             {
-              _.user.AnimController.TargetMovement = Vector2.Zero;
+              _.User.AnimController.TargetMovement = Vector2.Zero;
               _.UserInCorrectPosition = true;
             }
           }
@@ -232,10 +250,10 @@ namespace ShowPerfExtensions
           {
             // Secondary items (like ladders or chairs) will control the character position over primary items
             // Only control the character position if the character doesn't have another secondary item already controlling it
-            if (!_.user.HasSelectedAnotherSecondaryItem(_.Item))
+            if (!_.User.HasSelectedAnotherSecondaryItem(_.Item))
             {
               diff.Y = 0.0f;
-              if (GameMain.NetworkMember != null && GameMain.NetworkMember.IsClient && _.user != Character.Controlled)
+              if (GameMain.NetworkMember != null && GameMain.NetworkMember.IsClient && _.User != Character.Controlled)
               {
                 if (Math.Abs(diff.X) > 20.0f)
                 {
@@ -245,18 +263,18 @@ namespace ShowPerfExtensions
                 else if (Math.Abs(diff.X) > 0.1f)
                 {
                   //aim to keep the collider at the correct position once close enough
-                  _.user.AnimController.Collider.LinearVelocity = new Vector2(
+                  _.User.AnimController.Collider.LinearVelocity = new Vector2(
                       diff.X * 0.1f,
-                      _.user.AnimController.Collider.LinearVelocity.Y);
+                      _.User.AnimController.Collider.LinearVelocity.Y);
                 }
               }
               else if (Math.Abs(diff.X) > 10.0f)
               {
-                _.user.AnimController.TargetMovement = Vector2.Normalize(diff);
-                _.user.AnimController.TargetDir = diff.X > 0.0f ? Direction.Right : Direction.Left;
+                _.User.AnimController.TargetMovement = Vector2.Normalize(diff);
+                _.User.AnimController.TargetDir = diff.X > 0.0f ? Direction.Right : Direction.Left;
                 return false;
               }
-              _.user.AnimController.TargetMovement = Vector2.Zero;
+              _.User.AnimController.TargetMovement = Vector2.Zero;
             }
             _.UserInCorrectPosition = true;
           }
@@ -266,41 +284,41 @@ namespace ShowPerfExtensions
 
 
         sw.Restart();
-        _.ApplyStatusEffects(ActionType.OnActive, deltaTime, _.user);
+        _.ApplyStatusEffects(ActionType.OnActive, deltaTime, _.User);
         sw.Stop();
         CaptureController(sw.ElapsedTicks, _, "ApplyStatusEffects OnActive");
 
         if (_.limbPositions.Count == 0) { return false; }
 
         sw.Restart();
-        _.user.AnimController.StartUsingItem();
+        _.User.AnimController.StartUsingItem();
         sw.Stop();
         CaptureController(sw.ElapsedTicks, _, "StartUsingItem");
 
         sw.Restart();
-        if (_.user.SelectedItem != null)
+        if (_.User.SelectedItem != null)
         {
-          _.user.AnimController.ResetPullJoints(l => l.IsLowerBody);
+          _.User.AnimController.ResetPullJoints(l => l.IsLowerBody);
         }
         else
         {
-          _.user.AnimController.ResetPullJoints();
+          _.User.AnimController.ResetPullJoints();
         }
         sw.Stop();
         CaptureController(sw.ElapsedTicks, _, "ResetPullJoints");
 
 
         sw.Restart();
-        if (_.dir != 0) { _.user.AnimController.TargetDir = _.dir; }
+        if (_.dir != 0) { _.User.AnimController.TargetDir = _.dir; }
 
         foreach (LimbPos lb in _.limbPositions)
         {
-          Limb limb = _.user.AnimController.GetLimb(lb.LimbType);
+          Limb limb = _.User.AnimController.GetLimb(lb.LimbType);
           if (limb == null || !limb.body.Enabled) { continue; }
           // Don't move lower body limbs if there's another selected secondary item that should control them
-          if (limb.IsLowerBody && _.user.HasSelectedAnotherSecondaryItem(_.Item)) { continue; }
+          if (limb.IsLowerBody && _.User.HasSelectedAnotherSecondaryItem(_.Item)) { continue; }
           // Don't move hands if there's a selected primary item that should control them
-          if (limb.IsArm && _.Item == _.user.SelectedSecondaryItem && _.user.SelectedItem != null) { continue; }
+          if (limb.IsArm && _.Item == _.User.SelectedSecondaryItem && _.User.SelectedItem != null) { continue; }
           if (lb.AllowUsingLimb)
           {
             switch (lb.LimbType)
@@ -308,12 +326,12 @@ namespace ShowPerfExtensions
               case LimbType.RightHand:
               case LimbType.RightForearm:
               case LimbType.RightArm:
-                if (_.user.Inventory.GetItemInLimbSlot(InvSlotType.RightHand) != null) { continue; }
+                if (_.User.Inventory.GetItemInLimbSlot(InvSlotType.RightHand) != null) { continue; }
                 break;
               case LimbType.LeftHand:
               case LimbType.LeftForearm:
               case LimbType.LeftArm:
-                if (_.user.Inventory.GetItemInLimbSlot(InvSlotType.LeftHand) != null) { continue; }
+                if (_.User.Inventory.GetItemInLimbSlot(InvSlotType.LeftHand) != null) { continue; }
                 break;
             }
           }
@@ -338,17 +356,17 @@ namespace ShowPerfExtensions
 
         Controller _ = __instance;
 
-        if (activator != _.user)
+        if (activator != _.User)
         {
           __result = false; return false;
         }
 
         sw.Restart();
-        if (_.user == null || _.user.Removed || !_.user.IsAnySelectedItem(_.item) || !_.user.CanInteractWith(_.item))
+        if (_.User == null || _.User.Removed || !_.User.IsAnySelectedItem(_.item) || !_.User.CanInteractWith(_.item))
         {
           sw.Stop();
           CaptureController2(sw.ElapsedTicks, _, "CanInteractWith");
-          _.user = null;
+          _.User = null;
           __result = false; return false;
         }
         sw.Stop();
@@ -383,7 +401,7 @@ namespace ShowPerfExtensions
         }
         else if (!string.IsNullOrEmpty(_.output))
         {
-          _.item.SendSignal(new Signal(_.output, sender: _.user), "trigger_out");
+          _.item.SendSignal(new Signal(_.output, sender: _.User), "trigger_out");
         }
         sw.Stop();
         CaptureController2(sw.ElapsedTicks, _, "SendSignal");

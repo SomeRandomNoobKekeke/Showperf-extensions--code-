@@ -132,6 +132,16 @@ namespace ShowPerfExtensions
         sw.Stop();
         CaptureCharacter3(sw.ElapsedTicks, _, "FollowCursor");
 
+
+        sw.Restart();
+        // Try to detach from the controller if we are currently attached to something that is dangerous for our character
+        if (aiControlled && _.Stun <= 0f && !_.IsKnockedDownOrRagdolled && !_.LockHands && _.ShouldAvoidStayingAttachedToController())
+        {
+          _.SelectedItem = null;
+        }
+        sw.Stop();
+        CaptureCharacter3(sw.ElapsedTicks, _, "TryDetachFromController");
+
         sw.Restart();
         if (GameMain.NetworkMember != null)
         {
@@ -187,7 +197,7 @@ namespace ShowPerfExtensions
         {
           _.attackCoolDown -= deltaTime;
         }
-        else if (_.IsKeyDown(InputType.Attack))
+        else if (_.IsKeyDown(InputType.Attack) && !_.IsAttachedToController())
         {
           //normally the attack target, where to aim the attack and such is handled by EnemyAIController,
           //but in the case of player-controlled monsters, we handle it here

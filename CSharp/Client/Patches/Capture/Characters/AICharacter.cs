@@ -81,7 +81,9 @@ namespace ShowPerfExtensions
         sw.Stop();
         CaptureCharacter(sw.ElapsedTicks, _, "PetBehavior");
 
-        if (_.IsDead || _.IsUnconscious || _.Stun > 0.0f || _.IsIncapacitated)
+        if (_.IsDead || _.IsUnconscious || _.IsIncapacitated ||
+            //only check "real" stuns here, ignoring ragdolling, so the AI can run and decide whether to ragdoll or unragdoll
+            _.CharacterHealth.Stun > 0.0f)
         {
           //don't enable simple physics on dead/incapacitated characters
           //the ragdoll controls the movement of incapacitated characters instead of the collider,

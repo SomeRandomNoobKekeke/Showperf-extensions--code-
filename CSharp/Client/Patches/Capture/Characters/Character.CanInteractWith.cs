@@ -69,7 +69,6 @@ namespace ShowPerfExtensions
 #if CLIENT
         if (Screen.Selected == GameMain.SubEditorScreen) { hidden = false; }
 #endif
-        if (!_.CanInteract || hidden || !item.IsInteractable(_)) { StopStopwatch(); __result = false; return false; }
 
         section = "controller";
         Controller controller = item.GetComponent<Controller>();
@@ -77,6 +76,8 @@ namespace ShowPerfExtensions
         {
           StopStopwatch(); __result = true; return false;
         }
+
+        if (!_.CanInteract || hidden || !item.IsInteractable(_)) { StopStopwatch(); __result = false; return false; }
 
         section = "from inventory";
         if (item.ParentInventory != null)
@@ -211,7 +212,10 @@ namespace ShowPerfExtensions
         }
 
         section = "Submarine.CheckVisibility";
-        if (!item.Prefab.InteractThroughWalls && Screen.Selected != GameMain.SubEditorScreen && !insideTrigger)
+
+        //note that the distance to item should be set to 0 above if the character is within the item's bounding box
+        bool closeEnoughToIgnoreVisibilityCheck = distanceToItem <= 0.1f;
+        if (!item.Prefab.InteractThroughWalls && Screen.Selected != GameMain.SubEditorScreen && !insideTrigger && !closeEnoughToIgnoreVisibilityCheck)
         {
           var body = Submarine.CheckVisibility(_.SimPosition, itemPosition, ignoreLevel: true);
           bool itemCenterVisible = CheckBody(body, item);

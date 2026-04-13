@@ -405,6 +405,7 @@ namespace ShowPerfExtensions
             foreach (Submarine sub in Submarine.Loaded)
             {
               if (sub == _.Item.Submarine) { continue; }
+              if (sub.IsRespawnShuttle) { continue; }
               if (_.item.Submarine != null)
               {
                 if (Character.IsOnFriendlyTeam(_.item.Submarine.TeamID, sub.TeamID)) { continue; }
@@ -430,7 +431,7 @@ namespace ShowPerfExtensions
           }
         }
         sw.Stop();
-
+        Capture.Update.AddTicks(sw.ElapsedTicks, CaptureAutoOperate, "TargetSubmarines");
 
         if (target == null && _.RandomMovement)
         {
@@ -484,15 +485,29 @@ namespace ShowPerfExtensions
         }
         Vector2 start = ConvertUnits.ToSimUnits(_.item.WorldPosition);
         Vector2 end = ConvertUnits.ToSimUnits(target.WorldPosition);
+
+        bool doLineOfSightCheck = _.lastLineOfSightCheck.Time < Timing.TotalTimeUnpaused - Turret.LineOfSightCheckInterval;
+        if (doLineOfSightCheck)
+        {
+          _.lastLineOfSightCheck.WorldTarget = _.CheckLineOfSight(start, end);
+          _.lastLineOfSightCheck.Time = Timing.TotalTime;
+        }
+
+        sw.Restart();
         // Check that there's not other entities that shouldn't be targeted (like a friendly sub) between us and the target.
-        Body worldTarget = _.CheckLineOfSight(start, end);
+        Body worldTarget = _.lastLineOfSightCheck.WorldTarget;
         bool shoot;
         if (target.Submarine != null)
         {
-          start -= target.Submarine.SimPosition;
-          end -= target.Submarine.SimPosition;
-          Body transformedTarget = _.CheckLineOfSight(start, end);
-          shoot = _.CanShoot(transformedTarget, user: null, friendlyTag, _.TargetSubmarines) && (worldTarget == null || _.CanShoot(worldTarget, user: null, friendlyTag, _.TargetSubmarines));
+          if (doLineOfSightCheck)
+          {
+            start -= target.Submarine.SimPosition;
+            end -= target.Submarine.SimPosition;
+            _.lastLineOfSightCheck.TransformedTarget = _.CheckLineOfSight(start, end);
+          }
+          shoot =
+              (worldTarget == null || _.CanShoot(worldTarget, user: null, friendlyTag, _.TargetSubmarines)) &&
+              _.CanShoot(_.lastLineOfSightCheck.TransformedTarget, user: null, friendlyTag, _.TargetSubmarines);
         }
         else
         {
@@ -502,6 +517,9 @@ namespace ShowPerfExtensions
         {
           _.TryLaunch(deltaTime, ignorePower: ignorePower);
         }
+        sw.Stop();
+        Capture.Update.AddTicks(sw.ElapsedTicks, CaptureAutoOperate, "Check friendly subs in between");
+
 
         return false;
       }

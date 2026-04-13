@@ -139,13 +139,9 @@ namespace ShowPerfExtensions
 
           light.Priority = lightPriority(range, light);
 
-          int i = 0;
-          while (i < _.activeLights.Count && light.Priority < _.activeLights[i].Priority)
-          {
-            i++;
-          }
-          _.activeLights.Insert(i, light);
+          _.activeLights.Add(light);
         }
+        _.activeLights.Sort(static (a, b) => b.Priority.CompareTo(a.Priority));
         LightManager.ActiveLightCount = _.activeLights.Count;
 
         float lightPriority(float range, LightSource light)
@@ -175,7 +171,7 @@ namespace ShowPerfExtensions
             _.activeLights.Remove(_.activeShadowCastingLights[i]);
           }
         }
-        _.activeLights.Sort((l1, l2) => l1.LastRecalculationTime.CompareTo(l2.LastRecalculationTime));
+        _.activeLights.Sort(static (l1, l2) => l1.LastRecalculationTime.CompareTo(l2.LastRecalculationTime));
 
         sw.Stop();
         Capture.Draw.AddTicks(sw.ElapsedTicks, Lighting, "Find active lights");

@@ -208,7 +208,7 @@ namespace ShowPerfExtensions
 
     public static void PermitCommands(Identifier command, ref bool __result)
     {
-      if (Instance.AddedCommands.Any(c => c.Names.Contains(command.Value))) __result = true;
+      if (Instance.AddedCommands.Any(c => c.Names.Contains(command))) __result = true;
     }
 
 

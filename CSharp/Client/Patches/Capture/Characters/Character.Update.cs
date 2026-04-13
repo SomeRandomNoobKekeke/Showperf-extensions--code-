@@ -119,9 +119,9 @@ namespace ShowPerfExtensions
         _.obstructVisionAmount = Math.Max(_.obstructVisionAmount - deltaTime, 0.0f);
 
         sw.Restart();
-        if (_.Inventory != null)
+        if (_.Inventory != null && Vector2.DistanceSquared(_.lastInventoryItemSetTransformPosition, _.Position) > 0.1f)
         {
-          //do not check for duplicates: _ is code is called very frequently, and duplicates don't matter here,
+          //do not check for duplicates: this is code is called very frequently, and duplicates don't matter here,
           //so it's better just to avoid the relatively expensive duplicate check
           foreach (Item item in _.Inventory.GetAllItems(checkForDuplicates: false))
           {
@@ -129,6 +129,7 @@ namespace ShowPerfExtensions
             item.SetTransform(_.SimPosition, 0.0f);
             item.Submarine = _.Submarine;
           }
+          _.lastInventoryItemSetTransformPosition = _.Position;
         }
         sw.Stop();
         CaptureCharacter2(sw.ElapsedTicks, _, "item.SetTransform");
@@ -350,7 +351,7 @@ namespace ShowPerfExtensions
         {
           wasRagdolled = _.IsRagdolled;
           _.IsRagdolled = _.IsKeyDown(InputType.Ragdoll);
-          if (_.IsRagdolled && _.IsBot && GameMain.NetworkMember is not { IsClient: true })
+          if (_.IsRagdolled && _.IsPlayer && GameMain.NetworkMember is not { IsClient: true })
           {
             _.ClearInput(InputType.Ragdoll);
           }
@@ -407,7 +408,19 @@ namespace ShowPerfExtensions
             _.AnimController.IgnorePlatforms = true;
           }
           _.AnimController.ResetPullJoints();
-          _.SelectedItem = _.SelectedSecondaryItem = null;
+
+          // Prevent us from detaching from the controller if we are attached to it OR detach if we
+          // manually ragdoll, in this case it should be similar to us deselecting the controller
+          if (!_.IsAttachedToController() ||
+              (_.IsKeyDown(InputType.Ragdoll)
+              // Let only the server do this check since the Ragdoll input for other clients is set to be held
+              // for stunned characters even if a character isn't manually ragdolling
+              && (GameMain.NetworkMember == null || GameMain.NetworkMember is { IsServer: true })))
+          {
+            _.SelectedItem = null;
+          }
+
+          _.SelectedSecondaryItem = null;
 
           sw.Stop();
           CaptureCharacter2(sw.ElapsedTicks, _, "ResetPullJoints");
@@ -449,6 +462,13 @@ namespace ShowPerfExtensions
         bool MustDeselect(Item item)
         {
           if (item == null) { return false; }
+
+          // Prevent creatures from deselecting the controller if they are attached to it
+          if (_.IsAIControlled && !_.CanInteract && _.IsAttachedToController())
+          {
+            return false;
+          }
+
           if (!_.CanInteractWith(item)) { return true; }
           bool hasSelectableComponent = false;
           foreach (var component in item.Components)

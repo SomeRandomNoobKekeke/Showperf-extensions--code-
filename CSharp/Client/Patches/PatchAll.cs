@@ -46,7 +46,7 @@ namespace ShowPerfExtensions
     public void PatchTechnical()
     {
       harmony.Patch(
-        original: typeof(LuaGame).GetMethod("IsCustomCommandPermitted"),
+        original: typeof(DebugConsole).GetMethod("IsCommandPermitted", AccessTools.all),
         postfix: ShowperfMethod(typeof(Plugin).GetMethod("PermitCommands"))
       );
     }

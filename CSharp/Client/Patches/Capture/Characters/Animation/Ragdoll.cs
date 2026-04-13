@@ -73,7 +73,7 @@ namespace ShowPerfExtensions
         while (_.impactQueue.Count > 0)
         {
           var impact = _.impactQueue.Dequeue();
-          _.ApplyImpact(impact.F1, impact.F2, impact.LocalNormal, impact.ImpactPos, impact.Velocity);
+          _.ApplyImpact(impact.F1, impact.F2, impact.WorldNormal, impact.ImpactPos, impact.Velocity);
         }
         sw.Stop();
         CaptureRagdoll(_, sw.ElapsedTicks, "Apply Impacts");
@@ -148,9 +148,18 @@ namespace ShowPerfExtensions
 
         sw.Restart();
         float MaxVel = NetConfig.MaxPhysicsBodyVelocity;
-        _.Collider.LinearVelocity = new Vector2(
-            NetConfig.Quantize(_.Collider.LinearVelocity.X, -MaxVel, MaxVel, 12),
-            NetConfig.Quantize(_.Collider.LinearVelocity.Y, -MaxVel, MaxVel, 12));
+        if (GameMain.NetworkMember != null)
+        {
+          _.Collider.LinearVelocity = new Vector2(
+              NetConfig.Quantize(_.Collider.LinearVelocity.X, -MaxVel, MaxVel, 12),
+              NetConfig.Quantize(_.Collider.LinearVelocity.Y, -MaxVel, MaxVel, 12));
+        }
+        else
+        {
+          _.Collider.LinearVelocity = new Vector2(
+              MathHelper.Clamp(_.Collider.LinearVelocity.X, -MaxVel, MaxVel),
+              MathHelper.Clamp(_.Collider.LinearVelocity.Y, -MaxVel, MaxVel));
+        }
         sw.Stop();
         CaptureRagdoll(_, sw.ElapsedTicks, "Limit velocity");
 
@@ -213,9 +222,19 @@ namespace ShowPerfExtensions
         CaptureRagdoll(_, sw.ElapsedTicks, "UpdateHullFlowForces");
 
         sw.Restart();
-        if (_.currentHull == null ||
-            _.currentHull.WaterVolume > _.currentHull.Volume * 0.95f ||
-            ConvertUnits.ToSimUnits(_.currentHull.Surface) > _.Collider.SimPosition.Y)
+        bool applyWaterForces =
+                  _.currentHull == null ||
+                  _.currentHull.WaterVolume > _.currentHull.Volume * 0.95f ||
+                  ConvertUnits.ToSimUnits(_.currentHull.Surface) > _.Collider.SimPosition.Y;
+#if CLIENT
+                  if (Screen.Selected is Barotrauma.CharacterEditor.CharacterEditorScreen &&
+                      _ is AnimController animController)
+                  {
+                      applyWaterForces = animController.CurrentAnimationParams is SwimParams;
+                  }
+#endif
+
+        if (applyWaterForces)
         {
           _.Collider.ApplyWaterForces();
         }
@@ -314,10 +333,10 @@ namespace ShowPerfExtensions
           else
           {
             // Falling -> ragdoll briefly if we are not moving at all, because we are probably stuck.
-            if (_.Collider.LinearVelocity == Vector2.Zero)
+            if (_.Collider.LinearVelocity == Vector2.Zero && GameMain.NetworkMember is not { IsClient: true })
             {
               _.character.IsRagdolled = true;
-              if (_.character.IsBot)
+              if (!_.character.IsPlayer)
               {
                 // Seems to work without this on player controlled characters -> not sure if we should call it always or just for the bots.
                 _.character.SetInput(InputType.Ragdoll, hit: false, held: true);

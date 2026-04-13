@@ -56,7 +56,11 @@ namespace ShowPerfExtensions
 
         if (!_.CanInteract)
         {
-          _.SelectedItem = _.SelectedSecondaryItem = null;
+          if (!_.IsAttachedToController())
+          {
+            _.SelectedItem = null;
+          }
+          _.SelectedSecondaryItem = null;
           _.focusedItem = null;
           if (!_.AllowInput)
           {
@@ -73,13 +77,20 @@ namespace ShowPerfExtensions
           {
             if (_.findFocusedTimer <= 0.0f || Screen.Selected == GameMain.SubEditorScreen)
             {
-              
+
 
               if (!PlayerInput.PrimaryMouseButtonHeld() || Barotrauma.Inventory.DraggingItemToWorld)
               {
-                
-                _.FocusedCharacter = _.CanInteract || _.CanEat ? _.FindCharacterAtPosition(mouseSimPos) : null;
-                if (_.FocusedCharacter != null && !_.CanSeeTarget(_.FocusedCharacter)) { _.FocusedCharacter = null; }
+                //don't allow focusing on anyone when the health window is open (avoids accidentally selecting someone when closing the window)
+                if (CharacterHealth.OpenHealthWindow != null)
+                {
+                  _.FocusedCharacter = null;
+                }
+                else
+                {
+                  _.FocusedCharacter = _.CanInteract || _.CanEat ? _.FindCharacterAtPosition(mouseSimPos) : null;
+                  if (_.FocusedCharacter != null && !_.CanSeeTarget(_.FocusedCharacter)) { _.FocusedCharacter = null; }
+                }
                 float aimAssist = GameSettings.CurrentConfig.AimAssistAmount * (_.AnimController.InWater ? 1.5f : 1.0f);
                 if (_.HeldItems.Any(it => it?.GetComponent<Wire>()?.IsActive ?? false))
                 {
@@ -87,7 +98,7 @@ namespace ShowPerfExtensions
                   aimAssist = 0.0f;
                 }
                 sw.Restart();
-                _.UpdateInteractablesInRange(); 
+                _.UpdateInteractablesInRange();
                 sw.Stop();
                 Capture.Update.AddTicks(sw.ElapsedTicks, DoInteractionUpdateState, "UpdateInteractablesInRange");
 
@@ -106,7 +117,7 @@ namespace ShowPerfExtensions
                   }
                 }
                 _.findFocusedTimer = 0.05f;
-                
+
               }
               else
               {
