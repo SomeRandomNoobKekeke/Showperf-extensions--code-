@@ -156,30 +156,30 @@ namespace ShowPerfExtensions
 
           if (TalentsState.ByID)
           {
-            foreach (var characterTalent in _.characterTalents)
+            for (int i = 0; i < _.characterTalents.Count; i++)
             {
               sw2.Restart();
-              characterTalent.UpdateTalent(deltaTime);
+              _.characterTalents[i].UpdateTalent(deltaTime);
               sw2.Stop();
-              Capture.Update.AddTicks(sw2.ElapsedTicks, TalentsState, $"{_.Info?.DisplayName ?? _.ToString()} - {characterTalent.Prefab.OriginalName}");
+              Capture.Update.AddTicks(sw2.ElapsedTicks, TalentsState, $"{_.Info?.DisplayName ?? _.ToString()} - {_.characterTalents[i].Prefab.OriginalName}");
             }
           }
           else
           {
-            foreach (var characterTalent in _.characterTalents)
+            for (int i = 0; i < _.characterTalents.Count; i++)
             {
               sw2.Restart();
-              characterTalent.UpdateTalent(deltaTime);
+              _.characterTalents[i].UpdateTalent(deltaTime);
               sw2.Stop();
-              Capture.Update.AddTicks(sw2.ElapsedTicks, TalentsState, characterTalent.Prefab.OriginalName);
+              Capture.Update.AddTicks(sw2.ElapsedTicks, TalentsState, _.characterTalents[i].Prefab.OriginalName);
             }
           }
         }
         else
         {
-          foreach (var characterTalent in _.characterTalents)
+          for (int i = 0; i < _.characterTalents.Count; i++)
           {
-            characterTalent.UpdateTalent(deltaTime);
+            _.characterTalents[i].UpdateTalent(deltaTime);
           }
         }
 

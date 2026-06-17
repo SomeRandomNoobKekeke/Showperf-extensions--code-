@@ -85,7 +85,10 @@ namespace ShowPerfExtensions
         {
           Vector2 targetMovement = _.GetTargetMovement();
           _.AnimController.TargetMovement = targetMovement;
-          _.AnimController.IgnorePlatforms = _.AnimController.TargetMovement.Y < -0.1f;
+          if (_.SelectedItem?.GetComponent<Controller>() is not { ControlCharacterPose: true })
+          {
+            _.AnimController.IgnorePlatforms = _.AnimController.TargetMovement.Y < -0.1f;
+          }
         }
         sw.Stop();
         CaptureCharacter3(sw.ElapsedTicks, _, "GetTargetMovement");

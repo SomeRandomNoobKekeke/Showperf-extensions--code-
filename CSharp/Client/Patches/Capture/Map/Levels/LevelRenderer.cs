@@ -103,16 +103,12 @@ namespace ShowPerfExtensions
             SamplerState.LinearWrap, DepthStencilState.DepthRead, null, null,
             cam.Transform);
 
-        LevelObjectManagerPatch.DrawObjects(BackLevelLevelObjectsBack, backgroundSpriteManager, spriteBatch, cam, backgroundSpriteManager?.visibleObjectsBack);
+        //This is == DrawObjectsBack
+        LevelObjectManagerPatch.DrawObjects(BackLevelLevelObjectsBack, backgroundSpriteManager, spriteBatch, cam, backgroundCreatureManager, backgroundSpriteManager?.visibleObjectsBack);
 
         sw.Stop();
         Capture.Draw.AddTicksOnce(sw.ElapsedTicks, BackLevel, "LevelObjectsBack");
         sw.Restart();
-
-        if (cam.Zoom > 0.05f)
-        {
-          backgroundCreatureManager?.Draw(spriteBatch, cam);
-        }
 
         sw.Stop();
         Capture.Draw.AddTicks(sw.ElapsedTicks, BackLevel, "BackgroundCreatures");
@@ -146,7 +142,7 @@ namespace ShowPerfExtensions
             SamplerState.LinearClamp, DepthStencilState.DepthRead, null, null,
             cam.Transform);
 
-        LevelObjectManagerPatch.DrawObjects(BackLevelLevelObjectsMid, backgroundSpriteManager, spriteBatch, cam, backgroundSpriteManager?.visibleObjectsMid);
+        LevelObjectManagerPatch.DrawObjects(BackLevelLevelObjectsMid, backgroundSpriteManager, spriteBatch, cam, backgroundCreatureManager, backgroundSpriteManager?.visibleObjectsMid);
 
         spriteBatch.End();
 
@@ -159,7 +155,7 @@ namespace ShowPerfExtensions
 
 
 
-      public static bool LevelRenderer_DrawForeground_Replace(LevelRenderer __instance, SpriteBatch spriteBatch, Camera cam, LevelObjectManager backgroundSpriteManager = null)
+      public static bool LevelRenderer_DrawForeground_Replace(LevelRenderer __instance, SpriteBatch spriteBatch, Camera cam, BackgroundCreatureManager backgroundCreatureManager, LevelObjectManager backgroundSpriteManager = null)
       {
         if (Showperf == null || !Showperf.Revealed || !FrontLevel.IsActive) return true;
 
@@ -168,7 +164,7 @@ namespace ShowPerfExtensions
             SamplerState.LinearClamp, DepthStencilState.DepthRead, null, null,
             cam.Transform);
         //backgroundSpriteManager?.DrawObjectsFront(spriteBatch, cam);
-        LevelObjectManagerPatch.DrawObjects(FrontLevel, backgroundSpriteManager, spriteBatch, cam, backgroundSpriteManager?.visibleObjectsFront);
+        LevelObjectManagerPatch.DrawObjects(FrontLevel, backgroundSpriteManager, spriteBatch, cam, backgroundCreatureManager, backgroundSpriteManager?.visibleObjectsFront);
 
         spriteBatch.End();
 
@@ -222,8 +218,9 @@ namespace ShowPerfExtensions
         //calculate the sum of the forces of nearby level triggers
         //and use it to move the water texture and water distortion effect
         Vector2 currentWaterParticleVel = _.level.GenerationParams.WaterParticleVelocity;
-        foreach (LevelObject levelObject in _.level.LevelObjectManager.GetAllVisibleObjects())
+        foreach (ILevelRenderableObject obj in _.level.LevelObjectManager.GetAllVisibleObjects())
         {
+          if (obj is not LevelObject levelObject) { continue; }
           if (levelObject.Triggers == null) { continue; }
           //use the largest water flow velocity of all the triggers
           Vector2 objectMaxFlow = Vector2.Zero;

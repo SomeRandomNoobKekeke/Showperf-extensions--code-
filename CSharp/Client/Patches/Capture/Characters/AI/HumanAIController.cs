@@ -67,7 +67,7 @@ namespace ShowPerfExtensions
         }
         if (isIncapacitated) { return false; }
 
-        _.wasConscious = true;
+        _.wasDead = false;
 
         sw.Restart();
         _.respondToAttackTimer -= deltaTime;
