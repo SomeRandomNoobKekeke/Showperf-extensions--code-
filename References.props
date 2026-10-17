@@ -1,0 +1,11 @@
+<Project>
+  <ItemGroup>
+    <!-- TODO: Remove when we upgrade to NET 10 -->
+    <PackageReference Include="System.Collections.Immutable" Version="9.0.0" />
+    <!-- Add misc references here -->
+
+    <Reference Include="CUI">
+      <HintPath>C:\Program Files (x86)\Steam\steamapps\common\Barotrauma\LocalMods\[Root] CUI Dev\Build\bin\Client\Windows\CUI.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+</Project>
