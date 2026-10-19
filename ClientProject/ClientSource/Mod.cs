@@ -26,6 +26,15 @@ public partial class Mod
     ));
 
     ShowperfFrame.Open();
+    UTest.ScanThisAssembly();
+    UTest.TryRunPrevTest();
+
+    Utils.RunWithDelay(Experiment, 500);
+
+    PluginCommands.Add("print_assemblies", (args) =>
+    {
+      Logger.Log(Logger.Wrap.IEnumerable(AppDomain.CurrentDomain.GetAssemblies(), true));
+    });
   }
 
   public void Dispose()
