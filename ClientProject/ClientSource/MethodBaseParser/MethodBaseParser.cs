@@ -10,6 +10,7 @@ public static class MethodBaseParser
 {
   public static BindingFlags Pls = BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic;
 
+  public static string StaticConstuctorName = "StaticConstructor";
   public static string ConstuctorName = "Constructor";
 
   public static Assembly[] AssembliesToScan = [
@@ -31,7 +32,10 @@ public static class MethodBaseParser
 
     parts.Add(mb.DeclaringType.Namespace);
 
-    if (mb.IsConstructor) parts[0] = ConstuctorName;
+    if (mb is ConstructorInfo)
+    {
+      parts[0] = mb.IsConstructor ? ConstuctorName : StaticConstuctorName;
+    }
 
     parts.Reverse();
 
@@ -97,6 +101,11 @@ public static class MethodBaseParser
       }
 
       return null;
+    }
+
+    if (methodName == StaticConstuctorName)
+    {
+      return T.GetConstructor(BindingFlags.Static | BindingFlags.NonPublic, []);
     }
 
     MethodInfo[] methods = T.GetMethods(Pls).Where(mi => mi.Name == methodName).ToArray();

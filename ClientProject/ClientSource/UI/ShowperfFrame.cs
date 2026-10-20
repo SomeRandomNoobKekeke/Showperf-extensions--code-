@@ -7,31 +7,36 @@ namespace ShowperfExtensions;
 
 public partial class ShowperfFrame : CUIDefault.Frame
 {
-  public StopwatchWrapper StopwatchWrapper = new();
+  public MethodBrowserPage MethodBrowser = new();
   public CustomPatchesPage CustomPatchesPage { get; } = new();
 
   public void OpenPage(CUIPage page)
   {
-    Get<CUIPages>("layout.main").Open(page);
+    Get<CUIPages>("layout.main").OpenPage(page);
   }
 
   public ShowperfFrame() : base("Showperf", 400, 600)
   {
-    Anchor = CUIAnchor.RightCenter;
+    Anchor = CUIAnchor.Center;
     OnOpen += DeepRefresh;
     ResizableBoth = true;
 
     this["layout"]["handle"].Children.Insert(0, new ReloadLuaButton());
     this["layout"]["header"] = new CUIDefault.HorizontalPanel();
 
-    using (new CUIContextStyle<CUIButton>(btn => btn.Flex = 1))
+    using (new CUIContextStyle<CUIRadioButton>(btn =>
     {
-      this["layout"]["header"]["Stopwatch Wrapper"] = new CUIButton("Stopwatch Wrapper")
+      btn.Flex = 1;
+      btn.GroupName = "ShowperfFrame pages";
+    }))
+    {
+      this["layout"]["header"]["Browse Methods"] = new CUIRadioButton("Browse Methods")
       {
-        OnMouseDown = (e) => OpenPage(StopwatchWrapper),
+        OnSelected = () => OpenPage(MethodBrowser),
+        IsSelected = true,
       };
 
-      this["layout"]["header"]["Custom Patches"] = new CUIButton("Custom Patches")
+      this["layout"]["header"]["Custom Patches"] = new CUIRadioButton("Custom Patches")
       {
         OnMouseDown = (e) => OpenPage(CustomPatchesPage),
       };
@@ -43,6 +48,6 @@ public partial class ShowperfFrame : CUIDefault.Frame
       Flex = 1,
     };
 
-    OpenPage(StopwatchWrapper);
+    OpenPage(MethodBrowser);
   }
 }

@@ -1,6 +1,7 @@
 ﻿using Barotrauma;
 using CursedUI;
 using CUILibs;
+using Microsoft.Xna.Framework;
 
 namespace ShowperfExtensions;
 
@@ -29,7 +30,13 @@ public partial class Mod
     UTest.ScanThisAssembly();
     UTest.TryRunPrevTest();
 
+
+
+    // CUIPageTestingFrame.Instance.Open();
+    // CUIPageTestingFrame.Instance.ScanForCUIPages();
+
     Utils.RunWithDelay(Experiment, 500);
+    // Experiment();
 
     PluginCommands.Add("print_assemblies", (args) =>
     {

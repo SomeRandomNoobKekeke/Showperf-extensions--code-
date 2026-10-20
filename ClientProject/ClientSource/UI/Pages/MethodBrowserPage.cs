@@ -9,9 +9,9 @@ using Microsoft.Xna.Framework.Input;
 
 namespace ShowperfExtensions;
 
-public class StopwatchWrapper : CUIPage
+public class MethodBrowserPage : CUIPage
 {
-  public static ICUIStyle DefaultStyle => new CUIDefaultStyle<StopwatchWrapper>((c) =>
+  public static ICUIStyle DefaultStyle => new CUIDefaultStyle<MethodBrowserPage>((c) =>
   {
     c.Background.Color = Color.Lerp(c.Palette["back"], c.Palette["main"], 0.2f);
   });
@@ -23,40 +23,62 @@ public class StopwatchWrapper : CUIPage
 
   private CodeExplorer CodeExplorer = new CodeExplorer(typeof(GameMain).Assembly);
 
+
+
+  protected override void HandleOpen()
+  {
+    Refresh();
+  }
+
   public override void Refresh()
   {
     base.Refresh();
 
-    Caption.Text = $"{CodeExplorer.Current.NodeTypeName}: {CodeExplorer.Current}";
+
+
+    Caption.Text = $"{CodeExplorer.Current.NodeType}: {CodeExplorer.Current}";
     ChildNodeList.Clear();
+    ChildNodeList.Scroll = 0;
+
+
 
     IEnumerable<CodeExplorer.Node> nodes = CodeExplorer.Current.GetChildren();
+
+
 
     if (SearchBox.Text.Trim() != "")
     {
       nodes = nodes.Where(node => node.ToString().IndexOf(SearchBox.Text, 0, StringComparison.OrdinalIgnoreCase) != -1);
     }
 
-    nodes = nodes.OrderBy(node => node.GetType()).ThenBy(node => node.ToString());
+    nodes = nodes.OrderBy(node => node.NodeType).ThenBy(node => node.ToString());
 
     foreach (CodeExplorer.Node node in nodes)
     {
-      if (node is CodeExplorer.MethodNode methodNode)
+      switch (node)
       {
-        ChildNodeList.Add(new CUIToggleButton(node.ToString())
-        {
-          TextAnchor = CUIAnchor.LeftCenter,
-          Palette = CUICore.Palettes.Quaternary,
-        });
-      }
-      else
-      {
-        ChildNodeList.Add(new CUIButton(node.ToString())
-        {
-          TextAnchor = CUIAnchor.LeftCenter,
-          Palette = CUICore.Palettes.Tertiary,
-          OnMouseDown = (e) => GoTo(node),
-        });
+        case CodeExplorer.ConstructorNode constructorNode:
+          ChildNodeList.Add(new CUIDefault.GlowingToggleButton(node.ToString())
+          {
+            TextAnchor = CUIAnchor.LeftCenter,
+            Style = (c) => c.MasterColor = Color.Yellow,
+          });
+          break;
+        case CodeExplorer.MethodNode methodNode:
+          ChildNodeList.Add(new CUIDefault.GlowingToggleButton(node.ToString())
+          {
+            TextAnchor = CUIAnchor.LeftCenter,
+            Style = (c) => c.MasterColor = Color.Lime,
+          });
+          break;
+
+        default:
+          ChildNodeList.Add(new CUIDefault.GlowingButton(node.ToString())
+          {
+            TextAnchor = CUIAnchor.LeftCenter,
+            OnMouseDown = (e) => GoTo(node),
+          });
+          break;
       }
     }
 
@@ -70,15 +92,17 @@ public class StopwatchWrapper : CUIPage
   public void GoUp()
   {
     CodeExplorer.Current = CodeExplorer.Current.GetParent();
+    SearchBox.Text = "";
     Refresh();
   }
   public void GoTo(CodeExplorer.Node node)
   {
     CodeExplorer.Current = node;
+    SearchBox.Text = "";
     Refresh();
   }
 
-  public StopwatchWrapper()
+  public MethodBrowserPage()
   {
     this["layout"] = new CUIVerticalList() { Relative = new CUINullRect(0, 0, 1, 1) };
     this["layout"]["header"] = new CUIVerticalList()
@@ -106,7 +130,10 @@ public class StopwatchWrapper : CUIPage
     {
 
     };
-    this["layout"]["header"]["search panel"]["search label"] = new CUITextBlock("Search:");
+    this["layout"]["header"]["search panel"]["search label"] = new CUIButton("Search:")
+    {
+      OnMouseDown = (e) => { Refresh(); },
+    };
     this["layout"]["header"]["search panel"]["search"] = SearchBox = new CUITextInput()
     {
       Flex = 1,
