@@ -23,18 +23,17 @@ public class MethodBrowserPage : CUIPage
 
   private CodeExplorer CodeExplorer = new CodeExplorer(typeof(GameMain).Assembly);
 
-
-
-  protected override void HandleOpen()
+  public CodeExplorer.Node CurrentNode
   {
-    Refresh();
+    get => CodeExplorer.Current;
+    set => GoTo(value);
   }
+
+  protected override void HandleOpen() => Refresh();
 
   public override void Refresh()
   {
     base.Refresh();
-
-
 
     Caption.Text = $"{CodeExplorer.Current.NodeType}: {CodeExplorer.Current}";
     ChildNodeList.Clear();
@@ -53,53 +52,50 @@ public class MethodBrowserPage : CUIPage
 
     nodes = nodes.OrderBy(node => node.NodeType).ThenBy(node => node.ToString());
 
-    foreach (CodeExplorer.Node node in nodes)
+    Color GetNodeColor(CodeExplorer.Node node) => node switch
     {
-      switch (node)
-      {
-        case CodeExplorer.ConstructorNode constructorNode:
-          ChildNodeList.Add(new CUIDefault.GlowingToggleButton(node.ToString())
-          {
-            TextAnchor = CUIAnchor.LeftCenter,
-            Style = (c) => c.MasterColor = Color.Yellow,
-          });
-          break;
-        case CodeExplorer.MethodNode methodNode:
-          ChildNodeList.Add(new CUIDefault.GlowingToggleButton(node.ToString())
-          {
-            TextAnchor = CUIAnchor.LeftCenter,
-            Style = (c) => c.MasterColor = Color.Lime,
-          });
-          break;
+      CodeExplorer.AssemblyNode => Color.Gray,
+      CodeExplorer.NamespaceNode => Color.Gray,
+      CodeExplorer.TypeNode => Color.Blue,
+      CodeExplorer.ConstructorNode => Color.Orange,
+      CodeExplorer.MethodNode => Color.Lime,
+    };
 
-        default:
-          ChildNodeList.Add(new CUIDefault.GlowingButton(node.ToString())
-          {
-            TextAnchor = CUIAnchor.LeftCenter,
-            OnMouseDown = (e) => GoTo(node),
-          });
-          break;
-      }
+    CUIComponent CreateNodeComponent(CodeExplorer.Node node)
+    {
+      return new CUIDefault.GlowingButton(node.ToString())
+      {
+        TextAnchor = CUIAnchor.LeftCenter,
+        OnMouseDown = (e) => GoTo(node),
+        Style = (c) => c.MasterColor = GetNodeColor(node),
+      };
     }
 
+    foreach (CodeExplorer.Node node in nodes)
+    {
+      ChildNodeList.Add(CreateNodeComponent(node));
+    }
   }
 
-  public void TogglePatch(MethodBase mb)
-  {
 
-  }
-
-  public void GoUp()
-  {
-    CodeExplorer.Current = CodeExplorer.Current.GetParent();
-    SearchBox.Text = "";
-    Refresh();
-  }
+  public void GoUp() => GoTo(CodeExplorer.Current.GetParent());
   public void GoTo(CodeExplorer.Node node)
   {
+    if (node is CodeExplorer.MethodNode mn)
+    {
+      Commands.SendUp(ShowperfFrame.ShowMethodDetails_Command, mn.Method);
+      return;
+    }
+
     CodeExplorer.Current = node;
     SearchBox.Text = "";
     Refresh();
+  }
+
+  public void GoToUnknown(object sus)
+  {
+    if (sus is MethodBase mb) GoTo(new CodeExplorer.TypeNode(CodeExplorer, mb.DeclaringType));
+    if (sus is Type T) GoTo(new CodeExplorer.TypeNode(CodeExplorer, T));
   }
 
   public MethodBrowserPage()
@@ -115,7 +111,7 @@ public class MethodBrowserPage : CUIPage
     };
     this["layout"]["header"]["location panel"]["go up"] = new CUIIconButton()
     {
-      Icon = new CUISprite(CUISprite.AtIconIndex(null, 4, 2)) { Effects = SpriteEffects.FlipVertically },
+      Icon = CUISprite.ArrowUpIcon,
       OnMouseDown = (e) => GoUp(),
     };
 
@@ -144,10 +140,6 @@ public class MethodBrowserPage : CUIPage
     };
 
     this["layout"]["main"] = new CUIVerticalList() { Flex = 1 };
-    this["layout"]["main"]["caption"] = new CUIDefault.TextPanel("Nodes:")
-    {
-      TextAnchor = CUIAnchor.LeftCenter,
-    };
     this["layout"]["main"]["nodes"] = new CUIDefault.ListWithScrollbar() { Flex = 1 };
 
     ChildNodeList = Get<CUIVerticalList>("layout.main.nodes.list");

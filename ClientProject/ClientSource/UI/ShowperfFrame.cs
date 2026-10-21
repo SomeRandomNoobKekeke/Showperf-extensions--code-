@@ -2,18 +2,20 @@
 using System.Collections.Immutable;
 using CursedUI;
 using Microsoft.Xna.Framework;
+using System.Reflection;
 
 namespace ShowperfExtensions;
 
 public partial class ShowperfFrame : CUIDefault.Frame
 {
-  public MethodBrowserPage MethodBrowser = new();
-  public CustomPatchesPage CustomPatchesPage { get; } = new();
+  public const string ShowMethodDetails_Command = "show method details";
+  public const string OpenInMethodBrowser_Command = "open in method browser";
 
-  public void OpenPage(CUIPage page)
-  {
-    Get<CUIPages>("layout.main").OpenPage(page);
-  }
+
+  public CUIPages Pages { get; }
+  public MethodBrowserPage MethodBrowserPage = new();
+  public CustomPatchesPage CustomPatchesPage { get; } = new();
+  public MethodDetailsPage MethodDetailsPage { get; } = new();
 
   public ShowperfFrame() : base("Showperf", 400, 600)
   {
@@ -21,8 +23,11 @@ public partial class ShowperfFrame : CUIDefault.Frame
     OnOpen += DeepRefresh;
     ResizableBoth = true;
 
+
+
     this["layout"]["handle"].Children.Insert(0, new ReloadLuaButton());
     this["layout"]["header"] = new CUIDefault.HorizontalPanel();
+    this["layout"]["main"] = Pages = new CUIPages() { Flex = 1 };
 
     using (new CUIContextStyle<CUIRadioButton>(btn =>
     {
@@ -32,22 +37,34 @@ public partial class ShowperfFrame : CUIDefault.Frame
     {
       this["layout"]["header"]["Browse Methods"] = new CUIRadioButton("Browse Methods")
       {
-        OnSelected = () => OpenPage(MethodBrowser),
+        OnSelected = () => Pages.OpenPage(MethodBrowserPage),
         IsSelected = true,
       };
 
       this["layout"]["header"]["Custom Patches"] = new CUIRadioButton("Custom Patches")
       {
-        OnMouseDown = (e) => OpenPage(CustomPatchesPage),
+        OnSelected = () => Pages.OpenPage(CustomPatchesPage),
+      };
+
+      this["layout"]["header"]["Method Details"] = new CUIRadioButton("Method Details")
+      {
+        OnSelected = () => Pages.OpenPage(MethodDetailsPage),
       };
     }
     this["layout"]["header"].DeepPalette = CUICore.Palettes.Secondary;
 
-    this["layout"]["main"] = new CUIPages()
+    Commands.ListenFor<MethodBase>(ShowMethodDetails_Command, (mb) =>
     {
-      Flex = 1,
-    };
+      Get<CUIRadioButton>("layout.header.Method Details").Select();
+      MethodDetailsPage.Method = mb;
+    });
 
-    OpenPage(MethodBrowser);
+    Commands.ListenFor(OpenInMethodBrowser_Command, (o) =>
+    {
+      Get<CUIRadioButton>("layout.header.Browse Methods").Select();
+      MethodBrowserPage.GoToUnknown(o);
+    });
+
+    Pages.OpenPage(MethodBrowserPage);
   }
 }
