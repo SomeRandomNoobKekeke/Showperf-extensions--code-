@@ -11,36 +11,40 @@ using Microsoft.Xna.Framework;
 
 namespace ShowperfExtensions;
 
+/// <summary>
+/// Hardcoded to analyze Barotrauma.dll
+/// </summary>
 public class UltimateAssemblyAnalyzer3000
 {
-  public UltimateAssemblyAnalyzer3000() : this(
-    typeof(Barotrauma.GameMain).Assembly,
-    "Barotrauma.dll"
-  )
-  { }
-  public UltimateAssemblyAnalyzer3000(Assembly assembly, string path)
+  public UltimateAssemblyAnalyzer3000()
   {
-    CecilModule = AssemblyDefinition.ReadAssembly(path).MainModule;
-    Assembly = assembly;
-    ReflectionModule = assembly.Modules.First();
+    BarotraumaCecilModule = AssemblyDefinition.ReadAssembly("Barotrauma.dll").MainModule;
+    BarotraumaAssembly = typeof(Barotrauma.GameMain).Assembly;
+    BarotraumaReflectionModule = BarotraumaAssembly.Modules.First();
   }
 
 
-  public Assembly Assembly { get; }
-  public Module ReflectionModule { get; }
-  public ModuleDefinition CecilModule { get; }
+
+  public Assembly BarotraumaAssembly { get; }
+  public Module BarotraumaReflectionModule { get; }
+  public ModuleDefinition BarotraumaCecilModule { get; }
+
+  public HashSet<string> AllowedModules { get; } = new();
 
 
   public MethodBase ToMethodBase(MethodDefinition method)
-    => ReflectionModule.ResolveMethod(method.MetadataToken.ToInt32())!;
+    => BarotraumaReflectionModule.ResolveMethod(method.MetadataToken.ToInt32())!;
 
   public MethodDefinition ToMethodDefinition(MethodBase method)
-    => (CecilModule.LookupToken(method.MetadataToken) as MethodDefinition)!;
+    => (BarotraumaCecilModule.LookupToken(method.MetadataToken) as MethodDefinition)!;
 
   public IEnumerable<MethodBase> GetCalledMethods(MethodBase method)
     => GetCalledMethods(ToMethodDefinition(method)).Select(ToMethodBase);
 
   public IEnumerable<MethodDefinition> GetCalledMethods(MethodDefinition method)
+    => _GetCalledMethods(method);
+
+  private IEnumerable<MethodDefinition> _GetCalledMethods(MethodDefinition method)
   {
     foreach (Instruction instruction in method.Body.Instructions)
     {
@@ -53,6 +57,7 @@ public class UltimateAssemblyAnalyzer3000
         if (calledMethod.IsAddOn) continue;
         if (calledMethod.IsRemoveOn) continue;
 
+        if (calledMethod.Module != BarotraumaCecilModule) continue;
 
         yield return calledMethod;
       }

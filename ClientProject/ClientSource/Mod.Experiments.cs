@@ -21,6 +21,8 @@ public partial class Mod
 
   public void Experiment()
   {
-    Analyzer.PrintInstructions(typeof(GameSession).GetMethod("ShouldIgnorePerksThatCanNotApplyWithoutSubmarine", Pls));
+    // Analyzer.PrintInstructions(typeof(GameSession).GetMethod("ShouldIgnorePerksThatCanNotApplyWithoutSubmarine", Pls));
+
+
   }
 }
