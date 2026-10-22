@@ -17,15 +17,7 @@
     "Barotrauma.GUIComponentStyle.GetDefaultSprite()",
     "Barotrauma.GameSettings.Config.KeyMapping.KeyBindText(InputType)",
     "Barotrauma.TextManager.GetWithVariable(String, String, LocalizedString, FormatCapitals)",
-    "Barotrauma.GameSettings.Config.KeyMapping.KeyBindText(InputType)",
-    "Barotrauma.TextManager.GetWithVariable(String, String, LocalizedString, FormatCapitals)",
-    "Barotrauma.GameSettings.Config.KeyMapping.KeyBindText(InputType)",
-    "Barotrauma.TextManager.GetWithVariable(String, String, LocalizedString, FormatCapitals)",
     "Barotrauma.GameSession.CreateNotificationIcon(GUIComponent, Boolean)",
-    "Barotrauma.GameSession.CreateNotificationIcon(GUIComponent, Boolean)",
-    "Barotrauma.TextManager.Get(String)",
-    "Barotrauma.TextManager.Get(String)",
-    "Barotrauma.TextManager.GetWithVariable(String, String, LocalizedString, FormatCapitals)",
     "Barotrauma.TextManager.Get(String)"
   ],
   "Barotrauma.GameSession.AddToGUIUpdateList()": [
@@ -33,11 +25,9 @@
     "Barotrauma.TabMenu.AddToGUIUpdateList()",
     "Barotrauma.ObjectiveManager.AddToGUIUpdateList()",
     "Barotrauma.CoroutineManager.IsCoroutineRunning(String)",
-    "Barotrauma.CoroutineManager.IsCoroutineRunning(String)",
     "Barotrauma.GameSession.CreateTopLeftButtons()",
     "Barotrauma.GUIComponent.AddToGUIUpdateList(Boolean, Int32)",
     "Barotrauma.CharacterInfo.AppearanceCustomizationMenu.AddToGUIUpdateList()",
-    "Barotrauma.GUIComponent.AddToGUIUpdateList(Boolean, Int32)",
     "Barotrauma.DeathPrompt.AddToGUIUpdateList()"
   ],
   "Barotrauma.GameSession.CreateNotificationIcon(GUIComponent, Boolean)": [],
@@ -64,11 +54,8 @@
   "Barotrauma.GameSession.InitOwnedSubs(SubmarineInfo, List\u003CSubmarineInfo\u003E)": [],
   "Barotrauma.GameSession.InstantiateGameMode(GameModePreset, String, SubmarineInfo, CampaignSettings, IEnumerable\u003CMissionPrefab\u003E, IEnumerable\u003CIdentifier\u003E)": [
     "Barotrauma.ToolBox.RandomSeed(Int32)",
-    "Barotrauma.ToolBox.RandomSeed(Int32)",
-    "Barotrauma.ToolBox.RandomSeed(Int32)",
     "Barotrauma.MultiPlayerCampaign.StartNew(String, CampaignSettings)",
     "Barotrauma.Wallet.Deduct(Int32)",
-    "Barotrauma.ToolBox.RandomSeed(Int32)",
     "Barotrauma.SinglePlayerCampaign.StartNew(String, CampaignSettings)",
     "Barotrauma.Wallet.TryDeduct(Int32)"
   ],
@@ -77,7 +64,6 @@
     "Barotrauma.Extensions.IEnumerableExtensions.GetRandom(IEnumerable\u003CT\u003E, Random)",
     "Barotrauma.GameSession.CreateDummyLocations(Random, LocationType)",
     "Barotrauma.PrefabCollection\u00601.GetEnumerator()",
-    "Barotrauma.CampaignMode.GetRandomFaction(IEnumerable\u003CFaction\u003E, Random, Boolean, Boolean)",
     "Barotrauma.CampaignMode.GetRandomFaction(IEnumerable\u003CFaction\u003E, Random, Boolean, Boolean)"
   ],
   "Barotrauma.GameSession.CreateDummyLocations(String, LocationType)": [
@@ -101,7 +87,6 @@
   ],
   "Barotrauma.GameSession.IsSubmarineOwned(SubmarineInfo)": [],
   "Barotrauma.GameSession.IsCurrentLocationRadiated()": [
-    "Barotrauma.Location.IsRadiated()",
     "Barotrauma.Location.IsRadiated()"
   ],
   "Barotrauma.GameSession.StartRound(String, Single?, LevelGenerationParams, Identifier)": [
@@ -109,13 +94,9 @@
     "Barotrauma.Extensions.IEnumerableExtensions.GetRandom(IEnumerable\u003CT\u003E, Random)",
     "Barotrauma.GameSession.CreateDummyLocations(String, LocationType)",
     "Barotrauma.LevelData.CreateRandom(String, Single?, LevelGenerationParams, Identifier, Boolean, Boolean)",
-    "Barotrauma.LevelData.CreateRandom(String, Single?, LevelGenerationParams, Identifier, Boolean, Boolean)",
     "Barotrauma.GameSession.StartRound(LevelData, Boolean, SubmarineInfo, SubmarineInfo)"
   ],
   "Barotrauma.GameSession.TryGenerateStationAroundModule(SubmarineInfo, out Submarine)": [
-    "Barotrauma.Extensions.IEnumerableExtensions.GetRandomUnsynced(IEnumerable\u003CT\u003E)",
-    "Barotrauma.Extensions.IEnumerableExtensions.GetRandomUnsynced(IEnumerable\u003CT\u003E)",
-    "Barotrauma.DebugConsole.AddWarning(String, ContentPackage)",
     "Barotrauma.Extensions.IEnumerableExtensions.GetRandomUnsynced(IEnumerable\u003CT\u003E)",
     "Barotrauma.DebugConsole.AddWarning(String, ContentPackage)",
     "Barotrauma.OutpostGenerator.Generate(OutpostGenerationParams, LocationType, Boolean, Boolean)",
@@ -126,8 +107,6 @@
   "Barotrauma.GameSession.StartRound(LevelData, Boolean, SubmarineInfo, SubmarineInfo)": [
     "Barotrauma.AfflictionPrefab.LoadAllEffectsAndTreatmentSuitabilities()",
     "Barotrauma.DebugConsole.ThrowError(String, Exception, ContentPackage, Boolean, Boolean)",
-    "Barotrauma.DebugConsole.ThrowError(String, Exception, ContentPackage, Boolean, Boolean)",
-    "Barotrauma.DebugConsole.ThrowError(String, Exception, ContentPackage, Boolean, Boolean)",
     "Barotrauma.Submarine.Unload()",
     "Barotrauma.Extensions.IEnumerableExtensions.None(IEnumerable\u003CT\u003E, Func\u003CT, Boolean\u003E)",
     "Barotrauma.GameSession.TryGenerateStationAroundModule(SubmarineInfo, out Submarine)",
@@ -136,8 +115,6 @@
     "Barotrauma.GameMode.AddExtraMissions(LevelData)",
     "Barotrauma.Mission.SetLevel(LevelData)",
     "Barotrauma.Submarine.GetItems(Boolean)",
-    "Barotrauma.Submarine.GetItems(Boolean)",
-    "Barotrauma.Item.GetComponent()",
     "Barotrauma.Item.GetComponent()",
     "Barotrauma.Level.Generate(LevelData, Boolean, Location, Location, SubmarineInfo, SubmarineInfo)",
     "Barotrauma.GameSession.InitializeLevel(Level)",
@@ -146,21 +123,9 @@
     "Barotrauma.GUI.AddMessage(LocalizedString, Color, Single?, Boolean, GUIFont)",
     "Barotrauma.TextManager.Get(String)",
     "Barotrauma.TextManager.AddPunctuation(Char, LocalizedString[])",
-    "Barotrauma.GUI.AddMessage(LocalizedString, Color, Single?, Boolean, GUIFont)",
-    "Barotrauma.TextManager.Get(String)",
-    "Barotrauma.TextManager.AddPunctuation(Char, LocalizedString[])",
-    "Barotrauma.GUI.AddMessage(LocalizedString, Color, Single?, Boolean, GUIFont)",
-    "Barotrauma.TextManager.Get(String)",
-    "Barotrauma.TextManager.Get(String)",
-    "Barotrauma.TextManager.AddPunctuation(Char, LocalizedString[])",
-    "Barotrauma.GUI.AddMessage(LocalizedString, Color, Single?, Boolean, GUIFont)",
-    "Barotrauma.TextManager.Get(String)",
-    "Barotrauma.TextManager.AddPunctuation(Char, LocalizedString[])",
-    "Barotrauma.GUI.AddMessage(LocalizedString, Color, Single?, Boolean, GUIFont)",
     "Barotrauma.HintManager.OnRoundStarted()",
     "Barotrauma.GameSession.EnableEventLogNotificationIcon(Boolean)",
     "Barotrauma.GameSession.LogStartRoundStats()",
-    "Barotrauma.TextManager.Get(String)",
     "Barotrauma.EventLog.Clear()",
     "Barotrauma.Level.GetRealWorldDepth(Single)",
     "Barotrauma.CoroutineManager.Invoke(Action, Single)"
@@ -172,7 +137,6 @@
     "Barotrauma.GameMode.Start()",
     "Barotrauma.Entity.GetEntities()",
     "Barotrauma.Mission.Start(Level)",
-    "Barotrauma.Entity.GetEntities()",
     "Barotrauma.DebugConsole.ThrowError(String, Exception, ContentPackage, Boolean, Boolean)",
     "Barotrauma.ObjectiveManager.ResetObjectives()",
     "Barotrauma.EventManager.StartRound(Level)",
@@ -190,24 +154,12 @@
   ],
   "Barotrauma.GameSession.PlaceSubAtInitialPosition(Submarine, Level, Boolean, Boolean)": [
     "Barotrauma.Submarine.SetPosition(Vector2, List\u003CSubmarine\u003E, Boolean)",
-    "Barotrauma.Submarine.SetPosition(Vector2, List\u003CSubmarine\u003E, Boolean)",
     "Barotrauma.Submarine.NeutralizeBallast()",
     "Barotrauma.Submarine.EnableMaintainPosition()",
     "Barotrauma.Submarine.GetDockedBorders(Boolean)",
-    "Barotrauma.Submarine.GetDockedBorders(Boolean)",
-    "Barotrauma.Submarine.SetPosition(Vector2, List\u003CSubmarine\u003E, Boolean)",
-    "Barotrauma.Submarine.SetPosition(Vector2, List\u003CSubmarine\u003E, Boolean)",
     "Barotrauma.Items.Components.DockingPort.Dock(DockingPort)",
     "Barotrauma.Items.Components.DockingPort.Lock(Boolean, Boolean, Boolean)",
-    "Barotrauma.Submarine.SetPosition(Vector2, List\u003CSubmarine\u003E, Boolean)",
-    "Barotrauma.Submarine.NeutralizeBallast()",
-    "Barotrauma.Submarine.EnableMaintainPosition()",
-    "Barotrauma.Submarine.NeutralizeBallast()",
-    "Barotrauma.Submarine.EnableMaintainPosition()",
     "Barotrauma.Submarine.FindSpawnPos(Vector2, Point?, Single, Int32)",
-    "Barotrauma.Submarine.SetPosition(Vector2, List\u003CSubmarine\u003E, Boolean)",
-    "Barotrauma.Submarine.NeutralizeBallast()",
-    "Barotrauma.Submarine.EnableMaintainPosition()",
     "Barotrauma.Submarine.GetItems(Boolean)",
     "Barotrauma.Item.GetComponent()",
     "Barotrauma.Items.Components.Steering.RefreshPosToMaintain()",
@@ -220,9 +172,7 @@
     "Barotrauma.PlayerInput.KeyHit(InputType)",
     "Barotrauma.GameSession.ToggleTabMenu()",
     "Barotrauma.TabMenu.Update(Single)",
-    "Barotrauma.PlayerInput.KeyHit(InputType)",
     "Barotrauma.PlayerInput.KeyHit(Keys)",
-    "Barotrauma.GameSession.ToggleTabMenu()",
     "Barotrauma.GameSession.UpdateTalentNotificationIndicator(GUIImage)",
     "Barotrauma.CharacterInfo.AppearanceCustomizationMenu.Update()",
     "Barotrauma.PlayerInput.PrimaryMouseButtonDown()",
@@ -232,7 +182,6 @@
     "Barotrauma.VideoPlayer.Update()"
   ],
   "Barotrauma.GameSession.GetSessionCrewCharacters(CharacterType)": [
-    "Barotrauma.CrewManager.GetCharacters()",
     "Barotrauma.CrewManager.GetCharacters()"
   ],
   "Barotrauma.GameSession.EndRound(String, TransitionType, TraitorResults?, Boolean)": [
@@ -266,11 +215,9 @@
   "Barotrauma.GameSession.EndMissions(TransitionType)": [
     "Barotrauma.GameSession.GetSessionCrewCharacters(CharacterType)",
     "Barotrauma.Mission.End(TransitionType)",
-    "Barotrauma.Character.CheckTalents(AbilityEffectType)",
     "Barotrauma.Character.CheckTalents(AbilityEffectType)"
   ],
   "Barotrauma.GameSession.GetPerks()": [
-    "Barotrauma.PrefabCollection\u00601.TryGet(Identifier, out T)",
     "Barotrauma.PrefabCollection\u00601.TryGet(Identifier, out T)"
   ],
   "Barotrauma.GameSession.ValidatedDisembarkPoints(GameModePreset, IEnumerable\u003CIdentifier\u003E)": [
@@ -283,48 +230,14 @@
     "Barotrauma.GameAnalyticsManager.ShouldLogRandomSample(DataSampleSize)",
     "Barotrauma.GameAnalyticsManager.AddProgressionEvent(ProgressionStatus, String)",
     "Barotrauma.GameAnalyticsManager.AddDesignEvent(String)",
-    "Barotrauma.GameAnalyticsManager.AddDesignEvent(String)",
     "Barotrauma.CrewManager.GetCharacterInfos(Boolean)",
-    "Barotrauma.GameAnalyticsManager.AddDesignEvent(String)",
-    "Barotrauma.GameAnalyticsManager.AddDesignEvent(String)",
-    "Barotrauma.GameAnalyticsManager.AddDesignEvent(String)",
-    "Barotrauma.GameAnalyticsManager.AddDesignEvent(String)",
-    "Barotrauma.GameAnalyticsManager.AddDesignEvent(String)",
-    "Barotrauma.GameAnalyticsManager.AddDesignEvent(String)",
-    "Barotrauma.GameAnalyticsManager.AddDesignEvent(String)",
-    "Barotrauma.GameAnalyticsManager.AddDesignEvent(String)",
-    "Barotrauma.GameAnalyticsManager.AddDesignEvent(String)",
-    "Barotrauma.GameAnalyticsManager.AddDesignEvent(String)",
-    "Barotrauma.GameAnalyticsManager.AddDesignEvent(String)",
-    "Barotrauma.GameAnalyticsManager.AddDesignEvent(String)",
-    "Barotrauma.GameAnalyticsManager.AddDesignEvent(String)",
-    "Barotrauma.GameAnalyticsManager.AddDesignEvent(String)",
-    "Barotrauma.GameAnalyticsManager.AddDesignEvent(String)",
-    "Barotrauma.GameAnalyticsManager.AddDesignEvent(String)",
-    "Barotrauma.GameAnalyticsManager.AddDesignEvent(String)",
-    "Barotrauma.GameAnalyticsManager.AddDesignEvent(String)",
-    "Barotrauma.GameAnalyticsManager.AddDesignEvent(String)",
-    "Barotrauma.GameAnalyticsManager.AddDesignEvent(String)",
-    "Barotrauma.GameAnalyticsManager.AddDesignEvent(String)",
-    "Barotrauma.GameAnalyticsManager.AddDesignEvent(String, Double)",
-    "Barotrauma.GameAnalyticsManager.AddDesignEvent(String, Double)",
-    "Barotrauma.GameAnalyticsManager.AddDesignEvent(String)",
-    "Barotrauma.GameAnalyticsManager.AddDesignEvent(String)",
-    "Barotrauma.GameAnalyticsManager.AddDesignEvent(String)"
+    "Barotrauma.GameAnalyticsManager.AddDesignEvent(String, Double)"
   ],
   "Barotrauma.GameSession.LogEndRoundStats(String, TraitorResults?)": [
     "Barotrauma.GameAnalyticsManager.ShouldLogRandomSample(DataSampleSize)",
     "Barotrauma.SubmarineInfo.IsVanillaSubmarine()",
     "Barotrauma.GameAnalyticsManager.AddDesignEvent(String, Double)",
-    "Barotrauma.GameAnalyticsManager.AddDesignEvent(String, Double)",
     "Barotrauma.CrewManager.GetCharacterInfos(Boolean)",
-    "Barotrauma.GameAnalyticsManager.AddDesignEvent(String, Double)",
-    "Barotrauma.GameAnalyticsManager.AddDesignEvent(String, Double)",
-    "Barotrauma.GameAnalyticsManager.AddDesignEvent(String, Double)",
-    "Barotrauma.GameAnalyticsManager.AddDesignEvent(String, Double)",
-    "Barotrauma.GameAnalyticsManager.AddDesignEvent(String)",
-    "Barotrauma.GameAnalyticsManager.AddDesignEvent(String)",
-    "Barotrauma.GameAnalyticsManager.AddDesignEvent(String)",
     "Barotrauma.GameAnalyticsManager.AddDesignEvent(String)"
   ],
   "Barotrauma.GameSession.KillCharacter(Character)": [
@@ -345,13 +258,7 @@
   "Barotrauma.GameSession.IsCompatibleWithEnabledContentPackages(IList\u003CString\u003E, out LocalizedString)": [
     "Barotrauma.ContentPackage.NameMatches(String)",
     "Barotrauma.TextManager.GetWithVariable(String, String, LocalizedString, FormatCapitals)",
-    "Barotrauma.TextManager.GetWithVariable(String, String, LocalizedString, FormatCapitals)",
-    "Barotrauma.StringExtensions.IsNullOrEmpty(LocalizedString)",
-    "Barotrauma.TextManager.GetWithVariable(String, String, LocalizedString, FormatCapitals)",
-    "Barotrauma.StringExtensions.IsNullOrEmpty(LocalizedString)",
-    "Barotrauma.TextManager.GetWithVariable(String, String, LocalizedString, FormatCapitals)",
-    "Barotrauma.StringExtensions.IsNullOrEmpty(LocalizedString)",
-    "Barotrauma.TextManager.GetWithVariable(String, String, LocalizedString, FormatCapitals)"
+    "Barotrauma.StringExtensions.IsNullOrEmpty(LocalizedString)"
   ],
   "Barotrauma.GameSession.Save(String, Boolean)": [
     "Barotrauma.SerializableDateTime.ToUnixTime()",

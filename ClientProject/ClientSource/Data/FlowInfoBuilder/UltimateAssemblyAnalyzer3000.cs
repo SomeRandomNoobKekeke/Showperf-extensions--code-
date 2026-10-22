@@ -42,7 +42,7 @@ public class UltimateAssemblyAnalyzer3000
     => GetCalledMethods(ToMethodDefinition(method)).Select(ToMethodBase);
 
   public IEnumerable<MethodDefinition> GetCalledMethods(MethodDefinition method)
-    => _GetCalledMethods(method);
+    => _GetCalledMethods(method).Distinct();
 
   private IEnumerable<MethodDefinition> _GetCalledMethods(MethodDefinition method)
   {
