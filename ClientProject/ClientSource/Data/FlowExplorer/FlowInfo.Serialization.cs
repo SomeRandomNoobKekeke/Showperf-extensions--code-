@@ -3,6 +3,7 @@ using HarmonyLib;
 using System.Text;
 using System.Text.Json;
 using CUILibs;
+using System.Text.Encodings.Web;
 
 namespace ShowperfExtensions;
 
@@ -16,6 +17,7 @@ public partial class FlowInfo
     ), new JsonSerializerOptions()
     {
       WriteIndented = true,
+      Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
     });
   }
   public static FlowInfo Parse(string raw)
