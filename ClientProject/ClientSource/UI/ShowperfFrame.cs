@@ -8,16 +8,14 @@ namespace ShowperfExtensions;
 
 public partial class ShowperfFrame : CUIDefault.Frame
 {
-  public const string ShowMethodDetails_Command = "show method details";
-  public const string OpenInMethodBrowser_Command = "open in method browser";
 
 
   public CUIPages Pages { get; }
-  public MethodBrowserPage MethodBrowserPage = new();
-  public CustomPatchesPage CustomPatchesPage { get; } = new();
-  public MethodDetailsPage MethodDetailsPage { get; } = new();
 
-  public ShowperfFrame() : base("Showperf", 400, 600)
+  public CustomPatchesPage CustomPatchesPage { get; } = new();
+  public MethodsPage MethodsPage { get; } = new();
+
+  public ShowperfFrame() : base("Showperf", 600, 600)
   {
     Anchor = CUIAnchor.Center;
     OnOpen += DeepRefresh;
@@ -33,38 +31,19 @@ public partial class ShowperfFrame : CUIDefault.Frame
     {
       btn.Flex = 1;
       btn.GroupName = "ShowperfFrame pages";
+      btn.CullChildren = true;
     }))
     {
-      this["layout"]["header"]["Browse Methods"] = new CUIRadioButton("Browse Methods")
-      {
-        OnSelected = () => Pages.OpenPage(MethodBrowserPage),
-        IsSelected = true,
-      };
-
-      this["layout"]["header"]["Custom Patches"] = new CUIRadioButton("Custom Patches")
+      this["layout"]["header"]["Custom Patches"] = new CUIRadioButton("Patches")
       {
         OnSelected = () => Pages.OpenPage(CustomPatchesPage),
       };
-
-      this["layout"]["header"]["Method Details"] = new CUIRadioButton("Method Details")
+      this["layout"]["header"]["Methods"] = new CUIRadioButton("Methods")
       {
-        OnSelected = () => Pages.OpenPage(MethodDetailsPage),
+        OnSelected = () => Pages.OpenPage(MethodsPage),
       };
     }
-    this["layout"]["header"].DeepPalette = CUICore.Palettes.Secondary;
 
-    Commands.ListenFor<MethodBase>(ShowMethodDetails_Command, (mb) =>
-    {
-      Get<CUIRadioButton>("layout.header.Method Details").Select();
-      MethodDetailsPage.Method = mb;
-    });
-
-    Commands.ListenFor(OpenInMethodBrowser_Command, (o) =>
-    {
-      Get<CUIRadioButton>("layout.header.Browse Methods").Select();
-      MethodBrowserPage.GoToUnknown(o);
-    });
-
-    Pages.OpenPage(MethodBrowserPage);
+    Get<CUIRadioButton>("layout.header.Methods").Select();
   }
 }

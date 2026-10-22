@@ -33,7 +33,7 @@ public class MethodDetailsPage : CUIPage
     this["layout"]["location panel"]["go up"] = new CUIIconButton()
     {
       Icon = CUISprite.ArrowUpIcon,
-      OnMouseDown = (e) => Commands.SendUp(ShowperfFrame.OpenInMethodBrowser_Command, Method),
+      OnMouseDown = (e) => Commands.SendUp(MethodsPage.OpenInMethodBrowser_Command, Method),
     };
     this["layout"]["location panel"]["method name"] = MethodName = new CUITextBlock("No Method")
     {

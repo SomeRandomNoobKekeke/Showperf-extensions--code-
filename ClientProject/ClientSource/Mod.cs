@@ -7,6 +7,8 @@ namespace ShowperfExtensions;
 
 public partial class Mod
 {
+  public static Mod Instance { get; private set; }
+
   public Logger Logger { get; } = new();
 
   public static Patcher Patcher { get; private set; } = new();
@@ -16,9 +18,12 @@ public partial class Mod
 
   public void Init()
   {
+    Instance = this;
     Logger.Log("ShowperfExtensions compiled");
 
     // PluginCommands.Add("showperf", (args) => ShowperfFrame.Open());
+
+    LoadData();
 
     AddPatch(new PatchInfo(
       typeof(Item).GetMethod("Update")!,
@@ -48,6 +53,7 @@ public partial class Mod
   {
     Patcher.RemoveAllPatches();
     Patcher = null;
+    Instance = null;
   }
 
   public void OnContentLoaded()

@@ -10,7 +10,9 @@ public class FlowExplorer
 
   public MethodBase Current { get; set; }
 
+  public bool Contains(MethodBase mb) => FlowInfo.ContainsKey(mb);
+
   public MethodBase[] GetCalledMethods()
-    => FlowInfo.Data.TryGetValue(Current, out MethodBase[] called) ? called : [];
+    => FlowInfo.TryGetValue(Current, out MethodBase[] called) ? called : [];
 
 }

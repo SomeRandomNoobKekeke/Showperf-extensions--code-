@@ -6,19 +6,11 @@ using CUILibs;
 
 namespace ShowperfExtensions;
 
-public class FlowInfo
+public partial class FlowInfo
 {
-  private static ILogger Logger => CUILibs.Logger.Default;
-
-
-  public Dictionary<MethodBase, MethodBase[]> Data { get; set; } = [];
-
-
-
-
   public string Serialize()
   {
-    return JsonSerializer.Serialize(Data.ToDictionary(
+    return JsonSerializer.Serialize(this.ToDictionary(
       kvp => MethodBaseParser.Serialize(kvp.Key),
       kvp => kvp.Value.Select(MethodBaseParser.Serialize)
     ), new JsonSerializerOptions()
@@ -36,7 +28,7 @@ public class FlowInfo
     }
     catch (Exception e)
     {
-      Logger.Error(e);
+      Logger.Default.Error(e);
     }
 
     FlowInfo info = new();
@@ -45,14 +37,10 @@ public class FlowInfo
       MethodBase mb = MethodBaseParser.Parse(method);
       if (mb is not null)
       {
-        info.Data[mb] = calledMethods.Select(MethodBaseParser.Parse).Where(mb => mb != null).ToArray();
+        info[mb] = calledMethods.Select(MethodBaseParser.Parse).Where(mb => mb != null).ToArray();
       }
     }
 
     return info;
   }
-
-
-  public FlowInfo() { }
-  public FlowInfo(Dictionary<MethodBase, MethodBase[]> data) => Data = data;
 }

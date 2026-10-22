@@ -83,7 +83,7 @@ public class MethodBrowserPage : CUIPage
   {
     if (node is CodeExplorer.MethodNode mn)
     {
-      Commands.SendUp(ShowperfFrame.ShowMethodDetails_Command, mn.Method);
+      Commands.SendUp(MethodsPage.ShowMethodDetails_Command, mn.Method);
       return;
     }
 
@@ -106,9 +106,7 @@ public class MethodBrowserPage : CUIPage
       FitContent = new CUIBool2(false, true),
     };
 
-    this["layout"]["header"]["location panel"] = new CUIDefault.HorizontalPanel()
-    {
-    };
+    this["layout"]["header"]["location panel"] = new CUIDefault.HorizontalPanel();
     this["layout"]["header"]["location panel"]["go up"] = new CUIIconButton()
     {
       Icon = CUISprite.ArrowUpIcon,
@@ -122,10 +120,7 @@ public class MethodBrowserPage : CUIPage
       Padding = new CUISizes(4, 4, 4, 4),
     };
 
-    this["layout"]["header"]["search panel"] = new CUIDefault.HorizontalPanel()
-    {
-
-    };
+    this["layout"]["header"]["search panel"] = new CUIDefault.HorizontalPanel();
     this["layout"]["header"]["search panel"]["search label"] = new CUIButton("Search:")
     {
       OnMouseDown = (e) => { Refresh(); },
@@ -144,7 +139,7 @@ public class MethodBrowserPage : CUIPage
 
     ChildNodeList = Get<CUIVerticalList>("layout.main.nodes.list");
 
-    DeepPalette = CUICore.Palettes.Tertiary;
+    DeepPalette = CUICore.Palettes.Secondary;
 
 
   }

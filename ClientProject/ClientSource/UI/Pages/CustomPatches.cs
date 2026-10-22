@@ -11,7 +11,7 @@ public class CustomPatchesPage : CUIPage
 
   public Dictionary<string, PatchInfo> Patches { get; } = new();
 
-  public void AddPatch(PatchInfo info) => Patches[info.ID] = info;
+  public void AddPatch(PatchInfo info) => Patches[info.Name] = info;
 
   public override void Refresh()
   {
