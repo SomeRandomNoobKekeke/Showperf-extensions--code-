@@ -26,12 +26,7 @@ public partial class Mod
 
     FlowInfo info = FlowInfo.LoadFrom(FlowInfoPath);
 
-    MethodInfo mi = typeof(GameSession).GetMethod("Update");
-
     sw.Restart();
-
-
-
     info.Merge(FlowInfoBuilder.GetFlowInfo(typeof(GameSession)));
     sw.Stop();
     Logger.LogVars(sw.ElapsedMilliseconds);

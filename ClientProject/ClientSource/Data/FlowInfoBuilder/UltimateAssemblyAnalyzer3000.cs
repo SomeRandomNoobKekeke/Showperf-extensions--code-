@@ -29,8 +29,6 @@ public class UltimateAssemblyAnalyzer3000
   public Module BarotraumaReflectionModule { get; }
   public ModuleDefinition BarotraumaCecilModule { get; }
 
-  public HashSet<string> AllowedModules { get; } = new();
-
 
   public MethodBase ToMethodBase(MethodDefinition method)
     => BarotraumaReflectionModule.ResolveMethod(method.MetadataToken.ToInt32())!;

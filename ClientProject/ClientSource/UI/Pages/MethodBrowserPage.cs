@@ -106,6 +106,8 @@ public class MethodBrowserPage : CUIPage
       FitContent = new CUIBool2(false, true),
     };
 
+    this["layout"]["main"] = new CUIVerticalList() { Flex = 1 };
+
     this["layout"]["header"]["location panel"] = new CUIDefault.HorizontalPanel();
     this["layout"]["header"]["location panel"]["go up"] = new CUIIconButton()
     {
@@ -134,7 +136,7 @@ public class MethodBrowserPage : CUIPage
       }
     };
 
-    this["layout"]["main"] = new CUIVerticalList() { Flex = 1 };
+
     this["layout"]["main"]["nodes"] = new CUIDefault.ListWithScrollbar() { Flex = 1 };
 
     ChildNodeList = Get<CUIVerticalList>("layout.main.nodes.list");
