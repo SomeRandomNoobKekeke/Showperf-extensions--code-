@@ -56,6 +56,12 @@ public class MethodBaseParserTest : UTestPack
         MethodBaseParser.Serialize(typeof(Color).GetMethod("Lerp")!),
         "Microsoft.Xna.Framework.Color.Lerp(Color, Color, Single)"
       ),
+      new UTest(
+        MethodBaseParser.Serialize(typeof(Barotrauma.Items.Components.ItemContainer.ContainedItem).GetMethod("ToString")!),
+        "Barotrauma.Items.Components.ItemContainer+ContainedItem.ToString()"
+      ),
+
+
     ];
   }
 

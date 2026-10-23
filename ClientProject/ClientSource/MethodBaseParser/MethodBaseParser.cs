@@ -22,25 +22,6 @@ public static class MethodBaseParser
 
   public static string Serialize(MethodBase mb)
   {
-    List<string> nameParts = [mb.Name];
-
-    Type declaringType = mb.DeclaringType;
-    while (declaringType != null)
-    {
-      nameParts.Add(declaringType.Name);
-      declaringType = declaringType.DeclaringType;
-    }
-
-    nameParts.Add(mb.DeclaringType.Namespace);
-
-    if (mb is ConstructorInfo)
-    {
-      nameParts[0] = mb.IsConstructor ? ConstuctorName : StaticConstuctorName;
-    }
-
-    nameParts.Reverse();
-
-
     string SerializeParameterInfo(ParameterInfo pi)
     {
       string SerializeType(Type T)
@@ -68,8 +49,13 @@ public static class MethodBaseParser
       return SerializeType(pi.ParameterType);
     }
 
+    string methodName = mb is ConstructorInfo ?
+      mb.IsConstructor ? ConstuctorName : StaticConstuctorName :
+      mb.Name;
+
+
     StringBuilder sb = new();
-    sb.Append(string.Join('.', nameParts));
+    sb.Append($"{mb.DeclaringType.FullName}.{methodName}");
     if (mb is MethodInfo mi)
     {
       if (mi.ContainsGenericParameters)

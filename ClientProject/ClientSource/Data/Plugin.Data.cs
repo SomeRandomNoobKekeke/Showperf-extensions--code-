@@ -15,34 +15,25 @@ public partial class Plugin
   public CallGraphBuilder CallGraphBuilder { get; } = new();
 
 
-
   public string CallGraphPath => Path.Combine(ModInfo.Dir, "Data", "CallGraph.json");
+
 
   private void LoadData()
   {
     Stopwatch sw = new Stopwatch();
-    CallGraph info = null;
 
+    sw.Restart();
     try
     {
-      sw.Restart();
-      info = CallGraphBuilder.ExtractFullCallGraph();
+      // CallGraphExplorer.CallGraph = CallGraphBuilder.ExtractFullCallGraph();
+      CallGraphExplorer.CallGraph = CallGraph.LoadFrom(CallGraphPath);
     }
     catch (Exception e)
     {
-      CUI.Logger.Error(e);
+      Logger.Default.Error(e);
     }
-    finally
-    {
-      sw.Stop();
-    }
-
-
+    sw.Stop();
 
     CUI.Logger.LogVars(sw.ElapsedMilliseconds);
-
-    CallGraphExplorer.CallGraph = info;
-    info.SaveTo(CallGraphPath);
-
   }
 }

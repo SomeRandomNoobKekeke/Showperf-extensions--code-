@@ -12,7 +12,9 @@ public class CallGraphExplorer
 
   public bool Contains(MethodBase mb) => CallGraph.ContainsKey(mb);
 
-  public MethodBase[] GetCalledMethods()
-    => CallGraph.TryGetValue(Current, out MethodBase[] called) ? called : [];
+  public List<MethodBase> GetCallinhMethods()
+    => CallGraph.TryGetValue(Current, out CallGraph.Node node) ? node.CallingMethods : [];
+  public List<MethodBase> GetCalledMethods()
+    => CallGraph.TryGetValue(Current, out CallGraph.Node node) ? node.CalledMethods : [];
 
 }

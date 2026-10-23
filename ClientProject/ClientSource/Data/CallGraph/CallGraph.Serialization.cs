@@ -12,7 +12,7 @@ public partial class CallGraph
   public string Serialize()
   {
     Dictionary<string, IEnumerable<string>> dict = new();
-    foreach (var (method, calledMethods) in this)
+    foreach (var (method, node) in this)
     {
       string key = MethodBaseParser.Serialize(method);
 
@@ -23,7 +23,7 @@ public partial class CallGraph
         Logger.Default.Warning($"CallGraph has duplicate: {method.DeclaringType}.{method}");
       }
 
-      dict[MethodBaseParser.Serialize(method)] = calledMethods.Select(MethodBaseParser.Serialize);
+      dict[MethodBaseParser.Serialize(method)] = node.CalledMethods.Select(MethodBaseParser.Serialize);
     }
 
     return JsonSerializer.Serialize(dict, new JsonSerializerOptions()
@@ -45,7 +45,7 @@ public partial class CallGraph
       Logger.Default.Error(e);
     }
 
-    CallGraph info = new();
+    CallGraph callGraph = new();
     foreach (var (method, calledMethods) in dict)
     {
       MethodBase mb = MethodBaseParser.Parse(method);
@@ -54,10 +54,33 @@ public partial class CallGraph
         Logger.Default.Warning($"Couldn't deserialize [{method}]");
         continue;
       }
-
-      info[mb] = calledMethods.Select(MethodBaseParser.Parse).Where(mb => mb != null).ToArray();
+      Node node = callGraph[mb] = new Node(mb);
+      node.CalledMethods = calledMethods.Select(MethodBaseParser.Parse).Where(mb => mb != null).ToList();
     }
 
-    return info;
+    callGraph.Connect();
+
+    return callGraph;
+  }
+
+  /// <summary>
+  /// should be called once
+  /// </summary>
+  internal void Connect()
+  {
+    foreach (var (method, node) in this)
+    {
+      foreach (MethodBase called in node.CalledMethods)
+      {
+        if (this.TryGetValue(called, out Node calledNode))
+        {
+          calledNode.CallingMethods.Add(method);
+        }
+        // else
+        // {
+        //   Logger.Default.Warning($"Called method is not in CallGraph [{method}]->[{called}]");
+        // }
+      }
+    }
   }
 }

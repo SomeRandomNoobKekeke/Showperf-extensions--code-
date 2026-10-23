@@ -21,7 +21,6 @@ public partial class Plugin
 
   public void Experiment()
   {
-    // MethodInfo mi = typeof(LocalizableString).GetMethods("GetWithVariables");
-    // Logger.Default.Log(Logger.Wrap.IEnumerable(typeof(Barotrauma.TextManager.Barotrauma).GetMethods(), true));
+
   }
 }

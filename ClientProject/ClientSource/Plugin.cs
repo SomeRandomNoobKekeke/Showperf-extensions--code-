@@ -45,10 +45,8 @@ public partial class Plugin
     Utils.RunWithDelay(Experiment, 500);
     // Experiment();
 
-    PluginCommands.Add("print_assemblies", (args) =>
-    {
-      CUI.Logger.Log(Logger.Wrap.IEnumerable(AppDomain.CurrentDomain.GetAssemblies(), true));
-    });
+    AddCommands();
+
   }
 
   public void Dispose()
