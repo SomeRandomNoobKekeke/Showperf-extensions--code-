@@ -3,7 +3,7 @@ using Microsoft.Xna.Framework;
 
 namespace ShowperfExtensions;
 
-public partial class Mod
+public partial class Plugin
 {
 
 }

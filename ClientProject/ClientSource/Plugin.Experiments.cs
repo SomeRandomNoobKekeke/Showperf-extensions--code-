@@ -14,7 +14,7 @@ using MonoMod.Utils;
 
 namespace ShowperfExtensions;
 
-public partial class Mod
+public partial class Plugin
 {
   public static BindingFlags Pls => BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static;
 

@@ -4,7 +4,7 @@ using Barotrauma.LuaCs;
 
 namespace ShowperfExtensions
 {
-  public partial class Mod : IAssemblyPlugin
+  public partial class Plugin : IAssemblyPlugin
   {
     public void Initialize() => Init();
     public void OnLoadCompleted() { }

@@ -2,7 +2,7 @@
 
 namespace ShowperfExtensions;
 
-public partial class Mod
+public partial class Plugin
 {
   public void Init()
   {

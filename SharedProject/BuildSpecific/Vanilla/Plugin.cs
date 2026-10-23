@@ -4,7 +4,7 @@ using Microsoft.Xna.Framework;
 
 namespace ShowperfExtensions
 {
-  public partial class Mod : IBarotraumaPlugin
+  public partial class Plugin : IBarotraumaPlugin
   {
 
   }

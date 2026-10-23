@@ -4,7 +4,7 @@ using System.Reflection;
 
 namespace ShowperfExtensions;
 
-public partial class Patcher
+public partial class PatchInstaller
 {
   private Harmony Harmony { get; } = new Harmony("showperf.patches");
   private HashSet<PatchInfo> InstalledPatches { get; } = new();

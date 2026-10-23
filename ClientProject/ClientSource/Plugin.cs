@@ -5,27 +5,29 @@ using Microsoft.Xna.Framework;
 
 namespace ShowperfExtensions;
 
-public partial class Mod
+public partial class Plugin
 {
-  public static Mod Instance { get; private set; }
+  public static Plugin? Instance { get; private set; }
+  public SingletonsContainer Singletons { get; private set; } = new();
 
-  public Logger Logger { get; } = new();
 
-  public static Patcher Patcher { get; private set; } = new();
+
+
   public ShowperfFrame ShowperfFrame { get; } = new();
 
-  public void AddPatch(PatchInfo info) => ShowperfFrame.CustomPatchesPage.AddPatch(info);
 
   public void Init()
   {
     Instance = this;
-    Logger.Log("ShowperfExtensions compiled");
+
+    CUI.Logger.Log("ShowperfExtensions compiled");
 
     // PluginCommands.Add("showperf", (args) => ShowperfFrame.Open());
 
     LoadData();
 
-    AddPatch(new PatchInfo(
+    CustomPatches.Add(new PatchInfo(
+      "bruh",
       typeof(Item).GetMethod("Update")!,
       typeof(Item_Patch).GetMethod("Update")!,
       HarmonyLib.HarmonyPatchType.Postfix
@@ -45,14 +47,14 @@ public partial class Mod
 
     PluginCommands.Add("print_assemblies", (args) =>
     {
-      Logger.Log(Logger.Wrap.IEnumerable(AppDomain.CurrentDomain.GetAssemblies(), true));
+      CUI.Logger.Log(Logger.Wrap.IEnumerable(AppDomain.CurrentDomain.GetAssemblies(), true));
     });
   }
 
   public void Dispose()
   {
-    Patcher.RemoveAllPatches();
-    Patcher = null;
+    Singletons.Dispose();
+    Singletons = null;
     Instance = null;
   }
 

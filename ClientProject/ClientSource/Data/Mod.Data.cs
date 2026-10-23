@@ -8,7 +8,7 @@ using System.Diagnostics;
 
 namespace ShowperfExtensions;
 
-public partial class Mod
+public partial class Plugin
 {
   public CodeExplorer CodeExplorer { get; } = new CodeExplorer(typeof(GameMain).Assembly);
   public FlowExplorer FlowExplorer { get; } = new();
@@ -29,7 +29,7 @@ public partial class Mod
     sw.Restart();
     info.Merge(FlowInfoBuilder.GetFlowInfo(typeof(GameSession)));
     sw.Stop();
-    Logger.LogVars(sw.ElapsedMilliseconds);
+    CUI.Logger.LogVars(sw.ElapsedMilliseconds);
 
     FlowExplorer.FlowInfo = info;
     info.SaveTo(FlowInfoPath);

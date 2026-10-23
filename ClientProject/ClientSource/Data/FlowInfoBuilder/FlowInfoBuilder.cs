@@ -15,7 +15,7 @@ public class FlowInfoBuilder
   public static BindingFlags Pls = BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic;
 
 
-  public UltimateAssemblyAnalyzer3000 Analyzer => Mod.Analyzer;
+  public UltimateAssemblyAnalyzer3000 Analyzer => Plugin.Analyzer;
 
   public FlowInfo GetFlowInfo(MethodBase method)
   {
