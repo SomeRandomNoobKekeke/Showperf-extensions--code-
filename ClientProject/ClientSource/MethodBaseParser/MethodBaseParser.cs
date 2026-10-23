@@ -3,6 +3,7 @@ using Barotrauma;
 using CUILibs;
 using FarseerPhysics.Dynamics;
 using Microsoft.Xna.Framework;
+using System.Text;
 
 namespace ShowperfExtensions;
 
@@ -21,23 +22,23 @@ public static class MethodBaseParser
 
   public static string Serialize(MethodBase mb)
   {
-    List<string> parts = [mb.Name];
+    List<string> nameParts = [mb.Name];
 
     Type declaringType = mb.DeclaringType;
     while (declaringType != null)
     {
-      parts.Add(declaringType.Name);
+      nameParts.Add(declaringType.Name);
       declaringType = declaringType.DeclaringType;
     }
 
-    parts.Add(mb.DeclaringType.Namespace);
+    nameParts.Add(mb.DeclaringType.Namespace);
 
     if (mb is ConstructorInfo)
     {
-      parts[0] = mb.IsConstructor ? ConstuctorName : StaticConstuctorName;
+      nameParts[0] = mb.IsConstructor ? ConstuctorName : StaticConstuctorName;
     }
 
-    parts.Reverse();
+    nameParts.Reverse();
 
 
     string SerializeParameterInfo(ParameterInfo pi)
@@ -67,15 +68,31 @@ public static class MethodBaseParser
       return SerializeType(pi.ParameterType);
     }
 
+    StringBuilder sb = new();
+    sb.Append(string.Join('.', nameParts));
+    if (mb is MethodInfo mi)
+    {
+      if (mi.ContainsGenericParameters)
+      {
+        sb.Append($"<{string.Join(',', mi.GetGenericArguments().Select(T => T.Name))}>");
+      }
+    }
+    sb.Append($"({string.Join(", ", mb.GetParameters().Select(SerializeParameterInfo))})");
 
-    return $"{string.Join('.', parts)}({string.Join(", ", mb.GetParameters().Select(SerializeParameterInfo))})";
+    return sb.ToString();
   }
 
   public static MethodBase Parse(string raw)
   {
-    int i = raw.IndexOf('(');
-    string[] methodNameParts = raw.Substring(0, i).Split('.');
-    string args = raw.Substring(i, raw.Length - i);
+    int endOfName = raw.IndexOfAny(['(', '<']);
+    int startOfArgs = raw.IndexOf('(');
+
+    // bool hasGenericArgs = endOfName != startOfArgs;
+    // Akshually i don't care coz i compare by serializing again anyway xd
+
+
+    string[] methodNameParts = raw.Substring(0, endOfName).Split('.');
+    string args = raw.Substring(endOfName, raw.Length - endOfName);
 
     if (methodNameParts.Length < 2) return null;
 

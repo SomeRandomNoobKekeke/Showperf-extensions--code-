@@ -11,7 +11,7 @@ namespace ShowperfExtensions;
 
 public class FlowBrowserPage : CUIPage
 {
-  public FlowExplorer FlowExplorer { get; } = new();
+  public CallGraphExplorer FlowExplorer { get; } = new();
 
   public MethodBase Current
   {

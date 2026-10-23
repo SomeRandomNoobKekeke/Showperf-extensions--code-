@@ -44,12 +44,15 @@ public class UltimateAssemblyAnalyzer3000
 
   private IEnumerable<MethodDefinition> _GetCalledMethods(MethodDefinition method)
   {
+    if (!method.HasBody) yield break;
+
     foreach (Instruction instruction in method.Body.Instructions)
     {
       if (instruction.OpCode == OpCodes.Call || instruction.OpCode == OpCodes.Callvirt)
       {
         MethodDefinition calledMethod = (instruction.Operand as MethodReference)!.Resolve();
 
+        if (calledMethod is null) continue;
         if (calledMethod.IsGetter) continue;
         if (calledMethod.IsSetter) continue;
         if (calledMethod.IsAddOn) continue;

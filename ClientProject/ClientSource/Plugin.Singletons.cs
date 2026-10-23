@@ -20,6 +20,7 @@ public partial class Plugin
   {
     public PatchInstaller Patcher { get; } = new();
     public CustomPatchRepo CustomPatchRepo { get; } = new();
+    public UltimateAssemblyAnalyzer3000 Analyzer { get; } = new();
 
     public void Dispose()
     {
@@ -28,6 +29,7 @@ public partial class Plugin
   }
 
 
+  public static UltimateAssemblyAnalyzer3000 Analyzer => Instance?.Singletons.Analyzer!;
   public static PatchInstaller PatchInstaller => Instance?.Singletons.Patcher!;
   public static CustomPatchRepo CustomPatches => Instance?.Singletons.CustomPatchRepo!;
 

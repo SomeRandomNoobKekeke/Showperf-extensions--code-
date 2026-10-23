@@ -11,28 +11,38 @@ namespace ShowperfExtensions;
 public partial class Plugin
 {
   public CodeExplorer CodeExplorer { get; } = new CodeExplorer(typeof(GameMain).Assembly);
-  public FlowExplorer FlowExplorer { get; } = new();
-  public FlowInfoBuilder FlowInfoBuilder { get; } = new();
+  public CallGraphExplorer CallGraphExplorer { get; } = new();
+  public CallGraphBuilder CallGraphBuilder { get; } = new();
 
-  private UltimateAssemblyAnalyzer3000 _Analyzer;
-  public static UltimateAssemblyAnalyzer3000 Analyzer => Instance._Analyzer ??= new();
 
-  public string FlowInfoPath => Path.Combine(ModInfo.Dir, "Data", "FlowInfo.json");
+
+  public string CallGraphPath => Path.Combine(ModInfo.Dir, "Data", "CallGraph.json");
 
   private void LoadData()
   {
     Stopwatch sw = new Stopwatch();
+    CallGraph info = null;
+
+    try
+    {
+      sw.Restart();
+      info = CallGraphBuilder.ExtractFullCallGraph();
+    }
+    catch (Exception e)
+    {
+      CUI.Logger.Error(e);
+    }
+    finally
+    {
+      sw.Stop();
+    }
 
 
-    FlowInfo info = FlowInfo.LoadFrom(FlowInfoPath);
 
-    sw.Restart();
-    info.Merge(FlowInfoBuilder.GetFlowInfo(typeof(GameSession)));
-    sw.Stop();
     CUI.Logger.LogVars(sw.ElapsedMilliseconds);
 
-    FlowExplorer.FlowInfo = info;
-    info.SaveTo(FlowInfoPath);
+    CallGraphExplorer.CallGraph = info;
+    info.SaveTo(CallGraphPath);
 
   }
 }

@@ -6,9 +6,9 @@ using CUILibs;
 
 namespace ShowperfExtensions;
 
-public partial class FlowInfo : Dictionary<MethodBase, MethodBase[]>
+public partial class CallGraph : Dictionary<MethodBase, MethodBase[]>
 {
-  public void Merge(FlowInfo other)
+  public void Merge(CallGraph other)
   {
     foreach (var (key, value) in other)
     {

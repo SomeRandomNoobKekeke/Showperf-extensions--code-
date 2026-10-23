@@ -8,12 +8,12 @@ using System.IO;
 
 namespace ShowperfExtensions;
 
-public partial class FlowInfo
+public partial class CallGraph
 {
-  public static FlowInfo LoadFrom(string path)
+  public static CallGraph LoadFrom(string path)
   {
-    if (!File.Exists(path)) return new FlowInfo();
-    return FlowInfo.Parse(File.ReadAllText(path));
+    if (!File.Exists(path)) return new CallGraph();
+    return CallGraph.Parse(File.ReadAllText(path));
   }
 
   public void SaveTo(string path)

@@ -59,6 +59,24 @@ public class MethodBaseParserTest : UTestPack
     ];
   }
 
+  public List<UTest> SerializeGenericMethod()
+  {
+    return [
+      new UTest(
+        MethodBaseParser.Serialize(typeof(CharacterHealth).GetMethod("GetAffliction", 0, [
+          typeof(Identifier),typeof(bool)
+        ])!),
+        "Barotrauma.CharacterHealth.GetAffliction(Identifier, Boolean)"
+      ),
+      new UTest(
+        MethodBaseParser.Serialize(typeof(CharacterHealth).GetMethod("GetAffliction", 1, [
+          typeof(Identifier),typeof(bool)
+        ])!),
+        "Barotrauma.CharacterHealth.GetAffliction<T>(Identifier, Boolean)"
+      ),
+    ];
+  }
+
   public List<UTest> Parse()
   {
     return [
@@ -104,6 +122,24 @@ public class MethodBaseParserTest : UTestPack
           typeof(float),
           typeof(float),
           typeof(float),
+        ])!
+      ),
+    ];
+  }
+
+  public List<UTest> ParsingGenericMethod()
+  {
+    return [
+      new UTest(
+        MethodBaseParser.Parse("Barotrauma.CharacterHealth.GetAffliction(Identifier, Boolean)"),
+        typeof(CharacterHealth).GetMethod("GetAffliction", 0, [
+          typeof(Identifier),typeof(bool)
+        ])!
+      ),
+      new UTest(
+        MethodBaseParser.Parse("Barotrauma.CharacterHealth.GetAffliction<T>(Identifier, Boolean)"),
+        typeof(CharacterHealth).GetMethod("GetAffliction", 1, [
+          typeof(Identifier),typeof(bool)
         ])!
       ),
     ];
