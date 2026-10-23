@@ -10,21 +10,21 @@ public partial class Plugin
   public static Plugin? Instance { get; private set; }
   public SingletonsContainer Singletons { get; private set; } = new();
 
-
-
-
-  public ShowperfFrame ShowperfFrame { get; } = new();
+  public ShowperfFrame ShowperfFrame { get; private set; }
 
 
   public void Init()
   {
     Instance = this;
+    LoadData();
+
+    ShowperfFrame = new();
 
     CUI.Logger.Log("ShowperfExtensions compiled");
 
     // PluginCommands.Add("showperf", (args) => ShowperfFrame.Open());
 
-    LoadData();
+
 
     CustomPatches.Add(new PatchInfo(
       "bruh",

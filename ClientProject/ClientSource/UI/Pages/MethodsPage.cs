@@ -15,8 +15,8 @@ public class MethodsPage : CUIPage
   public const string OpenInMethodBrowser_Command = "open in method browser";
 
 
-  public MethodBrowserPage MethodBrowserPage { get; } = new();
-  public FlowBrowserPage FlowBrowserPage { get; } = new();
+  public TypeExplorerPage TypeExplorerPage { get; } = new();
+  public CallGraphBrowserPage CallGraphBrowserPage { get; } = new();
   public MethodDetailsPage MethodDetailsPage { get; } = new();
 
   public CUIPages Pages { get; }
@@ -35,14 +35,14 @@ public class MethodsPage : CUIPage
       btn.CullChildren = true;
     }))
     {
-      this["layout"]["header"]["Execution Flow"] = new CUIRadioButton("Execution Flow")
+      this["layout"]["header"]["CallGraphBrowser"] = new CUIRadioButton("Call Graph")
       {
-        OnSelected = () => Pages.OpenPage(FlowBrowserPage),
+        OnSelected = () => Pages.OpenPage(CallGraphBrowserPage),
       };
 
-      this["layout"]["header"]["Browse Methods"] = new CUIRadioButton("Browse")
+      this["layout"]["header"]["Browse Methods"] = new CUIRadioButton("Type Explorer")
       {
-        OnSelected = () => Pages.OpenPage(MethodBrowserPage),
+        OnSelected = () => Pages.OpenPage(TypeExplorerPage),
       };
 
       this["layout"]["header"]["Method Details"] = new CUIRadioButton("Details")
@@ -61,11 +61,11 @@ public class MethodsPage : CUIPage
     Commands.ListenFor(OpenInMethodBrowser_Command, (o) =>
     {
       Get<CUIRadioButton>("layout.header.Browse Methods").Select();
-      MethodBrowserPage.GoToUnknown(o);
+      TypeExplorerPage.GoToUnknown(o);
     });
 
 
-    Get<CUIRadioButton>("layout.header.Browse Methods").Select();
+    Get<CUIRadioButton>("layout.header.CallGraphBrowser").Select();
   }
 
 }

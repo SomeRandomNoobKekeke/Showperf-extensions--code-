@@ -11,7 +11,7 @@ namespace ShowperfExtensions;
 public partial class Plugin
 {
   public CodeExplorer CodeExplorer { get; } = new CodeExplorer(typeof(GameMain).Assembly);
-  public CallGraphExplorer CallGraphExplorer { get; } = new();
+
   public CallGraphBuilder CallGraphBuilder { get; } = new();
 
 

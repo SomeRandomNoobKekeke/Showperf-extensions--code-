@@ -9,9 +9,9 @@ using Microsoft.Xna.Framework.Input;
 
 namespace ShowperfExtensions;
 
-public class MethodBrowserPage : CUIPage
+public class TypeExplorerPage : CUIPage
 {
-  public static ICUIStyle DefaultStyle => new CUIDefaultStyle<MethodBrowserPage>((c) =>
+  public static ICUIStyle DefaultStyle => new CUIDefaultStyle<TypeExplorerPage>((c) =>
   {
     c.Background.Color = Color.Lerp(c.Palette["back"], c.Palette["main"], 0.2f);
   });
@@ -56,9 +56,9 @@ public class MethodBrowserPage : CUIPage
     {
       CodeExplorer.AssemblyNode => Color.Gray,
       CodeExplorer.NamespaceNode => Color.Gray,
-      CodeExplorer.TypeNode => Color.Blue,
-      CodeExplorer.ConstructorNode => Color.Orange,
-      CodeExplorer.MethodNode => Color.Lime,
+      CodeExplorer.TypeNode => Color.Blue.To(Color.Gray, 0.5f),
+      CodeExplorer.ConstructorNode => Color.Orange.To(Color.Gray, 0.5f),
+      CodeExplorer.MethodNode => Color.Lime.To(Color.Gray, 0.5f),
     };
 
     CUIComponent CreateNodeComponent(CodeExplorer.Node node)
@@ -98,7 +98,7 @@ public class MethodBrowserPage : CUIPage
     if (sus is Type T) GoTo(new CodeExplorer.TypeNode(CodeExplorer, T));
   }
 
-  public MethodBrowserPage()
+  public TypeExplorerPage()
   {
     this["layout"] = new CUIVerticalList() { Relative = new CUINullRect(0, 0, 1, 1) };
     this["layout"]["header"] = new CUIVerticalList()

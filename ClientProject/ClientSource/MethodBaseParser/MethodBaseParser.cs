@@ -49,9 +49,11 @@ public static class MethodBaseParser
       return SerializeType(pi.ParameterType);
     }
 
+    if (mb is null) return "";
+
     string methodName = mb is ConstructorInfo ?
-      mb.IsConstructor ? ConstuctorName : StaticConstuctorName :
-      mb.Name;
+    mb.IsConstructor ? ConstuctorName : StaticConstuctorName :
+    mb.Name;
 
 
     StringBuilder sb = new();
