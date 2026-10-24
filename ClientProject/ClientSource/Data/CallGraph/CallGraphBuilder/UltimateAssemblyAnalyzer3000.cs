@@ -65,6 +65,14 @@ public class UltimateAssemblyAnalyzer3000
     }
   }
 
+  // Nope, doesn't work and almost impossible in cecil
+  // public IEnumerable<MethodDefinition> GetOverrides(MethodDefinition method)
+  // {
+  //   return method.Overrides
+  //         .Select(reference => reference.Resolve())
+  //         .Where(def => def.Module == BarotraumaCecilModule);
+  // }
+
 
   public void PrintInstructions(MethodBase method)
   {

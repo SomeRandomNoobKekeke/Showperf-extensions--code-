@@ -25,8 +25,8 @@ public partial class Plugin
     sw.Restart();
     try
     {
-      // CallGraphExplorer.CallGraph = CallGraphBuilder.ExtractFullCallGraph();
-      CallGraphExplorer.CallGraph = CallGraph.LoadFrom(CallGraphPath);
+      // CallGraphExplorer.CallGraph = CallGraphBuilder.ExtractFullCallGraph(); // takes ~674ms
+      CallGraphExplorer.CallGraph = CallGraph.LoadFrom(CallGraphPath); // takes ~32ms
     }
     catch (Exception e)
     {

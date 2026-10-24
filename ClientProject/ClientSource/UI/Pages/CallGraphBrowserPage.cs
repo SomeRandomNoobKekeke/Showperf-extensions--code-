@@ -17,6 +17,7 @@ public class CallGraphBrowserPage : CUIPage
   public CallGraphExplorer CallGraphExplorer => Plugin.CallGraphExplorer;
   public CUIVerticalList CalledFromList { get; }
   public CUIVerticalList CallingToList { get; }
+  public CUIVerticalList OverridesList { get; }
   public CUIVerticalList Main { get; }
   public CUITextBlock LocationText { get; }
 
@@ -55,6 +56,12 @@ public class CallGraphBrowserPage : CUIPage
     foreach (MethodBase mb in CallGraphExplorer.GetCalledMethods())
     {
       CallingToList.Add(CreateMethodButton(mb));
+    }
+
+    OverridesList.Clear();
+    foreach (MethodBase mb in CallGraphExplorer.GetOverrides())
+    {
+      OverridesList.Add(CreateMethodButton(mb));
     }
   }
 
@@ -98,6 +105,13 @@ public class CallGraphBrowserPage : CUIPage
       TextAnchor = CUIAnchor.LeftCenter,
     }; ;
     Main["calling to block"]["methods"] = CallingToList = new CUIDefault.VerticalPanel();
+
+    Main["overrides block"] = new CUIDefault.VerticalBackPanel();
+    Main["overrides block"]["caption"] = new CUITextBlock("Overrides:")
+    {
+      TextAnchor = CUIAnchor.LeftCenter,
+    }; ;
+    Main["overrides block"]["methods"] = OverridesList = new CUIDefault.VerticalPanel();
 
     Current = UpdateRoot;
   }

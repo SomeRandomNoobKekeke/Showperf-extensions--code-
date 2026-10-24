@@ -13,11 +13,11 @@ public partial class CallGraph
   public static CallGraph LoadFrom(string path)
   {
     if (!File.Exists(path)) return new CallGraph();
-    return CallGraph.Parse(File.ReadAllText(path));
+    return Serializer.Parse(File.ReadAllText(path));
   }
 
   public void SaveTo(string path)
   {
-    File.WriteAllText(path, Serialize());
+    File.WriteAllText(path, Serializer.Serialize(this));
   }
 }

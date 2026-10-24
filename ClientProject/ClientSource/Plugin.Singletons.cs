@@ -20,8 +20,9 @@ public partial class Plugin
   {
     public PatchInstaller Patcher { get; } = new();
     public CustomPatchRepo CustomPatchRepo { get; } = new();
-    public UltimateAssemblyAnalyzer3000 Analyzer { get; } = new();
+    public Lazy<UltimateAssemblyAnalyzer3000> Analyzer { get; } = new();
     public CallGraphExplorer CallGraphExplorer { get; } = new();
+    public ICallGraphSerializer CallGraphSerializer { get; } = new MetadataCallGraphSerializer();
 
     public void Dispose()
     {
@@ -29,8 +30,9 @@ public partial class Plugin
     }
   }
 
+  public static ICallGraphSerializer CallGraphSerializer => Instance?.Singletons.CallGraphSerializer!;
   public static CallGraphExplorer CallGraphExplorer => Instance?.Singletons.CallGraphExplorer!;
-  public static UltimateAssemblyAnalyzer3000 Analyzer => Instance?.Singletons.Analyzer!;
+  public static UltimateAssemblyAnalyzer3000 Analyzer => Instance?.Singletons.Analyzer.Value!;
   public static PatchInstaller PatchInstaller => Instance?.Singletons.Patcher!;
   public static CustomPatchRepo CustomPatches => Instance?.Singletons.CustomPatchRepo!;
 
