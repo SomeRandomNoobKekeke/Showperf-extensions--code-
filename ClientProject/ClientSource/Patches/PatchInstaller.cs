@@ -1,4 +1,5 @@
-﻿using HarmonyLib;
+﻿using CUILibs;
+using HarmonyLib;
 using System.Collections.Immutable;
 using System.Reflection;
 
@@ -10,10 +11,37 @@ public partial class PatchInstaller
   private HashSet<PatchInfoBase> _InstalledPatches { get; } = new();
   public ImmutableHashSet<PatchInfoBase> InstalledPatches => _InstalledPatches.ToImmutableHashSet();
 
+  public Dictionary<string, PatchInfoBase> PatchesByID
+    => _InstalledPatches.ToDictionary(
+        info => info.ID,
+        info => info
+      );
+
+  public Dictionary<MethodBase, List<PatchInfoBase>> PatchesByMethod
+  {
+    get
+    {
+      Dictionary<MethodBase, List<PatchInfoBase>> dict = [];
+      foreach (var info in _InstalledPatches)
+      {
+        dict.TryAdd(info.TargetMethod, []);
+        dict[info.TargetMethod].Add(info);
+      }
+      return dict;
+    }
+  }
+
 
   public bool IsInstalled(PatchInfoBase info) => _InstalledPatches.Contains(info);
   public void TogglePatch(PatchInfoBase info)
   {
+    Logger.Default.LogVars(_InstalledPatches.Contains(info));
+    Logger.Default.LogVars(Logger.Wrap.Props(info));
+    Logger.Default.LogVars(Logger.Wrap.IEnumerable(
+      InstalledPatches.Where(i => i.TargetMethod == info.TargetMethod)
+    ));
+
+
     if (_InstalledPatches.Contains(info)) RemovePatch(info);
     else InstallPatch(info);
   }

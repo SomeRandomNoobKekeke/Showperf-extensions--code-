@@ -18,6 +18,15 @@ public partial class Plugin
 {
   public void AddCommands()
   {
+    PluginCommands.Add("showperf1.5", (args) =>
+    {
+      if (!ShowperfFrame.IsOpen)
+      {
+        ShowperfFrame.Open();
+      }
+
+    });
+
     PluginCommands.Add("_showperf_buildcallgraph", (args) =>
     {
       ICallGraphSerializer serializer = CallGraphSerializer;

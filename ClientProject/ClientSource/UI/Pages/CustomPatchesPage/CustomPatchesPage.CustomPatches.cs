@@ -53,28 +53,28 @@ public partial class CustomPatchesPage : CUIPage
         };
       }
 
-
       //TODO use grid component
+      block["table"] = new CUIDefault.HorizontalBackPanel();
+      block["table"]["keys"] = new CUIDefault.VerticalBackPanel()
+      {
+        FitContent = new CUIBool2(true, true)
+      };
+      block["table"]["values"] = new CUIDefault.VerticalBackPanel()
+      {
+        Flex = 1,
+        FitContent = new CUIBool2(false, true)
+      };
+
+      block["table"]["keys"]["target"] = new CUIDefault.SolidTextBlock("Target: ");
+      block["table"]["values"]["target"] = new CUITextBlock(MethodBaseParser.Serialize(info.TargetMethod));
+
+
       if (info is PatchInfo patchInfo)
       {
-        block["table"] = new CUIDefault.HorizontalBackPanel();
-        block["table"]["keys"] = new CUIDefault.VerticalBackPanel()
-        {
-          FitContent = new CUIBool2(true, true)
-        };
-        block["table"]["values"] = new CUIDefault.VerticalBackPanel()
-        {
-          Flex = 1,
-          FitContent = new CUIBool2(false, true)
-        };
-
-
-        block["table"]["keys"]["target"] = new CUIDefault.SolidTextBlock("Target: ");
         block["table"]["keys"]["source"] = new CUIDefault.SolidTextBlock("Source: ");
-        block["table"]["keys"]["type"] = new CUIDefault.SolidTextBlock("Type: ");
-
-        block["table"]["values"]["target"] = new CUITextBlock(MethodBaseParser.Serialize(patchInfo.TargetMethod));
         block["table"]["values"]["source"] = new CUITextBlock(MethodBaseParser.Serialize(patchInfo.PatchMethod));
+
+        block["table"]["keys"]["type"] = new CUIDefault.SolidTextBlock("Type: ");
         block["table"]["values"]["type"] = new CUITextBlock($"{patchInfo.PatchType}");
       }
 

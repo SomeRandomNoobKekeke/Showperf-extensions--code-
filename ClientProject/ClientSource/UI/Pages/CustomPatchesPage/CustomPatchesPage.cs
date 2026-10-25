@@ -13,7 +13,7 @@ public partial class CustomPatchesPage : CUIPage
   private CUIVerticalList PatchList;
 
   public CustomPatchRepo CustomPatches => Plugin.CustomPatches;
-  public static PatchInstaller PatchInstaller => Plugin.PatchInstaller;
+  public PatchInstaller PatchInstaller => Plugin.PatchInstaller;
 
   private CustomPatchesComponent CustomPatchesBlock;
   private InstalledPatchesComponent InstalledPatchesBlock;

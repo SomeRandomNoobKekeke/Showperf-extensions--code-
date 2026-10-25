@@ -23,6 +23,7 @@ public partial class Plugin
     public Lazy<UltimateAssemblyAnalyzer3000> Analyzer { get; } = new();
     public CallGraphExplorer CallGraphExplorer { get; } = new();
     public ICallGraphSerializer CallGraphSerializer { get; } = new MetadataCallGraphSerializer();
+    public StopWatchWrapper StopWatchWrapper { get; } = new();
 
     public void Dispose()
     {
@@ -35,5 +36,6 @@ public partial class Plugin
   public static UltimateAssemblyAnalyzer3000 Analyzer => Instance?.Singletons.Analyzer.Value!;
   public static PatchInstaller PatchInstaller => Instance?.Singletons.Patcher!;
   public static CustomPatchRepo CustomPatches => Instance?.Singletons.CustomPatchRepo!;
+  public static StopWatchWrapper StopWatchWrapper => Instance?.Singletons.StopWatchWrapper!;
 
 }

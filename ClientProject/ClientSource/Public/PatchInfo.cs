@@ -4,20 +4,43 @@ using System.Text;
 
 namespace ShowperfExtensions;
 
-public abstract record PatchInfoBase(string ID, string Description = "")
+public abstract class PatchInfoBase(string ID, MethodBase TargetMethod, string Description = "")
 {
+  public string ID { get; } = ID;
+  public MethodBase TargetMethod { get; } = TargetMethod;
+  public string Description { get; } = Description;
+
+
   public abstract void Install(Harmony harmony);
   public abstract void Remove(Harmony harmony);
+
+
+  public static bool operator ==(PatchInfoBase a, PatchInfoBase b) => a.Equals(b);
+  public static bool operator !=(PatchInfoBase a, PatchInfoBase b) => !a.Equals(b);
+
+  public override bool Equals(object? obj)
+  {
+    if (obj is not PatchInfoBase other) return false;
+    return ID == other.ID && TargetMethod == other.TargetMethod;
+  }
+
+  public override int GetHashCode()
+    => HashCode.Combine(ID, TargetMethod, Description);
 }
 
-public record PatchInfo(
+public class PatchInfo(
   string ID,
   MethodBase TargetMethod,
   MethodInfo PatchMethod,
   HarmonyPatchType PatchType,
   string Description = ""
-) : PatchInfoBase(ID, Description)
+) : PatchInfoBase(ID, TargetMethod, Description)
 {
+  public MethodInfo PatchMethod { get; } = PatchMethod;
+  public HarmonyPatchType PatchType { get; } = PatchType;
+
+
+
   public override void Install(Harmony harmony)
   {
     switch (PatchType)
@@ -45,12 +68,16 @@ public record PatchInfo(
   }
 }
 
-public record MultiPatchInfo(
+
+public class MultiPatchInfo(
   string ID,
+  MethodBase TargetMethod,
   IEnumerable<PatchInfo> Patches,
   string Description = ""
-) : PatchInfoBase(ID, Description)
+) : PatchInfoBase(ID, TargetMethod, Description)
 {
+  public IEnumerable<PatchInfo> Patches { get; } = Patches;
+
   public override void Install(Harmony harmony)
   {
     foreach (PatchInfo patch in Patches)
