@@ -8,7 +8,10 @@ namespace ShowperfExtensions;
 
 public partial class ShowperfFrame : CUIDefault.Frame
 {
-
+  // public static ICUIStyle DefaultStyle => new CUIDefaultStyle<ShowperfFrame>((c) =>
+  // {
+  //   c.Background.Color = c.Palette["back"].To(Color.Transparent, 0.2f);
+  // });
 
   public CUIPages Pages { get; }
 
@@ -21,11 +24,9 @@ public partial class ShowperfFrame : CUIDefault.Frame
     OnOpen += DeepRefresh;
     ResizableBoth = true;
 
-
-
     this["layout"]["handle"].Children.Insert(0, new ReloadLuaButton());
     this["layout"]["header"] = new CUIDefault.HorizontalPanel();
-    this["layout"]["main"] = Pages = new CUIPages() { Flex = 1 };
+    this["layout"]["main"] = Pages = new CUIPages() { Flex = 1, };
 
     using (new CUIContextStyle<CUIRadioButton>(btn =>
     {

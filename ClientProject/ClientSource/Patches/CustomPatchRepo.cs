@@ -6,9 +6,9 @@ namespace ShowperfExtensions;
 
 public class CustomPatchRepo
 {
-  private Dictionary<string, PatchInfo> _Patches = new();
-  public ImmutableDictionary<string, PatchInfo> Patches => _Patches.ToImmutableDictionary();
+  private Dictionary<string, PatchInfoBase> _Patches = new();
+  public ImmutableDictionary<string, PatchInfoBase> Patches => _Patches.ToImmutableDictionary();
 
 
-  public void Add(PatchInfo info) => _Patches[info.ID] = info;
+  public void Add(PatchInfoBase info) => _Patches[info.ID] = info;
 }

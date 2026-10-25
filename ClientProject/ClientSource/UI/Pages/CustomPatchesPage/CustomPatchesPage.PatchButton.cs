@@ -7,7 +7,7 @@ namespace ShowperfExtensions;
 
 public partial class CustomPatchesPage : CUIPage
 {
-  public CUIComponent CreatePatchButton(string id, PatchInfo info)
+  public CUIComponent CreatePatchButton(string id, PatchInfoBase info)
   {
     return new CUIToggleButton(id)
     {

@@ -7,7 +7,7 @@ namespace ShowperfExtensions;
 
 public static class CustomPatches
 {
-  public static void AddPatchInfo(PatchInfo info)
+  public static void AddPatchInfo(PatchInfoBase info)
   {
 
   }

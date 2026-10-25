@@ -4,40 +4,66 @@ using System.Text;
 
 namespace ShowperfExtensions;
 
+public abstract record PatchInfoBase(string ID, string Description = "")
+{
+  public abstract void Install(Harmony harmony);
+  public abstract void Remove(Harmony harmony);
+}
+
 public record PatchInfo(
   string ID,
   MethodBase TargetMethod,
   MethodInfo PatchMethod,
   HarmonyPatchType PatchType,
   string Description = ""
-)
+) : PatchInfoBase(ID, Description)
 {
-  public string ID { get; } = ID ?? throw new ArgumentNullException(nameof(ID));
-  public string Description { get; init; } = Description ?? throw new ArgumentNullException(nameof(ID));
-  public MethodBase TargetMethod { get; } = TargetMethod ?? throw new ArgumentNullException(nameof(PatchInfo.TargetMethod));
-  public MethodInfo PatchMethod { get; } = PatchMethod ?? throw new ArgumentNullException(nameof(PatchInfo.PatchMethod));
-  public HarmonyPatchType PatchType { get; } = PatchType;
-
-
-  public virtual bool Equals(PatchInfo? other)
+  public override void Install(Harmony harmony)
   {
-    if (other is null) return false;
-    if (TargetMethod != other.TargetMethod) return false;
-    if (PatchMethod != other.PatchMethod) return false;
-    if (ID != other.ID) return false;
+    switch (PatchType)
+    {
+      case HarmonyPatchType.Prefix:
+        harmony.Patch(original: TargetMethod, prefix: new HarmonyMethod(PatchMethod));
+        break;
+      case HarmonyPatchType.Postfix:
+        harmony.Patch(original: TargetMethod, postfix: new HarmonyMethod(PatchMethod));
+        break;
+      case HarmonyPatchType.Finalizer:
+        harmony.Patch(original: TargetMethod, finalizer: new HarmonyMethod(PatchMethod));
+        break;
+      case HarmonyPatchType.Transpiler:
+        harmony.Patch(original: TargetMethod, transpiler: new HarmonyMethod(PatchMethod));
+        break;
+      case HarmonyPatchType.ILManipulator:
+        harmony.Patch(original: TargetMethod, ilmanipulator: new HarmonyMethod(PatchMethod));
+        break;
+    }
+  }
+  public override void Remove(Harmony harmony)
+  {
+    harmony.Unpatch(TargetMethod, PatchMethod);
+  }
+}
 
-    return true;
+public record MultiPatchInfo(
+  string ID,
+  IEnumerable<PatchInfo> Patches,
+  string Description = ""
+) : PatchInfoBase(ID, Description)
+{
+  public override void Install(Harmony harmony)
+  {
+    foreach (PatchInfo patch in Patches)
+    {
+      patch.Install(harmony);
+    }
   }
 
-  public override int GetHashCode()
+  public override void Remove(Harmony harmony)
   {
-    return HashCode.Combine(
-      ID,
-      TargetMethod,
-      PatchMethod,
-      PatchType
-    );
+    foreach (PatchInfo patch in Patches)
+    {
+      patch.Remove(harmony);
+    }
   }
-
-
 }

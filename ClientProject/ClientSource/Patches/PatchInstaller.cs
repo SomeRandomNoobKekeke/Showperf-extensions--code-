@@ -7,56 +7,39 @@ namespace ShowperfExtensions;
 public partial class PatchInstaller
 {
   private Harmony Harmony { get; } = new Harmony("showperf.patches");
-  private HashSet<PatchInfo> _InstalledPatches { get; } = new();
-  public ImmutableHashSet<PatchInfo> InstalledPatches => _InstalledPatches.ToImmutableHashSet();
+  private HashSet<PatchInfoBase> _InstalledPatches { get; } = new();
+  public ImmutableHashSet<PatchInfoBase> InstalledPatches => _InstalledPatches.ToImmutableHashSet();
 
 
-  public bool IsInstalled(PatchInfo info) => _InstalledPatches.Contains(info);
-  public void TogglePatch(PatchInfo info)
+  public bool IsInstalled(PatchInfoBase info) => _InstalledPatches.Contains(info);
+  public void TogglePatch(PatchInfoBase info)
   {
     if (_InstalledPatches.Contains(info)) RemovePatch(info);
     else InstallPatch(info);
   }
 
-  public void InstallPatch(PatchInfo info)
+  public void InstallPatch(PatchInfoBase info)
   {
     if (_InstalledPatches.Contains(info)) return;
 
-    switch (info.PatchType)
-    {
-      case HarmonyPatchType.Prefix:
-        Harmony.Patch(original: info.TargetMethod, prefix: new HarmonyMethod(info.PatchMethod));
-        break;
-      case HarmonyPatchType.Postfix:
-        Harmony.Patch(original: info.TargetMethod, postfix: new HarmonyMethod(info.PatchMethod));
-        break;
-      case HarmonyPatchType.Finalizer:
-        Harmony.Patch(original: info.TargetMethod, finalizer: new HarmonyMethod(info.PatchMethod));
-        break;
-      case HarmonyPatchType.Transpiler:
-        Harmony.Patch(original: info.TargetMethod, transpiler: new HarmonyMethod(info.PatchMethod));
-        break;
-      case HarmonyPatchType.ILManipulator:
-        Harmony.Patch(original: info.TargetMethod, ilmanipulator: new HarmonyMethod(info.PatchMethod));
-        break;
-    }
+    info.Install(Harmony);
 
     _InstalledPatches.Add(info);
   }
 
-  public void RemovePatch(PatchInfo info)
+  public void RemovePatch(PatchInfoBase info)
   {
     if (!_InstalledPatches.Contains(info)) return;
 
-    Harmony.Unpatch(info.TargetMethod, info.PatchMethod);
+    info.Remove(Harmony);
     _InstalledPatches.Remove(info);
   }
 
   public void RemoveAllPatches()
   {
-    foreach (PatchInfo info in _InstalledPatches)
+    foreach (PatchInfoBase info in _InstalledPatches)
     {
-      Harmony.Unpatch(info.TargetMethod, info.PatchMethod);
+      info.Remove(Harmony);
     }
 
     _InstalledPatches.Clear();

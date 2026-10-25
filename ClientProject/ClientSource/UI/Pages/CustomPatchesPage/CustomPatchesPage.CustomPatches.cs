@@ -7,7 +7,7 @@ namespace ShowperfExtensions;
 
 public partial class CustomPatchesPage : CUIPage
 {
-  public class CustomPatchesComponent : CUIDefault.VerticalBackPanel
+  public class CustomPatchesComponent : CUIVerticalList
   {
     public CustomPatchRepo CustomPatches => Plugin.CustomPatches;
     public PatchInstaller PatchInstaller => Plugin.PatchInstaller;
@@ -24,12 +24,12 @@ public partial class CustomPatchesPage : CUIPage
       }
     }
 
-    private void TogglePatch(PatchInfo info)
+    private void TogglePatch(PatchInfoBase info)
     {
       Commands.SendUp(TogglePatch_Command, info);
     }
 
-    private CUIComponent CreatePatchBlock(PatchInfo info)
+    private CUIComponent CreatePatchBlock(PatchInfoBase info)
     {
       CUIVerticalList block = new CUIDefault.VerticalBackPanel()
       {
@@ -47,32 +47,36 @@ public partial class CustomPatchesPage : CUIPage
       {
         block["desctiption"] = new CUIDefault.SolidTextBlock(info.Description)
         {
-          // AbsoluteMax = new CUINullRect(h: 50),
+          AbsoluteMax = new CUINullRect(h: 50),
           ResizeStrategy = ResizeStrategy.Wrap,
+          CullChildren = true,
         };
       }
 
 
       //TODO use grid component
-      block["table"] = new CUIDefault.HorizontalBackPanel();
-      block["table"]["keys"] = new CUIDefault.VerticalBackPanel()
+      if (info is PatchInfo patchInfo)
       {
-        FitContent = new CUIBool2(true, true)
-      };
-      block["table"]["values"] = new CUIDefault.VerticalBackPanel()
-      {
-        Flex = 1,
-        FitContent = new CUIBool2(false, true)
-      };
+        block["table"] = new CUIDefault.HorizontalBackPanel();
+        block["table"]["keys"] = new CUIDefault.VerticalBackPanel()
+        {
+          FitContent = new CUIBool2(true, true)
+        };
+        block["table"]["values"] = new CUIDefault.VerticalBackPanel()
+        {
+          Flex = 1,
+          FitContent = new CUIBool2(false, true)
+        };
 
 
-      block["table"]["keys"]["target"] = new CUIDefault.SolidTextBlock("Target: ");
-      block["table"]["keys"]["source"] = new CUIDefault.SolidTextBlock("Source: ");
-      block["table"]["keys"]["type"] = new CUIDefault.SolidTextBlock("Type: ");
+        block["table"]["keys"]["target"] = new CUIDefault.SolidTextBlock("Target: ");
+        block["table"]["keys"]["source"] = new CUIDefault.SolidTextBlock("Source: ");
+        block["table"]["keys"]["type"] = new CUIDefault.SolidTextBlock("Type: ");
 
-      block["table"]["values"]["target"] = new CUITextBlock(MethodBaseParser.Serialize(info.TargetMethod));
-      block["table"]["values"]["source"] = new CUITextBlock(MethodBaseParser.Serialize(info.PatchMethod));
-      block["table"]["values"]["type"] = new CUITextBlock($"{info.PatchType}");
+        block["table"]["values"]["target"] = new CUITextBlock(MethodBaseParser.Serialize(patchInfo.TargetMethod));
+        block["table"]["values"]["source"] = new CUITextBlock(MethodBaseParser.Serialize(patchInfo.PatchMethod));
+        block["table"]["values"]["type"] = new CUITextBlock($"{patchInfo.PatchType}");
+      }
 
       block.DeepPalette = CUICore.Palettes.Tertiary;
 
@@ -86,7 +90,12 @@ public partial class CustomPatchesPage : CUIPage
       {
         TextAnchor = CUIAnchor.Center,
       };
-      this["list"] = PatchList = new CUIDefault.VerticalBackPanel() { Flex = 1 };
+      this["list"] = PatchList = new CUIVerticalList()
+      {
+        Flex = 1,
+        Borders = new CUISizes(right: 2),
+        Padding = new CUISizes(4, 4, 4, 4),
+      };
 
       this.DeepPalette = CUICore.Palettes.Secondary;
     }

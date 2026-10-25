@@ -26,7 +26,7 @@ public partial class CustomPatchesPage : CUIPage
     InstalledPatchesBlock.Refresh();
   }
 
-  public void TogglePatch(PatchInfo info)
+  public void TogglePatch(PatchInfoBase info)
   {
     PatchInstaller.TogglePatch(info);
     Refresh();
@@ -39,14 +39,13 @@ public partial class CustomPatchesPage : CUIPage
     this["layout"]["custom patches"] = CustomPatchesBlock = new CustomPatchesComponent()
     {
       Flex = 1,
-      Borders = new CUISizes(right: 2),
     };
     this["layout"]["installed patches"] = InstalledPatchesBlock = new InstalledPatchesComponent()
     {
       Flex = 1,
     };
 
-    Commands.ListenFor<PatchInfo>(TogglePatch_Command, TogglePatch);
+    Commands.ListenFor<PatchInfoBase>(TogglePatch_Command, TogglePatch);
   }
 
 }

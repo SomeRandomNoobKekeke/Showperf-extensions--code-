@@ -7,7 +7,7 @@ namespace ShowperfExtensions;
 
 public partial class CustomPatchesPage : CUIPage
 {
-  public class InstalledPatchesComponent : CUIDefault.VerticalBackPanel
+  public class InstalledPatchesComponent : CUIVerticalList
   {
     public CustomPatchRepo CustomPatches => Plugin.CustomPatches;
     public PatchInstaller PatchInstaller => Plugin.PatchInstaller;
@@ -18,13 +18,13 @@ public partial class CustomPatchesPage : CUIPage
     {
       PatchList.Clear();
 
-      foreach (PatchInfo info in PatchInstaller.InstalledPatches)
+      foreach (PatchInfoBase info in PatchInstaller.InstalledPatches)
       {
         PatchList.Add(CreatePatchBlock(info));
       }
     }
 
-    private CUIComponent CreatePatchBlock(PatchInfo info)
+    private CUIComponent CreatePatchBlock(PatchInfoBase info)
     {
       CUIHorizontalList block = new CUIDefault.HorizontalBackPanel()
       {
@@ -47,7 +47,7 @@ public partial class CustomPatchesPage : CUIPage
       {
         TextAnchor = CUIAnchor.Center,
       };
-      this["list"] = PatchList = new CUIDefault.VerticalBackPanel()
+      this["list"] = PatchList = new CUIVerticalList()
       {
         Flex = 1,
         Padding = new CUISizes(4, 4, 4, 4),
