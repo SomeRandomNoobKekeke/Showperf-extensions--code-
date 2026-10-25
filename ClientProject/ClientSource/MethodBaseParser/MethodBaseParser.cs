@@ -76,7 +76,7 @@ public static class MethodBaseParser
     int startOfArgs = raw.IndexOf('(');
 
     // bool hasGenericArgs = endOfName != startOfArgs;
-    // Akshually i don't care coz i compare by serializing again anyway xd
+    // Akshually i don't care because i compare by serializing back xd
 
 
     string[] methodNameParts = raw.Substring(0, endOfName).Split('.');

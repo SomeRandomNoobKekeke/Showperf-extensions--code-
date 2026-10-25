@@ -20,9 +20,22 @@ public partial class Plugin
   {
     PluginCommands.Add("_showperf_buildcallgraph", (args) =>
     {
-      CallGraphBuilder.ExtractFullCallGraph().SaveTo(CallGraphPath);
-      Logger.Default.Print($"CallGraph saved to [{CallGraphPath}]", Color.Lime);
-    });
+      ICallGraphSerializer serializer = CallGraphSerializer;
+      if (args.Length >= 1)
+      {
+        if (args[0] == "metadata") serializer = new MetadataCallGraphSerializer();
+        if (args[0] == "humanreadable") serializer = new FancyCallGraphSerializer();
+      }
+
+      string savePath = CallGraphPath;
+      if (args.Length >= 2)
+      {
+        savePath = Path.Combine(ModInfo.Dir, "Data", $"{args[1]}.json");
+      }
+
+      CallGraphBuilder.ExtractFullCallGraph().SaveTo(savePath, serializer);
+      Logger.Default.Print($"CallGraph saved to [{savePath}]", Color.Lime);
+    }, () => [["metadata", "humanreadable"], ["CallGraph"]]);
   }
 
 }

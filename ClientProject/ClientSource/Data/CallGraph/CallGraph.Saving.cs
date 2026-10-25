@@ -10,6 +10,8 @@ namespace ShowperfExtensions;
 
 public partial class CallGraph
 {
+  public static ICallGraphSerializer Serializer => Plugin.CallGraphSerializer;
+
   public static CallGraph LoadFrom(string path)
   {
     if (!File.Exists(path)) return new CallGraph();
@@ -19,5 +21,10 @@ public partial class CallGraph
   public void SaveTo(string path)
   {
     File.WriteAllText(path, Serializer.Serialize(this));
+  }
+
+  public void SaveTo(string path, ICallGraphSerializer serializer)
+  {
+    File.WriteAllText(path, serializer.Serialize(this));
   }
 }

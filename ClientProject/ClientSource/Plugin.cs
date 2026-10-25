@@ -35,7 +35,8 @@ public partial class Plugin
       "bruh",
       typeof(Item).GetMethod("Update")!,
       typeof(Item_Patch).GetMethod("Update")!,
-      HarmonyLib.HarmonyPatchType.Postfix
+      HarmonyLib.HarmonyPatchType.Postfix,
+      "some patch"
     ));
 
     ShowperfFrame.Open();

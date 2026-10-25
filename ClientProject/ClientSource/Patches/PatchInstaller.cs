@@ -7,18 +7,20 @@ namespace ShowperfExtensions;
 public partial class PatchInstaller
 {
   private Harmony Harmony { get; } = new Harmony("showperf.patches");
-  private HashSet<PatchInfo> InstalledPatches { get; } = new();
+  private HashSet<PatchInfo> _InstalledPatches { get; } = new();
+  public ImmutableHashSet<PatchInfo> InstalledPatches => _InstalledPatches.ToImmutableHashSet();
 
-  public bool IsInstalled(PatchInfo info) => InstalledPatches.Contains(info);
+
+  public bool IsInstalled(PatchInfo info) => _InstalledPatches.Contains(info);
   public void TogglePatch(PatchInfo info)
   {
-    if (InstalledPatches.Contains(info)) RemovePatch(info);
+    if (_InstalledPatches.Contains(info)) RemovePatch(info);
     else InstallPatch(info);
   }
 
   public void InstallPatch(PatchInfo info)
   {
-    if (InstalledPatches.Contains(info)) return;
+    if (_InstalledPatches.Contains(info)) return;
 
     switch (info.PatchType)
     {
@@ -39,25 +41,25 @@ public partial class PatchInstaller
         break;
     }
 
-    InstalledPatches.Add(info);
+    _InstalledPatches.Add(info);
   }
 
   public void RemovePatch(PatchInfo info)
   {
-    if (!InstalledPatches.Contains(info)) return;
+    if (!_InstalledPatches.Contains(info)) return;
 
     Harmony.Unpatch(info.TargetMethod, info.PatchMethod);
-    InstalledPatches.Remove(info);
+    _InstalledPatches.Remove(info);
   }
 
   public void RemoveAllPatches()
   {
-    foreach (PatchInfo info in InstalledPatches)
+    foreach (PatchInfo info in _InstalledPatches)
     {
       Harmony.Unpatch(info.TargetMethod, info.PatchMethod);
     }
 
-    InstalledPatches.Clear();
+    _InstalledPatches.Clear();
   }
 
 }

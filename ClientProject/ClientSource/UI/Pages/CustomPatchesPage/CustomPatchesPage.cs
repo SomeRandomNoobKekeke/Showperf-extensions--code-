@@ -7,33 +7,46 @@ namespace ShowperfExtensions;
 
 public partial class CustomPatchesPage : CUIPage
 {
+
+  public const string TogglePatch_Command = "TogglePatch";
+
   private CUIVerticalList PatchList;
 
   public CustomPatchRepo CustomPatches => Plugin.CustomPatches;
   public static PatchInstaller PatchInstaller => Plugin.PatchInstaller;
 
+  private CustomPatchesComponent CustomPatchesBlock;
+  private InstalledPatchesComponent InstalledPatchesBlock;
 
   protected override void HandleOpen() => Refresh();
 
   public override void Refresh()
   {
-    base.Refresh();
+    CustomPatchesBlock.Refresh();
+    InstalledPatchesBlock.Refresh();
+  }
 
-    PatchList.Clear();
-
-    foreach (var (id, info) in CustomPatches.Patches.OrderBy(kvp => kvp.Key))
-    {
-      PatchList.Add(CreatePatchButton(id, info));
-    }
+  public void TogglePatch(PatchInfo info)
+  {
+    PatchInstaller.TogglePatch(info);
+    Refresh();
   }
 
 
   public CustomPatchesPage()
   {
-    this["layout"] = PatchList = new CUIVerticalList()
+    this["layout"] = new CUIHorizontalList() { Relative = new CUINullRect(0, 0, 1, 1) };
+    this["layout"]["custom patches"] = CustomPatchesBlock = new CustomPatchesComponent()
     {
-      Relative = new CUINullRect(0, 0, 1, 1),
+      Flex = 1,
+      Borders = new CUISizes(right: 2),
     };
+    this["layout"]["installed patches"] = InstalledPatchesBlock = new InstalledPatchesComponent()
+    {
+      Flex = 1,
+    };
+
+    Commands.ListenFor<PatchInfo>(TogglePatch_Command, TogglePatch);
   }
 
 }

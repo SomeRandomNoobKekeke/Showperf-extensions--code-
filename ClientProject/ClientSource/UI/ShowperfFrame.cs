@@ -44,6 +44,6 @@ public partial class ShowperfFrame : CUIDefault.Frame
       };
     }
 
-    Get<CUIRadioButton>("layout.header.Methods").Select();
+    Get<CUIRadioButton>("layout.header.Custom Patches").Select();
   }
 }

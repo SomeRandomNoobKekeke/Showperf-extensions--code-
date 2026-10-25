@@ -59,10 +59,7 @@ public partial class CallGraphBrowserPage : CUIPage
     {
       Margin = new CUISizes(4, 4, 4, 4);
 
-      this["caption"] = new CUIDefault.SolidTextBlock(caption)
-      {
-        TextAnchor = CUIAnchor.LeftCenter,
-      };
+      this["caption"] = new CUIDefault.SolidTextBlock(caption);
       this["methods"] = new CUIDefault.VerticalBackPanel();
     }
   }

@@ -12,7 +12,7 @@ public partial class CallGraph
   public Dictionary<MethodBase, List<MethodBase>> CallingMethods { get; set; } = [];
   public Dictionary<MethodBase, List<MethodBase>> OverridenIn { get; set; } = [];
   public Dictionary<MethodBase, MethodBase> Overrides { get; set; } = [];
-  public static ICallGraphSerializer Serializer => Plugin.CallGraphSerializer;
+
 
   public void Connect()
   {
