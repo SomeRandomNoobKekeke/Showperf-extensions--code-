@@ -18,6 +18,11 @@ public partial class Plugin
     Instance = this;
     LoadData();
 
+    CUI.Palettes.Primary = CUIPalette.FromColor(new Color(92, 92, 92, 255));
+    CUI.Palettes.Secondary = CUIPalette.FromColor(new Color(0, 191, 221, 255));
+    CUI.Palettes.Tertiary = CUIPalette.FromColor(new Color(0, 113, 183, 255));
+    CUI.Palettes.Quaternary = CUIPalette.FromColor(new Color(255, 0, 0, 255));
+
     ShowperfFrame = new();
 
     CUI.Logger.Log("ShowperfExtensions compiled");

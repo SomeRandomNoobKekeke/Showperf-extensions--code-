@@ -22,9 +22,20 @@ public class CallGraphExplorer
     return CallGraph.CalledMethods.TryGetValue(Current, out List<MethodBase>? methods) ? methods : [];
   }
 
-  public List<MethodBase> GetOverrides()
+  public List<MethodBase> GetOverridenIn()
   {
     if (Current is null) return [];
-    return CallGraph.Overrides.TryGetValue(Current, out List<MethodBase>? methods) ? methods : [];
+    return CallGraph.OverridenIn.TryGetValue(Current, out List<MethodBase>? methods) ? methods : [];
+  }
+
+  public bool IsOverride()
+  {
+    if (Current is not MethodInfo mi) return false;
+    return mi.GetBaseDefinition() != mi;
+  }
+
+  public MethodInfo GetBaseDefinition()
+  {
+    return (Current as MethodInfo).GetBaseDefinition();
   }
 }

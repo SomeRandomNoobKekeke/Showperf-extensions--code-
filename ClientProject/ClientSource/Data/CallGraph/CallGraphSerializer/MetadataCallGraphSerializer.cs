@@ -20,9 +20,9 @@ public class MetadataCallGraphSerializer : ICallGraphSerializer
     }
 
     Dictionary<int, IEnumerable<int>> overridesDict = new();
-    foreach (var (baseDef, overrides) in callGraph.Overrides)
+    foreach (var (baseDef, overridenIn) in callGraph.OverridenIn)
     {
-      overridesDict[baseDef.MetadataToken] = overrides.Select(mb => mb.MetadataToken);
+      overridesDict[baseDef.MetadataToken] = overridenIn.Select(mb => mb.MetadataToken);
     }
 
     return JsonSerializer.Serialize(new Dictionary<string, object>
@@ -65,7 +65,7 @@ public class MetadataCallGraphSerializer : ICallGraphSerializer
     }
 
     Dictionary<int, IEnumerable<int>> overridesDict = dict.GetValueOrDefault("Overrides") ?? [];
-    foreach (var (baseDef, overrides) in overridesDict)
+    foreach (var (baseDef, overridenIn) in overridesDict)
     {
       MethodBase mb = BarotraumaModule.ResolveMethod(baseDef);
       if (mb is null)
@@ -73,7 +73,7 @@ public class MetadataCallGraphSerializer : ICallGraphSerializer
         Logger.Default.Warning($"Couldn't deserialize [{baseDef}]");
         continue;
       }
-      callGraph.Overrides[mb] = overrides.Select(m => BarotraumaModule.ResolveMethod(m)).ToList();
+      callGraph.OverridenIn[mb] = overridenIn.Select(m => BarotraumaModule.ResolveMethod(m)).ToList();
     }
 
     callGraph.Connect();

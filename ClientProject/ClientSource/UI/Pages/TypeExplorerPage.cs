@@ -61,7 +61,7 @@ public class TypeExplorerPage : CUIPage
       CodeExplorer.MethodNode => Color.Lime.To(Color.Gray, 0.5f),
     };
 
-    CUIComponent CreateNodeComponent(CodeExplorer.Node node)
+    CUIComponent CreateNodeButton(CodeExplorer.Node node)
     {
       return new CUIDefault.GlowingButton(node.ToString())
       {
@@ -73,7 +73,7 @@ public class TypeExplorerPage : CUIPage
 
     foreach (CodeExplorer.Node node in nodes)
     {
-      ChildNodeList.Add(CreateNodeComponent(node));
+      ChildNodeList.Add(CreateNodeButton(node));
     }
   }
 
@@ -83,13 +83,18 @@ public class TypeExplorerPage : CUIPage
   {
     if (node is CodeExplorer.MethodNode mn)
     {
-      Commands.SendUp(MethodsPage.ShowMethodDetails_Command, mn.Method);
+      Commands.SendUp(MethodsPage.SelectMethod_Command, mn.Method);
       return;
     }
 
     CodeExplorer.Current = node;
     SearchBox.Text = "";
     Refresh();
+  }
+
+  public void GoToMethod(MethodBase mb)
+  {
+    GoTo(new CodeExplorer.TypeNode(CodeExplorer, mb.DeclaringType));
   }
 
   public void GoToUnknown(object sus)
@@ -141,7 +146,7 @@ public class TypeExplorerPage : CUIPage
 
     ChildNodeList = Get<CUIVerticalList>("layout.main.nodes.list");
 
-    DeepPalette = CUICore.Palettes.Secondary;
+    DeepPalette = CUICore.Palettes.Tertiary;
 
 
   }

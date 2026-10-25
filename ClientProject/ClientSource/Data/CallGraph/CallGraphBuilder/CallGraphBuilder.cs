@@ -50,8 +50,8 @@ public class CallGraphBuilder
     callGraph.Overrides = [];
     foreach (var (method, baseDef) in baseDefs)
     {
-      if (!callGraph.Overrides.ContainsKey(baseDef)) callGraph.Overrides[baseDef] = [];
-      callGraph.Overrides[baseDef].Add(method);
+      if (!callGraph.OverridenIn.ContainsKey(baseDef)) callGraph.OverridenIn[baseDef] = [];
+      callGraph.OverridenIn[baseDef].Add(method);
     }
 
     callGraph.Connect();
