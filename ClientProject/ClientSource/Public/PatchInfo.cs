@@ -7,7 +7,7 @@ namespace ShowperfExtensions;
 public abstract class PatchInfoBase(string ID, MethodBase TargetMethod, string Description = "")
 {
   public string ID { get; } = ID;
-  public MethodBase TargetMethod { get; } = TargetMethod;
+  public MethodBase TargetMethod { get; } = TargetMethod ?? throw new ArgumentNullException(nameof(TargetMethod));
   public string Description { get; } = Description;
 
 
@@ -34,9 +34,13 @@ public class PatchInfo(
   MethodInfo PatchMethod,
   HarmonyPatchType PatchType,
   string Description = ""
-) : PatchInfoBase(ID, TargetMethod, Description)
+) : PatchInfoBase(
+  ID,
+  TargetMethod,
+  Description
+)
 {
-  public MethodInfo PatchMethod { get; } = PatchMethod;
+  public MethodInfo PatchMethod { get; } = PatchMethod ?? throw new ArgumentNullException(nameof(PatchMethod));
   public HarmonyPatchType PatchType { get; } = PatchType;
 
 
@@ -76,7 +80,7 @@ public class MultiPatchInfo(
   string Description = ""
 ) : PatchInfoBase(ID, TargetMethod, Description)
 {
-  public IEnumerable<PatchInfo> Patches { get; } = Patches;
+  public IEnumerable<PatchInfo> Patches { get; } = Patches ?? throw new ArgumentNullException(nameof(Patches));
 
   public override void Install(Harmony harmony)
   {

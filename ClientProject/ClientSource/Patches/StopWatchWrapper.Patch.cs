@@ -28,6 +28,11 @@ public partial class StopWatchWrapper
     Description
   )
   {
+    public static void ReportElapsedTicks(MethodBase method, long ticks)
+    {
+      Logger.Default.Log($"{method} took [{ticks}] ticks");
+    }
+
     public static void Prefix(out Stopwatch __state)
     {
       __state = new Stopwatch();
@@ -37,7 +42,7 @@ public partial class StopWatchWrapper
     public static void Postfix(MethodBase __originalMethod, Stopwatch __state)
     {
       __state.Stop();
-      Logger.Default.Log($"{__originalMethod} took [{__state.ElapsedTicks}] ticks");
+      ReportElapsedTicks(__originalMethod, __state.ElapsedTicks);
     }
   }
 }

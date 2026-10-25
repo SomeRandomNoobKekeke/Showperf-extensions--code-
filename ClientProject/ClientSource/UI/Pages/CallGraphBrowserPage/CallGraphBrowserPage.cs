@@ -34,6 +34,7 @@ public partial class CallGraphBrowserPage : CUIPage
   }
 
 
+  protected override void HandleOpen() => Refresh();
 
   public override void Refresh()
   {

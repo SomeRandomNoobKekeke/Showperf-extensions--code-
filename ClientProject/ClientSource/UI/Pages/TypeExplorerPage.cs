@@ -81,6 +81,8 @@ public class TypeExplorerPage : CUIPage
   public void GoUp() => GoTo(CodeExplorer.Current.GetParent());
   public void GoTo(CodeExplorer.Node node)
   {
+    if (node == CurrentNode) return;
+
     if (node is CodeExplorer.MethodNode mn)
     {
       Commands.SendUp(MethodsPage.SelectMethod_Command, mn.Method);

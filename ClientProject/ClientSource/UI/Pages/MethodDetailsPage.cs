@@ -23,24 +23,47 @@ public class MethodDetailsPage : CUIPage
     }
   }
 
+  private CUIVerticalList Main;
+
+  protected override void HandleOpen() => Refresh();
+
+
   public override void Refresh()
   {
-    this["layout"].Get<CUIToggleButton>("wrap in stopwatch").State = StopWatchWrapper.IsPatched(Method);
+    Main.Clear();
+
+    if (Method is null)
+    {
+      Main["no method"] = new CUIDefault.SolidTextBlock("No Method");
+      return;
+    }
+
+    Main["Wrapped In Stopwatch"] = new CUIToggleButton("Wrapped In Stopwatch")
+    {
+      State = StopWatchWrapper.IsPatched(Method),
+      OnToggle = (state) => ToggleMethod(),
+    };
+
+    Main["lorem"] = new CUITextBlock(Utils.Lorem)
+    {
+      ResizeStrategy = ResizeStrategy.Wrap,
+    };
   }
 
+
+  private void ToggleMethod()
+  {
+    if (Method is null) return;
+    StopWatchWrapper.TogglePatch(Method);
+  }
 
   public MethodDetailsPage()
   {
     this["layout"] = new CUIVerticalList() { Relative = new CUINullRect(0, 0, 1, 1) };
-
-    this["layout"]["wrap in stopwatch"] = new CUIToggleButton("Wrap In Stopwatch")
+    this["layout"]["main"] = Main = new CUIVerticalList()
     {
-      OnToggle = (state) => StopWatchWrapper.TogglePatch(Method),
-    };
+      FitContent = new CUIBool2(false, true),
 
-    this["layout"]["lorem"] = new CUITextBlock(Utils.Lorem)
-    {
-      ResizeStrategy = ResizeStrategy.Wrap,
     };
   }
 

@@ -26,7 +26,11 @@ public partial class ShowperfFrame : CUIDefault.Frame
 
     this["layout"]["handle"].Children.Insert(0, new ReloadLuaButton());
     this["layout"]["header"] = new CUIDefault.HorizontalPanel();
-    this["layout"]["main"] = Pages = new CUIPages() { Flex = 1, };
+    this["layout"]["main"] = Pages = new CUIPages()
+    {
+      Flex = 1,
+      ConsumeMouseEvents = true,
+    };
 
     using (new CUIContextStyle<CUIRadioButton>(btn =>
     {

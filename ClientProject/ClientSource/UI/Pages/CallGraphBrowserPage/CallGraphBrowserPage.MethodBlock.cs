@@ -29,7 +29,8 @@ public partial class CallGraphBrowserPage : CUIPage
         this["methods"].Children.Clear();
         Displayed = value.Count != 0;
 
-        foreach (MethodBase mb in value)
+        //TODO serialized twice, bruh
+        foreach (MethodBase mb in value.OrderBy(MethodBaseParser.Serialize))
         {
           this["methods"].Children.Add(CreateMethodButton(mb));
         }

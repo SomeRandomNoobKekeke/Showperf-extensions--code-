@@ -36,10 +36,7 @@ public class MethodsPage : CUIPage
 
       TypeExplorerPage.GoToMethod(Current);
       MethodDetailsPage.Method = Current;
-
       CallGraphBrowserPage.Current = Current;
-
-
     }
   }
 
