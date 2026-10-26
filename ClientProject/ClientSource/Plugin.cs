@@ -32,11 +32,10 @@ public partial class Plugin
 
 
     CustomPatches.Add(new PatchInfo(
-      "bruh",
+      "Deep item analysis",
       typeof(Item).GetMethod("Update")!,
-      typeof(Item_Patch).GetMethod("Update")!,
-      HarmonyLib.HarmonyPatchType.Postfix,
-      "some patch"
+      typeof(Item_Patch).GetMethod("Item_Update_Replace")!,
+      HarmonyLib.HarmonyPatchType.Prefix
     ));
 
     ShowperfFrame.Open();

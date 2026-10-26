@@ -24,6 +24,7 @@ public partial class Plugin
     public CallGraphExplorer CallGraphExplorer { get; } = new();
     public ICallGraphSerializer CallGraphSerializer { get; } = new MetadataCallGraphSerializer();
     public StopWatchWrapper StopWatchWrapper { get; } = new();
+    public Capture Capture { get; } = new();
 
     public void Dispose()
     {
@@ -37,5 +38,5 @@ public partial class Plugin
   public static PatchInstaller PatchInstaller => Instance?.Singletons.Patcher!;
   public static CustomPatchRepo CustomPatches => Instance?.Singletons.CustomPatchRepo!;
   public static StopWatchWrapper StopWatchWrapper => Instance?.Singletons.StopWatchWrapper!;
-
+  public static Capture? Capture => Instance?.Singletons.Capture;
 }
