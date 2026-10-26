@@ -6,9 +6,9 @@ using System.Reflection;
 
 namespace ShowperfExtensions;
 
-public partial class CodeExplorer
+public partial class TypeExplorer
 {
-  public record NamespaceNode(CodeExplorer explorer, string name) : Node(explorer)
+  public record NamespaceNode(TypeExplorer explorer, string name) : Node(explorer)
   {
     public string Name { get; } = name;
 

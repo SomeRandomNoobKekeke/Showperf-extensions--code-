@@ -6,11 +6,11 @@ using System.Reflection;
 
 namespace ShowperfExtensions;
 
-public partial class CodeExplorer
+public partial class TypeExplorer
 {
-  public abstract record Node(CodeExplorer explorer)
+  public abstract record Node(TypeExplorer explorer)
   {
-    public CodeExplorer Explorer { get; } = explorer;
+    public TypeExplorer Explorer { get; } = explorer;
 
     public abstract Node GetParent();
     public abstract IEnumerable<Node> GetChildren();

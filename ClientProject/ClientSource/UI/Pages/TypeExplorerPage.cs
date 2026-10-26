@@ -21,11 +21,11 @@ public class TypeExplorerPage : CUIPage
   private CUITextBlock Caption;
   private CUITextInput SearchBox;
 
-  private CodeExplorer CodeExplorer = new CodeExplorer(typeof(GameMain).Assembly);
+  private TypeExplorer TypeExplorer = new TypeExplorer(typeof(GameMain).Assembly);
 
-  public CodeExplorer.Node CurrentNode
+  public TypeExplorer.Node CurrentNode
   {
-    get => CodeExplorer.Current;
+    get => TypeExplorer.Current;
     set => GoTo(value);
   }
 
@@ -35,13 +35,13 @@ public class TypeExplorerPage : CUIPage
   {
     base.Refresh();
 
-    Caption.Text = $"{CodeExplorer.Current.NodeType}: {CodeExplorer.Current}";
+    Caption.Text = $"{TypeExplorer.Current.NodeType}: {TypeExplorer.Current}";
     ChildNodeList.Clear();
     ChildNodeList.Scroll = 0;
 
 
 
-    IEnumerable<CodeExplorer.Node> nodes = CodeExplorer.Current.GetChildren();
+    IEnumerable<TypeExplorer.Node> nodes = TypeExplorer.Current.GetChildren();
 
 
 
@@ -52,16 +52,16 @@ public class TypeExplorerPage : CUIPage
 
     nodes = nodes.OrderBy(node => node.NodeType).ThenBy(node => node.ToString());
 
-    Color GetNodeColor(CodeExplorer.Node node) => node switch
+    Color GetNodeColor(TypeExplorer.Node node) => node switch
     {
-      CodeExplorer.AssemblyNode => Color.Gray,
-      CodeExplorer.NamespaceNode => Color.Gray,
-      CodeExplorer.TypeNode => Color.Blue.To(Color.Gray, 0.5f),
-      CodeExplorer.ConstructorNode => Color.Orange.To(Color.Gray, 0.5f),
-      CodeExplorer.MethodNode => Color.Lime.To(Color.Gray, 0.5f),
+      TypeExplorer.AssemblyNode => Color.Gray,
+      TypeExplorer.NamespaceNode => Color.Gray,
+      TypeExplorer.TypeNode => Color.Blue.To(Color.Gray, 0.5f),
+      TypeExplorer.ConstructorNode => Color.Orange.To(Color.Gray, 0.5f),
+      TypeExplorer.MethodNode => Color.Lime.To(Color.Gray, 0.5f),
     };
 
-    CUIComponent CreateNodeButton(CodeExplorer.Node node)
+    CUIComponent CreateNodeButton(TypeExplorer.Node node)
     {
       return new CUIDefault.GlowingButton(node.ToString())
       {
@@ -71,38 +71,38 @@ public class TypeExplorerPage : CUIPage
       };
     }
 
-    foreach (CodeExplorer.Node node in nodes)
+    foreach (TypeExplorer.Node node in nodes)
     {
       ChildNodeList.Add(CreateNodeButton(node));
     }
   }
 
 
-  public void GoUp() => GoTo(CodeExplorer.Current.GetParent());
-  public void GoTo(CodeExplorer.Node node)
+  public void GoUp() => GoTo(TypeExplorer.Current.GetParent());
+  public void GoTo(TypeExplorer.Node node)
   {
     if (node == CurrentNode) return;
 
-    if (node is CodeExplorer.MethodNode mn)
+    if (node is TypeExplorer.MethodNode mn)
     {
       Commands.SendUp(MethodsPage.SelectMethod_Command, mn.Method);
       return;
     }
 
-    CodeExplorer.Current = node;
+    TypeExplorer.Current = node;
     SearchBox.Text = "";
     Refresh();
   }
 
   public void GoToMethod(MethodBase mb)
   {
-    GoTo(new CodeExplorer.TypeNode(CodeExplorer, mb.DeclaringType));
+    GoTo(new TypeExplorer.TypeNode(TypeExplorer, mb.DeclaringType));
   }
 
   public void GoToUnknown(object sus)
   {
-    if (sus is MethodBase mb) GoTo(new CodeExplorer.TypeNode(CodeExplorer, mb.DeclaringType));
-    if (sus is Type T) GoTo(new CodeExplorer.TypeNode(CodeExplorer, T));
+    if (sus is MethodBase mb) GoTo(new TypeExplorer.TypeNode(TypeExplorer, mb.DeclaringType));
+    if (sus is Type T) GoTo(new TypeExplorer.TypeNode(TypeExplorer, T));
   }
 
   public TypeExplorerPage()

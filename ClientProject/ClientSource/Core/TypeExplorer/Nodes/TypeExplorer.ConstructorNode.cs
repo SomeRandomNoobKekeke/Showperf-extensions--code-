@@ -6,9 +6,9 @@ using System.Reflection;
 
 namespace ShowperfExtensions;
 
-public partial class CodeExplorer
+public partial class TypeExplorer
 {
-  public record ConstructorNode(CodeExplorer explorer, MethodBase method) : MethodNode(explorer, method)
+  public record ConstructorNode(TypeExplorer explorer, MethodBase method) : MethodNode(explorer, method)
   {
     public override NodeType NodeType => NodeType.Constructor;
     public override string ToString() => MethodBaseParser.Serialize(Method);

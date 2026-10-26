@@ -6,9 +6,9 @@ using System.Reflection;
 
 namespace ShowperfExtensions;
 
-public partial class CodeExplorer
+public partial class TypeExplorer
 {
-  public record MethodNode(CodeExplorer explorer, MethodBase method) : Node(explorer)
+  public record MethodNode(TypeExplorer explorer, MethodBase method) : Node(explorer)
   {
     public MethodBase Method { get; } = method;
 

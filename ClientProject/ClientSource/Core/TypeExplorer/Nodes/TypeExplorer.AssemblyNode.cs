@@ -6,9 +6,9 @@ using System.Reflection;
 
 namespace ShowperfExtensions;
 
-public partial class CodeExplorer
+public partial class TypeExplorer
 {
-  public record AssemblyNode(CodeExplorer explorer) : Node(explorer)
+  public record AssemblyNode(TypeExplorer explorer) : Node(explorer)
   {
     public override Node GetParent() => this;
     public override IEnumerable<Node> GetChildren()

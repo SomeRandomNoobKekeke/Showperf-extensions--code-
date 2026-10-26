@@ -3,12 +3,13 @@ using System.Collections.Immutable;
 using CursedUI;
 using Microsoft.Xna.Framework;
 using System.Reflection;
+using ShowperfExtensions.Extensions;
 
 namespace ShowperfExtensions;
 
-public partial class CodeExplorer
+public partial class TypeExplorer
 {
-  public record TypeNode(CodeExplorer explorer, Type type) : Node(explorer)
+  public record TypeNode(TypeExplorer explorer, Type type) : Node(explorer)
   {
     public Type Type { get; } = type;
 

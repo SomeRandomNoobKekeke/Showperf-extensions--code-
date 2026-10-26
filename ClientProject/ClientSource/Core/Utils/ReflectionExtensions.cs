@@ -1,6 +1,6 @@
 ﻿using System.Reflection;
 
-namespace ShowperfExtensions;
+namespace ShowperfExtensions.Extensions;
 
 public static class Reflection_Extensions
 {
