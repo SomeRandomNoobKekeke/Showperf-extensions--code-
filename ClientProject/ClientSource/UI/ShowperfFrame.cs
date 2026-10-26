@@ -17,6 +17,9 @@ public partial class ShowperfFrame : CUIDefault.Frame
 
   public CustomPatchesPage CustomPatchesPage { get; } = new();
   public MethodsPage MethodsPage { get; } = new();
+  public MeasurementsPage MeasurementsPage { get; } = new();
+
+  private CUIComponent PageButtons;
 
   public ShowperfFrame() : base("Showperf", 600, 600)
   {
@@ -25,7 +28,7 @@ public partial class ShowperfFrame : CUIDefault.Frame
     ResizableBoth = true;
 
     this["layout"]["handle"].Children.Insert(0, new ReloadLuaButton());
-    this["layout"]["header"] = new CUIDefault.HorizontalPanel();
+    this["layout"]["page buttons"] = PageButtons = new CUIDefault.HorizontalPanel();
     this["layout"]["main"] = Pages = new CUIPages()
     {
       Flex = 1,
@@ -39,16 +42,21 @@ public partial class ShowperfFrame : CUIDefault.Frame
       btn.CullChildren = true;
     }))
     {
-      this["layout"]["header"]["Custom Patches"] = new CUIRadioButton("Patches")
+      this["layout"]["page buttons"]["Measurements"] = new CUIRadioButton("Measurements")
+      {
+        OnSelected = () => Pages.OpenPage(MeasurementsPage),
+      };
+      this["layout"]["page buttons"]["Custom Patches"] = new CUIRadioButton("Patches")
       {
         OnSelected = () => Pages.OpenPage(CustomPatchesPage),
       };
-      this["layout"]["header"]["Methods"] = new CUIRadioButton("Methods")
+      this["layout"]["page buttons"]["Methods"] = new CUIRadioButton("Methods")
       {
         OnSelected = () => Pages.OpenPage(MethodsPage),
       };
     }
 
-    Get<CUIRadioButton>("layout.header.Custom Patches").Select();
+    PageButtons.Get<CUIRadioButton>("Methods").Select();
+    // MethodsPage.Subpages.Get<CUIRadioButton>("Type Explorer").Select();
   }
 }

@@ -38,7 +38,7 @@ public partial class Plugin
       HarmonyLib.HarmonyPatchType.Prefix
     ));
 
-    ShowperfFrame.Open();
+
     UTest.ScanThisAssembly();
     UTest.TryRunPrevTest();
 
@@ -50,8 +50,11 @@ public partial class Plugin
     Utils.RunWithDelay(Experiment, 500);
     // Experiment();
 
+    Singletons.Init();
     AddCommands();
 
+    ShowperfFrame.Open();
+    ShowperfFrame.MethodsPage.Current = typeof(Item).GetMethod("Update")!;
   }
 
   public void Dispose()

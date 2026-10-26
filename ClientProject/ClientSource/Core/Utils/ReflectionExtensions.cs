@@ -4,6 +4,8 @@ namespace ShowperfExtensions.Extensions;
 
 public static class Reflection_Extensions
 {
+
+
   public static string GetFullName(this Type T)
   {
     List<string> parts = new List<string>() { T.Name };

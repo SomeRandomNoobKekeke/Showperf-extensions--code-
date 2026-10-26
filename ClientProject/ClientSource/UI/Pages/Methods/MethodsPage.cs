@@ -52,7 +52,7 @@ public class MethodsPage : CUIPage
     using (new CUIContextStyle<CUIRadioButton>(btn =>
     {
       btn.Flex = 1;
-      btn.GroupName = "ShowperfFrame pages";
+      btn.GroupName = "method page subpages";
       btn.CullChildren = true;
     }))
     {
@@ -99,7 +99,7 @@ public class MethodsPage : CUIPage
     });
 
 
-    Subpages.Get<CUIRadioButton>("CallGraphBrowser").Select();
+    Subpages.Get<CUIRadioButton>("Type Explorer").Select();
   }
 
 }

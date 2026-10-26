@@ -4,6 +4,7 @@ using CUILibs;
 using Barotrauma.Items.Components;
 using FarseerPhysics;
 using FarseerPhysics.Dynamics;
+using System.Diagnostics;
 
 namespace ShowperfExtensions;
 

@@ -30,7 +30,7 @@ public partial class StopWatchWrapper
   {
     public static void ReportElapsedTicks(MethodBase method, long ticks)
     {
-      Logger.Default.Log($"{method} took [{ticks}] ticks");
+      Plugin.Capture?.Update.AddTicks(MethodBaseParser.Serialize(method), ticks);
     }
 
     public static void Prefix(out Stopwatch __state)

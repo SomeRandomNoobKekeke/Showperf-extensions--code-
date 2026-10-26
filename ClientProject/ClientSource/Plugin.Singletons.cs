@@ -26,8 +26,14 @@ public partial class Plugin
     public StopWatchWrapper StopWatchWrapper { get; } = new();
     public Capture Capture { get; } = new();
 
+    public void Init()
+    {
+      Capture.AttachToGame();
+    }
+
     public void Dispose()
     {
+      Capture.DetachFromGame();
       Patcher.RemoveAllPatches();
     }
   }
