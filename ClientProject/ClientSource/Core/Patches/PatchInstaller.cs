@@ -33,34 +33,26 @@ public partial class PatchInstaller
 
 
   public bool IsInstalled(PatchInfoBase info) => _InstalledPatches.Contains(info);
-  public void TogglePatch(PatchInfoBase info)
+  public bool TogglePatch(PatchInfoBase info)
+    => _InstalledPatches.Contains(info) ? RemovePatch(info) : InstallPatch(info);
+
+  public bool InstallPatch(PatchInfoBase info)
   {
-    Logger.Default.LogVars(_InstalledPatches.Contains(info));
-    Logger.Default.LogVars(Logger.Wrap.Props(info));
-    Logger.Default.LogVars(Logger.Wrap.IEnumerable(
-      InstalledPatches.Where(i => i.TargetMethod == info.TargetMethod)
-    ));
-
-
-    if (_InstalledPatches.Contains(info)) RemovePatch(info);
-    else InstallPatch(info);
-  }
-
-  public void InstallPatch(PatchInfoBase info)
-  {
-    if (_InstalledPatches.Contains(info)) return;
+    if (_InstalledPatches.Contains(info)) return false;
 
     info.Install(Harmony);
 
     _InstalledPatches.Add(info);
+    return true;
   }
 
-  public void RemovePatch(PatchInfoBase info)
+  public bool RemovePatch(PatchInfoBase info)
   {
-    if (!_InstalledPatches.Contains(info)) return;
+    if (!_InstalledPatches.Contains(info)) return false;
 
     info.Remove(Harmony);
     _InstalledPatches.Remove(info);
+    return true;
   }
 
   public void RemoveAllPatches()

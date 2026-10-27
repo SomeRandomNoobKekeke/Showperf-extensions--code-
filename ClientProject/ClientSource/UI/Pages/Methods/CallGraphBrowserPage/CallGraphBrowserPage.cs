@@ -17,6 +17,8 @@ public partial class CallGraphBrowserPage : CUIPage
 
 
   private CallGraphExplorer CallGraphExplorer => Plugin.CallGraphExplorer;
+
+  private MethodBlock ThisMethodBlock;
   private MethodBlock CalledFromBlock;
   private MethodBlock CallingToBlock;
   private MethodBlock OverridenInBlock;
@@ -34,12 +36,14 @@ public partial class CallGraphBrowserPage : CUIPage
   }
 
 
+
   protected override void HandleOpen() => Refresh();
 
   public override void Refresh()
   {
     Main.Scroll = 0;
 
+    ThisMethodBlock.Methods = [Current];
     OverridesBlock.Methods = CallGraphExplorer.IsOverride() ? [CallGraphExplorer.GetBaseDefinition()] : [];
     CalledFromBlock.Methods = CallGraphExplorer.GetCallingMethods();
     CallingToBlock.Methods = CallGraphExplorer.GetCalledMethods();
@@ -52,8 +56,19 @@ public partial class CallGraphBrowserPage : CUIPage
     Commands.SendUp(MethodsPage.SelectMethod_Command, mb);
   }
 
+  private void HandleMethodPatched(MethodBase mb)
+  {
+    MethodLineComponent thisMethodLine = ThisMethodBlock["methods"][0] as MethodLineComponent;
+    if (thisMethodLine is null) return;
+
+    thisMethodLine.NotifyMethodPatched(mb);
+  }
+
   public CallGraphBrowserPage()
   {
+    Commands.ListenFor<MethodBase>(MethodsPage.MethodPatched_Notification, HandleMethodPatched);
+
+
     this["layout"] = new CUIVerticalList() { Relative = new CUINullRect(0, 0, 1, 1) };
 
     this["layout"]["controls"] = new CUIDefault.VerticalPanel();
@@ -71,8 +86,14 @@ public partial class CallGraphBrowserPage : CUIPage
     this["layout"]["main"] = new CUIDefault.ListWithScrollbar() { Flex = 1, };
 
     Main = this["layout"]["main"].Get<CUIVerticalList>("list");
+    Main.BottomGap = ResizeHandle.DefaultSize.Y * 2;
     Main.Padding = new CUISizes(4, 4, 4, 4);
 
+    Main["this method block"] = ThisMethodBlock = new MethodBlock("This Method:")
+    {
+      PaletteImmunity = true,
+      DeepPalette = CUIPalette.FromColor(Color.Lime),
+    };
     Main["overrides block"] = OverridesBlock = new MethodBlock("Overrides:");
     Main["overriden in block"] = OverridenInBlock = new MethodBlock("Overriden In:");
     Main["called from block"] = CalledFromBlock = new MethodBlock("Called From:");

@@ -23,17 +23,17 @@ public partial class Plugin
     public Lazy<UltimateAssemblyAnalyzer3000> Analyzer { get; } = new();
     public CallGraphExplorer CallGraphExplorer { get; } = new();
     public ICallGraphSerializer CallGraphSerializer { get; } = new MetadataCallGraphSerializer();
-    public StopWatchWrapper StopWatchWrapper { get; } = new();
-    public Capture Capture { get; } = new();
+    public StopwatchWrapper StopwatchWrapper { get; } = new();
+    public CaptureCore CaptureCore { get; } = new();
 
     public void Init()
     {
-      Capture.AttachToGame();
+      CaptureCore.AttachToGame();
     }
 
     public void Dispose()
     {
-      Capture.DetachFromGame();
+      CaptureCore.DetachFromGame();
       Patcher.RemoveAllPatches();
     }
   }
@@ -43,6 +43,6 @@ public partial class Plugin
   public static UltimateAssemblyAnalyzer3000 Analyzer => Instance?.Singletons.Analyzer.Value!;
   public static PatchInstaller PatchInstaller => Instance?.Singletons.Patcher!;
   public static CustomPatchRepo CustomPatches => Instance?.Singletons.CustomPatchRepo!;
-  public static StopWatchWrapper StopWatchWrapper => Instance?.Singletons.StopWatchWrapper!;
-  public static Capture? Capture => Instance?.Singletons.Capture;
+  public static StopwatchWrapper StopwatchWrapper => Instance?.Singletons.StopwatchWrapper!;
+  public static CaptureCore? CaptureCore => Instance?.Singletons.CaptureCore;
 }

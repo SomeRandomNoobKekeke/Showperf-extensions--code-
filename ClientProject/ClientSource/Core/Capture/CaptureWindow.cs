@@ -32,8 +32,6 @@ public class CaptureWindow
 
   public void Rotate()
   {
-    Logger.Default.LogVars(StagingSlice);
-
     TotalSlice += StagingSlice;
 
 
@@ -41,7 +39,6 @@ public class CaptureWindow
 
     CaptureSlice last = Slices.Dequeue();
     TotalSlice -= last;
-    Logger.Default.LogVars(TotalSlice);
 
     StagingSlice = new();
     Rotated?.Invoke();

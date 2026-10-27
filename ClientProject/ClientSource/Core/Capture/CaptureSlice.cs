@@ -10,7 +10,7 @@ public class CaptureSlice : Dictionary<string, long>
   {
     if (this.TryGetValue(id, out long prevValue))
     {
-      this[id] += value;
+      this[id] = prevValue + value;
     }
     else
     {

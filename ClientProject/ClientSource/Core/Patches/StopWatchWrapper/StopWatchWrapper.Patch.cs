@@ -6,9 +6,9 @@ using System.Reflection;
 
 namespace ShowperfExtensions;
 
-public partial class StopWatchWrapper
+public partial class StopwatchWrapper
 {
-  public class StopWatchWrapperPatch(
+  public class StopwatchWrapperPatch(
     string ID,
     MethodBase TargetMethod,
     string Description = ""
@@ -17,11 +17,11 @@ public partial class StopWatchWrapper
     TargetMethod,
     [
       new PatchInfo($"{ID} prefix", TargetMethod,
-        typeof(StopWatchWrapperPatch).GetMethod("Prefix")!,
+        typeof(StopwatchWrapperPatch).GetMethod("Prefix")!,
         HarmonyPatchType.Prefix
       ),
       new PatchInfo($"{ID} postfix",TargetMethod,
-        typeof(StopWatchWrapperPatch).GetMethod("Postfix")!,
+        typeof(StopwatchWrapperPatch).GetMethod("Postfix")!,
         HarmonyPatchType.Postfix
       ),
     ],
@@ -30,7 +30,7 @@ public partial class StopWatchWrapper
   {
     public static void ReportElapsedTicks(MethodBase method, long ticks)
     {
-      Plugin.Capture?.Update.AddTicks(MethodBaseParser.Serialize(method), ticks);
+      Plugin.CaptureCore?.Update.AddTicks(MethodBaseParser.Serialize(method), ticks);
     }
 
     public static void Prefix(out Stopwatch __state)

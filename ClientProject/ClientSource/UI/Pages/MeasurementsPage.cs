@@ -8,7 +8,7 @@ namespace ShowperfExtensions;
 
 public partial class MeasurementsPage : CUIPage
 {
-  public Capture? Capture => Plugin.Capture;
+  public CaptureCore? Capture => Plugin.CaptureCore;
 
   public CUIFastTextDump Dump { get; }
 
@@ -21,10 +21,12 @@ public partial class MeasurementsPage : CUIPage
     }
 
     List<FastTextDump.Line> lines = [];
-    foreach (var (key, value) in Capture.Update.TotalSlice)
+    foreach (var (id, ticks) in Capture.Update.TotalSlice.OrderByDescending(kvp => kvp.Value))
     {
-      lines.Add(new FastTextDump.Line($"{value / Capture.Update.SliceCount} ticks {key}", Color.White));
+      lines.Add(new FastTextDump.Line($"{ticks / Capture.Update.SliceCount} ticks {id}", Color.White));
     }
+
+
     Dump.Lines = lines;
 
     // CUI.Logger.Log(Logger.Wrap.IEnumerable(lines.Select(l => l.ToString()), true));
@@ -36,6 +38,7 @@ public partial class MeasurementsPage : CUIPage
     this["layout"]["scroll wrapper"] = new CUIDefault.ListWithScrollbar() { Flex = 1 };
     this["layout"]["scroll wrapper"]["list"]["dump"] = Dump = new CUIFastTextDump()
     {
+      Offset = new Vector2(10, 10),
       Solid = true,
     };
 

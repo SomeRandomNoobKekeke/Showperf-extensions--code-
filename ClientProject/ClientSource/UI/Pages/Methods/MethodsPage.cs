@@ -12,9 +12,13 @@ namespace ShowperfExtensions;
 
 public class MethodsPage : CUIPage
 {
-  public const string ShowMethodDetails_Command = "show method details";
-  public const string OpenInMethodBrowser_Command = "open in method browser";
-  public const string SelectMethod_Command = "SelectMethod";
+  public const string ShowMethodDetails_Command = "ShowMethodDetails_Command";
+  public const string OpenInMethodBrowser_Command = "OpenInMethodBrowser_Command";
+  public const string SelectMethod_Command = "SelectMethod_Command";
+  public const string MethodPatched_Notification = "MethodPatched_Notification";
+
+
+  public StopwatchWrapper StopwatchWrapper => Plugin.StopwatchWrapper;
 
   public TypeExplorerPage TypeExplorerPage { get; } = new();
   public CallGraphBrowserPage CallGraphBrowserPage { get; } = new();
@@ -23,7 +27,7 @@ public class MethodsPage : CUIPage
   public CUIHorizontalList Subpages { get; }
   public CUIPages Main { get; }
 
-  public CUITextBlock CurrentMethodText { get; }
+  public MethodLineComponent CurrentMethodLine { get; }
 
   private MethodBase _Current; public MethodBase Current
   {
@@ -32,7 +36,7 @@ public class MethodsPage : CUIPage
     {
       _Current = value;
 
-      CurrentMethodText.Text = MethodBaseParser.Serialize(value);
+      CurrentMethodLine.Method = value;
 
       TypeExplorerPage.GoToMethod(Current);
       MethodDetailsPage.Method = Current;
@@ -40,11 +44,19 @@ public class MethodsPage : CUIPage
     }
   }
 
+  private void HandleMethodPatched(MethodBase mb)
+  {
+    CurrentMethodLine.NotifyMethodPatched(mb);
+    Main.OpenedPage.Commands.Execute(MethodPatched_Notification, mb);
+  }
+
   public MethodsPage()
   {
     this["layout"] = new CUIVerticalList() { Relative = new CUINullRect(0, 0, 1, 1) };
     this["layout"]["header"] = new CUIDefault.VerticalPanel();
     this["layout"]["main"] = Main = new CUIPages() { Flex = 1 };
+
+    StopwatchWrapper.MethodPatched += HandleMethodPatched;
 
 
     this["layout"]["header"]["subpages"] = Subpages = new CUIDefault.HorizontalPanel();
@@ -71,14 +83,17 @@ public class MethodsPage : CUIPage
         OnSelected = () => Main.OpenPage(MethodDetailsPage),
       };
     }
-    this["layout"]["header"]["subpages"].DeepPalette = CUICore.Palettes.Secondary2;
+    this["layout"]["header"]["subpages"].DeepPalette = CUICore.Palettes.Secondary;
 
 
     CUIComponent currentMethodBlock = new CUIDefault.HorizontalPanel();
     this["layout"]["header"]["current method block"] = currentMethodBlock;
     currentMethodBlock["label"] = new CUITextBlock("Selected Method: ");
-    currentMethodBlock["name"] = CurrentMethodText = new CUITextBlock("");
-    currentMethodBlock.DeepPalette = CUICore.Palettes.Secondary;
+    currentMethodBlock["method line"] = CurrentMethodLine = new MethodLineComponent()
+    {
+      Flex = 1,
+    };
+    currentMethodBlock.DeepPalette = CUICore.Palettes.Secondary2;
 
 
     Commands.ListenFor<MethodBase>(ShowMethodDetails_Command, (mb) =>

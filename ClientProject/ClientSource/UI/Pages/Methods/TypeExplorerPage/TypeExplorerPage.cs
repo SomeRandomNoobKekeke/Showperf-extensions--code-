@@ -105,14 +105,21 @@ public class TypeExplorerPage : CUIPage
     if (sus is Type T) GoTo(new TypeExplorer.TypeNode(TypeExplorer, T));
   }
 
+  public void HandleMethodPatched(MethodBase mb)
+  {
+    // MethodLineComponent thisMethodLine = ThisMethodBlock["methods"][0] as MethodLineComponent;
+    // if (thisMethodLine is null) return;
+
+    // thisMethodLine.NotifyMethodPatched(mb);
+  }
+
   public TypeExplorerPage()
   {
-    this["layout"] = new CUIVerticalList() { Relative = new CUINullRect(0, 0, 1, 1) };
-    this["layout"]["header"] = new CUIVerticalList()
-    {
-      FitContent = new CUIBool2(false, true),
-    };
+    Commands.ListenFor<MethodBase>(MethodsPage.MethodPatched_Notification, HandleMethodPatched);
 
+
+    this["layout"] = new CUIVerticalList() { Relative = new CUINullRect(0, 0, 1, 1) };
+    this["layout"]["header"] = new CUIVerticalList() { FitContent = new CUIBool2(false, true), };
     this["layout"]["main"] = new CUIVerticalList() { Flex = 1 };
 
     this["layout"]["header"]["location panel"] = new CUIDefault.HorizontalPanel();
@@ -137,9 +144,10 @@ public class TypeExplorerPage : CUIPage
     this["layout"]["header"]["search panel"]["search"] = SearchBox = new CUITextInput()
     {
       Flex = 1,
+      OnInput = (text) => CUICore.Debounce(Refresh),
       OnKeyPressed = (e) =>
       {
-        if (e.Key == Keys.Enter) { Refresh(); }
+        if (e.Key == Keys.Enter) { Refresh(); } // <- old way
       }
     };
 
@@ -147,6 +155,8 @@ public class TypeExplorerPage : CUIPage
     this["layout"]["main"]["nodes"] = new CUIDefault.ListWithScrollbar() { Flex = 1 };
 
     ChildNodeList = Get<CUIVerticalList>("layout.main.nodes.list");
+    ChildNodeList.BottomGap = ResizeHandle.DefaultSize.Y * 2;
+
 
     DeepPalette = CUICore.Palettes.Tertiary;
 

@@ -11,7 +11,7 @@ namespace ShowperfExtensions;
 
 public class MethodDetailsPage : CUIPage
 {
-  public StopWatchWrapper StopWatchWrapper => Plugin.StopWatchWrapper;
+  public StopwatchWrapper StopwatchWrapper => Plugin.StopwatchWrapper;
 
   private MethodBase _Method; public MethodBase Method
   {
@@ -40,7 +40,7 @@ public class MethodDetailsPage : CUIPage
 
     Main["Wrapped In Stopwatch"] = new CUIToggleButton("Wrapped In Stopwatch")
     {
-      State = StopWatchWrapper.IsPatched(Method),
+      State = StopwatchWrapper.IsPatched(Method),
       OnToggle = (state) => ToggleMethod(),
     };
 
@@ -54,7 +54,7 @@ public class MethodDetailsPage : CUIPage
   private void ToggleMethod()
   {
     if (Method is null) return;
-    StopWatchWrapper.TogglePatch(Method);
+    StopwatchWrapper.TogglePatch(Method);
   }
 
   public MethodDetailsPage()

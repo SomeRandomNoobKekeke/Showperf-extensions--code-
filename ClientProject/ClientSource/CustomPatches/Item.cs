@@ -14,6 +14,8 @@ public class Item_Patch
   {
     Item _ = __instance;
 
+    Stopwatch sw = new();
+
     if (!_.IsActive || _.IsLayerHidden || _.IsInRemoveQueue) { return false; }
 
     if (_.impactQueue != null)
@@ -45,6 +47,8 @@ public class Item_Patch
     _.ApplyStatusEffects(ActionType.Always, deltaTime, character: (_.parentInventory as CharacterInventory)?.Owner as Character);
     _.ApplyStatusEffects(containedEffectType, deltaTime, character: (_.parentInventory as CharacterInventory)?.Owner as Character);
 
+
+    sw.Restart();
     for (int i = 0; i < _.updateableComponents.Count; i++)
     {
       ItemComponent ic = _.updateableComponents[i];
@@ -114,6 +118,11 @@ public class Item_Patch
         }
       }
     }
+    sw.Stop();
+    Capture.Update.AddTicks($"{_}.ItemComponents", sw.ElapsedTicks);
+
+
+
 
     if (_.Removed) { return false; }
 

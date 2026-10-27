@@ -5,7 +5,7 @@ using HarmonyLib;
 
 namespace ShowperfExtensions;
 
-public class Capture
+public class CaptureCore
 {
   private static BindingFlags Pls => BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static;
   private Harmony Harmony { get; } = new Harmony("showperf.capture");
@@ -18,15 +18,15 @@ public class Capture
 
   private static void GameScreen_Update_Postfix()
   {
-    if (!Plugin.Capture?.Active == true) return;
-    Plugin.Capture?.Update.Rotate();
+    if (!Plugin.CaptureCore?.Active == true) return;
+    Plugin.CaptureCore?.Update.Rotate();
   }
 
   internal void AttachToGame()
   {
     Harmony.Patch(
       original: typeof(GameScreen).GetMethod("Update", Pls),
-      postfix: new HarmonyMethod(typeof(Capture).GetMethod("GameScreen_Update_Postfix", Pls))
+      postfix: new HarmonyMethod(typeof(CaptureCore).GetMethod("GameScreen_Update_Postfix", Pls))
     );
   }
 
@@ -34,7 +34,7 @@ public class Capture
   {
     Harmony.Unpatch(
       typeof(GameScreen).GetMethod("Update", Pls),
-      typeof(Capture).GetMethod("GameScreen_Update_Postfix", Pls)
+      typeof(CaptureCore).GetMethod("GameScreen_Update_Postfix", Pls)
     );
   }
 }

@@ -4,44 +4,52 @@ using System.Reflection;
 
 namespace ShowperfExtensions;
 
-public partial class StopWatchWrapper
+public partial class StopwatchWrapper
 {
   public PatchInstaller PatchInstaller => Plugin.PatchInstaller;
 
-  public void Patch(MethodBase target)
-  {
-    StopWatchWrapperPatch info = new StopWatchWrapperPatch(
-      $"Wrapper around: {MethodBaseParser.Serialize(target)}",
+  public event Action<MethodBase>? MethodPatched;
+
+  private StopwatchWrapperPatch CreatePatchInfo(MethodBase target)
+    => new StopwatchWrapperPatch(
+      $"Stopwatch around: {MethodBaseParser.Serialize(target)}",
       target
     );
 
-    PatchInstaller.InstallPatch(info);
+  public void Patch(MethodBase target)
+  {
+    StopwatchWrapperPatch info = CreatePatchInfo(target);
+
+    if (PatchInstaller.InstallPatch(info))
+    {
+      MethodPatched?.Invoke(target);
+    }
   }
 
   public void UnPatch(MethodBase target)
   {
-    StopWatchWrapperPatch info = new StopWatchWrapperPatch(
-      $"Wrapper around: {MethodBaseParser.Serialize(target)}",
-      target
-    );
+    StopwatchWrapperPatch info = CreatePatchInfo(target);
 
-    PatchInstaller.RemovePatch(info);
+    if (PatchInstaller.RemovePatch(info))
+    {
+      MethodPatched?.Invoke(target);
+    }
   }
 
   public void TogglePatch(MethodBase target)
   {
-    StopWatchWrapperPatch info = new StopWatchWrapperPatch(
-      $"Wrapper around: {MethodBaseParser.Serialize(target)}",
-      target
-    );
+    StopwatchWrapperPatch info = CreatePatchInfo(target);
 
-    PatchInstaller.TogglePatch(info);
+    if (PatchInstaller.TogglePatch(info))
+    {
+      MethodPatched?.Invoke(target);
+    }
   }
 
   public bool IsPatched(MethodBase target)
   {
     return PatchInstaller.InstalledPatches.Any(
-      info => info is StopWatchWrapperPatch &&
+      info => info is StopwatchWrapperPatch &&
       info.TargetMethod == target
     );
   }
