@@ -1,14 +1,15 @@
 ﻿
+using Barotrauma;
 using CUILibs;
 
 namespace ShowperfExtensions;
 
-public class CaptureSlice : Dictionary<string, long>
+public class CaptureSlice : Dictionary<Identifier, double>
 {
-  public long Total { get; private set; }
-  public void AddTicks(string id, long value)
+  public double Total { get; private set; }
+  public void AddTicks(Identifier id, double value)
   {
-    if (this.TryGetValue(id, out long prevValue))
+    if (this.TryGetValue(id, out double prevValue))
     {
       this[id] = prevValue + value;
     }
@@ -24,7 +25,7 @@ public class CaptureSlice : Dictionary<string, long>
   {
     foreach (var (key, value) in right)
     {
-      if (left.TryGetValue(key, out long leftValue))
+      if (left.TryGetValue(key, out double leftValue))
       {
         left[key] = leftValue + value;
       }
@@ -41,9 +42,9 @@ public class CaptureSlice : Dictionary<string, long>
   {
     foreach (var (key, value) in right)
     {
-      if (left.TryGetValue(key, out long leftValue))
+      if (left.TryGetValue(key, out double leftValue))
       {
-        long result = leftValue - value;
+        double result = leftValue - value;
         if (result <= 0)
         {
           left.Remove(key);

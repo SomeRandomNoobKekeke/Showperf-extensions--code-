@@ -30,9 +30,9 @@ public class MethodLineComponent : CUIDefault.HorizontalBackPanel
     }
   }
 
-  public void NotifyMethodPatched(MethodBase mb)
+  public void UpdateStopwatchState()
   {
-    if (Method != mb) return;
+    if (ToggleStopwatchButton is null) return;
     ToggleStopwatchButton.State = StopwatchWrapper.IsPatched(Method);
   }
 

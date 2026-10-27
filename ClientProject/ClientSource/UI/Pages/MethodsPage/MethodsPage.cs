@@ -46,9 +46,16 @@ public class MethodsPage : CUIPage
 
   private void HandleMethodPatched(MethodBase mb)
   {
-    CurrentMethodLine.NotifyMethodPatched(mb);
+    CurrentMethodLine.UpdateStopwatchState();
     Main.OpenedPage.Commands.Execute(MethodPatched_Notification, mb);
   }
+
+  protected override void HandleOpen() => Refresh();
+  public override void Refresh()
+  {
+    CurrentMethodLine.UpdateStopwatchState();
+  }
+
 
   public MethodsPage()
   {

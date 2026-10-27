@@ -1,4 +1,5 @@
-﻿using CUILibs;
+﻿using Barotrauma;
+using CUILibs;
 using HarmonyLib;
 using System.Collections.Immutable;
 using System.Diagnostics;
@@ -30,7 +31,7 @@ public partial class StopwatchWrapper
   {
     public static void ReportElapsedTicks(MethodBase method, long ticks)
     {
-      Plugin.CaptureCore?.Update.AddTicks(MethodBaseParser.Serialize(method), ticks);
+      Plugin.CaptureCore?.Update.AddTicks(MethodBaseParser.Serialize(method).ToIdentifier(), ticks);
     }
 
     public static void Prefix(out Stopwatch __state)

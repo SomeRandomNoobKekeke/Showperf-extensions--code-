@@ -1,4 +1,5 @@
 ﻿
+using Barotrauma;
 using CUILibs;
 
 namespace ShowperfExtensions;
@@ -23,7 +24,8 @@ public class CaptureWindow
   public Queue<CaptureSlice> Slices { get; private set; } = [];
   public CaptureSlice TotalSlice { get; private set; } = new();
 
-  public void AddTicks(string id, long value)
+  public void AddTicks(string id, double value) => AddTicks(id.ToIdentifier(), value);
+  public void AddTicks(Identifier id, double value)
   {
     StagingSlice.AddTicks(id, value);
   }

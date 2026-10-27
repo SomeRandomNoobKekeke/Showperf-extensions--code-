@@ -61,7 +61,7 @@ public partial class CallGraphBrowserPage : CUIPage
     MethodLineComponent thisMethodLine = ThisMethodBlock["methods"][0] as MethodLineComponent;
     if (thisMethodLine is null) return;
 
-    thisMethodLine.NotifyMethodPatched(mb);
+    thisMethodLine.UpdateStopwatchState();
   }
 
   public CallGraphBrowserPage()

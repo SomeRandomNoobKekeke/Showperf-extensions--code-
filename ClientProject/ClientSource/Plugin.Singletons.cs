@@ -25,6 +25,7 @@ public partial class Plugin
     public ICallGraphSerializer CallGraphSerializer { get; } = new MetadataCallGraphSerializer();
     public StopwatchWrapper StopwatchWrapper { get; } = new();
     public CaptureCore CaptureCore { get; } = new();
+    public Settings Settings { get; } = new();
 
     public void Init()
     {
@@ -37,7 +38,7 @@ public partial class Plugin
       Patcher.RemoveAllPatches();
     }
   }
-
+  public static Settings Settings => Instance?.Singletons.Settings!;
   public static ICallGraphSerializer CallGraphSerializer => Instance?.Singletons.CallGraphSerializer!;
   public static CallGraphExplorer CallGraphExplorer => Instance?.Singletons.CallGraphExplorer!;
   public static UltimateAssemblyAnalyzer3000 Analyzer => Instance?.Singletons.Analyzer.Value!;
