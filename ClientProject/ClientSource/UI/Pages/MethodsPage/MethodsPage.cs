@@ -18,14 +18,13 @@ public class MethodsPage : CUIPage
   public const string MethodPatched_Notification = "MethodPatched_Notification";
 
 
-  public StopwatchWrapper StopwatchWrapper => Plugin.StopwatchWrapper;
 
-  public TypeExplorerPage TypeExplorerPage { get; private set; } = new();
-  public CallGraphBrowserPage CallGraphBrowserPage { get; private set; } = new();
-  public MethodDetailsPage MethodDetailsPage { get; private set; } = new();
+  public TypeExplorerPage TypeExplorerPage { get; }
+  public CallGraphBrowserPage CallGraphBrowserPage { get; }
+  public MethodDetailsPage MethodDetailsPage { get; }
 
-  public CUIHorizontalList Subpages { get; private set; }
-  public CUIPages Main { get; private set; }
+  public CUIHorizontalList Subpages { get; }
+  public CUIPages Main { get; }
 
   public MethodLineComponent CurrentMethodLine { get; private set; }
 
@@ -56,8 +55,16 @@ public class MethodsPage : CUIPage
     return block;
   }
 
-  public MethodsPage()
+  public MethodsPage(
+    TypeExplorerPage typeExplorerPage,
+    CallGraphBrowserPage callGraphBrowserPage,
+    MethodDetailsPage methodDetailsPage
+  )
   {
+    TypeExplorerPage = typeExplorerPage;
+    CallGraphBrowserPage = callGraphBrowserPage;
+    MethodDetailsPage = methodDetailsPage;
+
     this["layout"] = new CUIVerticalList() { Relative = new CUINullRect(0, 0, 1, 1) };
     this["layout"]["header"] = new CUIDefault.VerticalPanel();
     this["layout"]["main"] = Main = new CUIPages() { Flex = 1 };

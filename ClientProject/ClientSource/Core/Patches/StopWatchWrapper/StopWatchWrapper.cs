@@ -9,7 +9,7 @@ public partial class StopwatchWrapper
 {
   public FunnyDictOfWeakSets<MethodBase, ITrackStopwatchPatches> StopwatchPatcherListeners { get; } = new();
 
-  public PatchInstaller PatchInstaller => Plugin.PatchInstaller;
+  public PatchInstaller PatchInstaller { get; }
 
   private StopwatchWrapperPatch CreatePatchInfo(MethodBase target)
     => new StopwatchWrapperPatch(
@@ -56,9 +56,9 @@ public partial class StopwatchWrapper
 
 
 
-  public StopwatchWrapper()
+  public StopwatchWrapper(PatchInstaller patchInstaller)
   {
-    Logger.Default.LogVars(PatchInstaller);
+    PatchInstaller = patchInstaller;
 
     PatchInstaller.PatchInstalled += (info) =>
     {

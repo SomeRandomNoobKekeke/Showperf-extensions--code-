@@ -17,9 +17,9 @@ public partial class ShowperfFrame : CUIDefault.Frame
 
   public CUIPages Pages { get; }
 
-  public CustomPatchesPage CustomPatchesPage { get; } = new();
-  public MethodsPage MethodsPage { get; } = new();
-  public MeasurementsPage MeasurementsPage { get; } = new();
+  public CustomPatchesPage CustomPatchesPage { get; }
+  public MethodsPage MethodsPage { get; }
+  public MeasurementsPage MeasurementsPage { get; }
 
   private CUIComponent PageButtons;
 
@@ -31,8 +31,16 @@ public partial class ShowperfFrame : CUIDefault.Frame
     Close();
   }
 
-  public ShowperfFrame() : base("Showperf", 600, 600)
+  public ShowperfFrame(
+    CustomPatchesPage customPatchesPage,
+    MeasurementsPage measurementsPage,
+    MethodsPage methodsPage
+  ) : base("Showperf", 600, 600)
   {
+    CustomPatchesPage = customPatchesPage;
+    MeasurementsPage = measurementsPage;
+    MethodsPage = methodsPage;
+
     TargetMainComponent = CUI.Main;
     Anchor = CUIAnchor.Center;
     OnOpen += DeepRefresh;

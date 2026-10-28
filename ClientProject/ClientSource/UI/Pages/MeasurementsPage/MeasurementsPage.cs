@@ -9,7 +9,8 @@ namespace ShowperfExtensions;
 
 public partial class MeasurementsPage : CUIPage
 {
-  public CaptureCore? Capture => Plugin.CaptureCore;
+  public CaptureCore? Capture => Plugin.Capture;
+  public Settings Settings { get; set; }
 
   public CUIFastTextDump Dump { get; }
 
@@ -30,14 +31,16 @@ public partial class MeasurementsPage : CUIPage
 
     Dump.Lines = sortedTicks.Select(kvp => new FastTextDump.Line(
       $"{ConverToMs(kvp.Value / Capture.Update.SliceCount)}ms {kvp.Key}",
-      Plugin.Settings.Gradient((float)(kvp.Value / maxValue))
+      Settings.Gradient((float)(kvp.Value / maxValue))
     )).ToList();
 
     // CUI.Logger.Log(Logger.Wrap.IEnumerable(lines.Select(l => l.ToString()), true));
   }
 
-  public MeasurementsPage()
+  public MeasurementsPage(Settings settings)
   {
+    Settings = settings;
+
     this["layout"] = new CUIVerticalList() { Relative = new CUINullRect(0, 0, 1, 1) };
     this["layout"]["scroll wrapper"] = new CUIDefault.ListWithScrollbar() { Flex = 1 };
     this["layout"]["scroll wrapper"].Get<CUIVerticalList>("list").BottomGap = ResizeHandle.DefaultSize.Y * 2;

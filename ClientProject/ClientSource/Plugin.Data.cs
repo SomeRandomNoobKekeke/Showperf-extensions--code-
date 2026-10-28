@@ -12,7 +12,9 @@ public partial class Plugin
 {
   public TypeExplorer TypeExplorer { get; } = new TypeExplorer(typeof(GameMain).Assembly);
 
-  public CallGraphBuilder CallGraphBuilder { get; } = new();
+  public CallGraphBuilder CallGraphBuilder { get; private set; }
+  public CallGraphSaver CallGraphSaver { get; private set; }
+  public CallGraphExplorer CallGraphExplorer { get; private set; }
 
 
   public string CallGraphPath => Path.Combine(ModInfo.Dir, "Data", "CallGraph.json");
@@ -26,7 +28,7 @@ public partial class Plugin
     try
     {
       // CallGraphExplorer.CallGraph = CallGraphBuilder.ExtractFullCallGraph(); // takes ~674ms
-      CallGraphExplorer.CallGraph = CallGraph.LoadFrom(CallGraphPath); // takes ~32ms
+      CallGraphExplorer.CallGraph = CallGraphSaver.LoadFrom(CallGraphPath); // takes ~32ms
     }
     catch (Exception e)
     {

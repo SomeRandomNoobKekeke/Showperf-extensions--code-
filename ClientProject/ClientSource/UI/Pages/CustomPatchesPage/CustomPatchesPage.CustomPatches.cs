@@ -7,10 +7,10 @@ namespace ShowperfExtensions;
 
 public partial class CustomPatchesPage : CUIPage
 {
-  public class CustomPatchesComponent : CUIVerticalList
+  public class CustomPatchesBlockComponent : CUIVerticalList
   {
-    public CustomPatchRepo CustomPatches => Plugin.CustomPatches;
-    public PatchInstaller PatchInstaller => Plugin.PatchInstaller;
+    public CustomPatchRepo CustomPatches { get; } = Plugin.Get<CustomPatchRepo>();
+    public PatchInstaller PatchInstaller { get; } = Plugin.Get<PatchInstaller>();
 
     private CUIVerticalList PatchList;
 
@@ -84,7 +84,7 @@ public partial class CustomPatchesPage : CUIPage
     }
 
 
-    public CustomPatchesComponent()
+    public CustomPatchesBlockComponent()
     {
       this["caption"] = new CUIDefault.SolidTextBlock("Custom Patches")
       {

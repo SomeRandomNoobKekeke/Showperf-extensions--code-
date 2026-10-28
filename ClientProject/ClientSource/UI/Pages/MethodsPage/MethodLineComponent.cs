@@ -7,7 +7,7 @@ using Microsoft.Xna.Framework.Graphics;
 using System.Reflection;
 using Microsoft.Xna.Framework.Input;
 using System.Runtime.CompilerServices;
-
+using LightInject;
 namespace ShowperfExtensions;
 
 public class MethodLineComponent : CUIDefault.HorizontalBackPanel, ITrackStopwatchPatches
@@ -16,7 +16,7 @@ public class MethodLineComponent : CUIDefault.HorizontalBackPanel, ITrackStopwat
 
 
   private Assembly BarotraumaAssembly => typeof(GameMain).Assembly;
-  public StopwatchWrapper StopwatchWrapper => Plugin.StopwatchWrapper;
+  public StopwatchWrapper StopwatchWrapper { get; } = Plugin.ServiceContainer.GetInstance<StopwatchWrapper>();
 
   private MethodBase _Method; public MethodBase Method
   {

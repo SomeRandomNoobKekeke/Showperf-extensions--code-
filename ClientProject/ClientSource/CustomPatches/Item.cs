@@ -119,7 +119,7 @@ public class Item_Patch
       }
     }
     sw.Stop();
-    Capture.Update.AddTicks($"{_}.ItemComponents", sw.ElapsedTicks);
+    Plugin.Capture.Update.AddTicks($"{_}.ItemComponents", sw.ElapsedTicks);
 
 
 

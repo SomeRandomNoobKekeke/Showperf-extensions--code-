@@ -16,7 +16,7 @@ public partial class CallGraphBrowserPage : CUIPage
 
 
 
-  private CallGraphExplorer CallGraphExplorer => Plugin.CallGraphExplorer;
+  public CallGraphExplorer CallGraphExplorer { get; } = Plugin.Get<CallGraphExplorer>();
 
   private MethodBlock ThisMethodBlock;
   private MethodBlock CalledFromBlock;
@@ -34,8 +34,6 @@ public partial class CallGraphBrowserPage : CUIPage
       Refresh();
     }
   }
-
-
 
   protected override void HandleOpen() => Refresh();
 
@@ -58,7 +56,6 @@ public partial class CallGraphBrowserPage : CUIPage
 
   public CallGraphBrowserPage()
   {
-
     this["layout"] = new CUIVerticalList() { Relative = new CUINullRect(0, 0, 1, 1) };
 
     this["layout"]["controls"] = new CUIDefault.VerticalPanel();

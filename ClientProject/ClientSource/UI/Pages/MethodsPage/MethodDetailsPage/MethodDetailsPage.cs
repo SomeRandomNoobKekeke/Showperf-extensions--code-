@@ -11,7 +11,7 @@ namespace ShowperfExtensions;
 
 public class MethodDetailsPage : CUIPage
 {
-  public StopwatchWrapper StopwatchWrapper => Plugin.StopwatchWrapper;
+  public StopwatchWrapper StopwatchWrapper { get; }
 
   private MethodBase _Method; public MethodBase Method
   {
@@ -57,8 +57,10 @@ public class MethodDetailsPage : CUIPage
     StopwatchWrapper.TogglePatch(Method);
   }
 
-  public MethodDetailsPage()
+  public MethodDetailsPage(StopwatchWrapper stopwatchWrapper)
   {
+    StopwatchWrapper = stopwatchWrapper;
+
     this["layout"] = new CUIVerticalList() { Relative = new CUINullRect(0, 0, 1, 1) };
     this["layout"]["main"] = Main = new CUIVerticalList()
     {

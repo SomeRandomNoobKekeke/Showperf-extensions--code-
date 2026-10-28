@@ -9,39 +9,48 @@ namespace ShowperfExtensions;
 public partial class Plugin
 {
   public static Plugin? Instance { get; private set; }
-  public SingletonsContainer Singletons { get; private set; } = new();
-  public static ServiceContainer ServiceContainer { get; private set; } = new();
+
+
+
+  public ShowperfFrame ShowperfFrame { get; set; }
+  public static CaptureCore Capture { get; set; }
+  public PatchInstaller PatchInstaller { get; set; }
 
   public void Init()
   {
     Instance = this;
-    LoadData();
+
+
 
     CUI.Palettes.Primary = CUIPalette.FromColor(new Color(92, 92, 92, 255));
     CUI.Palettes.Secondary = CUIPalette.FromColor(new Color(0, 191, 221, 255));
     CUI.Palettes.Tertiary = CUIPalette.FromColor(new Color(0, 113, 183, 255));
     CUI.Palettes.Quaternary = CUIPalette.FromColor(new Color(255, 0, 0, 255));
 
-    Singletons.InitStep1();
-    Singletons.InitStep2();
-    Singletons.InitStep3();
 
 
-    ServiceContainer.RegisterSingleton<CustomPatchRepo>();
+    Capture = Get<CaptureCore>();
+    Capture.AttachToGame();
+
+    CallGraphBuilder = Get<CallGraphBuilder>();
+    CallGraphSaver = Get<CallGraphSaver>();
+    CallGraphExplorer = Get<CallGraphExplorer>();
 
     CUI.Logger.Log("ShowperfExtensions compiled");
 
     // PluginCommands.Add("showperf", (args) => ShowperfFrame.Open());
 
-    CustomPatchRepo patchRepo = ServiceContainer.GetInstance<CustomPatchRepo>();
+    PatchInstaller = Get<PatchInstaller>();
 
-    patchRepo.Add(new PatchInfo(
+    Get<CustomPatchRepo>().Add(new PatchInfo(
       "Deep item analysis",
       typeof(Item).GetMethod("Update")!,
       typeof(Item_Patch).GetMethod("Item_Update_Replace")!,
       HarmonyLib.HarmonyPatchType.Prefix
     ));
 
+    LoadData();
+    ShowperfFrame = Get<ShowperfFrame>();
 
     UTest.ScanThisAssembly();
     UTest.TryRunPrevTest();
@@ -54,8 +63,9 @@ public partial class Plugin
     Utils.RunWithDelay(Experiment, 500);
     // Experiment();
 
-    Singletons.Init();
     AddCommands();
+
+
 
     ShowperfFrame.Open();
     ShowperfFrame.MethodsPage.Current = typeof(Item).GetMethod("Update")!;
@@ -63,8 +73,8 @@ public partial class Plugin
 
   public void Dispose()
   {
-    Singletons.Dispose();
-    Singletons = null;
+    Capture.DetachFromGame();
+    PatchInstaller.RemoveAllPatches();
 
     ServiceContainer.Dispose();
     ServiceContainer = null;

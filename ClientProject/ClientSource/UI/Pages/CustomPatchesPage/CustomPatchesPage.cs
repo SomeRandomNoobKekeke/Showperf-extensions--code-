@@ -10,12 +10,12 @@ public partial class CustomPatchesPage : CUIPage
 
   public const string TogglePatch_Command = "TogglePatch";
 
-  private CUIVerticalList PatchList;
 
-  public CustomPatchRepo CustomPatches => Plugin.CustomPatches;
-  public PatchInstaller PatchInstaller => Plugin.PatchInstaller;
+  public CustomPatchRepo CustomPatches { get; } = Plugin.Get<CustomPatchRepo>();
+  public PatchInstaller PatchInstaller { get; } = Plugin.Get<PatchInstaller>();
 
-  private CustomPatchesComponent CustomPatchesBlock;
+
+  private CustomPatchesBlockComponent CustomPatchesBlock;
   private InstalledPatchesComponent InstalledPatchesBlock;
 
   protected override void HandleOpen() => Refresh();
@@ -36,7 +36,7 @@ public partial class CustomPatchesPage : CUIPage
   public CustomPatchesPage()
   {
     this["layout"] = new CUIHorizontalList() { Relative = new CUINullRect(0, 0, 1, 1) };
-    this["layout"]["custom patches"] = CustomPatchesBlock = new CustomPatchesComponent()
+    this["layout"]["custom patches"] = CustomPatchesBlock = new CustomPatchesBlockComponent()
     {
       Flex = 1,
     };

@@ -18,8 +18,8 @@ public class CaptureCore
 
   private static void GameScreen_Update_Postfix()
   {
-    if (!Plugin.CaptureCore?.Active == true) return;
-    Plugin.CaptureCore?.Update.Rotate();
+    if (!Plugin.Capture?.Active == true) return;
+    Plugin.Capture?.Update.Rotate();
   }
 
   internal void AttachToGame()

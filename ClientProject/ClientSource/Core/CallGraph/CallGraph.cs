@@ -37,6 +37,4 @@ public partial class CallGraph
       }
     }
   }
-
-  public override string ToString() => Serializer.Serialize(this);
 }
