@@ -25,15 +25,11 @@ public partial class ShowperfFrame : CUIDefault.Frame
 
   private CUIButton OpenButton;
 
-
   public void Minimize()
   {
     TargetMainComponent["open showperf"] = OpenButton;
     Close();
   }
-
-
-
 
   public ShowperfFrame() : base("Showperf", 600, 600)
   {

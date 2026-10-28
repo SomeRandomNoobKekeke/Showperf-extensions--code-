@@ -44,27 +44,11 @@ public class MethodsPage : CUIPage
     }
   }
 
-  private void HandleMethodPatched(MethodBase mb)
-  {
-    CurrentMethodLine.UpdateStopwatchState();
-    Main.OpenedPage.Commands.Execute(MethodPatched_Notification, mb);
-  }
-
-  protected override void HandleOpen() => Refresh();
-  public override void Refresh()
-  {
-    CurrentMethodLine.UpdateStopwatchState();
-  }
-
-
   public MethodsPage()
   {
     this["layout"] = new CUIVerticalList() { Relative = new CUINullRect(0, 0, 1, 1) };
     this["layout"]["header"] = new CUIDefault.VerticalPanel();
     this["layout"]["main"] = Main = new CUIPages() { Flex = 1 };
-
-    StopwatchWrapper.MethodPatched += HandleMethodPatched;
-
 
     this["layout"]["header"]["subpages"] = Subpages = new CUIDefault.HorizontalPanel();
 

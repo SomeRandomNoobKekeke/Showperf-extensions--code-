@@ -10,7 +10,7 @@ using System.Runtime.CompilerServices;
 
 namespace ShowperfExtensions;
 
-public class MethodLineComponent : CUIDefault.HorizontalBackPanel
+public class MethodLineComponent : CUIDefault.HorizontalBackPanel, ITrackStopwatchPatches
 {
   public static ConditionalWeakTable<MethodBase, MethodLineComponent> Components { get; } = new();
 
@@ -24,13 +24,24 @@ public class MethodLineComponent : CUIDefault.HorizontalBackPanel
     set
     {
       if (Method == value) return;
+
+      if (_Method != null)
+      {
+        StopwatchWrapper.StopwatchPatcherListeners.Remove(_Method, this);
+      }
+
       _Method = value;
+
+      if (_Method != null)
+      {
+        StopwatchWrapper.StopwatchPatcherListeners.Add(_Method, this);
+      }
 
       Refresh();
     }
   }
 
-  public void UpdateStopwatchState()
+  public void NotifyStopwatchToggled(MethodBase mb, bool state)
   {
     if (ToggleStopwatchButton is null) return;
     ToggleStopwatchButton.State = StopwatchWrapper.IsPatched(Method);

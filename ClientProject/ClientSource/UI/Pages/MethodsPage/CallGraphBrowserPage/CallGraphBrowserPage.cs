@@ -56,18 +56,8 @@ public partial class CallGraphBrowserPage : CUIPage
     Commands.SendUp(MethodsPage.SelectMethod_Command, mb);
   }
 
-  private void HandleMethodPatched(MethodBase mb)
-  {
-    MethodLineComponent thisMethodLine = ThisMethodBlock["methods"][0] as MethodLineComponent;
-    if (thisMethodLine is null) return;
-
-    thisMethodLine.UpdateStopwatchState();
-  }
-
   public CallGraphBrowserPage()
   {
-    Commands.ListenFor<MethodBase>(MethodsPage.MethodPatched_Notification, HandleMethodPatched);
-
 
     this["layout"] = new CUIVerticalList() { Relative = new CUINullRect(0, 0, 1, 1) };
 

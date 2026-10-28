@@ -17,6 +17,10 @@ public partial class PatchInstaller
         info => info
       );
 
+
+  public event Action<PatchInfoBase>? PatchInstalled;
+  public event Action<PatchInfoBase>? PatchRemoved;
+
   public Dictionary<MethodBase, List<PatchInfoBase>> PatchesByMethod
   {
     get
@@ -43,6 +47,7 @@ public partial class PatchInstaller
     info.Install(Harmony);
 
     _InstalledPatches.Add(info);
+    PatchInstalled?.Invoke(info);
     return true;
   }
 
@@ -52,6 +57,7 @@ public partial class PatchInstaller
 
     info.Remove(Harmony);
     _InstalledPatches.Remove(info);
+    PatchRemoved?.Invoke(info);
     return true;
   }
 

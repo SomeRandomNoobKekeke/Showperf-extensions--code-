@@ -10,8 +10,6 @@ public partial class Plugin
   public static Plugin? Instance { get; private set; }
   public SingletonsContainer Singletons { get; private set; } = new();
 
-  public ShowperfFrame ShowperfFrame { get; private set; }
-
 
   public void Init()
   {
@@ -23,7 +21,9 @@ public partial class Plugin
     CUI.Palettes.Tertiary = CUIPalette.FromColor(new Color(0, 113, 183, 255));
     CUI.Palettes.Quaternary = CUIPalette.FromColor(new Color(255, 0, 0, 255));
 
-    ShowperfFrame = new();
+    Singletons.InitStep1();
+    Singletons.InitStep2();
+    Singletons.InitStep3();
 
     CUI.Logger.Log("ShowperfExtensions compiled");
 

@@ -1,4 +1,5 @@
-﻿using HarmonyLib;
+﻿using CUILibs;
+using HarmonyLib;
 using System.Collections.Immutable;
 using System.Reflection;
 
@@ -6,9 +7,9 @@ namespace ShowperfExtensions;
 
 public partial class StopwatchWrapper
 {
-  public PatchInstaller PatchInstaller => Plugin.PatchInstaller;
+  public FunnyDictOfWeakSets<MethodBase, ITrackStopwatchPatches> StopwatchPatcherListeners { get; } = new();
 
-  public event Action<MethodBase>? MethodPatched;
+  public PatchInstaller PatchInstaller => Plugin.PatchInstaller;
 
   private StopwatchWrapperPatch CreatePatchInfo(MethodBase target)
     => new StopwatchWrapperPatch(
@@ -16,34 +17,33 @@ public partial class StopwatchWrapper
       target
     );
 
+  private void NotifyStopwatchPatcherListeners(MethodBase mb, bool state)
+  {
+    foreach (var (method, listeners) in StopwatchPatcherListeners)
+    {
+      foreach (ITrackStopwatchPatches listener in listeners)
+      {
+        listener.NotifyStopwatchToggled(mb, state);
+      }
+    }
+  }
+
   public void Patch(MethodBase target)
   {
     StopwatchWrapperPatch info = CreatePatchInfo(target);
-
-    if (PatchInstaller.InstallPatch(info))
-    {
-      MethodPatched?.Invoke(target);
-    }
+    PatchInstaller.InstallPatch(info);
   }
 
   public void UnPatch(MethodBase target)
   {
     StopwatchWrapperPatch info = CreatePatchInfo(target);
-
-    if (PatchInstaller.RemovePatch(info))
-    {
-      MethodPatched?.Invoke(target);
-    }
+    PatchInstaller.RemovePatch(info);
   }
 
   public void TogglePatch(MethodBase target)
   {
     StopwatchWrapperPatch info = CreatePatchInfo(target);
-
-    if (PatchInstaller.TogglePatch(info))
-    {
-      MethodPatched?.Invoke(target);
-    }
+    PatchInstaller.TogglePatch(info);
   }
 
   public bool IsPatched(MethodBase target)
@@ -52,5 +52,28 @@ public partial class StopwatchWrapper
       info => info is StopwatchWrapperPatch &&
       info.TargetMethod == target
     );
+  }
+
+
+
+  public StopwatchWrapper()
+  {
+    Logger.Default.LogVars(PatchInstaller);
+
+    PatchInstaller.PatchInstalled += (info) =>
+    {
+      if (info is StopwatchWrapperPatch swp)
+      {
+        NotifyStopwatchPatcherListeners(swp.TargetMethod, true);
+      }
+    };
+
+    PatchInstaller.PatchRemoved += (info) =>
+    {
+      if (info is StopwatchWrapperPatch swp)
+      {
+        NotifyStopwatchPatcherListeners(swp.TargetMethod, false);
+      }
+    };
   }
 }
