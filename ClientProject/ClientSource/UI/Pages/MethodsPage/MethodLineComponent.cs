@@ -25,17 +25,9 @@ public class MethodLineComponent : CUIDefault.HorizontalBackPanel, ITrackStopwat
     {
       if (Method == value) return;
 
-      if (_Method != null)
-      {
-        StopwatchWrapper.StopwatchPatcherListeners.Remove(_Method, this);
-      }
-
+      if (_Method != null) StopwatchWrapper.StopwatchPatcherListeners.Remove(_Method, this);
       _Method = value;
-
-      if (_Method != null)
-      {
-        StopwatchWrapper.StopwatchPatcherListeners.Add(_Method, this);
-      }
+      if (_Method != null) StopwatchWrapper.StopwatchPatcherListeners.Add(_Method, this);
 
       Refresh();
     }
@@ -70,6 +62,7 @@ public class MethodLineComponent : CUIDefault.HorizontalBackPanel, ITrackStopwat
     this["toggle stopwatch"] = ToggleStopwatchButton = new CUIToggleIconButton(CUISprite.BurningTimerIcon)
     {
       State = StopwatchWrapper.IsPatched(Method),
+      PaletteImmunity = true,
       OnToggle = (state) =>
       {
         StopwatchWrapper.TogglePatch(Method);
@@ -77,18 +70,11 @@ public class MethodLineComponent : CUIDefault.HorizontalBackPanel, ITrackStopwat
       },
       Scale = 0.8f,
       Padding = new CUISizes(1, 1, 1, 1),
-      Background = { Sprite = CUISprite.VerticalGlowSolid },
-      Border = {
-        Sprite = CUISprite.VerticalGlowSolid,
-        Sizes = new CUISizes( right: 1),
-      },
+      Background = { Sprite = CUISprite.GlowingEdgesSolid },
       Style = (c) =>
       {
-        c.OnColor = Color.Cyan.MultOpaque(1.0f);
-        c.OffColorHovered = new Color(200, 200, 200, 200).MultOpaque(0.9f);
-        c.OffColor = new Color(200, 200, 200, 200).MultOpaque(0.8f);
-        c.Border.Color = new Color(200, 200, 200, 200).MultOpaque(0.8f);
-        c.DetermineColor();
+        c.MasterColor = Color.White;
+        c.OnColor = Color.Lime;
       },
     };
 

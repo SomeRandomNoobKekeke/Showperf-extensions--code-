@@ -20,14 +20,14 @@ public class MethodsPage : CUIPage
 
   public StopwatchWrapper StopwatchWrapper => Plugin.StopwatchWrapper;
 
-  public TypeExplorerPage TypeExplorerPage { get; } = new();
-  public CallGraphBrowserPage CallGraphBrowserPage { get; } = new();
-  public MethodDetailsPage MethodDetailsPage { get; } = new();
+  public TypeExplorerPage TypeExplorerPage { get; private set; } = new();
+  public CallGraphBrowserPage CallGraphBrowserPage { get; private set; } = new();
+  public MethodDetailsPage MethodDetailsPage { get; private set; } = new();
 
-  public CUIHorizontalList Subpages { get; }
-  public CUIPages Main { get; }
+  public CUIHorizontalList Subpages { get; private set; }
+  public CUIPages Main { get; private set; }
 
-  public MethodLineComponent CurrentMethodLine { get; }
+  public MethodLineComponent CurrentMethodLine { get; private set; }
 
   private MethodBase _Current; public MethodBase Current
   {
@@ -42,6 +42,18 @@ public class MethodsPage : CUIPage
       MethodDetailsPage.Method = Current;
       CallGraphBrowserPage.Current = Current;
     }
+  }
+
+
+  private CUIComponent CreateCurrentMethodBlock()
+  {
+    CUIComponent block = new CUIDefault.HorizontalPanel();
+
+    block["label"] = new CUITextBlock("Selected Method: ");
+    block["method line"] = CurrentMethodLine = new MethodLineComponent() { Flex = 1 };
+    block.DeepPalette = CUICore.Palettes.Secondary2;
+
+    return block;
   }
 
   public MethodsPage()
@@ -77,14 +89,7 @@ public class MethodsPage : CUIPage
     this["layout"]["header"]["subpages"].DeepPalette = CUICore.Palettes.Secondary;
 
 
-    CUIComponent currentMethodBlock = new CUIDefault.HorizontalPanel();
-    this["layout"]["header"]["current method block"] = currentMethodBlock;
-    currentMethodBlock["label"] = new CUITextBlock("Selected Method: ");
-    currentMethodBlock["method line"] = CurrentMethodLine = new MethodLineComponent()
-    {
-      Flex = 1,
-    };
-    currentMethodBlock.DeepPalette = CUICore.Palettes.Secondary2;
+    this["layout"]["header"]["current method block"] = CreateCurrentMethodBlock();
 
 
     Commands.ListenFor<MethodBase>(ShowMethodDetails_Command, (mb) =>

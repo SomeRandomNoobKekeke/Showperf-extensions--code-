@@ -33,7 +33,7 @@ public partial class ShowperfFrame : CUIDefault.Frame
 
   public ShowperfFrame() : base("Showperf", 600, 600)
   {
-    TargetMainComponent = CUI.TopMain;
+    TargetMainComponent = CUI.Main;
     Anchor = CUIAnchor.Center;
     OnOpen += DeepRefresh;
     ResizableBoth = true;
