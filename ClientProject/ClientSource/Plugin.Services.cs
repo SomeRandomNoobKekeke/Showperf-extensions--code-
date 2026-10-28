@@ -16,7 +16,11 @@ public partial class Plugin
     {
       if (_ServiceContainer is null)
       {
-        _ServiceContainer = new(new ContainerOptions { EnablePropertyInjection = false });
+        _ServiceContainer = new(new ContainerOptions
+        {
+          EnablePropertyInjection = false,
+          // LogFactory = (type) => logEntry => Logger.Default.Log($"LI| {Logger.White(logEntry.Message)}"),
+        });
         RegisterServices();
       }
 
@@ -30,8 +34,21 @@ public partial class Plugin
   /// </summary>
   public static T Get<T>() => ServiceContainer.GetInstance<T>();
 
+  private void InjectProperties()
+  {
+    // ServiceContainer.InjectProperties(this);
+
+    Capture = Get<CaptureCore>();
+    CallGraphBuilder = Get<CallGraphBuilder>();
+    CallGraphSaver = Get<CallGraphSaver>();
+    CallGraphExplorer = Get<CallGraphExplorer>();
+    PatchInstaller = Get<PatchInstaller>();
+    ShowperfFrame = Get<ShowperfFrame>();
+  }
+
   private static void RegisterServices()
   {
+    ServiceContainer.RegisterSingleton<Plugin>();
     ServiceContainer.RegisterSingleton<CustomPatchRepo>();
     ServiceContainer.RegisterSingleton<Settings>();
     ServiceContainer.RegisterSingleton<UltimateAssemblyAnalyzer3000>();
