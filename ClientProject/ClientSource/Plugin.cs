@@ -12,15 +12,14 @@ public partial class Plugin
 
 
 
-  public ShowperfFrame ShowperfFrame { get; set; }
-  public static CaptureCore Capture { get; set; }
-  public PatchInstaller PatchInstaller { get; set; }
+  public ShowperfFrame ShowperfFrame { get; } = Get<ShowperfFrame>();
+  public static CaptureCore Capture { get; set; } = Get<CaptureCore>();
+  public PatchInstaller PatchInstaller { get; } = Get<PatchInstaller>();
 
   public void Init()
   {
     CUI.Logger.Log("ShowperfExtensions compiled");
     Instance = this;
-    InjectProperties();
 
     Capture.AttachToGame();
     AddCommands();
@@ -52,6 +51,7 @@ public partial class Plugin
 
   public void Dispose()
   {
+    SaveData();
     Capture.DetachFromGame();
     PatchInstaller.RemoveAllPatches();
 

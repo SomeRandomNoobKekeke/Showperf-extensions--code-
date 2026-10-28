@@ -87,15 +87,15 @@ public class MethodBaseParserTest : UTestPack
   {
     return [
       new UTest(
-        MethodBaseParser.Parse("Barotrauma.GameMain.Update(GameTime)"),
+        MethodBaseParser.Parse("Barotrauma.GameMain.Update(GameTime)")!,
         typeof(GameMain).GetMethod("Update", Pls)!
       ),
       new UTest(
-        MethodBaseParser.Parse("Microsoft.Xna.Framework.Color.Lerp(Color, Color, Single)"),
+        MethodBaseParser.Parse("Microsoft.Xna.Framework.Color.Lerp(Color, Color, Single)")!,
         typeof(Color).GetMethod("Lerp")!
       ),
       new UTest(
-        MethodBaseParser.Parse("Barotrauma.Character.AddDamage(Vector2, IEnumerable<Affliction>, Single, Boolean, Vector2, out Limb, Character, Single)"),
+        MethodBaseParser.Parse("Barotrauma.Character.AddDamage(Vector2, IEnumerable<Affliction>, Single, Boolean, Vector2, out Limb, Character, Single)")!,
         typeof(Character).GetMethod("AddDamage", Pls, [
           typeof(Vector2),
           typeof(IEnumerable<Affliction>),
@@ -108,7 +108,7 @@ public class MethodBaseParserTest : UTestPack
         ])!
       ),
       new UTest(
-        MethodBaseParser.Parse("Barotrauma.Character.AddDamage(Vector2, IEnumerable<Affliction>, Single, Boolean, Vector2?, Character, Single)"),
+        MethodBaseParser.Parse("Barotrauma.Character.AddDamage(Vector2, IEnumerable<Affliction>, Single, Boolean, Vector2?, Character, Single)")!,
         typeof(Character).GetMethod("AddDamage", Pls, [
           typeof(Vector2),
           typeof(IEnumerable<Affliction>),
@@ -120,7 +120,7 @@ public class MethodBaseParserTest : UTestPack
         ])!
       ),
       new UTest(
-        MethodBaseParser.Parse("Barotrauma.Attack.Constructor(Single, Single, Single, Single, Single, Single)"),
+        MethodBaseParser.Parse("Barotrauma.Attack.Constructor(Single, Single, Single, Single, Single, Single)")!,
         typeof(Attack).GetConstructor(Pls, [
           typeof(float),
           typeof(float),
@@ -137,13 +137,13 @@ public class MethodBaseParserTest : UTestPack
   {
     return [
       new UTest(
-        MethodBaseParser.Parse("Barotrauma.CharacterHealth.GetAffliction(Identifier, Boolean)"),
+        MethodBaseParser.Parse("Barotrauma.CharacterHealth.GetAffliction(Identifier, Boolean)")!,
         typeof(CharacterHealth).GetMethod("GetAffliction", 0, [
           typeof(Identifier),typeof(bool)
         ])!
       ),
       new UTest(
-        MethodBaseParser.Parse("Barotrauma.CharacterHealth.GetAffliction<T>(Identifier, Boolean)"),
+        MethodBaseParser.Parse("Barotrauma.CharacterHealth.GetAffliction<T>(Identifier, Boolean)")!,
         typeof(CharacterHealth).GetMethod("GetAffliction", 1, [
           typeof(Identifier),typeof(bool)
         ])!

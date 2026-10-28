@@ -12,9 +12,9 @@ public partial class Plugin
 {
   public TypeExplorer TypeExplorer { get; } = new TypeExplorer(typeof(GameMain).Assembly);
 
-  public CallGraphBuilder CallGraphBuilder { get; private set; }
-  public CallGraphSaver CallGraphSaver { get; private set; }
-  public CallGraphExplorer CallGraphExplorer { get; private set; }
+  public CallGraphBuilder CallGraphBuilder { get; } = Get<CallGraphBuilder>();
+  public CallGraphSaver CallGraphSaver { get; } = Get<CallGraphSaver>();
+  public CallGraphExplorer CallGraphExplorer { get; } = Get<CallGraphExplorer>();
 
 
   public string CallGraphPath => Path.Combine(ModInfo.Dir, "Data", "CallGraph.json");
@@ -37,5 +37,10 @@ public partial class Plugin
     sw.Stop();
 
     CUI.Logger.LogVars(sw.ElapsedMilliseconds);
+  }
+
+  private void SaveData()
+  {
+
   }
 }

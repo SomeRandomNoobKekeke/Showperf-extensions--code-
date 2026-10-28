@@ -11,12 +11,6 @@ namespace ShowperfExtensions;
 
 public class TypeExplorerPage : CUIPage
 {
-  public static ICUIStyle DefaultStyle => new CUIDefaultStyle<TypeExplorerPage>((c) =>
-  {
-    c.Background.Color = Color.Lerp(c.Palette["back"], c.Palette["main"], 0.2f);
-  });
-
-
   private CUIVerticalList ChildNodeList;
   private CUITextBlock Caption;
   private CUITextInput SearchBox;
@@ -55,19 +49,23 @@ public class TypeExplorerPage : CUIPage
     Color GetNodeColor(TypeExplorer.Node node) => node switch
     {
       TypeExplorer.AssemblyNode => Color.Gray,
-      TypeExplorer.NamespaceNode => Color.Gray,
+      TypeExplorer.NamespaceNode => Color.Purple.To(Color.Gray, 0.5f),
       TypeExplorer.TypeNode => Color.Blue.To(Color.Gray, 0.5f),
       TypeExplorer.ConstructorNode => Color.Orange.To(Color.Gray, 0.5f),
-      TypeExplorer.MethodNode => Color.Lime.To(Color.Gray, 0.5f),
     };
 
     CUIComponent CreateNodeButton(TypeExplorer.Node node)
     {
-      return new CUIDefault.GlowingButton(node.ToString())
+      return node switch
       {
-        TextAnchor = CUIAnchor.LeftCenter,
-        OnMouseDown = (e) => GoTo(node),
-        Style = (c) => c.MasterColor = GetNodeColor(node),
+        TypeExplorer.ConstructorNode cn => new MethodLineComponent(cn.Method) { Color = Color.Orange },
+        TypeExplorer.MethodNode mn => new MethodLineComponent(mn.Method),
+        _ => new CUIDefault.GlowingButton(node.ToString())
+        {
+          TextAnchor = CUIAnchor.LeftCenter,
+          OnMouseDown = (e) => GoTo(node),
+          Style = (c) => c.MasterColor = GetNodeColor(node),
+        },
       };
     }
 
@@ -117,7 +115,6 @@ public class TypeExplorerPage : CUIPage
   {
     Commands.ListenFor<MethodBase>(MethodsPage.MethodPatched_Notification, HandleMethodPatched);
 
-
     this["layout"] = new CUIVerticalList() { Relative = new CUINullRect(0, 0, 1, 1) };
     this["layout"]["header"] = new CUIVerticalList() { FitContent = new CUIBool2(false, true), };
     this["layout"]["main"] = new CUIVerticalList() { Flex = 1 };
@@ -152,11 +149,13 @@ public class TypeExplorerPage : CUIPage
     };
 
 
-    this["layout"]["main"]["nodes"] = new CUIDefault.ListWithScrollbar() { Flex = 1 };
+    this["layout"]["main"]["nodes"] = new CUIDefault.ListWithScrollbar()
+    {
+      Flex = 1,
+      List = { BottomGap = ResizeHandle.DefaultSize.Y * 2 },
+    };
 
     ChildNodeList = Get<CUIVerticalList>("layout.main.nodes.list");
-    ChildNodeList.BottomGap = ResizeHandle.DefaultSize.Y * 2;
-
 
     DeepPalette = CUICore.Palettes.Tertiary;
 

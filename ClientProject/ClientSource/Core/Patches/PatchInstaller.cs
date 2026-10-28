@@ -44,7 +44,15 @@ public partial class PatchInstaller
   {
     if (_InstalledPatches.Contains(info)) return false;
 
-    info.Install(Harmony);
+    try
+    {
+      info.Install(Harmony);
+    }
+    catch (Exception e)
+    {
+      Logger.Default.Warning($"Couldn't patch {info.TargetMethod}: {e.Message}");
+      return false;
+    }
 
     _InstalledPatches.Add(info);
     PatchInstalled?.Invoke(info);
@@ -55,7 +63,16 @@ public partial class PatchInstaller
   {
     if (!_InstalledPatches.Contains(info)) return false;
 
-    info.Remove(Harmony);
+    try
+    {
+      info.Remove(Harmony);
+    }
+    catch (Exception e)
+    {
+      Logger.Default.Warning($"Couldn't unpatch {info.TargetMethod}: {e.Message}");
+      return false;
+    }
+
     _InstalledPatches.Remove(info);
     PatchRemoved?.Invoke(info);
     return true;

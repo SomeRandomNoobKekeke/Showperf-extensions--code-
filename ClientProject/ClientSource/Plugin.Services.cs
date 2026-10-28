@@ -34,18 +34,6 @@ public partial class Plugin
   /// </summary>
   public static T Get<T>() => ServiceContainer.GetInstance<T>();
 
-  private void InjectProperties()
-  {
-    // ServiceContainer.InjectProperties(this);
-
-    Capture = Get<CaptureCore>();
-    CallGraphBuilder = Get<CallGraphBuilder>();
-    CallGraphSaver = Get<CallGraphSaver>();
-    CallGraphExplorer = Get<CallGraphExplorer>();
-    PatchInstaller = Get<PatchInstaller>();
-    ShowperfFrame = Get<ShowperfFrame>();
-  }
-
   private static void RegisterServices()
   {
     ServiceContainer.RegisterSingleton<Plugin>();
@@ -59,6 +47,8 @@ public partial class Plugin
     ServiceContainer.RegisterSingleton<CallGraphExplorer>();
     ServiceContainer.RegisterSingleton<PatchInstaller>();
     ServiceContainer.RegisterSingleton<StopwatchWrapper>();
+    ServiceContainer.RegisterSingleton<MethodBookmarksList>();
+
 
 
     ServiceContainer.RegisterSingleton<CustomPatchesPage>();
@@ -68,6 +58,7 @@ public partial class Plugin
     ServiceContainer.RegisterSingleton<TypeExplorerPage>();
     ServiceContainer.RegisterSingleton<CallGraphBrowserPage>();
     ServiceContainer.RegisterSingleton<MethodDetailsPage>();
+    ServiceContainer.RegisterSingleton<BookmarkedMethodsPage>();
 
     ServiceContainer.RegisterSingleton<ShowperfFrame>();
   }

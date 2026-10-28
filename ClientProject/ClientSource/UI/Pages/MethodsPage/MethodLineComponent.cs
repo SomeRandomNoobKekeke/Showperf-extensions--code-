@@ -10,13 +10,13 @@ using System.Runtime.CompilerServices;
 using LightInject;
 namespace ShowperfExtensions;
 
-public class MethodLineComponent : CUIDefault.HorizontalBackPanel, ITrackStopwatchPatches
+public class MethodLineComponent : CUIDefault.HorizontalBackPanel,
+  ITrackStopwatchPatches,
+  ITrackMethodBookmarks
 {
-  public static ConditionalWeakTable<MethodBase, MethodLineComponent> Components { get; } = new();
-
-
   private Assembly BarotraumaAssembly => typeof(GameMain).Assembly;
-  public StopwatchWrapper StopwatchWrapper { get; } = Plugin.ServiceContainer.GetInstance<StopwatchWrapper>();
+  public StopwatchWrapper StopwatchWrapper { get; } = Plugin.Get<StopwatchWrapper>();
+  public MethodBookmarksList MethodBookmarksList { get; } = Plugin.Get<MethodBookmarksList>();
 
   private MethodBase _Method; public MethodBase Method
   {
@@ -33,10 +33,18 @@ public class MethodLineComponent : CUIDefault.HorizontalBackPanel, ITrackStopwat
     }
   }
 
+  public Color Color { set => Get<CUIButton>("select method").MasterColor = value; }
+
   public void NotifyStopwatchToggled(MethodBase mb, bool state)
   {
     if (ToggleStopwatchButton is null) return;
     ToggleStopwatchButton.State = StopwatchWrapper.IsPatched(Method);
+  }
+
+  public void NotifyMethodBookmarks()
+  {
+    if (this["bookmark"] is null) return;
+    this.Get<CUIToggleButton>("bookmark").State = MethodBookmarksList.Contains(Method);
   }
 
   private CUIToggleIconButton ToggleStopwatchButton;
@@ -62,7 +70,7 @@ public class MethodLineComponent : CUIDefault.HorizontalBackPanel, ITrackStopwat
     this["toggle stopwatch"] = ToggleStopwatchButton = new CUIToggleIconButton(CUISprite.BurningTimerIcon)
     {
       State = StopwatchWrapper.IsPatched(Method),
-      PaletteImmunity = true,
+      DeepPaletteImmunity = true,
       OnToggle = (state) =>
       {
         StopwatchWrapper.TogglePatch(Method);
@@ -83,11 +91,18 @@ public class MethodLineComponent : CUIDefault.HorizontalBackPanel, ITrackStopwat
       TextAnchor = CUIAnchor.LeftCenter,
       OnClick = () => SelectMethod(Method),
       MasterColor = new Color(200, 200, 200, 200),
-      PaletteImmunity = true,
+      DeepPaletteImmunity = true,
       Disabled = !CanMethodBeSelected(Method),
       Flex = 1,
     };
+
+    this["bookmark"] = new CUIToggleButton("bookmark")
+    {
+      State = MethodBookmarksList.Contains(Method),
+      OnToggle = (state) => MethodBookmarksList.Toggle(Method),
+    };
   }
+
 
 
   public MethodLineComponent(MethodBase method = null)

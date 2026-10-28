@@ -19,9 +19,10 @@ public class MethodsPage : CUIPage
 
 
 
-  public TypeExplorerPage TypeExplorerPage { get; }
-  public CallGraphBrowserPage CallGraphBrowserPage { get; }
-  public MethodDetailsPage MethodDetailsPage { get; }
+  public TypeExplorerPage TypeExplorerPage { get; } = Plugin.Get<TypeExplorerPage>();
+  public CallGraphBrowserPage CallGraphBrowserPage { get; } = Plugin.Get<CallGraphBrowserPage>();
+  public MethodDetailsPage MethodDetailsPage { get; } = Plugin.Get<MethodDetailsPage>();
+  public BookmarkedMethodsPage BookmarkedMethodsPage { get; } = Plugin.Get<BookmarkedMethodsPage>();
 
   public CUIHorizontalList Subpages { get; }
   public CUIPages Main { get; }
@@ -55,16 +56,8 @@ public class MethodsPage : CUIPage
     return block;
   }
 
-  public MethodsPage(
-    TypeExplorerPage typeExplorerPage,
-    CallGraphBrowserPage callGraphBrowserPage,
-    MethodDetailsPage methodDetailsPage
-  )
+  public MethodsPage()
   {
-    TypeExplorerPage = typeExplorerPage;
-    CallGraphBrowserPage = callGraphBrowserPage;
-    MethodDetailsPage = methodDetailsPage;
-
     this["layout"] = new CUIVerticalList() { Relative = new CUINullRect(0, 0, 1, 1) };
     this["layout"]["header"] = new CUIDefault.VerticalPanel();
     this["layout"]["main"] = Main = new CUIPages() { Flex = 1 };
@@ -78,7 +71,7 @@ public class MethodsPage : CUIPage
       btn.CullChildren = true;
     }))
     {
-      this["layout"]["header"]["subpages"]["CallGraphBrowser"] = new CUIRadioButton("Call Graph")
+      this["layout"]["header"]["subpages"]["Call Graph"] = new CUIRadioButton("Call Graph")
       {
         OnSelected = () => Main.OpenPage(CallGraphBrowserPage),
       };
@@ -88,9 +81,13 @@ public class MethodsPage : CUIPage
         OnSelected = () => Main.OpenPage(TypeExplorerPage),
       };
 
-      this["layout"]["header"]["subpages"]["Method Details"] = new CUIRadioButton("Details")
+      this["layout"]["header"]["subpages"]["Details"] = new CUIRadioButton("Details")
       {
         OnSelected = () => Main.OpenPage(MethodDetailsPage),
+      };
+      this["layout"]["header"]["subpages"]["Bookmarks"] = new CUIRadioButton("Bookmarks")
+      {
+        OnSelected = () => Main.OpenPage(BookmarkedMethodsPage),
       };
     }
     this["layout"]["header"]["subpages"].DeepPalette = CUICore.Palettes.Secondary;
@@ -101,7 +98,7 @@ public class MethodsPage : CUIPage
 
     Commands.ListenFor<MethodBase>(ShowMethodDetails_Command, (mb) =>
     {
-      Subpages.Get<CUIRadioButton>("Method Details").Select();
+      Subpages.Get<CUIRadioButton>("Details").Select();
       MethodDetailsPage.Method = mb;
     });
 

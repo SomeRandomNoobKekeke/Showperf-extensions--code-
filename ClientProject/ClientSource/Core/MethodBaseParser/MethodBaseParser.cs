@@ -70,7 +70,7 @@ public static class MethodBaseParser
     return sb.ToString();
   }
 
-  public static MethodBase Parse(string raw)
+  public static MethodBase? Parse(string raw)
   {
     int endOfName = raw.IndexOfAny(['(', '<']);
     int startOfArgs = raw.IndexOf('(');

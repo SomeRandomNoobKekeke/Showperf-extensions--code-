@@ -78,7 +78,7 @@ public partial class CallGraphBrowserPage : CUIPage
 
     Main["this method block"] = ThisMethodBlock = new MethodBlock("This Method:")
     {
-      PaletteImmunity = true,
+      DeepPaletteImmunity = true,
       DeepPalette = CUIPalette.FromColor(Color.Lime),
     };
     Main["overrides block"] = OverridesBlock = new MethodBlock("Overrides:");

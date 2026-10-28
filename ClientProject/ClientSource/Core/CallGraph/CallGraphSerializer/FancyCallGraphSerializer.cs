@@ -68,25 +68,25 @@ public class FancyCallGraphSerializer : ICallGraphSerializer
     Dictionary<string, IEnumerable<string>> calledMethodsDict = dict.GetValueOrDefault("Called Methods") ?? [];
     foreach (var (method, calledMethods) in calledMethodsDict)
     {
-      MethodBase mb = MethodBaseParser.Parse(method);
+      MethodBase? mb = MethodBaseParser.Parse(method);
       if (mb is null)
       {
         Logger.Default.Warning($"Couldn't deserialize [{method}]");
         continue;
       }
-      callGraph.CalledMethods[mb] = calledMethods.Select(MethodBaseParser.Parse).Where(mb => mb != null).ToList();
+      callGraph.CalledMethods[mb] = calledMethods.Select(MethodBaseParser.Parse).Where(mb => mb != null).ToList()!;
     }
 
     Dictionary<string, IEnumerable<string>> overridesDict = dict.GetValueOrDefault("Overrides") ?? [];
     foreach (var (baseDef, overridenIn) in overridesDict)
     {
-      MethodBase mb = MethodBaseParser.Parse(baseDef);
+      MethodBase? mb = MethodBaseParser.Parse(baseDef);
       if (mb is null)
       {
         Logger.Default.Warning($"Couldn't deserialize [{baseDef}]");
         continue;
       }
-      callGraph.OverridenIn[mb] = overridenIn.Select(MethodBaseParser.Parse).Where(mb => mb != null).ToList();
+      callGraph.OverridenIn[mb] = overridenIn.Select(MethodBaseParser.Parse).Where(mb => mb != null).ToList()!;
     }
 
     callGraph.Connect();

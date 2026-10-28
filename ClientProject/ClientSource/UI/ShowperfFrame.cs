@@ -17,9 +17,9 @@ public partial class ShowperfFrame : CUIDefault.Frame
 
   public CUIPages Pages { get; }
 
-  public CustomPatchesPage CustomPatchesPage { get; }
-  public MethodsPage MethodsPage { get; }
-  public MeasurementsPage MeasurementsPage { get; }
+  public CustomPatchesPage CustomPatchesPage { get; } = Plugin.Get<CustomPatchesPage>();
+  public MethodsPage MethodsPage { get; } = Plugin.Get<MethodsPage>();
+  public MeasurementsPage MeasurementsPage { get; } = Plugin.Get<MeasurementsPage>();
 
   private CUIComponent PageButtons;
 
@@ -31,16 +31,8 @@ public partial class ShowperfFrame : CUIDefault.Frame
     Close();
   }
 
-  public ShowperfFrame(
-    CustomPatchesPage customPatchesPage,
-    MeasurementsPage measurementsPage,
-    MethodsPage methodsPage
-  ) : base("Showperf", 600, 600)
+  public ShowperfFrame() : base("Showperf", 600, 600)
   {
-    CustomPatchesPage = customPatchesPage;
-    MeasurementsPage = measurementsPage;
-    MethodsPage = methodsPage;
-
     TargetMainComponent = CUI.Main;
     Anchor = CUIAnchor.Center;
     OnOpen += DeepRefresh;
@@ -114,6 +106,11 @@ public partial class ShowperfFrame : CUIDefault.Frame
         OnSelected = () => Pages.OpenPage(MethodsPage),
       };
     }
+
+    // this["layout"]["footer"] = new CUIDefault.HorizontalBackPanel()
+    // {
+    //   Absolute = new CUINullRect(h: ResizeHandle.DefaultSize.Y),
+    // };
 
     PageButtons.Get<CUIRadioButton>("Methods").Select();
 

@@ -42,8 +42,12 @@ public partial class MeasurementsPage : CUIPage
     Settings = settings;
 
     this["layout"] = new CUIVerticalList() { Relative = new CUINullRect(0, 0, 1, 1) };
-    this["layout"]["scroll wrapper"] = new CUIDefault.ListWithScrollbar() { Flex = 1 };
-    this["layout"]["scroll wrapper"].Get<CUIVerticalList>("list").BottomGap = ResizeHandle.DefaultSize.Y * 2;
+    this["layout"]["scroll wrapper"] = new CUIDefault.ListWithScrollbar()
+    {
+      Flex = 1,
+      List = { BottomGap = ResizeHandle.DefaultSize.Y * 2 }
+    };
+
     this["layout"]["scroll wrapper"]["list"]["dump"] = Dump = new CUIFastTextDump()
     {
       Offset = new Vector2(10, 10),
