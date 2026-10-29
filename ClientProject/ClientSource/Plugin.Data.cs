@@ -15,7 +15,7 @@ public partial class Plugin
   public CallGraphBuilder CallGraphBuilder { get; } = Get<CallGraphBuilder>();
   public CallGraphSaver CallGraphSaver { get; } = Get<CallGraphSaver>();
   public CallGraphExplorer CallGraphExplorer { get; } = Get<CallGraphExplorer>();
-
+  public PluginSettings PluginSettings { get; } = Get<PluginSettings>();
 
   public string CallGraphPath => Path.Combine(ModInfo.Dir, "Data", "CallGraph.json");
 
@@ -37,6 +37,8 @@ public partial class Plugin
     sw.Stop();
 
     CUI.Logger.LogVars(sw.ElapsedMilliseconds);
+
+    PluginSettings.Load();
   }
 
   private void SaveData()

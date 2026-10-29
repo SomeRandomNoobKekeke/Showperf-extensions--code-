@@ -38,7 +38,7 @@ public partial class Plugin
   {
     ServiceContainer.RegisterSingleton<Plugin>();
     ServiceContainer.RegisterSingleton<CustomPatchRepo>();
-    ServiceContainer.RegisterSingleton<Settings>();
+    ServiceContainer.RegisterSingleton<PluginSettings>();
     ServiceContainer.RegisterSingleton<UltimateAssemblyAnalyzer3000>();
     ServiceContainer.RegisterSingleton<CallGraphBuilder>();
     ServiceContainer.RegisterSingleton<CaptureCore>();
@@ -53,6 +53,7 @@ public partial class Plugin
 
     ServiceContainer.RegisterSingleton<CustomPatchesPage>();
     ServiceContainer.RegisterSingleton<MeasurementsPage>();
+    ServiceContainer.RegisterSingleton<SettingsPage>();
 
     ServiceContainer.RegisterSingleton<MethodsPage>();
     ServiceContainer.RegisterSingleton<TypeExplorerPage>();

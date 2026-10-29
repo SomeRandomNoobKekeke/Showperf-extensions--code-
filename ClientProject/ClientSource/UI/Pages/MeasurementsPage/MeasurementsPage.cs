@@ -10,9 +10,10 @@ namespace ShowperfExtensions;
 public partial class MeasurementsPage : CUIPage
 {
   public CaptureCore? Capture => Plugin.Capture;
-  public Settings Settings { get; set; }
+  public PluginSettings Settings { get; set; }
 
   public CUIFastTextDump Dump { get; }
+  private CUITextBlock SumTextBlock;
 
   public static double TicksToMs = 1000.0 / Stopwatch.Frequency;
   public string ConverToMs(double t) => string.Format("{0:0.000000}", t * TicksToMs);
@@ -24,6 +25,8 @@ public partial class MeasurementsPage : CUIPage
       Dump.Clear();
       return;
     }
+
+    SumTextBlock.Text = $"Sum: {ConverToMs(Capture.Update.TotalSlice.Total / Capture.Update.SliceCount)}ms";
 
     var sortedTicks = Capture.Update.TotalSlice.OrderByDescending(kvp => kvp.Value).ToList();
 
@@ -37,11 +40,17 @@ public partial class MeasurementsPage : CUIPage
     // CUI.Logger.Log(Logger.Wrap.IEnumerable(lines.Select(l => l.ToString()), true));
   }
 
-  public MeasurementsPage(Settings settings)
+  public MeasurementsPage(PluginSettings settings)
   {
     Settings = settings;
 
     this["layout"] = new CUIVerticalList() { Relative = new CUINullRect(0, 0, 1, 1) };
+    this["layout"]["header"] = new CUIDefault.HorizontalBackPanel();
+
+    this["layout"]["header"]["sum"] = SumTextBlock = new CUITextBlock() { Flex = 1 };
+
+
+
     this["layout"]["scroll wrapper"] = new CUIDefault.ListWithScrollbar()
     {
       Flex = 1,

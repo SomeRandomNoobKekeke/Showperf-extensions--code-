@@ -20,6 +20,7 @@ public partial class ShowperfFrame : CUIDefault.Frame
   public CustomPatchesPage CustomPatchesPage { get; } = Plugin.Get<CustomPatchesPage>();
   public MethodsPage MethodsPage { get; } = Plugin.Get<MethodsPage>();
   public MeasurementsPage MeasurementsPage { get; } = Plugin.Get<MeasurementsPage>();
+  public SettingsPage SettingsPage { get; } = Plugin.Get<SettingsPage>();
 
   public CUITextBlock FooterTextBlock { get; }
   public string FooterText
@@ -64,29 +65,39 @@ public partial class ShowperfFrame : CUIDefault.Frame
     };
 
 
-    this["layout"]["handle"]["minimize", 1] = new CUIIconButton(CUISprite.MinusIcon)
+    using (new CUIContextStyle<CUIIconButton>(btn => btn.Margin = new CUISizes(left: 4, right: 4)))
     {
-      Margin = new CUISizes(left: 4, right: 4),
-      OnClick = Minimize,
-    };
-    this["layout"]["handle"]["attachtoright", 1] = new CUIIconButton(CUISprite.AttachToRightIcon)
-    {
-      Margin = new CUISizes(left: 4, right: 4),
-      OnClick = () =>
+      this["layout"]["handle"]["minimize", 1] = new CUIIconButton(CUISprite.MinusIcon)
       {
-        Absolute = new CUINullRect(0, 0, 400, 600);
-        Anchor = CUIAnchor.RightCenter;
-      },
-    };
-    this["layout"]["handle"]["attachtocenter", 1] = new CUIIconButton(CUISprite.AttachToCenterIcon)
-    {
-      Margin = new CUISizes(left: 4, right: 4),
-      OnClick = () =>
+        OnClick = Minimize,
+      };
+      this["layout"]["handle"]["attachtoright", 1] = new CUIIconButton(CUISprite.AttachToRightIcon)
       {
-        Absolute = new CUINullRect(0, 0, 800, 800);
-        Anchor = CUIAnchor.Center;
-      },
-    };
+        OnClick = () =>
+        {
+          Absolute = new CUINullRect(0, 0, 400, 600);
+          Anchor = CUIAnchor.RightCenter;
+        },
+      };
+      this["layout"]["handle"]["attachtocenter", 1] = new CUIIconButton(CUISprite.AttachToCenterIcon)
+      {
+        OnClick = () =>
+        {
+          Absolute = new CUINullRect(0, 0, 800, 800);
+          Anchor = CUIAnchor.Center;
+        },
+      };
+
+      this["layout"]["handle"]["settings", 1] = new CUIIconButton(CUISprite.GearIcon)
+      {
+        OnClick = () =>
+        {
+          Pages.OpenPage(SettingsPage);
+          //HACK mb if there was some CUIRadioIconButton it could be more natural
+          CUIRadioButton.RadioGroup.GetOrCreate("ShowperfFrame pages").ClearSelection();
+        },
+      };
+    }
 
     this["layout"]["handle"]["reloadlua", 1] = new CUIDefault.ReloadLuaButton();
 

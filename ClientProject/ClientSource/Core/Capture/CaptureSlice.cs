@@ -35,6 +35,8 @@ public class CaptureSlice : Dictionary<Identifier, double>
       }
     }
 
+    left.Total += right.Total;
+
     return left;
   }
 
@@ -59,6 +61,8 @@ public class CaptureSlice : Dictionary<Identifier, double>
         left[key] = value;
       }
     }
+
+    left.Total -= right.Total;
 
     return left;
   }

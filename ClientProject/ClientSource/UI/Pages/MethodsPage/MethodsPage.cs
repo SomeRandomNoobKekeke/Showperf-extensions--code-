@@ -54,7 +54,11 @@ public class MethodsPage : CUIPage
   {
     this["layout"] = new CUIVerticalList() { Relative = new CUINullRect(0, 0, 1, 1) };
     this["layout"]["header"] = new CUIDefault.VerticalPanel();
-    this["layout"]["main"] = Main = new CUIPages() { Flex = 1 };
+    this["layout"]["main"] = Main = new CUIPages()
+    {
+      Flex = 1,
+      OnPageOpened = (page) => Plugin.FrameLogger?.Log(""),
+    };
 
     this["layout"]["header"]["subpages"] = Subpages = new CUIDefault.HorizontalPanel();
 

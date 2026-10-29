@@ -103,7 +103,7 @@ public class MethodLineComponent : CUIDefault.HorizontalBackPanel,
       Flex = 1,
     };
 
-    this["bookmark"] = new CUIToggleIconButton(CUISprite.StarOn, CUISprite.StarOff)
+    this["bookmark"] = new CUIToggleIconButton(CUISprite.StarOnIcon, CUISprite.StarOffIcon)
     {
       State = MethodBookmarksList.Contains(Method),
       OnToggle = (state) => MethodBookmarksList.Toggle(Method),
