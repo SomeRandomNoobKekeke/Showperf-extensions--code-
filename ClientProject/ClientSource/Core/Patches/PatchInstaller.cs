@@ -51,6 +51,7 @@ public partial class PatchInstaller
     catch (Exception e)
     {
       Logger.Default.Warning($"Couldn't patch {info.TargetMethod}: {e.Message}");
+      Plugin.FrameLogger.Warning($"Couldn't patch {info.TargetMethod}: {e.Message}");
       return false;
     }
 

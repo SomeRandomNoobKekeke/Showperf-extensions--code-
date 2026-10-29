@@ -57,7 +57,6 @@ public partial class Plugin
     ServiceContainer.RegisterSingleton<MethodsPage>();
     ServiceContainer.RegisterSingleton<TypeExplorerPage>();
     ServiceContainer.RegisterSingleton<CallGraphBrowserPage>();
-    ServiceContainer.RegisterSingleton<MethodDetailsPage>();
     ServiceContainer.RegisterSingleton<BookmarkedMethodsPage>();
 
     ServiceContainer.RegisterSingleton<ShowperfFrame>();

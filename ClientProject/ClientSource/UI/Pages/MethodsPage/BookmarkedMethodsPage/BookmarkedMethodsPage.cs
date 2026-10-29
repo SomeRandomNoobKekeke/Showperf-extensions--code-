@@ -11,28 +11,43 @@ namespace ShowperfExtensions;
 
 public class BookmarkedMethodsPage : CUIPage
 {
+  public static MethodInfo UpdateRoot => typeof(GameScreen).GetMethod("Update")!;
+  public static MethodInfo DrawRoot => typeof(GameScreen).GetMethod("Draw")!;
+
+
   public MethodBookmarksList MethodBookmarksList { get; } = Plugin.Get<MethodBookmarksList>();
 
-  private CUIVerticalList BookmarkList;
+  private MethodBlockComponent RootMethodsBlock;
+  private MethodBlockComponent BookmarksBlock;
 
-
+  protected override void HandleOpen() => Refresh();
   public override void Refresh()
   {
-    BookmarkList.Clear();
-
-    foreach (MethodBase mb in MethodBookmarksList)
-    {
-      BookmarkList.Add(new MethodLineComponent(mb));
-    }
+    BookmarksBlock.Methods = MethodBookmarksList.ToList();
   }
 
 
   public BookmarkedMethodsPage()
   {
-    Background.Color = Color.Black;
-
     this["layout"] = new CUIVerticalList() { Relative = new(0, 0, 1, 1) };
-    this["layout"]["bookmarks"] = BookmarkList = new CUIVerticalList() { Flex = 1 };
+    this["layout"]["main"] = new CUIDefault.ListWithScrollbar()
+    {
+      Flex = 1,
+      List = {
+        BottomGap = ResizeHandle.DefaultSize.Y * 2 ,
+        Padding= new CUISizes(4, 4, 4, 4),
+      },
+    };
+
+    this["layout"]["main"]["list"]["roots"] = RootMethodsBlock = new MethodBlockComponent("Roots")
+    {
+      Methods = [UpdateRoot, DrawRoot],
+    };
+
+    this["layout"]["main"]["list"]["bookmarks"] = BookmarksBlock = new MethodBlockComponent("Bookmarks");
+
+    MethodBookmarksList.Changed += Refresh;
+    DeepPalette = CUICore.Palettes.Tertiary;
   }
 
 

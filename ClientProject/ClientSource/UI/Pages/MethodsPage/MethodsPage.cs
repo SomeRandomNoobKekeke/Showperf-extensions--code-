@@ -12,16 +12,11 @@ namespace ShowperfExtensions;
 
 public class MethodsPage : CUIPage
 {
-  public const string ShowMethodDetails_Command = "ShowMethodDetails_Command";
-  public const string OpenInMethodBrowser_Command = "OpenInMethodBrowser_Command";
   public const string SelectMethod_Command = "SelectMethod_Command";
-  public const string MethodPatched_Notification = "MethodPatched_Notification";
-
 
 
   public TypeExplorerPage TypeExplorerPage { get; } = Plugin.Get<TypeExplorerPage>();
   public CallGraphBrowserPage CallGraphBrowserPage { get; } = Plugin.Get<CallGraphBrowserPage>();
-  public MethodDetailsPage MethodDetailsPage { get; } = Plugin.Get<MethodDetailsPage>();
   public BookmarkedMethodsPage BookmarkedMethodsPage { get; } = Plugin.Get<BookmarkedMethodsPage>();
 
   public CUIHorizontalList Subpages { get; }
@@ -39,7 +34,6 @@ public class MethodsPage : CUIPage
       CurrentMethodLine.Method = value;
 
       TypeExplorerPage.GoToMethod(Current);
-      MethodDetailsPage.Method = Current;
       CallGraphBrowserPage.Current = Current;
     }
   }
@@ -81,37 +75,15 @@ public class MethodsPage : CUIPage
         OnSelected = () => Main.OpenPage(TypeExplorerPage),
       };
 
-      this["layout"]["header"]["subpages"]["Details"] = new CUIRadioButton("Details")
-      {
-        OnSelected = () => Main.OpenPage(MethodDetailsPage),
-      };
       this["layout"]["header"]["subpages"]["Bookmarks"] = new CUIRadioButton("Bookmarks")
       {
         OnSelected = () => Main.OpenPage(BookmarkedMethodsPage),
       };
     }
     this["layout"]["header"]["subpages"].DeepPalette = CUICore.Palettes.Secondary;
-
-
     this["layout"]["header"]["current method block"] = CreateCurrentMethodBlock();
 
-
-    Commands.ListenFor<MethodBase>(ShowMethodDetails_Command, (mb) =>
-    {
-      Subpages.Get<CUIRadioButton>("Details").Select();
-      MethodDetailsPage.Method = mb;
-    });
-
-    Commands.ListenFor(OpenInMethodBrowser_Command, (o) =>
-    {
-      Subpages.Get<CUIRadioButton>("Type Explorer").Select();
-      TypeExplorerPage.GoToUnknown(o);
-    });
-
-    Commands.ListenFor<MethodBase>(SelectMethod_Command, (mb) =>
-    {
-      Current = mb;
-    });
+    Commands.ListenFor<MethodBase>(SelectMethod_Command, (mb) => Current = mb);
 
 
     Subpages.Get<CUIRadioButton>("Type Explorer").Select();

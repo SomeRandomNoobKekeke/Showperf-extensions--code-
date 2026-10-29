@@ -9,7 +9,7 @@ using System.Text.Json;
 
 namespace ShowperfExtensions;
 
-public class MethodBookmarksList : ReactiveIndexedList<MethodBase>
+public class MethodBookmarksList : ReactiveHashSet<MethodBase>
 {
   public FunnyDictOfWeakSets<MethodBase, ITrackMethodBookmarks> MethodBookmarksListListeners { get; } = new();
 
@@ -19,7 +19,7 @@ public class MethodBookmarksList : ReactiveIndexedList<MethodBase>
 
   public void Toggle(MethodBase mb)
   {
-
+    if (Contains(mb)) Remove(mb); else Add(mb);
   }
 
 
@@ -49,7 +49,11 @@ public class MethodBookmarksList : ReactiveIndexedList<MethodBase>
     File.WriteAllText(
       FilePath,
       JsonSerializer.Serialize(
-        this.Select(MethodBaseParser.Serialize)
+        this.Select(MethodBaseParser.Serialize),
+        new JsonSerializerOptions()
+        {
+          WriteIndented = true,
+        }
       )
     );
   }
@@ -69,5 +73,6 @@ public class MethodBookmarksList : ReactiveIndexedList<MethodBase>
   {
     LoadSilent();
     Changed += NotifyMethodBookmarksListListeners;
+    Changed += Save;
   }
 }

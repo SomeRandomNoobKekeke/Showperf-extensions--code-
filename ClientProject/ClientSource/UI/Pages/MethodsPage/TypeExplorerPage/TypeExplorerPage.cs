@@ -64,6 +64,7 @@ public class TypeExplorerPage : CUIPage
         {
           TextAnchor = CUIAnchor.LeftCenter,
           OnMouseDown = (e) => GoTo(node),
+          Padding = new CUISizes(1, 1, 1, 1),
           Style = (c) => c.MasterColor = GetNodeColor(node),
         },
       };
@@ -103,18 +104,9 @@ public class TypeExplorerPage : CUIPage
     if (sus is Type T) GoTo(new TypeExplorer.TypeNode(TypeExplorer, T));
   }
 
-  public void HandleMethodPatched(MethodBase mb)
-  {
-    // MethodLineComponent thisMethodLine = ThisMethodBlock["methods"][0] as MethodLineComponent;
-    // if (thisMethodLine is null) return;
-
-    // thisMethodLine.NotifyMethodPatched(mb);
-  }
 
   public TypeExplorerPage()
   {
-    Commands.ListenFor<MethodBase>(MethodsPage.MethodPatched_Notification, HandleMethodPatched);
-
     this["layout"] = new CUIVerticalList() { Relative = new CUINullRect(0, 0, 1, 1) };
     this["layout"]["header"] = new CUIVerticalList() { FitContent = new CUIBool2(false, true), };
     this["layout"]["main"] = new CUIVerticalList() { Flex = 1 };
@@ -123,6 +115,7 @@ public class TypeExplorerPage : CUIPage
     this["layout"]["header"]["location panel"]["go up"] = new CUIIconButton()
     {
       Icon = CUISprite.ArrowUpIcon,
+      CrossRelative = new CUINullRect(w: 1),
       OnMouseDown = (e) => GoUp(),
     };
 

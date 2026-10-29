@@ -14,15 +14,13 @@ public partial class CallGraphBrowserPage : CUIPage
   public static MethodInfo UpdateRoot => typeof(GameMain).GetMethod("Update", BindingFlags.NonPublic | BindingFlags.Instance)!;
   public static MethodInfo DrawRoot => typeof(GameMain).GetMethod("Draw", BindingFlags.NonPublic | BindingFlags.Instance)!;
 
-
-
   public CallGraphExplorer CallGraphExplorer { get; } = Plugin.Get<CallGraphExplorer>();
 
-  private MethodBlock ThisMethodBlock;
-  private MethodBlock CalledFromBlock;
-  private MethodBlock CallingToBlock;
-  private MethodBlock OverridenInBlock;
-  private MethodBlock OverridesBlock;
+  private MethodBlockComponent ThisMethodBlock;
+  private MethodBlockComponent CalledFromBlock;
+  private MethodBlockComponent CallingToBlock;
+  private MethodBlockComponent OverridenInBlock;
+  private MethodBlockComponent OverridesBlock;
 
   private CUIVerticalList Main;
   public MethodBase Current
@@ -60,33 +58,27 @@ public partial class CallGraphBrowserPage : CUIPage
 
     this["layout"]["controls"] = new CUIDefault.VerticalPanel();
 
-    this["layout"]["controls"]["home buttons"] = new CUIDefault.HorizontalPanel();
-    this["layout"]["controls"]["home buttons"]["Update Root"] = new CUIButton("GameMain.Update()")
+    this["layout"]["main"] = new CUIDefault.ListWithScrollbar()
     {
-      OnMouseDown = (e) => SelectMethod(UpdateRoot),
+      Flex = 1,
+      List = {
+        BottomGap = ResizeHandle.DefaultSize.Y * 2 ,
+        Padding= new CUISizes(4, 4, 4, 4),
+      },
     };
-    this["layout"]["controls"]["home buttons"]["Draw Root"] = new CUIButton("GameMain.Draw()")
-    {
-      OnMouseDown = (e) => SelectMethod(DrawRoot),
-    };
-
-    this["layout"]["main"] = new CUIDefault.ListWithScrollbar() { Flex = 1, };
-
     Main = this["layout"]["main"].Get<CUIVerticalList>("list");
-    Main.BottomGap = ResizeHandle.DefaultSize.Y * 2;
-    Main.Padding = new CUISizes(4, 4, 4, 4);
 
-    Main["this method block"] = ThisMethodBlock = new MethodBlock("This Method:")
+    Main["this method block"] = ThisMethodBlock = new MethodBlockComponent("This Method:")
     {
       DeepPaletteImmunity = true,
       DeepPalette = CUIPalette.FromColor(Color.Lime),
     };
-    Main["overrides block"] = OverridesBlock = new MethodBlock("Overrides:");
-    Main["overriden in block"] = OverridenInBlock = new MethodBlock("Overriden In:");
-    Main["called from block"] = CalledFromBlock = new MethodBlock("Called From:");
-    Main["calling to block"] = CallingToBlock = new MethodBlock("Calling To:");
+    Main["overrides block"] = OverridesBlock = new MethodBlockComponent("Overrides:");
+    Main["overriden in block"] = OverridenInBlock = new MethodBlockComponent("Overriden In:");
+    Main["called from block"] = CalledFromBlock = new MethodBlockComponent("Called From:");
+    Main["calling to block"] = CallingToBlock = new MethodBlockComponent("Calling To:");
 
     Current = UpdateRoot;
-    this.DeepPalette = CUICore.Palettes.Tertiary;
+    DeepPalette = CUICore.Palettes.Tertiary;
   }
 }

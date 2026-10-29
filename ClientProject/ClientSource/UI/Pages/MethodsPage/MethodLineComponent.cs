@@ -8,6 +8,7 @@ using System.Reflection;
 using Microsoft.Xna.Framework.Input;
 using System.Runtime.CompilerServices;
 using LightInject;
+using CUILibs;
 namespace ShowperfExtensions;
 
 public class MethodLineComponent : CUIDefault.HorizontalBackPanel,
@@ -25,9 +26,17 @@ public class MethodLineComponent : CUIDefault.HorizontalBackPanel,
     {
       if (Method == value) return;
 
-      if (_Method != null) StopwatchWrapper.StopwatchPatcherListeners.Remove(_Method, this);
+      if (_Method != null)
+      {
+        StopwatchWrapper.StopwatchPatcherListeners.Remove(_Method, this);
+        MethodBookmarksList.MethodBookmarksListListeners.Remove(_Method, this);
+      }
       _Method = value;
-      if (_Method != null) StopwatchWrapper.StopwatchPatcherListeners.Add(_Method, this);
+      if (_Method != null)
+      {
+        StopwatchWrapper.StopwatchPatcherListeners.Add(_Method, this);
+        MethodBookmarksList.MethodBookmarksListListeners.Add(_Method, this);
+      }
 
       Refresh();
     }
@@ -44,7 +53,7 @@ public class MethodLineComponent : CUIDefault.HorizontalBackPanel,
   public void NotifyMethodBookmarks()
   {
     if (this["bookmark"] is null) return;
-    this.Get<CUIToggleButton>("bookmark").State = MethodBookmarksList.Contains(Method);
+    this.Get<CUIToggleIconButton>("bookmark").State = MethodBookmarksList.Contains(Method);
   }
 
   private CUIToggleIconButton ToggleStopwatchButton;
@@ -70,7 +79,6 @@ public class MethodLineComponent : CUIDefault.HorizontalBackPanel,
     this["toggle stopwatch"] = ToggleStopwatchButton = new CUIToggleIconButton(CUISprite.BurningTimerIcon)
     {
       State = StopwatchWrapper.IsPatched(Method),
-      DeepPaletteImmunity = true,
       OnToggle = (state) =>
       {
         StopwatchWrapper.TogglePatch(Method);
@@ -91,15 +99,19 @@ public class MethodLineComponent : CUIDefault.HorizontalBackPanel,
       TextAnchor = CUIAnchor.LeftCenter,
       OnClick = () => SelectMethod(Method),
       MasterColor = new Color(200, 200, 200, 200),
-      DeepPaletteImmunity = true,
       Disabled = !CanMethodBeSelected(Method),
       Flex = 1,
     };
 
-    this["bookmark"] = new CUIToggleButton("bookmark")
+    this["bookmark"] = new CUIToggleIconButton(CUISprite.StarOn, CUISprite.StarOff)
     {
       State = MethodBookmarksList.Contains(Method),
       OnToggle = (state) => MethodBookmarksList.Toggle(Method),
+      Scale = 0.8f,
+      Padding = new CUISizes(1, 1, 1, 1),
+      Background = { Sprite = CUISprite.GlowingEdgesSolid },
+      MasterColor = Color.White,
+      ClickSound = GUISoundType.TickBox,
     };
   }
 
@@ -108,6 +120,8 @@ public class MethodLineComponent : CUIDefault.HorizontalBackPanel,
   public MethodLineComponent(MethodBase method = null)
   {
     Method = method;
+    DeepPaletteImmunity = true;
+
     Refresh();
   }
 }

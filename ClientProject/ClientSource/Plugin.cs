@@ -10,7 +10,7 @@ public partial class Plugin
 {
   public static Plugin? Instance { get; private set; }
 
-
+  public static ILogger FrameLogger => Instance!.ShowperfFrame.Logger;
 
   public ShowperfFrame ShowperfFrame { get; } = Get<ShowperfFrame>();
   public static CaptureCore Capture { get; set; } = Get<CaptureCore>();

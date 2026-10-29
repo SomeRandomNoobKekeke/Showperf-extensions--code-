@@ -21,8 +21,17 @@ public partial class ShowperfFrame : CUIDefault.Frame
   public MethodsPage MethodsPage { get; } = Plugin.Get<MethodsPage>();
   public MeasurementsPage MeasurementsPage { get; } = Plugin.Get<MeasurementsPage>();
 
-  private CUIComponent PageButtons;
+  public CUITextBlock FooterTextBlock { get; }
+  public string FooterText
+  {
+    get => FooterTextBlock.Text;
+    set => FooterTextBlock.Text = value;
+  }
 
+  public Logger_Part Logger { get; }
+
+
+  private CUIComponent PageButtons;
   private CUIButton OpenButton;
 
   public void Minimize()
@@ -33,7 +42,9 @@ public partial class ShowperfFrame : CUIDefault.Frame
 
   public ShowperfFrame() : base("Showperf", 600, 600)
   {
-    TargetMainComponent = CUI.Main;
+    Logger = new(this);
+
+    TargetMainComponent = CUI.TopMain;
     Anchor = CUIAnchor.Center;
     OnOpen += DeepRefresh;
     ResizableBoth = true;
@@ -84,6 +95,7 @@ public partial class ShowperfFrame : CUIDefault.Frame
     {
       Flex = 1,
       ConsumeMouseEvents = true,
+      OnPageOpened = (page) => Logger.Log(""),
     };
 
     using (new CUIContextStyle<CUIRadioButton>(btn =>
@@ -107,10 +119,12 @@ public partial class ShowperfFrame : CUIDefault.Frame
       };
     }
 
-    // this["layout"]["footer"] = new CUIDefault.HorizontalBackPanel()
-    // {
-    //   Absolute = new CUINullRect(h: ResizeHandle.DefaultSize.Y),
-    // };
+    this["layout"]["footer"] = new CUIDefault.HorizontalBackPanel()
+    {
+      Scrollable = true,
+      Padding = new CUISizes(left: ResizeHandle.DefaultSize.X, right: ResizeHandle.DefaultSize.X),
+    };
+    this["layout"]["footer"]["text"] = FooterTextBlock = new CUITextBlock();
 
     PageButtons.Get<CUIRadioButton>("Methods").Select();
 

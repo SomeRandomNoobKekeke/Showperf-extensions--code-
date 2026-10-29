@@ -22,6 +22,8 @@ public partial class Plugin
 
   public void Experiment()
   {
+    MethodBase mb = MethodBaseParser.Parse("Barotrauma.Item.GetComponent<T>()");
 
+    Logger.Default.LogVars(Logger.Wrap.Props(mb));
   }
 }
