@@ -150,7 +150,7 @@ public class TypeExplorerPage : CUIPage
 
     ChildNodeList = Get<CUIVerticalList>("layout.main.nodes.list");
 
-    DeepPalette = CUICore.Palettes.Tertiary;
+    DeepPalette = Plugin.Palettes.Tertiary;
 
 
   }

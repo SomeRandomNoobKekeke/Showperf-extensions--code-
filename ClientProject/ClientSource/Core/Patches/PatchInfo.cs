@@ -4,10 +4,9 @@ using System.Text;
 
 namespace ShowperfExtensions;
 
-public abstract class PatchInfoBase(string ID, string Description = "")
+public abstract class PatchInfoBase(string ID)
 {
   public string ID { get; } = ID;
-  public string Description { get; } = Description;
 
   public abstract MethodBase[] Targets { get; }
 
@@ -33,9 +32,8 @@ public class PatchInfo(
   string ID,
   MethodBase TargetMethod,
   MethodInfo PatchMethod,
-  HarmonyPatchType PatchType,
-  string Description = ""
-) : PatchInfoBase(ID, Description)
+  HarmonyPatchType PatchType
+) : PatchInfoBase(ID)
 {
   public MethodBase TargetMethod { get; } = TargetMethod ?? throw new ArgumentNullException(nameof(TargetMethod));
   public MethodInfo PatchMethod { get; } = PatchMethod ?? throw new ArgumentNullException(nameof(PatchMethod));
@@ -73,9 +71,8 @@ public class PatchInfo(
 
 public class MultiPatchInfo(
   string ID,
-  IEnumerable<PatchInfo> Patches,
-  string Description = ""
-) : PatchInfoBase(ID, Description)
+  IEnumerable<PatchInfo> Patches
+) : PatchInfoBase(ID)
 {
   public override MethodBase[] Targets { get; } = [.. Patches.Select(patch => patch.TargetMethod)];
 

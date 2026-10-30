@@ -79,6 +79,6 @@ public partial class CallGraphBrowserPage : CUIPage
     Main["calling to block"] = CallingToBlock = new MethodBlockComponent("Calling To:");
 
     Current = UpdateRoot;
-    DeepPalette = CUICore.Palettes.Tertiary;
+    DeepPalette = Plugin.Palettes.Tertiary;
   }
 }

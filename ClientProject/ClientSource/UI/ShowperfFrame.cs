@@ -137,6 +137,8 @@ public partial class ShowperfFrame : CUIDefault.Frame
     };
     this["layout"]["footer"]["text"] = FooterTextBlock = new CUITextBlock();
 
+    DeepPalette = Plugin.Palettes.Primary;
+
     PageButtons.Get<CUIRadioButton>("Methods").Select();
 
 

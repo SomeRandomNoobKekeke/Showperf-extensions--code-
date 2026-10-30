@@ -45,15 +45,15 @@ public partial class PatchesPage : CUIPage
         OnToggle = (state) => TogglePatch(info),
       };
 
-      if (!string.IsNullOrEmpty(info.Description))
-      {
-        block["desctiption"] = new CUIDefault.SolidTextBlock(info.Description)
-        {
-          AbsoluteMax = new CUINullRect(h: 50),
-          ResizeStrategy = ResizeStrategy.Wrap,
-          CullChildren = true,
-        };
-      }
+      // if (!string.IsNullOrEmpty(info.Description))
+      // {
+      //   block["desctiption"] = new CUIDefault.SolidTextBlock(info.Description)
+      //   {
+      //     AbsoluteMax = new CUINullRect(h: 50),
+      //     ResizeStrategy = ResizeStrategy.Wrap,
+      //     CullChildren = true,
+      //   };
+      // }
 
 
 
@@ -78,7 +78,7 @@ public partial class PatchesPage : CUIPage
         }
       }
 
-      block.DeepPalette = CUICore.Palettes.Tertiary;
+      block.DeepPalette = Plugin.Palettes.Tertiary;
 
       return block;
     }
@@ -96,7 +96,7 @@ public partial class PatchesPage : CUIPage
 
       PatchList = this.Get<CUIVerticalList>("layout.scroll wrapper.list");
 
-      this.DeepPalette = CUICore.Palettes.Tertiary;
+      this.DeepPalette = Plugin.Palettes.Tertiary;
     }
   }
 

@@ -39,7 +39,7 @@ public partial class PatchesPage : CUIPage
       };
       block["id"] = new CUITextBlock(info.ID);
 
-      block.DeepPalette = CUICore.Palettes.Tertiary;
+      block.DeepPalette = Plugin.Palettes.Tertiary;
 
       return block;
     }
@@ -56,7 +56,7 @@ public partial class PatchesPage : CUIPage
         Padding = new CUISizes(4, 4, 4, 4),
       };
 
-      this.DeepPalette = CUICore.Palettes.Tertiary;
+      this.DeepPalette = Plugin.Palettes.Tertiary;
     }
   }
 

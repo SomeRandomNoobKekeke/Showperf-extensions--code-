@@ -61,7 +61,7 @@ public partial class PatchesPage : CUIPage
         OnSelected = () => Main.OpenPage(InstalledPatchesBlock),
       };
     }
-    this["layout"]["header"]["page buttons"].DeepPalette = CUICore.Palettes.Secondary;
+    this["layout"]["header"]["page buttons"].DeepPalette = Plugin.Palettes.Secondary;
 
     Commands.ListenFor<PatchInfoBase>(TogglePatch_Command, TogglePatch);
 

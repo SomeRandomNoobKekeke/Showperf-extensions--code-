@@ -7,8 +7,8 @@ namespace ShowperfExtensions;
 
 public static class CustomPatches
 {
-  public static void AddPatchInfo(PatchInfoBase info)
+  public static void Add(PatchInfoBase info)
   {
-
+    Plugin.CustomPatchRepo.Add(info);
   }
 }

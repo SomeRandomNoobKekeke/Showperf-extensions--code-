@@ -10,8 +10,7 @@ namespace ShowperfExtensions;
 public partial class StopwatchWrapper
 {
   public class StopwatchWrapperPatch(
-    MethodBase TargetMethod,
-    string Description = ""
+    MethodBase TargetMethod
   ) : MultiPatchInfo(
     $"Stopwatch around: {MethodBaseParser.Serialize(TargetMethod)}",
     [
@@ -23,8 +22,7 @@ public partial class StopwatchWrapper
         typeof(StopwatchWrapperPatch).GetMethod("Postfix")!,
         HarmonyPatchType.Postfix
       ),
-    ],
-    Description
+    ]
   )
   {
     public MethodBase TargetMethod { get; } = TargetMethod;

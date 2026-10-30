@@ -45,7 +45,7 @@ public class MethodsPage : CUIPage
 
     block["label"] = new CUITextBlock("Selected Method: ");
     block["method line"] = CurrentMethodLine = new MethodLineComponent() { Flex = 1 };
-    block.DeepPalette = CUICore.Palettes.Secondary2;
+    block.DeepPalette = Plugin.Palettes.Secondary2;
 
     return block;
   }
@@ -84,7 +84,7 @@ public class MethodsPage : CUIPage
         OnSelected = () => Main.OpenPage(BookmarkedMethodsPage),
       };
     }
-    this["layout"]["header"]["page buttons"].DeepPalette = CUICore.Palettes.Secondary;
+    this["layout"]["header"]["page buttons"].DeepPalette = Plugin.Palettes.Secondary;
     this["layout"]["header"]["current method block"] = CreateCurrentMethodBlock();
 
     Commands.ListenFor<MethodBase>(SelectMethod_Command, (mb) => Current = mb);

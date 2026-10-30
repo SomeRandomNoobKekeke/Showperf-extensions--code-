@@ -15,6 +15,9 @@ public partial class Plugin
   public ShowperfFrame ShowperfFrame { get; } = Get<ShowperfFrame>();
   public static CaptureCore Capture { get; set; } = Get<CaptureCore>();
   public PatchInstaller PatchInstaller { get; } = Get<PatchInstaller>();
+  public static CustomPatchRepo CustomPatchRepo { get; } = Get<CustomPatchRepo>();
+
+  public static CUIPalettes Palettes { get; } = new();
 
   public void Init()
   {
@@ -28,18 +31,18 @@ public partial class Plugin
     UTest.ScanThisAssembly();
     UTest.TryRunPrevTest();
 
-    CUI.Palettes.Primary = CUIPalette.FromColor(new Color(92, 92, 92, 255));
-    CUI.Palettes.Secondary = CUIPalette.FromColor(new Color(0, 191, 221, 255));
-    CUI.Palettes.Tertiary = CUIPalette.FromColor(new Color(0, 113, 183, 255));
-    CUI.Palettes.Quaternary = CUIPalette.FromColor(new Color(255, 0, 0, 255));
+
+    Palettes.Primary = CUIPalette.FromColor(new Color(92, 92, 92, 255));
+    Palettes.Secondary = CUIPalette.FromColor(new Color(0, 191, 221, 255));
+    Palettes.Tertiary = CUIPalette.FromColor(new Color(0, 113, 183, 255));
+    Palettes.Quaternary = CUIPalette.FromColor(new Color(32, 32, 32, 255));
 
 
-    Get<CustomPatchRepo>().Add(new PatchInfo(
+    CustomPatches.Add(new PatchInfo(
       "Deep item analysis",
       typeof(Item).GetMethod("Update")!,
       typeof(Item_Patch).GetMethod("Item_Update_Replace")!,
-      HarmonyLib.HarmonyPatchType.Prefix,
-      Description: "bebebe"
+      HarmonyLib.HarmonyPatchType.Prefix
     ));
 
 
@@ -55,6 +58,8 @@ public partial class Plugin
   {
     SaveData();
     Capture.DetachFromGame();
+    Capture = null;
+
     PatchInstaller.RemoveAllPatches();
 
     ServiceContainer.Dispose();

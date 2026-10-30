@@ -47,7 +47,7 @@ public class BookmarkedMethodsPage : CUIPage
     this["layout"]["main"]["list"]["bookmarks"] = BookmarksBlock = new MethodBlockComponent("Bookmarks");
 
     MethodBookmarksList.Changed += Refresh;
-    DeepPalette = CUICore.Palettes.Tertiary;
+    DeepPalette = Plugin.Palettes.Tertiary;
   }
 
 
