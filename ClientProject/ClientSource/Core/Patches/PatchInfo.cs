@@ -4,11 +4,12 @@ using System.Text;
 
 namespace ShowperfExtensions;
 
-public abstract class PatchInfoBase(string ID, MethodBase TargetMethod, string Description = "")
+public abstract class PatchInfoBase(string ID, string Description = "")
 {
   public string ID { get; } = ID;
-  public MethodBase TargetMethod { get; } = TargetMethod ?? throw new ArgumentNullException(nameof(TargetMethod));
   public string Description { get; } = Description;
+
+  public abstract MethodBase[] Targets { get; }
 
 
   public abstract void Install(Harmony harmony);
@@ -21,12 +22,12 @@ public abstract class PatchInfoBase(string ID, MethodBase TargetMethod, string D
   public override bool Equals(object? obj)
   {
     if (obj is not PatchInfoBase other) return false;
-    return ID == other.ID && TargetMethod == other.TargetMethod;
+    return ID == other.ID;
   }
 
-  public override int GetHashCode()
-    => HashCode.Combine(ID, TargetMethod, Description);
+  public override int GetHashCode() => ID.GetHashCode();
 }
+
 
 public class PatchInfo(
   string ID,
@@ -34,16 +35,13 @@ public class PatchInfo(
   MethodInfo PatchMethod,
   HarmonyPatchType PatchType,
   string Description = ""
-) : PatchInfoBase(
-  ID,
-  TargetMethod,
-  Description
-)
+) : PatchInfoBase(ID, Description)
 {
+  public MethodBase TargetMethod { get; } = TargetMethod ?? throw new ArgumentNullException(nameof(TargetMethod));
   public MethodInfo PatchMethod { get; } = PatchMethod ?? throw new ArgumentNullException(nameof(PatchMethod));
   public HarmonyPatchType PatchType { get; } = PatchType;
 
-
+  public override MethodBase[] Targets { get; } = [TargetMethod];
 
   public override void Install(Harmony harmony)
   {
@@ -75,11 +73,12 @@ public class PatchInfo(
 
 public class MultiPatchInfo(
   string ID,
-  MethodBase TargetMethod,
   IEnumerable<PatchInfo> Patches,
   string Description = ""
-) : PatchInfoBase(ID, TargetMethod, Description)
+) : PatchInfoBase(ID, Description)
 {
+  public override MethodBase[] Targets { get; } = [.. Patches.Select(patch => patch.TargetMethod)];
+
   public IEnumerable<PatchInfo> Patches { get; } = Patches ?? throw new ArgumentNullException(nameof(Patches));
 
   public override void Install(Harmony harmony)

@@ -28,8 +28,11 @@ public partial class PatchInstaller
       Dictionary<MethodBase, List<PatchInfoBase>> dict = [];
       foreach (var info in _InstalledPatches)
       {
-        dict.TryAdd(info.TargetMethod, []);
-        dict[info.TargetMethod].Add(info);
+        foreach (MethodBase target in info.Targets)
+        {
+          dict.TryAdd(target, []);
+          dict[target].Add(info);
+        }
       }
       return dict;
     }
@@ -50,8 +53,8 @@ public partial class PatchInstaller
     }
     catch (Exception e)
     {
-      Logger.Default.Warning($"Couldn't patch {info.TargetMethod}: {e.Message}");
-      Plugin.FrameLogger.Warning($"Couldn't patch {info.TargetMethod}: {e.Message}");
+      Logger.Default.Warning($"Couldn't install {info}: {e.Message}");
+      Plugin.FrameLogger.Warning($"Couldn't install {info}: {e.Message}");
       return false;
     }
 
@@ -70,7 +73,7 @@ public partial class PatchInstaller
     }
     catch (Exception e)
     {
-      Logger.Default.Warning($"Couldn't unpatch {info.TargetMethod}: {e.Message}");
+      Logger.Default.Warning($"Couldn't uninstall {info}: {e.Message}");
       return false;
     }
 

@@ -10,18 +10,16 @@ namespace ShowperfExtensions;
 public partial class StopwatchWrapper
 {
   public class StopwatchWrapperPatch(
-    string ID,
     MethodBase TargetMethod,
     string Description = ""
   ) : MultiPatchInfo(
-    ID,
-    TargetMethod,
+    $"Stopwatch around: {MethodBaseParser.Serialize(TargetMethod)}",
     [
-      new PatchInfo($"{ID} prefix", TargetMethod,
+      new PatchInfo($"{TargetMethod} Stopwatch prefix", TargetMethod,
         typeof(StopwatchWrapperPatch).GetMethod("Prefix")!,
         HarmonyPatchType.Prefix
       ),
-      new PatchInfo($"{ID} postfix",TargetMethod,
+      new PatchInfo($"{TargetMethod} Stopwatch postfix",TargetMethod,
         typeof(StopwatchWrapperPatch).GetMethod("Postfix")!,
         HarmonyPatchType.Postfix
       ),
@@ -29,6 +27,8 @@ public partial class StopwatchWrapper
     Description
   )
   {
+    public MethodBase TargetMethod { get; } = TargetMethod;
+
     public static void ReportElapsedTicks(MethodBase method, long ticks)
     {
       Plugin.Capture?.Update.AddTicks(MethodBaseParser.Serialize(method).ToIdentifier(), ticks);

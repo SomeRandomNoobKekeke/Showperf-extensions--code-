@@ -38,7 +38,8 @@ public partial class Plugin
       "Deep item analysis",
       typeof(Item).GetMethod("Update")!,
       typeof(Item_Patch).GetMethod("Item_Update_Replace")!,
-      HarmonyLib.HarmonyPatchType.Prefix
+      HarmonyLib.HarmonyPatchType.Prefix,
+      Description: "bebebe"
     ));
 
 

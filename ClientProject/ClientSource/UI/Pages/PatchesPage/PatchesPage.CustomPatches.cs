@@ -2,6 +2,7 @@
 using System.Collections.Immutable;
 using CursedUI;
 using Microsoft.Xna.Framework;
+using System.Reflection;
 
 namespace ShowperfExtensions;
 
@@ -54,29 +55,27 @@ public partial class PatchesPage : CUIPage
         };
       }
 
-      //TODO use grid component
-      block["table"] = new CUIDefault.HorizontalBackPanel();
-      block["table"]["keys"] = new CUIDefault.VerticalBackPanel()
+
+
+
+      if (info.Targets.Length != 0)
       {
-        FitContent = new CUIBool2(true, true)
-      };
-      block["table"]["values"] = new CUIDefault.VerticalBackPanel()
-      {
-        Flex = 1,
-        FitContent = new CUIBool2(false, true)
-      };
+        if (info.Targets.Length == 1)
+        {
+          block["targets"] = new CUIDefault.HorizontalBackPanel();
+          block["targets"]["caption"] = new CUIDefault.SolidTextBlock($"Target: ");
+          block["targets"]["id"] = new CUITextBlock(MethodBaseParser.Serialize(info.Targets[0]));
+        }
 
-      block["table"]["keys"]["target"] = new CUIDefault.SolidTextBlock("Target: ");
-      block["table"]["values"]["target"] = new CUITextBlock(MethodBaseParser.Serialize(info.TargetMethod));
-
-
-      if (info is PatchInfo patchInfo)
-      {
-        block["table"]["keys"]["source"] = new CUIDefault.SolidTextBlock("Source: ");
-        block["table"]["values"]["source"] = new CUITextBlock(MethodBaseParser.Serialize(patchInfo.PatchMethod));
-
-        block["table"]["keys"]["type"] = new CUIDefault.SolidTextBlock("Type: ");
-        block["table"]["values"]["type"] = new CUITextBlock($"{patchInfo.PatchType}");
+        if (info.Targets.Length > 1)
+        {
+          block["targets"] = new CUIDefault.VerticalBackPanel();
+          block["targets"]["caption"] = new CUIDefault.SolidTextBlock("Targets:");
+          foreach (MethodBase mb in info.Targets)
+          {
+            block["targets"].Children.Add(new CUITextBlock(MethodBaseParser.Serialize(mb)));
+          }
+        }
       }
 
       block.DeepPalette = CUICore.Palettes.Tertiary;

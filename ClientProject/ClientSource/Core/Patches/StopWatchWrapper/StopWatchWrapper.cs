@@ -12,10 +12,7 @@ public partial class StopwatchWrapper
   public PatchInstaller PatchInstaller { get; }
 
   private StopwatchWrapperPatch CreatePatchInfo(MethodBase target)
-    => new StopwatchWrapperPatch(
-      $"Stopwatch around: {MethodBaseParser.Serialize(target)}",
-      target
-    );
+    => new StopwatchWrapperPatch(target);
 
   private void NotifyStopwatchPatcherListeners(MethodBase mb, bool state)
   {
@@ -49,8 +46,8 @@ public partial class StopwatchWrapper
   public bool IsPatched(MethodBase target)
   {
     return PatchInstaller.InstalledPatches.Any(
-      info => info is StopwatchWrapperPatch &&
-      info.TargetMethod == target
+      info => info is StopwatchWrapperPatch swp &&
+      swp.TargetMethod == target
     );
   }
 
