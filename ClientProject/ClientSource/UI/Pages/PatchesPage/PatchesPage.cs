@@ -13,8 +13,6 @@ public partial class PatchesPage : CUIPage
   private CUIPages Main;
   private CUIHorizontalList PageButtons;
 
-
-  public CustomPatchRepo CustomPatches { get; } = Plugin.Get<CustomPatchRepo>();
   public PatchInstaller PatchInstaller { get; } = Plugin.Get<PatchInstaller>();
 
 

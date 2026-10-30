@@ -9,7 +9,6 @@ public partial class PatchesPage : CUIPage
 {
   public class InstalledPatchesPage : CUIPage
   {
-    public CustomPatchRepo CustomPatches { get; } = Plugin.Get<CustomPatchRepo>();
     public PatchInstaller PatchInstaller { get; } = Plugin.Get<PatchInstaller>();
 
     private CUIVerticalList PatchList;

@@ -37,7 +37,6 @@ public class SettingsPage : CUIPage
   {
     this["layout"] = new CUIVerticalList() { Relative = new(0, 0, 1, 1) };
     this["layout"]["main"] = Main = new CUIVerticalList() { Flex = 1 };
-    Background.Color = Color.Green;
   }
 
 

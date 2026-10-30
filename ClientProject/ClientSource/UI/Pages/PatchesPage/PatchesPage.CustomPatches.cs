@@ -20,9 +20,9 @@ public partial class PatchesPage : CUIPage
     {
       PatchList.Clear();
 
-      foreach (var (id, info) in CustomPatches.Patches)
+      foreach (var (id, entry) in CustomPatches.Patches)
       {
-        PatchList.Add(CreatePatchBlock(info));
+        PatchList.Add(CreatePatchBlock(entry));
       }
     }
 
@@ -31,7 +31,7 @@ public partial class PatchesPage : CUIPage
       Commands.SendUp(TogglePatch_Command, info);
     }
 
-    private CUIComponent CreatePatchBlock(PatchInfoBase info)
+    private CUIComponent CreatePatchBlock(CustomPatchRepo.Entry entry)
     {
       CUIVerticalList block = new CUIDefault.VerticalBackPanel()
       {
@@ -39,43 +39,45 @@ public partial class PatchesPage : CUIPage
         Borders = new CUISizes(1, 1, 1, 1),
       };
 
-      block["id"] = new CUIToggleButton(info.ID)
+      block["id"] = new CUIToggleButton(entry.ID)
       {
-        State = PatchInstaller.IsInstalled(info),
-        OnToggle = (state) => TogglePatch(info),
+        State = PatchInstaller.IsInstalled(entry.PatchInfo),
+        OnToggle = (state) => TogglePatch(entry.PatchInfo),
       };
 
-      // if (!string.IsNullOrEmpty(info.Description))
-      // {
-      //   block["desctiption"] = new CUIDefault.SolidTextBlock(info.Description)
-      //   {
-      //     AbsoluteMax = new CUINullRect(h: 50),
-      //     ResizeStrategy = ResizeStrategy.Wrap,
-      //     CullChildren = true,
-      //   };
-      // }
-
-
-
-
-      if (info.Targets.Length != 0)
+      if (!string.IsNullOrEmpty(entry.Description))
       {
-        if (info.Targets.Length == 1)
+        block["desctiption"] = new CUIDefault.SolidTextBlock(entry.Description)
+        {
+          AbsoluteMax = new CUINullRect(h: 50),
+          ResizeStrategy = ResizeStrategy.Wrap,
+          CullChildren = true,
+        };
+      }
+
+      if (entry.PatchInfo.Targets.Length != 0)
+      {
+        if (entry.PatchInfo.Targets.Length == 1)
         {
           block["targets"] = new CUIDefault.HorizontalBackPanel();
           block["targets"]["caption"] = new CUIDefault.SolidTextBlock($"Target: ");
-          block["targets"]["id"] = new CUITextBlock(MethodBaseParser.Serialize(info.Targets[0]));
+          block["targets"]["id"] = new CUITextBlock(MethodBaseParser.Serialize(entry.PatchInfo.Targets[0]));
         }
 
-        if (info.Targets.Length > 1)
+        if (entry.PatchInfo.Targets.Length > 1)
         {
           block["targets"] = new CUIDefault.VerticalBackPanel();
           block["targets"]["caption"] = new CUIDefault.SolidTextBlock("Targets:");
-          foreach (MethodBase mb in info.Targets)
+          foreach (MethodBase mb in entry.PatchInfo.Targets)
           {
             block["targets"].Children.Add(new CUITextBlock(MethodBaseParser.Serialize(mb)));
           }
         }
+      }
+
+      if (entry.CustomPageFactory != null)
+      {
+        block["custom page"] = entry.CustomPageFactory();
       }
 
       block.DeepPalette = Plugin.Palettes.Tertiary;

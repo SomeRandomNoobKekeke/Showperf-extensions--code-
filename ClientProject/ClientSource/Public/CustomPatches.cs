@@ -7,8 +7,14 @@ namespace ShowperfExtensions;
 
 public static class CustomPatches
 {
-  public static void Add(PatchInfoBase info)
+  public static void Add(PatchInfoBase info, string desctiption = "", Func<CUIComponent> customPageFactory = null)
   {
-    Plugin.CustomPatchRepo.Add(info);
+    Plugin.CustomPatchRepo.Add(
+      new CustomPatchRepo.Entry(info)
+      {
+        Description = desctiption,
+        CustomPageFactory = customPageFactory,
+      }
+    );
   }
 }
