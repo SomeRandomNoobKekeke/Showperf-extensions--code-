@@ -17,7 +17,7 @@ public partial class ShowperfFrame : CUIDefault.Frame
 
   public CUIPages Pages { get; }
 
-  public CustomPatchesPage CustomPatchesPage { get; } = Plugin.Get<CustomPatchesPage>();
+  public PatchesPage PatchesPage { get; } = Plugin.Get<PatchesPage>();
   public MethodsPage MethodsPage { get; } = Plugin.Get<MethodsPage>();
   public MeasurementsPage MeasurementsPage { get; } = Plugin.Get<MeasurementsPage>();
   public SettingsPage SettingsPage { get; } = Plugin.Get<SettingsPage>();
@@ -120,9 +120,9 @@ public partial class ShowperfFrame : CUIDefault.Frame
       {
         OnSelected = () => Pages.OpenPage(MeasurementsPage),
       };
-      this["layout"]["page buttons"]["Custom Patches"] = new CUIRadioButton("Patches")
+      this["layout"]["page buttons"]["Patches"] = new CUIRadioButton("Patches")
       {
-        OnSelected = () => Pages.OpenPage(CustomPatchesPage),
+        OnSelected = () => Pages.OpenPage(PatchesPage),
       };
       this["layout"]["page buttons"]["Methods"] = new CUIRadioButton("Methods")
       {

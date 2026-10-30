@@ -51,7 +51,10 @@ public partial class Plugin
 
 
 
-    ServiceContainer.RegisterSingleton<CustomPatchesPage>();
+    ServiceContainer.RegisterSingleton<PatchesPage>();
+    ServiceContainer.RegisterSingleton<PatchesPage.CustomPatchesPage>();
+    ServiceContainer.RegisterSingleton<PatchesPage.InstalledPatchesPage>();
+
     ServiceContainer.RegisterSingleton<MeasurementsPage>();
     ServiceContainer.RegisterSingleton<SettingsPage>();
 

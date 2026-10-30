@@ -19,7 +19,7 @@ public class MethodsPage : CUIPage
   public CallGraphBrowserPage CallGraphBrowserPage { get; } = Plugin.Get<CallGraphBrowserPage>();
   public BookmarkedMethodsPage BookmarkedMethodsPage { get; } = Plugin.Get<BookmarkedMethodsPage>();
 
-  public CUIHorizontalList Subpages { get; }
+  public CUIHorizontalList PageButtons { get; }
   public CUIPages Main { get; }
 
   public MethodLineComponent CurrentMethodLine { get; private set; }
@@ -60,7 +60,7 @@ public class MethodsPage : CUIPage
       OnPageOpened = (page) => Plugin.FrameLogger?.Log(""),
     };
 
-    this["layout"]["header"]["subpages"] = Subpages = new CUIDefault.HorizontalPanel();
+    this["layout"]["header"]["page buttons"] = PageButtons = new CUIDefault.HorizontalPanel();
 
     using (new CUIContextStyle<CUIRadioButton>(btn =>
     {
@@ -69,28 +69,28 @@ public class MethodsPage : CUIPage
       btn.CullChildren = true;
     }))
     {
-      this["layout"]["header"]["subpages"]["Call Graph"] = new CUIRadioButton("Call Graph")
+      this["layout"]["header"]["page buttons"]["Call Graph"] = new CUIRadioButton("Call Graph")
       {
         OnSelected = () => Main.OpenPage(CallGraphBrowserPage),
       };
 
-      this["layout"]["header"]["subpages"]["Type Explorer"] = new CUIRadioButton("Type Explorer")
+      this["layout"]["header"]["page buttons"]["Type Explorer"] = new CUIRadioButton("Type Explorer")
       {
         OnSelected = () => Main.OpenPage(TypeExplorerPage),
       };
 
-      this["layout"]["header"]["subpages"]["Bookmarks"] = new CUIRadioButton("Bookmarks")
+      this["layout"]["header"]["page buttons"]["Bookmarks"] = new CUIRadioButton("Bookmarks")
       {
         OnSelected = () => Main.OpenPage(BookmarkedMethodsPage),
       };
     }
-    this["layout"]["header"]["subpages"].DeepPalette = CUICore.Palettes.Secondary;
+    this["layout"]["header"]["page buttons"].DeepPalette = CUICore.Palettes.Secondary;
     this["layout"]["header"]["current method block"] = CreateCurrentMethodBlock();
 
     Commands.ListenFor<MethodBase>(SelectMethod_Command, (mb) => Current = mb);
 
 
-    Subpages.Get<CUIRadioButton>("Type Explorer").Select();
+    PageButtons.Get<CUIRadioButton>("Type Explorer").Select();
   }
 
 }

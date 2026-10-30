@@ -5,15 +5,16 @@ using Microsoft.Xna.Framework;
 
 namespace ShowperfExtensions;
 
-public partial class CustomPatchesPage : CUIPage
+public partial class PatchesPage : CUIPage
 {
-  public class InstalledPatchesComponent : CUIVerticalList
+  public class InstalledPatchesPage : CUIPage
   {
     public CustomPatchRepo CustomPatches { get; } = Plugin.Get<CustomPatchRepo>();
     public PatchInstaller PatchInstaller { get; } = Plugin.Get<PatchInstaller>();
 
     private CUIVerticalList PatchList;
 
+    protected override void HandleOpen() => Refresh();
     public override void Refresh()
     {
       PatchList.Clear();
@@ -30,9 +31,11 @@ public partial class CustomPatchesPage : CUIPage
       {
         Margin = new CUISizes(4, 4, 4, 4),
       };
-      block["remove"] = new CUIButton("Remove")
+      block["remove button"] = new CUIIconButton(CUISprite.CrossIcon)
       {
-        OnClick = () => Commands.SendUp(TogglePatch_Command, info),
+        Scale = 0.8f,
+        CrossRelative = new CUINullRect(w: 1),
+        OnClick = () => PatchInstaller.RemovePatch(info),
       };
       block["id"] = new CUITextBlock(info.ID);
 
@@ -41,19 +44,19 @@ public partial class CustomPatchesPage : CUIPage
       return block;
     }
 
-    public InstalledPatchesComponent()
+    public InstalledPatchesPage()
     {
-      this["caption"] = new CUIDefault.SolidTextBlock("Installed Patches")
-      {
-        TextAnchor = CUIAnchor.Center,
-      };
-      this["list"] = PatchList = new CUIVerticalList()
+      PatchInstaller.PatchInstalled += (info) => Refresh();
+      PatchInstaller.PatchRemoved += (info) => Refresh();
+
+      this["layout"] = new CUIVerticalList() { Relative = new CUINullRect(0, 0, 1, 1) };
+      this["layout"]["list"] = PatchList = new CUIVerticalList()
       {
         Flex = 1,
         Padding = new CUISizes(4, 4, 4, 4),
       };
 
-      this.DeepPalette = CUICore.Palettes.Secondary;
+      this.DeepPalette = CUICore.Palettes.Tertiary;
     }
   }
 

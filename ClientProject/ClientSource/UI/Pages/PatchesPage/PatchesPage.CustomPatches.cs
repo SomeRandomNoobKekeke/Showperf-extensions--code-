@@ -5,15 +5,16 @@ using Microsoft.Xna.Framework;
 
 namespace ShowperfExtensions;
 
-public partial class CustomPatchesPage : CUIPage
+public partial class PatchesPage : CUIPage
 {
-  public class CustomPatchesBlockComponent : CUIVerticalList
+  public class CustomPatchesPage : CUIPage
   {
     public CustomPatchRepo CustomPatches { get; } = Plugin.Get<CustomPatchRepo>();
     public PatchInstaller PatchInstaller { get; } = Plugin.Get<PatchInstaller>();
 
     private CUIVerticalList PatchList;
 
+    protected override void HandleOpen() => Refresh();
     public override void Refresh()
     {
       PatchList.Clear();
@@ -84,20 +85,19 @@ public partial class CustomPatchesPage : CUIPage
     }
 
 
-    public CustomPatchesBlockComponent()
+    public CustomPatchesPage()
     {
-      this["caption"] = new CUIDefault.SolidTextBlock("Custom Patches")
-      {
-        TextAnchor = CUIAnchor.Center,
-      };
-      this["list"] = PatchList = new CUIVerticalList()
+      this["layout"] = new CUIVerticalList() { Relative = new CUINullRect(0, 0, 1, 1) };
+
+      this["layout"]["scroll wrapper"] = new CUIDefault.ListWithScrollbar()
       {
         Flex = 1,
-        Borders = new CUISizes(right: 2),
-        Padding = new CUISizes(4, 4, 4, 4),
+        List = { Padding = new CUISizes(4, 4, 4, 4) },
       };
 
-      this.DeepPalette = CUICore.Palettes.Secondary;
+      PatchList = this.Get<CUIVerticalList>("layout.scroll wrapper.list");
+
+      this.DeepPalette = CUICore.Palettes.Tertiary;
     }
   }
 
