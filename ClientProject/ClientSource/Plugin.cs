@@ -12,11 +12,10 @@ public partial class Plugin
 
   public static ILogger FrameLogger => Instance?.ShowperfFrame?.Logger;
 
-  public ShowperfFrame ShowperfFrame { get; } = Get<ShowperfFrame>();
   public static CaptureCore Capture { get; set; } = Get<CaptureCore>();
-  public PatchInstaller PatchInstaller { get; } = Get<PatchInstaller>();
   public static CustomPatchRepo CustomPatchRepo { get; } = Get<CustomPatchRepo>();
-
+  public PatchInstaller PatchInstaller { get; } = Get<PatchInstaller>();
+  public ShowperfFrame ShowperfFrame { get; } = Get<ShowperfFrame>();
   public static CUIPalettes Palettes { get; } = new();
 
   public void Init()

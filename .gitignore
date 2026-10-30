@@ -64,5 +64,5 @@ Refs/*
 
 UserBuildData.props
 Build
-Libs
+/Libs
 Ignore
