@@ -4,6 +4,7 @@ using CUILibs;
 using Microsoft.Xna.Framework;
 using LightInject;
 using System.Diagnostics;
+using System.IO;
 
 namespace ShowperfExtensions;
 
@@ -38,7 +39,9 @@ public partial class Plugin
   {
     ServiceContainer.RegisterSingleton<Plugin>();
     ServiceContainer.RegisterSingleton<CustomPatchRepo>();
-    ServiceContainer.RegisterSingleton<PluginSettings>();
+    ServiceContainer.RegisterSingleton<PluginSettings>(
+      (factory) => new PluginSettings(Path.Combine("Data", "Mods", ModInfo.Name, "Settings.json"))
+    );
     ServiceContainer.RegisterSingleton<UltimateAssemblyAnalyzer3000>();
     ServiceContainer.RegisterSingleton<CallGraphBuilder>();
     ServiceContainer.RegisterSingleton<CaptureCore>();

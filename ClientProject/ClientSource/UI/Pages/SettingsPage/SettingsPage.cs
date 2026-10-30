@@ -26,11 +26,7 @@ public class SettingsPage : CUIPage
       State = PluginSettings.FrameAboveGUI,
       OnToggle = (state) =>
       {
-        PluginSettings.FrameAboveGUI = state;
-        ShowperfFrame frame = Plugin.Get<ShowperfFrame>();
-
-        frame.TargetMainComponent = PluginSettings.FrameAboveGUI ? CUI.TopMain : CUI.Main;
-        if (frame.IsOpen) frame.Open();
+        PluginSettings.Reactive.FrameAboveGUI = state;
       },
     };
     Main["AboveGUIBlock"]["label"] = new CUITextBlock("Draw frame above vanilla GUI");

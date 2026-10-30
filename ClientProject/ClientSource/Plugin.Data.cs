@@ -38,11 +38,6 @@ public partial class Plugin
 
     CUI.Logger.LogVars(sw.ElapsedMilliseconds);
 
-    PluginSettings.Load();
-  }
-
-  private void SaveData()
-  {
-
+    // PluginSettings.Load(); // actually loaded on creation
   }
 }

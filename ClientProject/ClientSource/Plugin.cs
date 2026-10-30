@@ -55,7 +55,9 @@ public partial class Plugin
 
   public void Dispose()
   {
-    SaveData();
+    // SaveData(); // vanilla plugins normally don't get disposed so all data should be saved on edit
+
+
     Capture.DetachFromGame();
     Capture = null;
 

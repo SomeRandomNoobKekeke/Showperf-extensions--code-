@@ -13,7 +13,7 @@ public partial class ShowperfFrame : CUIDefault.Frame
   //   c.Background.Color = c.Palette["back"].To(Color.Transparent, 0.2f);
   // });
 
-
+  public PluginSettings PluginSettings { get; } = Plugin.Get<PluginSettings>();
 
   public CUIPages Pages { get; }
 
@@ -45,7 +45,7 @@ public partial class ShowperfFrame : CUIDefault.Frame
   {
     Logger = new(this);
 
-    TargetMainComponent = CUI.TopMain;
+    TargetMainComponent = PluginSettings.FrameAboveGUI ? CUI.TopMain : CUI.Main;
     Anchor = CUIAnchor.Center;
     OnOpen += DeepRefresh;
     ResizableBoth = true;
