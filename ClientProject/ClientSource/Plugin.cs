@@ -38,9 +38,6 @@ public partial class Plugin
     Palettes.Quaternary = CUIPalette.FromColor(new Color(32, 32, 32, 255));
 
 
-    CustomPatches.Add<Item_Patch>();
-
-
     LoadData();
 
     ShowperfFrame.Open();
