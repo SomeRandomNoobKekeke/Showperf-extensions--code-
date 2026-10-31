@@ -36,7 +36,7 @@ public partial class Plugin
     }
     sw.Stop();
 
-    CUI.Logger.LogVars(sw.ElapsedMilliseconds);
+    // CUI.Logger.LogVars(sw.ElapsedMilliseconds);
 
     // PluginSettings.Load(); // actually loaded on creation
   }

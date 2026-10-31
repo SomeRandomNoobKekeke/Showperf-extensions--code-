@@ -3,7 +3,7 @@
     <PlatformName>Windows</PlatformName>
   </PropertyGroup>
   <Import Project="ServerItems.props" />
-  <ItemGroup>
+  <!-- <ItemGroup>
     <PackageReference Include="FluentResults" Version="4.0.0" />
-  </ItemGroup>
+  </ItemGroup> -->
 </Project>

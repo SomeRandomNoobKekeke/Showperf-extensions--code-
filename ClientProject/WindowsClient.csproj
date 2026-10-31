@@ -3,10 +3,4 @@
     <PlatformName>Windows</PlatformName>
   </PropertyGroup>
   <Import Project="ClientItems.props" />
-  <ItemGroup>
-    <PackageReference Include="FluentResults" Version="4.0.0" />
-    <PackageReference Include="ICSharpCode.Decompiler" Version="11.1.0.9782" />
-    <PackageReference Include="LightInject" Version="7.1.1" />
-    <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.11.0" />
-  </ItemGroup>
 </Project>

@@ -1,6 +1,6 @@
 ﻿using CUILibs;
 using HarmonyLib;
-using System.Collections.Immutable;
+// using System.Collections.Immutable; //TODO
 using System.Reflection;
 
 namespace ShowperfExtensions;
@@ -8,11 +8,10 @@ namespace ShowperfExtensions;
 public partial class PatchInstaller
 {
   private Harmony Harmony { get; } = new Harmony("showperf.patches");
-  private HashSet<PatchInfoBase> _InstalledPatches { get; } = new();
-  public ImmutableHashSet<PatchInfoBase> InstalledPatches => _InstalledPatches.ToImmutableHashSet();
+  public HashSet<PatchInfoBase> InstalledPatches { get; } = new();
 
   public Dictionary<string, PatchInfoBase> PatchesByID
-    => _InstalledPatches.ToDictionary(
+    => InstalledPatches.ToDictionary(
         info => info.ID,
         info => info
       );
@@ -26,7 +25,7 @@ public partial class PatchInstaller
     get
     {
       Dictionary<MethodBase, List<PatchInfoBase>> dict = [];
-      foreach (var info in _InstalledPatches)
+      foreach (var info in InstalledPatches)
       {
         foreach (MethodBase target in info.Targets)
         {
@@ -39,13 +38,13 @@ public partial class PatchInstaller
   }
 
 
-  public bool IsInstalled(PatchInfoBase info) => _InstalledPatches.Contains(info);
+  public bool IsInstalled(PatchInfoBase info) => InstalledPatches.Contains(info);
   public bool TogglePatch(PatchInfoBase info)
-    => _InstalledPatches.Contains(info) ? RemovePatch(info) : InstallPatch(info);
+    => InstalledPatches.Contains(info) ? RemovePatch(info) : InstallPatch(info);
 
   public bool InstallPatch(PatchInfoBase info)
   {
-    if (_InstalledPatches.Contains(info)) return false;
+    if (InstalledPatches.Contains(info)) return false;
 
     try
     {
@@ -58,14 +57,14 @@ public partial class PatchInstaller
       return false;
     }
 
-    _InstalledPatches.Add(info);
+    InstalledPatches.Add(info);
     PatchInstalled?.Invoke(info);
     return true;
   }
 
   public bool RemovePatch(PatchInfoBase info)
   {
-    if (!_InstalledPatches.Contains(info)) return false;
+    if (!InstalledPatches.Contains(info)) return false;
 
     try
     {
@@ -77,19 +76,19 @@ public partial class PatchInstaller
       return false;
     }
 
-    _InstalledPatches.Remove(info);
+    InstalledPatches.Remove(info);
     PatchRemoved?.Invoke(info);
     return true;
   }
 
   public void RemoveAllPatches()
   {
-    foreach (PatchInfoBase info in _InstalledPatches)
+    foreach (PatchInfoBase info in InstalledPatches)
     {
       info.Remove(Harmony);
     }
 
-    _InstalledPatches.Clear();
+    InstalledPatches.Clear();
   }
 
 }
