@@ -27,6 +27,7 @@ public partial class Plugin
     Capture.AttachToGame();
     AddCommands();
 
+    UTest.CollapseTestPackIfSucceed = false;
     UTest.ScanThisAssembly();
     UTest.TryRunPrevTest();
 
@@ -37,19 +38,7 @@ public partial class Plugin
     Palettes.Quaternary = CUIPalette.FromColor(new Color(32, 32, 32, 255));
 
 
-    CustomPatches.Add(
-      new PatchInfo(
-        "Deep item analysis",
-        typeof(Item).GetMethod("Update")!,
-        typeof(Item_Patch).GetMethod("Item_Update_Replace")!,
-        HarmonyLib.HarmonyPatchType.Prefix
-      ),
-      customPageFactory: () => new CUIComponent()
-      {
-        Background = { Color = Color.Lime },
-        Absolute = new CUINullRect(h: 50),
-      }
-    );
+    CustomPatches.Add<Item_Patch>();
 
 
     LoadData();

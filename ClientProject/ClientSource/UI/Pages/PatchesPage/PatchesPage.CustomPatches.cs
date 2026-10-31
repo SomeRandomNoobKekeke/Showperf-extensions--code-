@@ -26,10 +26,6 @@ public partial class PatchesPage : CUIPage
       }
     }
 
-    private void TogglePatch(PatchInfoBase info)
-    {
-      Commands.SendUp(TogglePatch_Command, info);
-    }
 
     private CUIComponent CreatePatchBlock(CustomPatchRepo.Entry entry)
     {
@@ -42,7 +38,11 @@ public partial class PatchesPage : CUIPage
       block["id"] = new CUIToggleButton(entry.ID)
       {
         State = PatchInstaller.IsInstalled(entry.PatchInfo),
-        OnToggle = (state) => TogglePatch(entry.PatchInfo),
+        OnToggle = (state) =>
+        {
+          PatchInstaller.TogglePatch(entry.PatchInfo);
+          block.Get<CUIToggleButton>("id").State = PatchInstaller.IsInstalled(entry.PatchInfo);
+        },
       };
 
       if (!string.IsNullOrEmpty(entry.Description))
@@ -75,9 +75,9 @@ public partial class PatchesPage : CUIPage
         }
       }
 
-      if (entry.CustomPageFactory != null)
+      if (entry.SettingsPageFactory != null)
       {
-        block["custom page"] = entry.CustomPageFactory();
+        block["custom page"] = entry.SettingsPageFactory();
       }
 
       block.DeepPalette = Plugin.Palettes.Tertiary;

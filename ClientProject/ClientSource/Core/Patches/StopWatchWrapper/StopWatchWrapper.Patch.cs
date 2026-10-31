@@ -12,7 +12,7 @@ public partial class StopwatchWrapper
   public class StopwatchWrapperPatch(
     MethodBase TargetMethod
   ) : MultiPatchInfo(
-    $"Stopwatch around: {MethodBaseParser.Serialize(TargetMethod)}",
+    $"{MethodBaseParser.Serialize(TargetMethod)}",
     [
       new PatchInfo($"{TargetMethod} Stopwatch prefix", TargetMethod,
         typeof(StopwatchWrapperPatch).GetMethod("Prefix")!,

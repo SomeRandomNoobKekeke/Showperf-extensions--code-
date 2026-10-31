@@ -7,12 +7,13 @@ namespace ShowperfExtensions;
 
 public partial class CustomPatchRepo
 {
-  public class Entry(PatchInfoBase patchInfo)
+  public class Entry(string id, PatchInfoBase patchInfo)
   {
-    public string ID => PatchInfo.ID;
+    public string ID { get; } = id;
     public PatchInfoBase PatchInfo { get; } = patchInfo;
+
     public string? Description { get; set; }
-    public CUIComponent CustomPage { set => CustomPageFactory = () => value; }
-    public Func<CUIComponent>? CustomPageFactory { get; set; }
+    public CUIComponent SettingsPage { set => SettingsPageFactory = () => value; }
+    public Func<CUIComponent>? SettingsPageFactory { get; set; }
   }
 }

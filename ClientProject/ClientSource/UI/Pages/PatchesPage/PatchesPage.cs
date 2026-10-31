@@ -7,9 +7,6 @@ namespace ShowperfExtensions;
 
 public partial class PatchesPage : CUIPage
 {
-
-  public const string TogglePatch_Command = "TogglePatch";
-
   private CUIPages Main;
   private CUIHorizontalList PageButtons;
 
@@ -26,13 +23,6 @@ public partial class PatchesPage : CUIPage
     CustomPatchesBlock.Refresh();
     InstalledPatchesBlock.Refresh();
   }
-
-  public void TogglePatch(PatchInfoBase info)
-  {
-    PatchInstaller.TogglePatch(info);
-    Refresh();
-  }
-
 
   public PatchesPage()
   {
@@ -60,8 +50,6 @@ public partial class PatchesPage : CUIPage
       };
     }
     this["layout"]["header"]["page buttons"].DeepPalette = Plugin.Palettes.Secondary;
-
-    Commands.ListenFor<PatchInfoBase>(TogglePatch_Command, TogglePatch);
 
     PageButtons.Get<CUIRadioButton>("Custom Patches").Select();
   }

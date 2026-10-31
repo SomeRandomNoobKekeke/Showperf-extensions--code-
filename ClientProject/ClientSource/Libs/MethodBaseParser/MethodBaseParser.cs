@@ -72,57 +72,64 @@ public static class MethodBaseParser
 
   public static MethodBase? Parse(string raw)
   {
-    int endOfName = raw.IndexOfAny(['(', '<']);
-    int startOfArgs = raw.IndexOf('(');
-
-    // bool hasGenericArgs = endOfName != startOfArgs;
-    // Akshually i don't care because i compare by serializing back xd
-
-
-    string[] methodNameParts = raw.Substring(0, endOfName).Split('.');
-    string args = raw.Substring(endOfName, raw.Length - endOfName);
-
-    if (methodNameParts.Length < 2) return null;
-
-    string typeName = string.Join('.', methodNameParts.SkipLast(1));
-    string methodName = methodNameParts.Last();
-
-    Type T = null;
-    foreach (Assembly assembly in AssembliesToScan)
+    try
     {
-      T = assembly.GetType(typeName);
-      if (T is not null) break;
-    }
+      if (string.IsNullOrEmpty(raw)) return null;
 
-    if (T is null) return null;
+      int endOfName = raw.IndexOfAny(['(', '<']);
+      if (endOfName == -1) endOfName = raw.Length;
 
-    if (methodName == ConstuctorName)
-    {
-      MethodBase[] constructor = T.GetConstructors(Pls);
+      string[] methodNameParts = raw.Substring(0, endOfName).Split('.');
 
-      foreach (MethodBase mb in constructor)
+      if (methodNameParts.Length < 2) return null;
+
+      string typeName = string.Join('.', methodNameParts.SkipLast(1));
+      string methodName = methodNameParts.Last();
+
+      Type T = null;
+      foreach (Assembly assembly in AssembliesToScan)
       {
-        if (Serialize(mb) == raw) return mb;
+        T = assembly.GetType(typeName);
+        T ??= assembly.GetType($"{assembly.GetName().Name}.{typeName}");
+        if (T is not null) break;
+      }
+
+      if (T is null) return null;
+
+      if (methodName == ConstuctorName)
+      {
+        MethodBase[] constructor = T.GetConstructors(Pls);
+
+        foreach (MethodBase mb in constructor)
+        {
+          if (Serialize(mb) == raw) return mb;
+        }
+
+        return null;
+      }
+
+      if (methodName == StaticConstuctorName)
+      {
+        return T.GetConstructor(BindingFlags.Static | BindingFlags.NonPublic, []);
+      }
+
+      MethodInfo[] methods = T.GetMethods(Pls).Where(mi => mi.Name == methodName).ToArray();
+
+      if (methods.Length == 0) return null;
+      if (methods.Length == 1) return methods[0];
+
+      foreach (MethodInfo mi in methods)
+      {
+        if (Serialize(mi) == raw) return mi;
       }
 
       return null;
     }
-
-    if (methodName == StaticConstuctorName)
+    catch (Exception e)
     {
-      return T.GetConstructor(BindingFlags.Static | BindingFlags.NonPublic, []);
+      Logger.Default.Warning($"MethodBaseParser failed to parse [{raw}]: {e.Message}");
+      Logger.Default.Warning($"this shouldn't happen, tell me to add this case to the tests");
+      return null;
     }
-
-    MethodInfo[] methods = T.GetMethods(Pls).Where(mi => mi.Name == methodName).ToArray();
-
-    if (methods.Length == 0) return null;
-    if (methods.Length == 1) return methods[0];
-
-    foreach (MethodInfo mi in methods)
-    {
-      if (Serialize(mi) == raw) return mi;
-    }
-
-    return null;
   }
 }

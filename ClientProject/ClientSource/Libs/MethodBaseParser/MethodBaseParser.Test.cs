@@ -151,4 +151,40 @@ public class MethodBaseParserTest : UTestPack
     ];
   }
 
+  public List<UTest> ParseNotFullyQualified()
+  {
+    return [
+      new UTest(
+        MethodBaseParser.Parse("Barotrauma.GameMain.Update")!,
+        typeof(GameMain).GetMethod("Update", Pls)!
+      ),
+      new UTest(
+        MethodBaseParser.Parse("GameMain.Update")!,
+        typeof(GameMain).GetMethod("Update", Pls)!
+      ),
+      new UTest(
+        MethodBaseParser.Parse("Barotrauma.GameMain.Update()")!,
+        typeof(GameMain).GetMethod("Update", Pls)!
+      ),
+      new UTest(
+        MethodBaseParser.Parse("GameMain.Update()")!,
+        typeof(GameMain).GetMethod("Update", Pls)!
+      ),
+    ];
+  }
+
+  public List<UTest> GarbageInput()
+  {
+    return [
+      new UTest(MethodBaseParser.Parse("bebebe")!, null),
+      new UTest(MethodBaseParser.Parse("")!, null),
+      new UTest(MethodBaseParser.Parse(null)!, null),
+      new UTest(MethodBaseParser.Parse("GameMain.Wpdate")!, null),
+      new UTest(MethodBaseParser.Parse("GameMain.update")!, null),
+      new UTest(MethodBaseParser.Parse("GameWain.Wpdate")!, null),
+      new UTest(MethodBaseParser.Parse("GameMain....GameMain")!, null),
+      new UTest(MethodBaseParser.Parse("Character.AddDamage")!,null), //There are multiple overloads
+    ];
+  }
+
 }

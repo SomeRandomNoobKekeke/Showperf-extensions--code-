@@ -5,11 +5,21 @@ using Barotrauma.Items.Components;
 using FarseerPhysics;
 using FarseerPhysics.Dynamics;
 using System.Diagnostics;
+using Microsoft.Xna.Framework;
 
 namespace ShowperfExtensions;
 
+[ShowperfPatch("deep dark fantasy")]
 public class Item_Patch
 {
+  public static CUIComponent SettingsPage => new CUIComponent()
+  {
+    Absolute = new CUINullRect(h: 50),
+    Background = { Color = Color.Purple },
+  };
+
+
+  [PatchMethod("Item.Update")]
   public static bool Item_Update_Replace(Item __instance, float deltaTime, Camera cam)
   {
     Item _ = __instance;
