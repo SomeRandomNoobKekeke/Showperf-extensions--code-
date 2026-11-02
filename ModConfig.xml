@@ -1,0 +1,6 @@
+<ModConfig>
+  <Assembly Folder="%ModDir%/ClientProject/ClientSource" Target="Client" IsScript="true" UseInternalAccessName="false" />
+  <Assembly Folder="%ModDir%/ServerProject/ServerSource" Target="Server" IsScript="true" UseInternalAccessName="false" />
+  <Assembly Folder="%ModDir%/SharedProject/SharedSource" Target="Any" IsScript="true" UseInternalAccessName="false" />
+  <Assembly Folder="%ModDir%/SharedProject/BuildSpecific/LuaPlugin" Target="Any" IsScript="true" UseInternalAccessName="false" />
+</ModConfig>
