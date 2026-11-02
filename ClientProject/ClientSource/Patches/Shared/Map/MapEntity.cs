@@ -1,5 +1,4 @@
-﻿using Barotrauma;
-using ShowperfExtensions;
+﻿using ShowperfExtensions;
 using System.Diagnostics;
 using Barotrauma.Items.Components;
 using static Barotrauma.MapEntity;
@@ -7,10 +6,14 @@ using static Barotrauma.MapEntity;
 namespace ShowperfPatches;
 
 [ShowperfPatch]
-public class MapEntityPatch
+public class MapEntity_UpdateAll_Deep
 {
+
+  [PatchMethod("MapEntity.UpdateAll")]
   public static void UpdateAll(float deltaTime, Camera cam)
   {
+
+
     Stopwatch sw = new Stopwatch();
     sw.Start();
     foreach (Hull hull in Hull.HullList)
@@ -45,6 +48,8 @@ public class MapEntityPatch
       gap2.Update(deltaTime, cam);
     }
     sw.Stop();
+
+    Capture.Update.AddTicks("Update:MapEntity:Misc", sw.ElapsedTicks);
     GameMain.PerformanceCounter.AddElapsedTicks("Update:MapEntity:Misc", sw.ElapsedTicks);
     sw.Restart();
     Powered.UpdatePower(deltaTime);
@@ -65,6 +70,7 @@ public class MapEntityPatch
     }
     MapEntity.UpdateAllProjSpecific(deltaTime);
     sw.Stop();
+    Capture.Update.AddTicks("Update:MapEntity:Items", sw.ElapsedTicks);
     GameMain.PerformanceCounter.AddElapsedTicks("Update:MapEntity:Items", sw.ElapsedTicks);
     sw.Restart();
     EntitySpawner spawner = Entity.Spawner;
