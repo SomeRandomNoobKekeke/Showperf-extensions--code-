@@ -64,7 +64,7 @@ public partial class FunnyDictOfWeakSets<TKey, TValue> : IDictionary<TKey, HashS
   public bool Remove(TKey key) => dict.Remove(key);
   public bool Remove(KeyValuePair<TKey, HashSet<TValue>> item) => dict.Remove(item.Key);
 
-  public bool TryGetValue(TKey key, [MaybeNullWhen(false)] out HashSet<TValue> value)
+  public bool TryGetValue(TKey key, out HashSet<TValue> value)
   {
     value = this[key];
     return true;

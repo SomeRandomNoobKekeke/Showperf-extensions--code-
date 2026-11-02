@@ -10,7 +10,7 @@
     <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.14.0" />
 
     <Reference Include="CUI">
-      <HintPath>C:\Program Files (x86)\Steam\steamapps\common\Barotrauma\LocalMods\[Root] CUI Dev\Build\bin\Client\Windows\CUI.dll</HintPath>
+      <HintPath>C:\Program Files (x86)\Steam\steamapps\common\Barotrauma\LocalMods\[Root] CUI Dev\Build\CUI\Windows\Client\CUIClient.dll</HintPath>
     </Reference>
   </ItemGroup>
 </Project>

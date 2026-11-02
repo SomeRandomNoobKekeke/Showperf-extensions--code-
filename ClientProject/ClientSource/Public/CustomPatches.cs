@@ -6,8 +6,32 @@ using System.Reflection;
 
 namespace ShowperfExtensions;
 
+#if FAKE 
 public static class CustomPatches
 {
+  public const string SettingsPagePropName = "SettingsPage";
+
+  public static void Add(
+    string id,
+    PatchInfoBase info,
+    string desctiption = "",
+    Func<CUIComponent>? settingsPageFactory = null
+  ){}
+
+  public static void AddAllPatchesInThisAssembly(){}
+  public static void AddAllPatchesInAssembly(Assembly assembly){}
+  public static void Add<T>() {}
+  public static void Add(Type showperfPatchType){}
+}
+#endif
+
+
+public static class CustomPatches
+{
+
+
+
+
   private static BindingFlags StaticAny => BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic;
 
   public const string SettingsPagePropName = "SettingsPage";
@@ -20,7 +44,7 @@ public static class CustomPatches
     Func<CUIComponent>? settingsPageFactory = null
   )
   {
-    Plugin.CustomPatchRepo.Add(
+    Plugin.Instance?.CustomPatchRepo.Add(
       new CustomPatchRepo.Entry(id, info)
       {
         Description = desctiption,
@@ -34,6 +58,8 @@ public static class CustomPatches
 
   public static void AddAllPatchesInAssembly(Assembly assembly)
   {
+    Logger.Default.LogVars($"tried to scan {assembly}");
+
     foreach (Type T in assembly.GetTypes())
     {
       if (T.GetCustomAttribute<ShowperfPatchAttribute>() != null)

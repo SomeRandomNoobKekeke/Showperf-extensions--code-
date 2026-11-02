@@ -4,9 +4,15 @@ using System.Text;
 
 namespace ShowperfExtensions;
 
-public class CallGraphExplorer
+/// <summary>
+/// This thing lets you explore CallGraph
+/// You can set the Current node, explore it and move to other nodes
+/// </summary>
+public partial class CallGraphExplorer
 {
-  public CallGraph CallGraph { get; set; } = new();
+  private CallGraphProvider CallGraphProvider { get; } = Plugin.Get<CallGraphProvider>();
+
+  public CallGraph CallGraph => CallGraphProvider.Current;
 
   public MethodBase? Current { get; set; }
 

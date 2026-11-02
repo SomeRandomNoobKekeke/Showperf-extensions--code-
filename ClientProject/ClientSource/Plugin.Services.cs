@@ -46,7 +46,7 @@ public partial class Plugin
     ServiceContainer.RegisterSingleton<CallGraphBuilder>();
     ServiceContainer.RegisterSingleton<CaptureCore>();
     ServiceContainer.Register<ICallGraphSerializer, MetadataCallGraphSerializer>();
-    ServiceContainer.RegisterSingleton<CallGraphSaver>();
+    ServiceContainer.RegisterSingleton<CallGraphProvider>();
     ServiceContainer.RegisterSingleton<CallGraphExplorer>();
     ServiceContainer.RegisterSingleton<PatchInstaller>();
     ServiceContainer.RegisterSingleton<StopwatchWrapper>();

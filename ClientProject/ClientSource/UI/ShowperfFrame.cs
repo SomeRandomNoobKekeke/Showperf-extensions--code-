@@ -41,12 +41,12 @@ public partial class ShowperfFrame : CUIDefault.Frame
     Close();
   }
 
-  public ShowperfFrame() : base("Showperf", 600, 600)
+  public ShowperfFrame() : base("Showperf", 400, 600)
   {
     Logger = new(this);
 
     TargetMainComponent = PluginSettings.FrameAboveGUI ? CUI.TopMain : CUI.Main;
-    Anchor = CUIAnchor.Center;
+    Anchor = CUIAnchor.RightCenter;
     OnOpen += DeepRefresh;
     ResizableBoth = true;
 

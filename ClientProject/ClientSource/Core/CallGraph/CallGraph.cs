@@ -6,6 +6,9 @@ using CUILibs;
 
 namespace ShowperfExtensions;
 
+/// <summary>
+/// This thing just stores the data
+/// </summary>
 public partial class CallGraph
 {
   public Dictionary<MethodBase, List<MethodBase>> CalledMethods { get; set; } = [];

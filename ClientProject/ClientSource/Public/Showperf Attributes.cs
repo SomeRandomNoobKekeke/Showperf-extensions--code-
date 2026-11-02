@@ -21,6 +21,6 @@ public class PatchMethodAttribute(string fullMethodName, HarmonyPatchType patchT
 {
   public MethodBase Target { get; } =
     MethodBaseParser.Parse(fullMethodName)
-    ?? throw new ArgumentException($"PatchMethodAttribute couldn't find [{fullMethodName}]");
+    ?? throw new ArgumentException($"PatchMethodAttribute couldn't find [{fullMethodName}], you sure it exists?");
   public HarmonyPatchType PatchType { get; } = patchType;
 }

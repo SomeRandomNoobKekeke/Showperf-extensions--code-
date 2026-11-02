@@ -12,11 +12,17 @@ public partial class Plugin
 
   public static ILogger FrameLogger => Instance?.ShowperfFrame?.Logger;
 
+  public static CUIPalettes Palettes { get; } = new();
+
   public static CaptureCore Capture { get; set; } = Get<CaptureCore>();
-  public static CustomPatchRepo CustomPatchRepo { get; } = Get<CustomPatchRepo>();
+  public CustomPatchRepo CustomPatchRepo { get; } = Get<CustomPatchRepo>();
   public PatchInstaller PatchInstaller { get; } = Get<PatchInstaller>();
   public ShowperfFrame ShowperfFrame { get; } = Get<ShowperfFrame>();
-  public static CUIPalettes Palettes { get; } = new();
+
+
+  public PluginSettings PluginSettings { get; } = Get<PluginSettings>();
+
+  public TypeExplorer TypeExplorer { get; } = new TypeExplorer(typeof(GameMain).Assembly);
 
   public void Init()
   {
@@ -37,8 +43,6 @@ public partial class Plugin
     Palettes.Tertiary = CUIPalette.FromColor(new Color(0, 113, 183, 255));
     Palettes.Quaternary = CUIPalette.FromColor(new Color(32, 32, 32, 255));
 
-
-    LoadData();
 
     ShowperfFrame.Open();
     ShowperfFrame.MethodsPage.Current = typeof(Item).GetMethod("Update")!;

@@ -17,6 +17,10 @@ namespace ShowperfExtensions;
 
 public partial class Plugin
 {
+  public CallGraphBuilder CallGraphBuilder { get; } = Get<CallGraphBuilder>();
+  public CallGraphExplorer CallGraphExplorer { get; } = Get<CallGraphExplorer>();
+  public CallGraphProvider CallGraphProvider { get; } = Get<CallGraphProvider>();
+
   public void AddCommands()
   {
     PluginCommands.Add("showperf1.5", (args) =>
@@ -25,24 +29,23 @@ public partial class Plugin
       {
         ShowperfFrame.Open();
       }
-
     });
 
     PluginCommands.Add("_showperf_buildcallgraph", (args) =>
     {
       if (args.Length >= 1)
       {
-        if (args[0] == "metadata") CallGraphSaver.Serializer = new MetadataCallGraphSerializer();
-        if (args[0] == "humanreadable") CallGraphSaver.Serializer = new FancyCallGraphSerializer();
+        if (args[0] == "metadata") CallGraphProvider.Serializer = new MetadataCallGraphSerializer();
+        if (args[0] == "humanreadable") CallGraphProvider.Serializer = new FancyCallGraphSerializer();
       }
 
-      string savePath = CallGraphPath;
+      string savePath = Path.Combine(CallGraphProvider.DirWhereCallGraphsAreStored, "call graph.json");
       if (args.Length >= 2)
       {
-        savePath = Path.Combine(ModInfo.Dir, "Data", $"{args[1]}.json");
+        savePath = Path.Combine(CallGraphProvider.DirWhereCallGraphsAreStored, $"{args[1]}.json");
       }
 
-      CallGraphSaver.SaveTo(savePath, CallGraphBuilder.ExtractFullCallGraph());
+      CallGraphProvider.SaveTo(savePath, CallGraphBuilder.ExtractFullCallGraph());
 
       Logger.Default.Print($"CallGraph saved to [{savePath}]", Color.Lime);
     }, () => [["metadata", "humanreadable"], ["CallGraph"]]);
