@@ -45,7 +45,6 @@ public partial class Plugin
 
 
     ShowperfFrame.Open();
-    ShowperfFrame.MethodsPage.Current = typeof(Item).GetMethod("Update")!;
 
     Utils.RunWithDelay(Experiment, 500);
   }

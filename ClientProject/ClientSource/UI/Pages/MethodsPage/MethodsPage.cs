@@ -24,6 +24,8 @@ public class MethodsPage : CUIPage
 
   public MethodLineComponent CurrentMethodLine { get; private set; }
 
+  public MethodBase InitialMethod { get; } = typeof(GameScreen).GetMethod("Update")!;
+
   private MethodBase _Current; public MethodBase Current
   {
     get => _Current;
@@ -91,6 +93,8 @@ public class MethodsPage : CUIPage
 
 
     PageButtons.Get<CUIRadioButton>("Type Explorer").Select();
+
+    Current = InitialMethod;
   }
 
 }
