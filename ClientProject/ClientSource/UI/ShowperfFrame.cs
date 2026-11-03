@@ -41,7 +41,7 @@ public partial class ShowperfFrame : CUIDefault.Frame
     Close();
   }
 
-  public ShowperfFrame() : base("Showperf", 400, 600)
+  public ShowperfFrame() : base("Showperf", 500, 600)
   {
     Logger = new(this);
 
@@ -75,7 +75,7 @@ public partial class ShowperfFrame : CUIDefault.Frame
       {
         OnClick = () =>
         {
-          Absolute = new CUINullRect(0, 0, 400, 600);
+          Absolute = new CUINullRect(0, 0, 500, 600);
           Anchor = CUIAnchor.RightCenter;
         },
       };

@@ -81,12 +81,9 @@ public partial class PatchInstaller
     return true;
   }
 
-  public void RemoveAllPatches()
+  public void Dispose()
   {
-    foreach (PatchInfoBase info in InstalledPatches)
-    {
-      info.Remove(Harmony);
-    }
+    Harmony.UnpatchSelf();
 
     InstalledPatches.Clear();
   }

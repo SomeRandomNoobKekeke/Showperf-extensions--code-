@@ -37,5 +37,10 @@ public class CaptureCore
       typeof(CaptureCore).GetMethod("GameScreen_Update_Postfix", Pls)
     );
   }
+
+  internal void Dispose()
+  {
+    Harmony.UnpatchSelf();
+  }
 }
 

@@ -54,10 +54,10 @@ public partial class Plugin
     // SaveData(); // vanilla plugins normally don't get disposed so all data should be saved on edit
 
 
-    Capture.DetachFromGame();
+    Capture.Dispose();
     Capture = null;
 
-    PatchInstaller.RemoveAllPatches();
+    PatchInstaller.Dispose();
 
     ServiceContainer.Dispose();
     ServiceContainer = null;

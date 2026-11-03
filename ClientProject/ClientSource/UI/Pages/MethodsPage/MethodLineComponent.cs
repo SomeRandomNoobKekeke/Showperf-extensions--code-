@@ -15,9 +15,25 @@ public class MethodLineComponent : CUIDefault.HorizontalBackPanel,
   ITrackStopwatchPatches,
   ITrackMethodBookmarks
 {
+  private enum IsTogglingState { No, TogglingOn, TogglingOff }
+
+  static MethodLineComponent()
+  {
+    CUI.Main.GlobalEvents.MouseUp.Add((e) =>
+    {
+      IsToggling = IsTogglingState.No;
+    });
+  }
+
+  private static IsTogglingState IsToggling;
+
+
   private Assembly BarotraumaAssembly => typeof(GameMain).Assembly;
   public StopwatchWrapper StopwatchWrapper { get; } = Plugin.Get<StopwatchWrapper>();
   public MethodBookmarksList MethodBookmarksList { get; } = Plugin.Get<MethodBookmarksList>();
+
+
+
 
   private MethodBase _Method; public MethodBase Method
   {
@@ -78,11 +94,22 @@ public class MethodLineComponent : CUIDefault.HorizontalBackPanel,
 
     this["toggle stopwatch"] = ToggleStopwatchButton = new CUIToggleIconButton(CUISprite.BurningTimerIcon)
     {
+      IsAllowedToToggle = () => IsToggling == IsTogglingState.No,
+      OnMouseEnter = (e) =>
+      {
+        if (IsToggling == IsTogglingState.TogglingOn) ToggleStopwatchButton.ReactiveState = true;
+        if (IsToggling == IsTogglingState.TogglingOff) ToggleStopwatchButton.ReactiveState = false;
+      },
       State = StopwatchWrapper.IsPatched(Method),
       OnToggle = (state) =>
       {
         StopwatchWrapper.TogglePatch(Method);
         ToggleStopwatchButton.State = StopwatchWrapper.IsPatched(Method);
+
+        if (IsToggling == IsTogglingState.No)
+        {
+          IsToggling = state ? IsTogglingState.TogglingOn : IsTogglingState.TogglingOff;
+        }
       },
       Scale = 0.8f,
       Padding = new CUISizes(1, 1, 1, 1),

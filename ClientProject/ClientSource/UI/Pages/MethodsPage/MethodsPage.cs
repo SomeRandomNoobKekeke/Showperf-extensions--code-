@@ -92,7 +92,7 @@ public class MethodsPage : CUIPage
     Commands.ListenFor<MethodBase>(SelectMethod_Command, (mb) => Current = mb);
 
 
-    PageButtons.Get<CUIRadioButton>("Type Explorer").Select();
+    PageButtons.Get<CUIRadioButton>("Call Graph").Select();
 
     Current = InitialMethod;
   }
