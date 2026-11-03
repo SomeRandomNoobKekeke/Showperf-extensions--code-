@@ -14,11 +14,13 @@ public partial class Mod
     CustomPatches.AddAllPatchesInThisAssembly();
   }
 
+  [MethodImpl(MethodImplOptions.NoInlining)]
   public void Dispose()
   {
 
   }
 
+  [MethodImpl(MethodImplOptions.NoInlining)]
   public void OnContentLoaded()
   {
 

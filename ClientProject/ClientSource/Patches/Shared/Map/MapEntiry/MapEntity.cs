@@ -10,10 +10,8 @@ public class MapEntity_UpdateAll_Deep
 {
 
   [PatchMethod("MapEntity.UpdateAll")]
-  public static void UpdateAll(float deltaTime, Camera cam)
+  public static bool UpdateAll(float deltaTime, Camera cam)
   {
-
-
     Stopwatch sw = new Stopwatch();
     sw.Start();
     foreach (Hull hull in Hull.HullList)
@@ -76,8 +74,10 @@ public class MapEntity_UpdateAll_Deep
     EntitySpawner spawner = Entity.Spawner;
     if (spawner == null)
     {
-      return;
+      return false;
     }
     spawner.Update(true);
+
+    return false;
   }
 }
