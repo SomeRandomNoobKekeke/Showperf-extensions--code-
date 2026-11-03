@@ -7,6 +7,7 @@ namespace ShowperfExtensions;
 public class CaptureWindow
 {
 
+  public static int DefaultSliceCount = 500;
   public int SliceCount
   {
     get => Slices.Count;
@@ -20,7 +21,7 @@ public class CaptureWindow
     }
   }
 
-  private CaptureSlice StagingSlice = new();
+  public CaptureSlice StagingSlice { get; private set; } = new();
   public Queue<CaptureSlice> Slices { get; private set; } = [];
   public CaptureSlice TotalSlice { get; private set; } = new();
 
@@ -28,6 +29,21 @@ public class CaptureWindow
   public void AddTicks(Identifier id, double value)
   {
     StagingSlice.AddTicks(id, value);
+  }
+
+  public double GetTotal()
+  {
+    return TotalSlice.Total / SliceCount;
+  }
+
+  public IEnumerable<KeyValuePair<Identifier, double>> Values
+  {
+    get
+    {
+      return TotalSlice.Select(kvp => new KeyValuePair<Identifier, double>(
+        kvp.Key, kvp.Value / SliceCount
+      ));
+    }
   }
 
   public event Action? Rotated;
@@ -48,7 +64,7 @@ public class CaptureWindow
 
   public CaptureWindow()
   {
-    SliceCount = 100;
+    SliceCount = DefaultSliceCount;
   }
 
 }

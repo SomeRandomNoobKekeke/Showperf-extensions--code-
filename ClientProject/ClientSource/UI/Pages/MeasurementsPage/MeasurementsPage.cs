@@ -4,6 +4,7 @@ using CursedUI;
 using Microsoft.Xna.Framework;
 using CUILibs;
 using System.Diagnostics;
+using Barotrauma;
 
 namespace ShowperfExtensions;
 
@@ -13,10 +14,23 @@ public partial class MeasurementsPage : CUIPage
   public PluginSettings Settings { get; set; }
 
   public CUIFastTextDump Dump { get; }
+  private CUIDefault.ListWithScrollbar ScrollWrapper;
   private CUITextBlock SumTextBlock;
 
   public static double TicksToMs = 1000.0 / Stopwatch.Frequency;
   public string ConverToMs(double t) => string.Format("{0:0.000000}", t * TicksToMs);
+
+
+  private List<KeyValuePair<Identifier, double>> SortedTicks = [];
+  private double maxValue;
+
+  protected override void UpdateRects()
+  {
+    base.UpdateRects();
+
+
+    CullLines();
+  }
 
   private void RefreshData()
   {
@@ -26,19 +40,49 @@ public partial class MeasurementsPage : CUIPage
       return;
     }
 
-    SumTextBlock.Text = $"Sum: {ConverToMs(Capture.Update.TotalSlice.Total / Capture.Update.SliceCount)}ms";
+    SumTextBlock.Text = $"Sum: {ConverToMs(Capture.Update.GetTotal())}ms";
 
-    var sortedTicks = Capture.Update.TotalSlice.OrderByDescending(kvp => kvp.Value).ToList();
+    SortedTicks = Capture.Update.Values.OrderByDescending(kvp => kvp.Value).ToList();
+    maxValue = SortedTicks.Count == 0 ? 0 : SortedTicks[0].Value;
 
-    double maxValue = sortedTicks.Count == 0 ? 0 : sortedTicks[0].Value;
+    CullLines();
+  }
 
-    Dump.Lines = sortedTicks.Select(kvp => new FastTextDump.Line(
-      $"{ConverToMs(kvp.Value / Capture.Update.SliceCount)}ms {kvp.Key}",
+  private void CullLines()
+  {
+    var culledTicks = SortedTicks;
+
+    double lineHeight = Dump.Shift.Y;
+    int howManyLinesWillFitOntoScreen = (int)Math.Round(ScrollWrapper.Rect.Height / lineHeight);
+
+    int topGap = howManyLinesWillFitOntoScreen;
+    int bottomGap = howManyLinesWillFitOntoScreen;
+
+    int skippedLines = 0;
+    if (SortedTicks.Count > howManyLinesWillFitOntoScreen)
+    {
+      int spaceToScroll = SortedTicks.Count - howManyLinesWillFitOntoScreen;
+
+      skippedLines = (int)Math.Round(ScrollWrapper.ScrollBar.Lambda * spaceToScroll);
+      skippedLines = Math.Max(0, skippedLines - topGap);
+
+      culledTicks = SortedTicks
+        .Skip(skippedLines)
+        .Take(howManyLinesWillFitOntoScreen + topGap + bottomGap)
+        .ToList();
+    }
+
+    Dump.Lines = culledTicks.Select(kvp => new FastTextDump.Line(
+      $"{ConverToMs(kvp.Value)}ms {kvp.Key}",
       Settings.Gradient((float)(kvp.Value / maxValue))
     )).ToList();
 
-    // CUI.Logger.Log(Logger.Wrap.IEnumerable(lines.Select(l => l.ToString()), true));
+    Dump.Skip = skippedLines;
+
+
+    Dump.Absolute = new CUINullRect(h: Dump.Shift.Y * SortedTicks.Count);
   }
+
 
   public MeasurementsPage(PluginSettings settings)
   {
@@ -51,16 +95,21 @@ public partial class MeasurementsPage : CUIPage
 
 
 
-    this["layout"]["scroll wrapper"] = new CUIDefault.ListWithScrollbar()
+    this["layout"]["scroll wrapper"] = ScrollWrapper = new CUIDefault.ListWithScrollbar()
     {
       Flex = 1,
-      List = { BottomGap = ResizeHandle.DefaultSize.Y * 2 }
+      List = {
+        BottomGap = ResizeHandle.DefaultSize.Y * 2,
+      }
     };
+    ScrollWrapper.List.ScrollChanged += (scroll) => CullLines();
+
+
 
     this["layout"]["scroll wrapper"]["list"]["dump"] = Dump = new CUIFastTextDump()
     {
       Offset = new Vector2(10, 10),
-      Solid = true,
+      // Solid = true,
     };
 
     Capture!.Update.Rotated += RefreshData;

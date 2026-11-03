@@ -7,6 +7,7 @@ namespace ShowperfExtensions;
 public class CaptureSlice : Dictionary<Identifier, double>
 {
   public double Total { get; private set; }
+
   public void AddTicks(Identifier id, double value)
   {
     if (this.TryGetValue(id, out double prevValue))
