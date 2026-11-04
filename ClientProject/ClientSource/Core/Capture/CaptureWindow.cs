@@ -7,11 +7,15 @@ namespace ShowperfExtensions;
 public class CaptureWindow
 {
 
-  public static int DefaultSliceCount = 500;
+  public static int DefaultSliceCount = 100;
   public int SliceCount
   {
     get => Slices.Count;
-    set => ResetSliceQueue(value);
+    set
+    {
+      TotalSlice.Clear();
+      ResetSliceQueue(value);
+    }
   }
 
   private void ResetSliceQueue(int count)
@@ -56,8 +60,20 @@ public class CaptureWindow
 
   public event Action? Rotated;
 
+  private bool _Frozen; public bool Frozen
+  {
+    get => _Frozen;
+    set
+    {
+      _Frozen = value;
+      StagingSlice = new();
+    }
+  }
+
   public void Rotate()
   {
+    if (Frozen) return;
+
     TotalSlice += StagingSlice;
 
 

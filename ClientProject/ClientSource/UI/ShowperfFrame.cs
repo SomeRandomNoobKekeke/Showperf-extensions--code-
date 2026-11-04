@@ -115,7 +115,7 @@ public partial class ShowperfFrame : CUIDefault.Frame
       btn.GroupName = "ShowperfFrame pages";
     }))
     {
-      this["layout"]["page buttons"]["Measurements"] = new CUIRadioButton("Measurements")
+      this["layout"]["page buttons"]["Measurements"] = new CUIRadioButton("Ticks")
       {
         OnSelected = () => Pages.OpenPage(MeasurementsPage),
       };

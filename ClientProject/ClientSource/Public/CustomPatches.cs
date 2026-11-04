@@ -58,8 +58,6 @@ public static class CustomPatches
 
   public static void AddAllPatchesInAssembly(Assembly assembly)
   {
-    Logger.Default.LogVars($"tried to scan {assembly}");
-
     foreach (Type T in assembly.GetTypes())
     {
       if (T.GetCustomAttribute<ShowperfPatchAttribute>() != null)

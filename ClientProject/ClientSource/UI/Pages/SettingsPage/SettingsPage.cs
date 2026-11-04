@@ -29,6 +29,7 @@ public class SettingsPage : CUIPage
 
     Main["edit palettes"] = new CUIButton("Edit Frame Palettes")
     {
+      TextAnchor = CUIAnchor.LeftCenter,
       OnClick = () =>
       {
         CUIFrame frame = CUIPalette.OpenPreview(PluginSettings.Palettes);

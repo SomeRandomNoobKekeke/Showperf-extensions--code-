@@ -24,5 +24,5 @@ public static class Capture
 
 public static class Capture
 {
-  public static CaptureWindow Update => Plugin.Capture?.Update;
+  public static CaptureWindow Update => Plugin.Capture?.Window;
 }
