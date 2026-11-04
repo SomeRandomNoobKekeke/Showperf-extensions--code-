@@ -68,7 +68,6 @@ public class MethodsPage : CUIPage
     {
       btn.Flex = 1;
       btn.GroupName = "method page subpages";
-      btn.CullChildren = true;
     }))
     {
       this["layout"]["header"]["page buttons"]["Call Graph"] = new CUIRadioButton("Call Graph")

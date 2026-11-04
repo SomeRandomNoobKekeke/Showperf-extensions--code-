@@ -11,13 +11,15 @@ public class CaptureWindow
   public int SliceCount
   {
     get => Slices.Count;
-    set
+    set => ResetSliceQueue(value);
+  }
+
+  private void ResetSliceQueue(int count)
+  {
+    Slices = new Queue<CaptureSlice>(count);
+    for (int i = 0; i < count; i++)
     {
-      Slices = new Queue<CaptureSlice>(value);
-      for (int i = 0; i < value; i++)
-      {
-        Slices.Enqueue(new());
-      }
+      Slices.Enqueue(new());
     }
   }
 
@@ -34,6 +36,12 @@ public class CaptureWindow
   public double GetTotal()
   {
     return TotalSlice.Total / SliceCount;
+  }
+
+  public void Clear()
+  {
+    TotalSlice.Clear();
+    ResetSliceQueue(SliceCount);
   }
 
   public IEnumerable<KeyValuePair<Identifier, double>> Values

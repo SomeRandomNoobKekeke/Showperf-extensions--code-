@@ -8,6 +8,12 @@ public class CaptureSlice : Dictionary<Identifier, double>
 {
   public double Total { get; private set; }
 
+  public void Clear()
+  {
+    base.Clear();
+    Total = 0;
+  }
+
   public void AddTicks(Identifier id, double value)
   {
     if (this.TryGetValue(id, out double prevValue))

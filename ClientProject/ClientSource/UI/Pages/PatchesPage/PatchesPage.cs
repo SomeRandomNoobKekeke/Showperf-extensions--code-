@@ -36,7 +36,6 @@ public partial class PatchesPage : CUIPage
     {
       btn.Flex = 1;
       btn.GroupName = "CustomPatchesPage subpages";
-      btn.CullChildren = true;
     }))
     {
       this["layout"]["header"]["page buttons"]["Custom Patches"] = new CUIRadioButton("Custom Patches")

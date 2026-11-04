@@ -27,10 +27,14 @@ public partial class MeasurementsPage : CUIPage
   protected override void UpdateRects()
   {
     base.UpdateRects();
-
-
     CullLines();
   }
+
+  protected override void HandleOpen()
+  {
+    Capture.Update.Clear();
+  }
+
 
   private void RefreshData()
   {
@@ -55,8 +59,8 @@ public partial class MeasurementsPage : CUIPage
     double lineHeight = Dump.Shift.Y;
     int howManyLinesWillFitOntoScreen = (int)Math.Round(ScrollWrapper.Rect.Height / lineHeight);
 
-    int topGap = howManyLinesWillFitOntoScreen;
-    int bottomGap = howManyLinesWillFitOntoScreen;
+    int topGap = Math.Max(howManyLinesWillFitOntoScreen, 5);
+    int bottomGap = Math.Max(howManyLinesWillFitOntoScreen, 5);
 
     int skippedLines = 0;
     if (SortedTicks.Count > howManyLinesWillFitOntoScreen)

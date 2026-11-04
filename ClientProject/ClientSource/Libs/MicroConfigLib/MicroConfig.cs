@@ -3,6 +3,8 @@ using System.IO;
 using System.Text.Json;
 using CUILibs;
 using CursedUI;
+using System.Text.Encodings.Web;
+using System.Text.Unicode;
 
 namespace MicroConfigLib;
 
@@ -56,7 +58,11 @@ public class MicroConfig(string savePath)
       SavePath,
       JsonSerializer.Serialize(
         values,
-        new JsonSerializerOptions() { WriteIndented = true, }
+        new JsonSerializerOptions()
+        {
+          WriteIndented = true,
+          Encoder = JavaScriptEncoder.Create(UnicodeRanges.All)
+        }
       )
     );
   }

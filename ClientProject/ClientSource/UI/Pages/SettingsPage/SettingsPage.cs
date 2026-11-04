@@ -20,16 +20,26 @@ public class SettingsPage : CUIPage
   public override void Refresh()
   {
     Main.Clear();
-    Main["AboveGUIBlock"] = new CUIDefault.HorizontalPanel();
-    Main["AboveGUIBlock"]["tickbox"] = new CUICheckBox()
+    Main["AboveGUIBlock"] = new CUIDefault.BoolField()
     {
+      Text = "Draw frame above vanilla GUI",
       State = PluginSettings.FrameAboveGUI,
-      OnToggle = (state) =>
+      OnToggle = (state) => PluginSettings.Reactive.FrameAboveGUI = state,
+    };
+
+    Main["edit palettes"] = new CUIButton("Edit Frame Palettes")
+    {
+      OnClick = () =>
       {
-        PluginSettings.Reactive.FrameAboveGUI = state;
+        CUIFrame frame = CUIPalette.OpenPreview(PluginSettings.Palettes);
+        frame["layout"].Children.Insert(1, new CUIButton("Reset Palettes") //HACK
+        {
+          OnClick = () => PluginSettings.ResetPalettes(),
+        });
+
+        frame.OnClose += () => PluginSettings.Save();
       },
     };
-    Main["AboveGUIBlock"]["label"] = new CUITextBlock("Draw frame above vanilla GUI");
   }
 
 

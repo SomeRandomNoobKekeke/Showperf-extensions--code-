@@ -113,7 +113,6 @@ public partial class ShowperfFrame : CUIDefault.Frame
     {
       btn.Flex = 1;
       btn.GroupName = "ShowperfFrame pages";
-      btn.CullChildren = true;
     }))
     {
       this["layout"]["page buttons"]["Measurements"] = new CUIRadioButton("Measurements")

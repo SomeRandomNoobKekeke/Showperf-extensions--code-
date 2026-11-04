@@ -13,6 +13,8 @@ public partial class PatchesPage : CUIPage
     public CustomPatchRepo CustomPatches { get; } = Plugin.Get<CustomPatchRepo>();
     public PatchInstaller PatchInstaller { get; } = Plugin.Get<PatchInstaller>();
 
+    public bool ShowTargets { get; set; } = true;
+
     private CUIVerticalList PatchList;
 
     protected override void HandleOpen() => Refresh();
@@ -55,7 +57,7 @@ public partial class PatchesPage : CUIPage
         };
       }
 
-      if (entry.PatchInfo.Targets.Length != 0)
+      if (ShowTargets && entry.PatchInfo.Targets.Length != 0)
       {
         if (entry.PatchInfo.Targets.Length == 1)
         {
@@ -75,12 +77,13 @@ public partial class PatchesPage : CUIPage
         }
       }
 
+      block.DeepPalette = Plugin.Palettes.Tertiary;
+
       if (entry.SettingsPageFactory != null)
       {
         block["custom page"] = entry.SettingsPageFactory();
+        block["custom page"].DeepPalette = Plugin.Palettes.Quaternary;
       }
-
-      block.DeepPalette = Plugin.Palettes.Tertiary;
 
       return block;
     }

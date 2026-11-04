@@ -26,16 +26,24 @@ public partial class PatchesPage : CUIPage
 
     private CUIComponent CreatePatchBlock(PatchInfoBase info)
     {
-      CUIHorizontalList block = new CUIDefault.HorizontalBackPanel()
-      {
-        Margin = new CUISizes(4, 4, 4, 4),
-      };
+      CUIHorizontalList block = new CUIDefault.HorizontalBackPanel();
       block["remove button"] = new CUIIconButton(CUISprite.CrossIcon)
       {
         Scale = 0.8f,
         CrossRelative = new CUINullRect(w: 1),
         OnClick = () => PatchInstaller.RemovePatch(info),
       };
+
+      if (info is StopwatchWrapper.StopwatchWrapperPatch)
+      {
+        block["icon"] = new CUIIconBlock(CUISprite.BurningTimerIcon)
+        {
+          Scale = 0.8f,
+          Padding = new CUISizes(1, 1, 1, 1),
+          Borders = new CUISizes(left: 2),
+        };
+      }
+
       block["id"] = new CUITextBlock(info.ID);
 
       block.DeepPalette = Plugin.Palettes.Tertiary;
@@ -52,7 +60,7 @@ public partial class PatchesPage : CUIPage
       this["layout"]["list"] = PatchList = new CUIVerticalList()
       {
         Flex = 1,
-        Padding = new CUISizes(4, 4, 4, 4),
+        Padding = new CUISizes(8, 8, 8, 8),
       };
 
       this.DeepPalette = Plugin.Palettes.Tertiary;
