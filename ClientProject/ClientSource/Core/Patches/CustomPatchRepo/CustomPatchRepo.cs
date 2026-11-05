@@ -7,7 +7,7 @@ namespace ShowperfExtensions;
 public partial class CustomPatchRepo
 {
   public Dictionary<string, Entry> Patches = new();
-  private Dictionary<MethodBase, HashSet<Entry>> PatchesByMethod = new();
+  public Dictionary<MethodBase, HashSet<Entry>> PatchesByMethod = new();
 
   public void Add(Entry entry)
   {

@@ -36,7 +36,7 @@ public partial class Plugin
     UTest.ScanThisAssembly();
     UTest.TryRunPrevTest();
 
-    ShowperfFrame.Open();
+
 
     Utils.RunWithDelay(Experiment, 500);
   }
@@ -57,8 +57,9 @@ public partial class Plugin
     Instance = null;
   }
 
-  public void OnContentLoaded()
+  public void OnLoadCompleted()
   {
-
+    ShowperfFrame.Open();
   }
+  public void PreInitPatching() { }
 }

@@ -7,8 +7,7 @@ namespace ShowperfExtensions
   public partial class Plugin : IAssemblyPlugin
   {
     public void Initialize() => Init();
-    public void OnLoadCompleted() { }
-    public void PreInitPatching() { }
+
   }
 
 }

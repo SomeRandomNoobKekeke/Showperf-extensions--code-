@@ -3,6 +3,8 @@ using System.Collections.Immutable;
 using CursedUI;
 using Microsoft.Xna.Framework;
 using System.Reflection;
+using System.Diagnostics;
+using Barotrauma;
 
 namespace ShowperfExtensions;
 
@@ -31,14 +33,98 @@ public partial class PatchesPage : CUIPage
       {
         List.Clear();
 
-        foreach (var (id, entry) in CustomPatches.Patches)
+        switch (SortingBy)
         {
-          List.Add(new CUIButton(id)
+          case SortingByEnum.Name:
+            foreach (var (id, entry) in CustomPatches.Patches.OrderBy(kvp => kvp.Key))
+            {
+              List.Add(CreateEntryBlockByName(id, entry));
+            }
+            break;
+
+          case SortingByEnum.Target:
+            foreach (var (target, entries) in CustomPatches.PatchesByMethod)
+            {
+              List.Add(CreateEntryBlockByTarget(target, entries));
+            }
+            break;
+        }
+
+        List.DeepPalette = Plugin.Palettes.Tertiary;
+      }
+
+      private CUIComponent CreateEntryBlockByName(string id, CustomPatchRepo.Entry entry)
+      {
+        CUIButtonContainer block = new()
+        {
+          Margin = new CUISizes(4, 4, 4, 4),
+          OnClick = () => Commands.SendUp(SelectPatch_Command, entry),
+          Borders = new CUISizes(1, 1, 1, 1),
+          FitContent = new CUIBool2(false, true)
+        };
+
+        block["layout"] = new CUIVerticalList()
+        {
+          Relative = new CUINullRect(0, 0, 1, 1),
+          FitContent = new CUIBool2(false, true),
+        };
+
+        block["layout"]["id"] = new CUITextBlock(id);
+
+        if (entry.PatchInfo.Targets.Length != 0)
+        {
+          if (entry.PatchInfo.Targets.Length == 1)
           {
-            Margin = new CUISizes(4, 4, 4, 4),
+            block["layout"]["targets"] = new CUIDefault.HorizontalBackPanel();
+            block["layout"]["targets"]["caption"] = new CUIDefault.SolidTextBlock($"Target: ");
+            block["layout"]["targets"]["id"] = new CUITextBlock(MethodBaseParser.Serialize(entry.PatchInfo.Targets[0]));
+          }
+
+          if (entry.PatchInfo.Targets.Length > 1)
+          {
+            block["layout"]["targets"] = new CUIDefault.VerticalBackPanel();
+            block["layout"]["targets"]["caption"] = new CUIDefault.SolidTextBlock("Targets:");
+            foreach (MethodBase mb in entry.PatchInfo.Targets)
+            {
+              block["layout"]["targets"].Children.Add(new CUITextBlock(MethodBaseParser.Serialize(mb)));
+            }
+          }
+        }
+
+        return block;
+      }
+
+      private CUIComponent CreateEntryBlockByTarget(MethodBase target, HashSet<CustomPatchRepo.Entry> entries)
+      {
+        CUIDefault.VerticalBackPanel block = new()
+        {
+          Margin = new CUISizes(4, 4, 4, 4),
+          Borders = new CUISizes(1, 1, 1, 1),
+        };
+
+        block["target"] = new CUIDefault.SolidTextBlock(MethodBaseParser.Serialize(target))
+        {
+          Palette = Plugin.Palettes.Secondary,
+          DeepPaletteImmunity = true,
+        };
+
+        block["entries"] = new CUIDefault.VerticalBackPanel()
+        {
+          Padding = new CUISizes(4, 4, 4, 4),
+        };
+        foreach (var entry in entries)
+        {
+          block["entries"].Children.Add(new CUIButton(entry.ID)
+          {
             OnClick = () => Commands.SendUp(SelectPatch_Command, entry),
+            Palette = Plugin.Palettes.Tertiary3,
+            DeepPaletteImmunity = true,
+            TextAnchor = CUIAnchor.LeftCenter,
+            Margin = new CUISizes(4, 4, 4, 4),
           });
         }
+
+        return block;
       }
 
       public PatchListComponent()

@@ -28,11 +28,9 @@ public partial class PatchesPage : CUIPage
 
       public override void Refresh()
       {
-        Children.Clear();
-
         if (SelectedEntry is null)
         {
-          this["select patch"] = new CUITextBlock("Select Patch")
+          this["selected entry"] = new CUITextBlock("Select Patch")
           {
             Anchor = CUIAnchor.Center,
           };
@@ -40,7 +38,7 @@ public partial class PatchesPage : CUIPage
           return;
         }
 
-        this["entry"] = CreateEntryContainer();
+        this["selected entry"] = CreateEntryContainer();
       }
 
       private CUIComponent CreateEntryContainer()
@@ -82,25 +80,7 @@ public partial class PatchesPage : CUIPage
           };
         }
 
-        // if (ShowTargets && SelectedEntry.PatchInfo.Targets.Length != 0)
-        // {
-        //   if (SelectedEntry.PatchInfo.Targets.Length == 1)
-        //   {
-        //     this["targets"] = new CUIDefault.HorizontalBackPanel();
-        //     this["targets"]["caption"] = new CUIDefault.SolidTextBlock($"Target: ");
-        //     this["targets"]["id"] = new CUITextBlock(MethodBaseParser.Serialize(SelectedEntry.PatchInfo.Targets[0]));
-        //   }
 
-        //   if (SelectedEntry.PatchInfo.Targets.Length > 1)
-        //   {
-        //     this["targets"] = new CUIDefault.VerticalBackPanel();
-        //     this["targets"]["caption"] = new CUIDefault.SolidTextBlock("Targets:");
-        //     foreach (MethodBase mb in SelectedEntry.PatchInfo.Targets)
-        //     {
-        //       this["targets"].Children.Add(new CUITextBlock(MethodBaseParser.Serialize(mb)));
-        //     }
-        //   }
-        // }
 
         container.DeepPalette = Plugin.Palettes.Tertiary;
 
@@ -118,7 +98,16 @@ public partial class PatchesPage : CUIPage
       {
         this.Background.Sprite = CUISprite.BoxWithALamp;
         FitContent = new CUIBool2(false, true);
-        AbsoluteMin = new CUINullRect(h: 140);
+        AbsoluteMin = new CUINullRect(h: 60);
+        Absolute = new CUINullRect(h: 170);
+        RelativeMax = new CUINullRect(h: 0.8f);
+
+        this.Children.Add(new ResizeHandle(0.5f, 1.0f)
+        {
+          Background = { Sprite = CUISprite.Trapezoid },
+          Absolute = new CUINullRect(w: 60, h: 10),
+          OnlyVertical = true,
+        });
       }
     }
   }

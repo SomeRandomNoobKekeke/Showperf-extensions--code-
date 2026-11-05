@@ -145,7 +145,11 @@ public class TypeExplorerPage : CUIPage
     this["layout"]["main"]["nodes"] = new CUIDefault.ListWithScrollbar()
     {
       Flex = 1,
-      List = { BottomGap = ResizeHandle.DefaultSize.Y * 2 },
+      List = {
+        BottomGap = ResizeHandle.DefaultSize.Y * 2 ,
+        Padding = new CUISizes(8, 8, 8, 8),
+      },
+
     };
 
     ChildNodeList = Get<CUIVerticalList>("layout.main.nodes.list");
