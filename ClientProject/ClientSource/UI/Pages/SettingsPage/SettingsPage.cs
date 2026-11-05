@@ -27,7 +27,7 @@ public class SettingsPage : CUIPage
       OnToggle = (state) => PluginSettings.Reactive.FrameAboveGUI = state,
     };
 
-    Main["edit palettes"] = new CUIDefault.IconButtonWithLabel(CUISprite.BrushAndPaletteIcon, "Edit Frame Palettes")
+    Main["edit palettes"] = new CUIDefault.IconButtonField(CUISprite.BrushAndPaletteIcon, "Edit Frame Palettes")
     {
       OnClick = () =>
       {

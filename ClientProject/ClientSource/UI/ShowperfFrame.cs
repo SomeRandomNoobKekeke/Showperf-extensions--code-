@@ -140,7 +140,7 @@ public partial class ShowperfFrame : CUIDefault.Frame
 
     DeepPalette = Plugin.Palettes.Primary;
 
-    PageButtons.Get<CUIRadioButton>("Methods").Select();
+    PageButtons.Get<CUIRadioButton>("Patches").Select();
 
 
   }

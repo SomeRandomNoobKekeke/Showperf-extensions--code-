@@ -31,6 +31,7 @@ public partial class MeasurementsPage : CUIPage
     controls["layer 2"] = new CUIDefault.HorizontalBackPanel();
     controls["layer 2"]["freeze"] = new CUIToggleButton("Freeze")
     {
+      Background = { Sprite = CUISprite.FrozenVertical },
       State = Capture.Window.Frozen,
       OnToggle = (state) => Capture.Window.Frozen = state,
       Style = (c) => c.MasterColor = Color.Cyan,
