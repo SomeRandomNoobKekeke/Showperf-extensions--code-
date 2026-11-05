@@ -24,15 +24,53 @@ public partial class PatchesPage : CUIPage
       }
     }
 
+
+
+    private bool refreshRequested;
+    private void RequestRefresh()
+    {
+      if (refreshRequested) return;
+      refreshRequested = true;
+      CUI.Main.GlobalEvents.MouseUp.Add(HandleGlobalMouseUp);
+    }
+    private void HandleGlobalMouseUp(CUIMouseUpEvent e)
+    {
+      CUI.Main.GlobalEvents.MouseUp.Remove(HandleGlobalMouseUp);
+      Refresh();
+      refreshRequested = false;
+    }
+
     private CUIComponent CreatePatchBlock(PatchInfoBase info)
     {
       CUIHorizontalList block = new CUIDefault.HorizontalBackPanel();
-      block["remove button"] = new CUIIconButton(CUISprite.CrossIcon)
+
+      CUIIconButton btn = new CUIIconButton(CUISprite.CrossIcon)
       {
         Scale = 0.8f,
         CrossRelative = new CUINullRect(w: 1),
-        OnClick = () => PatchInstaller.RemovePatch(info),
+        OnMouseDown = (e) => PatchInstaller.RemovePatch(info),
+        OnMouseUp = (e) => Refresh(),
+        OnMouseLeave = (e) =>
+        {
+          if (e.Mouse.M1.Pressed)
+          {
+            block.DeepTransparency = 0.5f;
+            RequestRefresh();
+          }
+        },
+        OnMouseEnter = (e) =>
+        {
+          if (e.Mouse.M1.Pressed)
+          {
+            block.DeepTransparency = 0.5f;
+            PatchInstaller.RemovePatch(info);
+            RequestRefresh();
+          }
+        },
       };
+
+
+      block["remove button"] = btn;
 
       if (info is StopwatchWrapper.StopwatchWrapperPatch)
       {
@@ -53,8 +91,8 @@ public partial class PatchesPage : CUIPage
 
     public InstalledPatchesPage()
     {
-      PatchInstaller.PatchInstalled += (info) => Refresh();
-      PatchInstaller.PatchRemoved += (info) => Refresh();
+      // PatchInstaller.PatchInstalled += (info) => Refresh();
+      // PatchInstaller.PatchRemoved += (info) => Refresh();
 
       this["layout"] = new CUIVerticalList() { Relative = new CUINullRect(0, 0, 1, 1) };
       this["layout"]["list"] = PatchList = new CUIVerticalList()
