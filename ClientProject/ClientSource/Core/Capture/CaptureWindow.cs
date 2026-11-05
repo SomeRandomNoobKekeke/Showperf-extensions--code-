@@ -7,6 +7,8 @@ namespace ShowperfExtensions;
 public class CaptureWindow
 {
 
+  public enum CaptureMode { Average, Sum, Spike }
+
   public static int DefaultSliceCount = 100;
   public int SliceCount
   {
@@ -37,10 +39,12 @@ public class CaptureWindow
     StagingSlice.AddTicks(id, value);
   }
 
-  public double GetTotal()
+  public double GetTotal() => Mode switch
   {
-    return TotalSlice.Total / SliceCount;
-  }
+    CaptureMode.Average => TotalSlice.Total / SliceCount,
+    CaptureMode.Sum => TotalSlice.Total,
+    CaptureMode.Spike => TotalSlice.Total,
+  };
 
   public void Clear()
   {
@@ -50,12 +54,14 @@ public class CaptureWindow
 
   public IEnumerable<KeyValuePair<Identifier, double>> Values
   {
-    get
+    get => Mode switch
     {
-      return TotalSlice.Select(kvp => new KeyValuePair<Identifier, double>(
+      CaptureMode.Average => TotalSlice.Select(kvp => new KeyValuePair<Identifier, double>(
         kvp.Key, kvp.Value / SliceCount
-      ));
-    }
+      )),
+      CaptureMode.Sum => TotalSlice,
+      CaptureMode.Spike => TotalSlice,
+    };
   }
 
   public event Action? Rotated;
@@ -70,19 +76,48 @@ public class CaptureWindow
     }
   }
 
+  private CaptureMode _Mode; public CaptureMode Mode
+  {
+    get => _Mode;
+    set
+    {
+      _Mode = value;
+      Clear();
+    }
+  }
+
   public void Rotate()
   {
     if (Frozen) return;
 
-    TotalSlice += StagingSlice;
 
 
-    Slices.Enqueue(StagingSlice);
+    switch (Mode)
+    {
+      case CaptureMode.Average:
+        TotalSlice += StagingSlice;
 
-    CaptureSlice last = Slices.Dequeue();
-    TotalSlice -= last;
+        Slices.Enqueue(StagingSlice);
+        TotalSlice -= Slices.Dequeue();
 
-    StagingSlice = new();
+        StagingSlice = new();
+        break;
+
+      case CaptureMode.Sum:
+        TotalSlice += StagingSlice;
+        StagingSlice = new();
+        break;
+
+      case CaptureMode.Spike:
+        Slices.Enqueue(StagingSlice);
+
+        CaptureSlice.RemoveMatches(TotalSlice, Slices.Dequeue());
+        CaptureSlice.ReplaceWithMax(TotalSlice, StagingSlice);
+
+        StagingSlice = new();
+        break;
+    }
+
     Rotated?.Invoke();
   }
 

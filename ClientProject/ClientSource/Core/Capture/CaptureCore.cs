@@ -12,7 +12,16 @@ public class CaptureCore
   private static BindingFlags Pls => BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static;
   private Harmony Harmony { get; } = new Harmony("showperf.capture");
 
-  public static WhenToRotateOptions WhenToRotate = WhenToRotateOptions.Update;
+  private static WhenToRotateOptions _WhenToRotate = WhenToRotateOptions.Update;
+  public static WhenToRotateOptions WhenToRotate
+  {
+    get => _WhenToRotate;
+    set
+    {
+      _WhenToRotate = value;
+      Plugin.Capture.Window.Clear();
+    }
+  }
 
 
   public static bool Active { get; set; } = true;

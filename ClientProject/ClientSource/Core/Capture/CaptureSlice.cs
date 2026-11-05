@@ -60,7 +60,7 @@ public class CaptureSlice : Dictionary<Identifier, double>
         }
         else
         {
-          left[key] = leftValue - value;
+          left[key] = result;
         }
       }
       else
@@ -70,6 +70,55 @@ public class CaptureSlice : Dictionary<Identifier, double>
     }
 
     left.Total -= right.Total;
+
+    return left;
+  }
+
+
+  public static CaptureSlice ReplaceWithMax(CaptureSlice left, CaptureSlice right)
+  {
+    foreach (var (key, value) in right)
+    {
+      if (left.TryGetValue(key, out double leftValue))
+      {
+        double result = Math.Max(leftValue, value);
+        if (result <= 0)
+        {
+          left.Remove(key);
+        }
+        else
+        {
+          left[key] = result;
+        }
+      }
+      else
+      {
+        left[key] = value;
+      }
+    }
+
+    left.Total = Math.Max(left.Total, right.Total);
+
+    return left;
+  }
+
+  public static CaptureSlice RemoveMatches(CaptureSlice left, CaptureSlice right)
+  {
+    foreach (var (key, value) in right)
+    {
+      if (left.TryGetValue(key, out double leftValue))
+      {
+        if (leftValue == value)
+        {
+          left.Remove(key);
+        }
+      }
+    }
+
+    if (left.Total == right.Total)
+    {
+      left.Total = 0;
+    }
 
     return left;
   }

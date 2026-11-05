@@ -77,6 +77,7 @@ public partial class ShowperfFrame : CUIDefault.Frame
         {
           Absolute = new CUINullRect(0, 0, 500, 600);
           Anchor = CUIAnchor.RightCenter;
+          MemorizeState();
         },
       };
       this["layout"]["handle"]["attachtocenter", 1] = new CUIIconButton(CUISprite.AttachToCenterIcon)
@@ -85,6 +86,7 @@ public partial class ShowperfFrame : CUIDefault.Frame
         {
           Absolute = new CUINullRect(0, 0, 800, 800);
           Anchor = CUIAnchor.Center;
+          MemorizeState();
         },
       };
 

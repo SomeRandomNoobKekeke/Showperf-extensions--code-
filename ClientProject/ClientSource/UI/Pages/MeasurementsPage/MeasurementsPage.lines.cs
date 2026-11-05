@@ -37,7 +37,7 @@ public partial class MeasurementsPage : CUIPage
       return;
     }
 
-    SumTextBlock.Text = $"Sum: {ConverToMs(Capture.Window.GetTotal())}ms";
+    SumTextBlock.Text = $"Total: {ConverToMs(Capture.Window.GetTotal())}ms";
 
     SortedTicks = Capture.Window.Values.OrderByDescending(kvp => kvp.Value).ToList();
     maxValue = SortedTicks.Count == 0 ? 0 : SortedTicks[0].Value;

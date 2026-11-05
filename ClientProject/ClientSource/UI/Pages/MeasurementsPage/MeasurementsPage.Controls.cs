@@ -20,7 +20,12 @@ public partial class MeasurementsPage : CUIPage
     {
       GroupName = "capture window mode",
       Options = ["Average", "Sum", "Spike"],
+      SelectedOption = Capture.Window.Mode.ToString(),
       Text = "Mode:",
+      OnSelected = (option) =>
+      {
+        Capture.Window.Mode = Enum.Parse<CaptureWindow.CaptureMode>(option);
+      },
     };
 
     controls["layer 2"] = new CUIDefault.HorizontalBackPanel();
@@ -40,14 +45,13 @@ public partial class MeasurementsPage : CUIPage
       OnSelected = (option) =>
       {
         CaptureCore.WhenToRotate = Enum.Parse<CaptureCore.WhenToRotateOptions>(option);
-        Capture.Window.Clear();
       },
     };
 
     CUITextBlock sliceCount = null;
     controls["slice count"] = new CUIDefault.HorizontalBackPanel();
     controls["slice count"]["label"] = new CUIDefault.SolidTextBlock("Frames:");
-    controls["slice count"]["count"] = sliceCount = new CUITextBlock()
+    controls["slice count"]["count"] = sliceCount = new CUITextBlock($"{Capture.Window.SliceCount}")
     {
       Solid = false,
       Absolute = new CUINullRect(w: 40),
@@ -55,6 +59,7 @@ public partial class MeasurementsPage : CUIPage
     controls["slice count"]["slider"] = new CUIRangeInput()
     {
       Flex = 1,
+      Lambda = (Capture.Window.SliceCount - SliceCountRange.Start) / (float)SliceCountRange.Length,
       OnHandleDragged = (l) =>
       {
         int slices = ValueLerpFuncs.Int(SliceCountRange.Start, SliceCountRange.End, l);
@@ -63,6 +68,7 @@ public partial class MeasurementsPage : CUIPage
       OnChanged = (l) =>
       {
         int slices = ValueLerpFuncs.Int(SliceCountRange.Start, SliceCountRange.End, l);
+        sliceCount.Text = $"{slices}";
         Capture.Window.SliceCount = slices;
       },
       Margin = new CUISizes(right: 10),

@@ -28,7 +28,7 @@ public partial class MeasurementsPage : CUIPage
 
     this["layout"]["controls"] = CreateControlsBlock();
 
-    this["layout"]["sum"] = SumTextBlock = new CUITextBlock()
+    this["layout"]["total"] = SumTextBlock = new CUITextBlock("...")
     {
       Borders = new CUISizes(bottom: 1),
     };
