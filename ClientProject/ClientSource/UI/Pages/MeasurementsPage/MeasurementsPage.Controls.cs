@@ -12,6 +12,11 @@ public partial class MeasurementsPage : CUIPage
 {
   public IntRange SliceCountRange = new IntRange(1, 500);
 
+  private CUIDefault.TextInputField IncludeTextInput;
+  private CUIDefault.TextInputField ExcludeTextInput;
+  public string Include => IncludeTextInput.Text;
+  public string Exclude => ExcludeTextInput.Text;
+
   private CUIComponent CreateControlsBlock()
   {
     var controls = new CUIDefault.VerticalBackPanel();
@@ -74,6 +79,11 @@ public partial class MeasurementsPage : CUIPage
       },
       Margin = new CUISizes(right: 10),
     };
+
+
+    controls["filters"] = new CUIDefault.HorizontalBackPanel();
+    controls["filters"]["include"] = IncludeTextInput = new CUIDefault.TextInputField("include") { Flex = 1 };
+    controls["filters"]["exclude"] = ExcludeTextInput = new CUIDefault.TextInputField("exclude") { Flex = 1 };
 
     controls.DeepPalette = Plugin.Palettes.Quaternary;
 
