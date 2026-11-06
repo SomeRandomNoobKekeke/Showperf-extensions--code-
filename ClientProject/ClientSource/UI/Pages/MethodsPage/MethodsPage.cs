@@ -52,6 +52,9 @@ public class MethodsPage : CUIPage
     return block;
   }
 
+  protected override void HandleOpen() => DeepRefresh();
+
+
   public MethodsPage()
   {
     this["layout"] = new CUIVerticalList() { Relative = new CUINullRect(0, 0, 1, 1) };

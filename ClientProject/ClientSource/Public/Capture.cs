@@ -9,20 +9,35 @@ namespace ShowperfExtensions;
 
 #if FAKE
 
-public class CaptureWindow
-{
-  public void AddTicks(string id, double value) { }
-  public void AddTicks(Identifier id, double value) { }
-}
-
 public static class Capture
 {
-  public static CaptureWindow Update { get; } = new CaptureWindow();
+  public static void Ticks(string id, double value) { }
+  public static void Ticks(Identifier id, double value) { }
+  public static void Ticks(string id, Stopwatch sw) { }
+  public static void Ticks(Identifier id, Stopwatch sw) { }
+  public static void Ticks(string id, DisposableStopwatch sw) { }
+  public static void Ticks(Identifier id, DisposableStopwatch sw) { }
 }
 
 #endif
 
 public static class Capture
 {
-  public static CaptureWindow Update => Plugin.Capture?.Window;
+  public static void Ticks(string id, double value)
+    => Plugin.Capture?.Window.AddTicks(id, value);
+
+  public static void Ticks(Identifier id, double value)
+    => Plugin.Capture?.Window.AddTicks(id, value);
+
+  public static void Ticks(string id, Stopwatch sw)
+    => Plugin.Capture?.Window.AddTicks(id, sw.ElapsedTicks);
+
+  public static void Ticks(Identifier id, Stopwatch sw)
+    => Plugin.Capture?.Window.AddTicks(id, sw.ElapsedTicks);
+
+  public static void Ticks(string id, DisposableStopwatch sw)
+    => Plugin.Capture?.Window.AddTicks(id, sw.ElapsedTicks);
+
+  public static void Ticks(Identifier id, DisposableStopwatch sw)
+    => Plugin.Capture?.Window.AddTicks(id, sw.ElapsedTicks);
 }

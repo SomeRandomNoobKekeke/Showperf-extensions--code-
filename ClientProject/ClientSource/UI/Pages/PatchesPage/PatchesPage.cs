@@ -16,6 +16,13 @@ public partial class PatchesPage : CUIPage
   private CustomPatchesPage CustomPatchesBlock = Plugin.Get<CustomPatchesPage>();
   private InstalledPatchesPage InstalledPatchesBlock = Plugin.Get<InstalledPatchesPage>();
 
+  public void OpenEntry(CustomPatchRepo.Entry entry)
+  {
+    PageButtons.Get<CUIRadioButton>("Custom Patches").Select();
+    CustomPatchesBlock.OpenEntry(entry);
+  }
+
+
   protected override void HandleOpen() => Refresh();
 
   public override void Refresh()

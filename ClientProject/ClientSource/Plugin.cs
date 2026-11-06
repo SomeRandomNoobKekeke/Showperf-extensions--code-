@@ -59,7 +59,10 @@ public partial class Plugin
 
   public void OnLoadCompleted()
   {
-    ShowperfFrame.Open();
+    if (ModStorage.TryGetValue("showperf frame was open", out bool yes))
+    {
+      if (yes) ShowperfFrame.Open();
+    }
   }
   public void PreInitPatching() { }
 }

@@ -31,7 +31,7 @@ public class MethodLineComponent : CUIDefault.HorizontalBackPanel,
   private Assembly BarotraumaAssembly => typeof(GameMain).Assembly;
   public StopwatchWrapper StopwatchWrapper { get; } = Plugin.Get<StopwatchWrapper>();
   public MethodBookmarksList MethodBookmarksList { get; } = Plugin.Get<MethodBookmarksList>();
-
+  public CustomPatchRepo CustomPatches { get; } = Plugin.Get<CustomPatchRepo>();
 
 
 
@@ -120,6 +120,25 @@ public class MethodLineComponent : CUIDefault.HorizontalBackPanel,
         c.OnColor = Color.Lime;
       },
     };
+
+    if (CustomPatches.PatchesByMethod.ContainsKey(Method))
+    {
+      this["go to custom patch"] = new CUIIconButton(CUISprite.WrenchIcon)
+      {
+        CrossRelative = new CUINullRect(w: 1),
+        Background = { Sprite = CUISprite.GlowingEdgesSolid },
+        Style = (c) =>
+        {
+          c.Background.Color = new Color(255, 255, 0);
+        },
+        Scale = 0.8f,
+        Padding = new CUISizes(1, 1, 1, 1),
+        OnClick = () =>
+        {
+          Commands.SendUp(ShowperfFrame.OpenCustomPatch_Command, CustomPatches.PatchesByMethod[Method].First());
+        }
+      };
+    }
 
     this["select method"] = new CUIDefault.GlowingButton(MethodBaseParser.Serialize(Method))
     {

@@ -3,11 +3,12 @@ using System.Collections.Immutable;
 using CursedUI;
 using Microsoft.Xna.Framework;
 using System.Reflection;
-
+using CUILibs;
 namespace ShowperfExtensions;
 
 public partial class ShowperfFrame : CUIDefault.Frame
 {
+  public const string OpenCustomPatch_Command = "OpenCustomPatch";
   // public static ICUIStyle DefaultStyle => new CUIDefaultStyle<ShowperfFrame>((c) =>
   // {
   //   c.Background.Color = c.Palette["back"].To(Color.Transparent, 0.2f);
@@ -48,7 +49,17 @@ public partial class ShowperfFrame : CUIDefault.Frame
     TargetMainComponent = PluginSettings.FrameAboveGUI ? CUI.TopMain : CUI.Main;
     Anchor = CUIAnchor.RightCenter;
     OnOpen += DeepRefresh;
+
+    OnOpen += () => ModStorage.Set("showperf frame was open", true);
+    OnClose += () => ModStorage.Set("showperf frame was open", false);
+
     ResizableBoth = true;
+
+    Commands.ListenFor<CustomPatchRepo.Entry>(OpenCustomPatch_Command, (entry) =>
+    {
+      PageButtons.Get<CUIRadioButton>("Patches").Select();
+      PatchesPage.OpenEntry(entry);
+    });
 
     OpenButton = new CUIButton("SHOWPERF")
     {

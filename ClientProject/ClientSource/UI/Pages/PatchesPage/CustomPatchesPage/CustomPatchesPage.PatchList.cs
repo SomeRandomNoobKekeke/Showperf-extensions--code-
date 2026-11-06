@@ -120,7 +120,7 @@ public partial class PatchesPage : CUIPage
             Palette = Plugin.Palettes.Tertiary3,
             DeepPaletteImmunity = true,
             TextAnchor = CUIAnchor.LeftCenter,
-            Margin = new CUISizes(4, 4, 4, 4),
+            // Margin = new CUISizes(4, 4, 4, 4),
           });
         }
 

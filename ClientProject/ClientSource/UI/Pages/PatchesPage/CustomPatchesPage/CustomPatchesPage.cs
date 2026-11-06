@@ -24,6 +24,11 @@ public partial class PatchesPage : CUIPage
       PatchList.Refresh();
     }
 
+    public void OpenEntry(CustomPatchRepo.Entry entry)
+    {
+      SelectedPatchBlock.SelectedEntry = entry;
+    }
+
 
     public CustomPatchesPage()
     {
