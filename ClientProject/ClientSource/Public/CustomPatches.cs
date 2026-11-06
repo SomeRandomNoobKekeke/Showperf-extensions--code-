@@ -81,6 +81,7 @@ public static class CustomPatches
     {
       PatchMethodAttribute? attribute = mi.GetCustomAttribute<PatchMethodAttribute>();
       if (attribute is null) continue;
+      if (attribute.Target is null) continue;
 
       patches.Add(new PatchInfo($"{entryID}|{mi.Name}", attribute.Target, mi, attribute.PatchType));
     }
