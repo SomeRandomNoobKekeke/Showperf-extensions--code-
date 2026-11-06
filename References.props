@@ -1,4 +1,9 @@
 <Project>
+
+  <PropertyGroup>
+    <AppDataLocalDir>$([System.Environment]::GetFolderPath(SpecialFolder.LocalApplicationData))</AppDataLocalDir>
+  </PropertyGroup>
+
   <ItemGroup>
     <!-- TODO: Remove when we upgrade to NET 10 -->
     <PackageReference Include="System.Collections.Immutable" Version="9.0.0" />
@@ -10,7 +15,7 @@
     <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.14.0" />
 
     <Reference Include="CUI">
-      <HintPath>C:\Program Files (x86)\Steam\steamapps\common\Barotrauma\LocalMods\[Root] CUI Dev\Build\CUI\Windows\Client\CUIClient.dll</HintPath>
+      <HintPath>$(AppDataLocalDir)\Daedalic Entertainment GmbH\Barotrauma\WorkshopMods\Installed\3834834427\Windows\Client\CUI.dll</HintPath>
     </Reference>
   </ItemGroup>
 </Project>
