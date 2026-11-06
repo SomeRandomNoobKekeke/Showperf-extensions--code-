@@ -8,11 +8,9 @@ namespace ShowperfPatches;
 [ShowperfPatch("Deep MapEntity.UpdateAll()")]
 public class MapEntity_UpdateAll_Deep
 {
-  public record WhatToCaptureOptions
+  public record WhatToCaptureOptions(string name)
   {
-    private WhatToCaptureOptions(string name) => Name = name;
-
-    public string Name { get; }
+    public string Name { get; } = name;
 
     public static List<string> AllNames => [All.Name, ItemsByPrefab.Name, ItemsById.Name,];
 
@@ -37,7 +35,7 @@ public class MapEntity_UpdateAll_Deep
       settings["capture mode"] = new CUIDefault.ButtonGroupField()
       {
         Text = "Capture:",
-        GroupName = "capture mode",
+        GroupName = "map entity capture mode",
         Options = WhatToCaptureOptions.AllNames,
         SelectedOption = WhatToCapture.Name,
         OnSelected = (name) => WhatToCapture = WhatToCaptureOptions.FromString(name),
