@@ -3,6 +3,7 @@ using ShowperfExtensions;
 using CUILibs;
 using System.Reflection;
 using System.Runtime.CompilerServices;
+using CursedUI;
 
 namespace ShowperfPatches;
 

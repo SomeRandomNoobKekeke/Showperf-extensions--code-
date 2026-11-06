@@ -11,15 +11,15 @@ public class DisposableStopwatch : IDisposable
 {
   public Stopwatch Watch { get; } = new();
 
+  public bool ShouldCapture { get; set; } = true;
+
   public void Capture(string id)
   {
-    Stop();
-    ShowperfExtensions.Capture.Ticks(id, this);
+    if (ShouldCapture) ShowperfExtensions.Capture.Ticks(id, this);
   }
   public void Capture(Identifier id)
   {
-    Stop();
-    ShowperfExtensions.Capture.Ticks(id, this);
+    if (ShouldCapture) ShowperfExtensions.Capture.Ticks(id, this);
   }
 
 
@@ -38,10 +38,27 @@ public class DisposableStopwatch : IDisposable
     return s;
   }
 
-  public void Start() => Watch.Start();
-  public void Stop() => Watch.Stop();
-  public void Reset() => Watch.Reset();
-  public void Restart() => Watch.Restart();
+  public DisposableStopwatch Start()
+  {
+    Watch.Start();
+    return this;
+  }
+  public DisposableStopwatch Stop()
+  {
+    Watch.Stop();
+    return this;
+  }
+  public DisposableStopwatch Reset()
+  {
+    Watch.Reset();
+    return this;
+  }
+  public DisposableStopwatch Restart()
+  {
+    Watch.Restart();
+    return this;
+  }
+
   public override string ToString() => Watch.ToString();
 
   public bool IsRunning => Watch.IsRunning;

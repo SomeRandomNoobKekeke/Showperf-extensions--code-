@@ -8,7 +8,7 @@ namespace ShowperfPatches;
 // [ShowperfPatch]
 public class TestPatch
 {
-  [PatchMethod("MapEntity.UpdateAll")]
+  [PatchMethod("MapEntity.UpdateAll", "")]
   public static void UpdateAll(float deltaTime, Camera cam)
   {
     for (int i = 1; i <= 100; i++)
