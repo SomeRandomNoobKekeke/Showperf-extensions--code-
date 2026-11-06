@@ -7,6 +7,10 @@ using System.Reflection;
 namespace ShowperfExtensions;
 
 
+/// <summary>
+/// Class for registering your patches in Showperf  
+/// 1 AddAllPatchesInThisAssembly() in Mod.Init should be enough
+/// </summary>
 public static class CustomPatches
 {
   public static void AddAllPatchesInThisAssembly()
