@@ -25,7 +25,7 @@ public partial class Plugin
 
   public void Init()
   {
-    CUI.Logger.Log("ShowperfExtensions compiled");
+    // CUI.Logger.Log("ShowperfExtensions compiled");
 
     Instance = this;
 
