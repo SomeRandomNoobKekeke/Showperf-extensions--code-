@@ -1,4 +1,4 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<contentpackage name="Showperf Extensions 1.5 [Unstable]" modversion="1.5.1" corepackage="False" steamworkshopid="3834853109" gameversion="1.15.28.0" AccentColor="{R:255 G:255 B:255 A:255}">
+<contentpackage name="Showperf Extensions 1.5 [Unstable]" modversion="1.5.2" corepackage="False" steamworkshopid="3834853109" gameversion="1.15.28.0" AccentColor="{R:255 G:255 B:255 A:255}">
   <Dependency identifier="CUI [Unstable]" names="CUI [Unstable]" ids="" SteamAppIds="" isoptional="True" order="Below" />
 </contentpackage>
