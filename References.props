@@ -17,5 +17,9 @@
     <Reference Include="CUI">
       <HintPath>$(AppDataLocalDir)\Daedalic Entertainment GmbH\Barotrauma\WorkshopMods\Installed\3834834427\Windows\Client\CUI.dll</HintPath>
     </Reference>
+
+    <Reference Include="LuaCsForBarotraumaPluginClient">
+      <HintPath>$(AppDataLocalDir)\Daedalic Entertainment GmbH\Barotrauma\WorkshopMods\Installed\3693624471\Windows\Client\LuaCsForBarotraumaPluginClient.dll</HintPath>
+    </Reference>
   </ItemGroup>
 </Project>

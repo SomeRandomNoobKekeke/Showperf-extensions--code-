@@ -39,20 +39,7 @@ public partial class MeasurementsPage : CUIPage
 
     SumTextBlock.Text = $"Total: {ConverToMs(Capture.Window.GetTotal())}ms";
 
-
-
-
     var values = Capture.Window.Values;
-
-    if (!string.IsNullOrEmpty(Exclude))
-    {
-      values = values.Where(v => !v.Key.Value.Contains(Exclude));
-    }
-
-    if (!string.IsNullOrEmpty(Include))
-    {
-      values = values.Where(v => v.Key.Value.Contains(Include));
-    }
 
     SortedTicks = values.OrderByDescending(kvp => kvp.Value).ToList();
 

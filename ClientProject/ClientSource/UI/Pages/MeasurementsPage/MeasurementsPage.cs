@@ -10,8 +10,8 @@ namespace ShowperfExtensions;
 
 public partial class MeasurementsPage : CUIPage
 {
-  public CaptureCore? Capture => Plugin.Capture;
-  public PluginSettings Settings { get; set; }
+  private CaptureCore? Capture = Plugin.Get<CaptureCore>();
+  private PluginSettings Settings = Plugin.Get<PluginSettings>();
 
   public CUIFastTextDump Dump { get; }
   private CUIDefault.ListWithScrollbar ScrollWrapper;
@@ -20,10 +20,8 @@ public partial class MeasurementsPage : CUIPage
 
 
 
-  public MeasurementsPage(PluginSettings settings)
+  public MeasurementsPage()
   {
-    Settings = settings;
-
     this["layout"] = new CUIVerticalList() { Relative = new CUINullRect(0, 0, 1, 1) };
 
     this["layout"]["controls"] = CreateControlsBlock();

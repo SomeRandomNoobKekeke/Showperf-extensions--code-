@@ -30,6 +30,16 @@ public partial class StopwatchWrapper
     public static void ReportElapsedTicks(MethodBase method, long ticks)
     {
       Plugin.Capture?.Window.AddTicks(MethodBaseParser.Serialize(method).ToIdentifier(), ticks);
+
+      if (TicksFromStopwatchPatches.TryGetValue(method, out long prev))
+      {
+        TicksFromStopwatchPatches[method] = prev + ticks;
+      }
+      else
+      {
+        TicksFromStopwatchPatches[method] = ticks;
+      }
+
     }
 
     public static void Prefix(out Stopwatch __state)

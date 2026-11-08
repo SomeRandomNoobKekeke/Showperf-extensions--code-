@@ -7,23 +7,12 @@ namespace ShowperfExtensions;
 
 public partial class StopwatchWrapper
 {
-  public FunnyDictOfWeakSets<MethodBase, ITrackStopwatchPatches> StopwatchPatcherListeners { get; } = new();
-
-  public PatchInstaller PatchInstaller { get; }
+  public PatchInstaller PatchInstaller { get; } = Plugin.Get<PatchInstaller>();
 
   private StopwatchWrapperPatch CreatePatchInfo(MethodBase target)
     => new StopwatchWrapperPatch(target);
 
-  private void NotifyStopwatchPatcherListeners(MethodBase mb, bool state)
-  {
-    foreach (var (method, listeners) in StopwatchPatcherListeners)
-    {
-      foreach (ITrackStopwatchPatches listener in listeners)
-      {
-        listener.NotifyStopwatchToggled(mb, state);
-      }
-    }
-  }
+
 
   public void Patch(MethodBase target)
   {
@@ -53,24 +42,9 @@ public partial class StopwatchWrapper
 
 
 
-  public StopwatchWrapper(PatchInstaller patchInstaller)
+  public StopwatchWrapper()
   {
-    PatchInstaller = patchInstaller;
-
-    PatchInstaller.PatchInstalled += (info) =>
-    {
-      if (info is StopwatchWrapperPatch swp)
-      {
-        NotifyStopwatchPatcherListeners(swp.TargetMethod, true);
-      }
-    };
-
-    PatchInstaller.PatchRemoved += (info) =>
-    {
-      if (info is StopwatchWrapperPatch swp)
-      {
-        NotifyStopwatchPatcherListeners(swp.TargetMethod, false);
-      }
-    };
+    ConnectToPatchInstaller();
+    ConnectToCaptureWindow();
   }
 }

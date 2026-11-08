@@ -33,11 +33,21 @@ public class CaptureWindow
   public Queue<CaptureSlice> Slices { get; private set; } = [];
   public CaptureSlice TotalSlice { get; private set; } = new();
 
+
+  public string IncludeFilter { get; set; }
+  public string ExcludeFilter { get; set; }
+
+
   public void AddTicks(string id, double value) => AddTicks(id.ToIdentifier(), value);
   public void AddTicks(Identifier id, double value)
   {
+    if (!string.IsNullOrEmpty(ExcludeFilter) && id.Value.Contains(ExcludeFilter)) return;
+    if (!string.IsNullOrEmpty(IncludeFilter) && !id.Value.Contains(IncludeFilter)) return;
+
     StagingSlice.AddTicks(id, value);
   }
+
+  public double MaxValue => TotalSlice.MaxValue;
 
   public double GetTotal() => Mode switch
   {

@@ -9,6 +9,7 @@ using Barotrauma;
 using CursedUI;
 using System.IO;
 using CUILibs;
+using Barotrauma.LuaCs;
 
 namespace ShowperfExtensions
 {

@@ -7,11 +7,14 @@ namespace ShowperfExtensions;
 public class CaptureSlice : Dictionary<Identifier, double>
 {
   public double Total { get; private set; }
+  public double MaxValue { get; private set; }
+
 
   public void Clear()
   {
     base.Clear();
     Total = 0;
+    MaxValue = 0;
   }
 
   public void AddTicks(Identifier id, double value)
@@ -26,6 +29,7 @@ public class CaptureSlice : Dictionary<Identifier, double>
     }
 
     Total += value;
+    MaxValue = Math.Max(value, MaxValue);
   }
 
   public static CaptureSlice operator +(CaptureSlice left, CaptureSlice right)
@@ -43,6 +47,7 @@ public class CaptureSlice : Dictionary<Identifier, double>
     }
 
     left.Total += right.Total;
+    left.MaxValue = Math.Max(left.MaxValue, right.MaxValue);
 
     return left;
   }
@@ -70,6 +75,7 @@ public class CaptureSlice : Dictionary<Identifier, double>
     }
 
     left.Total -= right.Total;
+    left.MaxValue = Math.Min(left.MaxValue, right.MaxValue);
 
     return left;
   }
@@ -98,6 +104,7 @@ public class CaptureSlice : Dictionary<Identifier, double>
     }
 
     left.Total = Math.Max(left.Total, right.Total);
+    left.MaxValue = Math.Max(left.MaxValue, right.MaxValue);
 
     return left;
   }
@@ -118,6 +125,11 @@ public class CaptureSlice : Dictionary<Identifier, double>
     if (left.Total == right.Total)
     {
       left.Total = 0;
+    }
+
+    if (left.MaxValue == right.MaxValue)
+    {
+      left.MaxValue = 0;
     }
 
     return left;

@@ -13,7 +13,8 @@ namespace ShowperfExtensions;
 
 public class MethodLineComponent : CUIDefault.HorizontalBackPanel,
   ITrackStopwatchPatches,
-  ITrackMethodBookmarks
+  ITrackMethodBookmarks,
+  ITrackStopwatchTicks
 {
   private enum IsTogglingState { No, TogglingOn, TogglingOff }
 
@@ -27,7 +28,8 @@ public class MethodLineComponent : CUIDefault.HorizontalBackPanel,
 
   private static IsTogglingState IsToggling;
 
-
+  private PluginSettings Settings = Plugin.Get<PluginSettings>();
+  private CaptureWindow CaptureWindow = Plugin.Get<CaptureCore>().Window;
   private Assembly BarotraumaAssembly => typeof(GameMain).Assembly;
   public StopwatchWrapper StopwatchWrapper { get; } = Plugin.Get<StopwatchWrapper>();
   public MethodBookmarksList MethodBookmarksList { get; } = Plugin.Get<MethodBookmarksList>();
@@ -45,13 +47,15 @@ public class MethodLineComponent : CUIDefault.HorizontalBackPanel,
       if (_Method != null)
       {
         StopwatchWrapper.StopwatchPatcherListeners.Remove(_Method, this);
-        MethodBookmarksList.MethodBookmarksListListeners.Remove(_Method, this);
+        StopwatchWrapper.TicksListeners.Remove(_Method, this);
+        MethodBookmarksList.MethodBookmarksListeners.Remove(_Method, this);
       }
       _Method = value;
       if (_Method != null)
       {
         StopwatchWrapper.StopwatchPatcherListeners.Add(_Method, this);
-        MethodBookmarksList.MethodBookmarksListListeners.Add(_Method, this);
+        StopwatchWrapper.TicksListeners.Add(_Method, this);
+        MethodBookmarksList.MethodBookmarksListeners.Add(_Method, this);
       }
 
       Refresh();
@@ -64,13 +68,21 @@ public class MethodLineComponent : CUIDefault.HorizontalBackPanel,
   {
     if (ToggleStopwatchButton is null) return;
     ToggleStopwatchButton.State = StopwatchWrapper.IsPatched(Method);
+    Get<CUIButton>("select method")?.ReapplyStyles();
   }
 
-  public void NotifyMethodBookmarks()
+  public void NotifyMethodBookmarksChanged()
   {
     if (this["bookmark"] is null) return;
     this.Get<CUIToggleIconButton>("bookmark").State = MethodBookmarksList.Contains(Method);
   }
+
+  public void UpdateStopwatchTicks(long ticks)
+  {
+    Color = Settings.Gradient((float)(ticks / CaptureWindow.TotalSlice.MaxValue));
+  }
+
+
 
   private CUIToggleIconButton ToggleStopwatchButton;
 
@@ -127,9 +139,10 @@ public class MethodLineComponent : CUIDefault.HorizontalBackPanel,
       {
         CrossRelative = new CUINullRect(w: 1),
         Background = { Sprite = CUISprite.GlowingEdgesSolid },
+        MasterColor = new Color(255, 255, 0),
         Style = (c) =>
         {
-          c.Background.Color = new Color(255, 255, 0);
+          c.Background.Color = new Color(200, 200, 200, 200);
         },
         Scale = 0.8f,
         Padding = new CUISizes(1, 1, 1, 1),
@@ -144,7 +157,7 @@ public class MethodLineComponent : CUIDefault.HorizontalBackPanel,
     {
       TextAnchor = CUIAnchor.LeftCenter,
       OnClick = () => SelectMethod(Method),
-      MasterColor = new Color(200, 200, 200, 200),
+      Style = (btn) => btn.MasterColor = new Color(200, 200, 200, 200),
       Disabled = !CanMethodBeSelected(Method),
       Flex = 1,
     };

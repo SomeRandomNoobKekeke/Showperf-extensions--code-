@@ -6,7 +6,7 @@ using System.Reflection;
 
 namespace ShowperfExtensions;
 
-public interface ITrackMethodBookmarks
+public interface ITrackStopwatchTicks
 {
-  public void NotifyMethodBookmarks();
+  public void UpdateStopwatchTicks(long ticks);
 }

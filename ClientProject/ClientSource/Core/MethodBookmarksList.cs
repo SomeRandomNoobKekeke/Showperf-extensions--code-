@@ -9,10 +9,8 @@ using System.Text.Json;
 
 namespace ShowperfExtensions;
 
-public class MethodBookmarksList : ReactiveHashSet<MethodBase>
+public partial class MethodBookmarksList : ReactiveHashSet<MethodBase>
 {
-  public FunnyDictOfWeakSets<MethodBase, ITrackMethodBookmarks> MethodBookmarksListListeners { get; } = new();
-
   public string DirPath => Path.Combine("Data", "Mods", ModInfo.Name);
   public string FilePath => Path.Combine(DirPath, "Method Bookmarks.json");
 
@@ -58,21 +56,10 @@ public class MethodBookmarksList : ReactiveHashSet<MethodBase>
     );
   }
 
-  private void NotifyMethodBookmarksListListeners()
-  {
-    foreach (var (method, listeners) in MethodBookmarksListListeners)
-    {
-      foreach (ITrackMethodBookmarks listener in listeners)
-      {
-        listener.NotifyMethodBookmarks();
-      }
-    }
-  }
-
   public MethodBookmarksList()
   {
     LoadSilent();
-    Changed += NotifyMethodBookmarksListListeners;
+    Changed += NotifyMethodBookmarksListeners;
     Changed += Save;
   }
 }
