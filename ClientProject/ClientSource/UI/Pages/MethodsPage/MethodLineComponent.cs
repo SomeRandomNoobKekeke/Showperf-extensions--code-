@@ -79,7 +79,7 @@ public class MethodLineComponent : CUIDefault.HorizontalBackPanel,
 
   public void UpdateStopwatchTicks(long ticks)
   {
-    Color = Settings.Gradient((float)(ticks / CaptureWindow.TotalSlice.MaxValue));
+    Color = Settings.Gradient((float)(ticks / CaptureWindow.TotalFrame.MaxValue));
   }
 
 

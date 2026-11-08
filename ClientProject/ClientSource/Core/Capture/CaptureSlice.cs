@@ -4,7 +4,7 @@ using CUILibs;
 
 namespace ShowperfExtensions;
 
-public class CaptureSlice : Dictionary<Identifier, double>
+public class CaptureFrame : Dictionary<Identifier, double>
 {
   public double Total { get; private set; }
   public double MaxValue { get; private set; }
@@ -32,7 +32,7 @@ public class CaptureSlice : Dictionary<Identifier, double>
     MaxValue = Math.Max(value, MaxValue);
   }
 
-  public static CaptureSlice operator +(CaptureSlice left, CaptureSlice right)
+  public static CaptureFrame operator +(CaptureFrame left, CaptureFrame right)
   {
     foreach (var (key, value) in right)
     {
@@ -52,7 +52,7 @@ public class CaptureSlice : Dictionary<Identifier, double>
     return left;
   }
 
-  public static CaptureSlice operator -(CaptureSlice left, CaptureSlice right)
+  public static CaptureFrame operator -(CaptureFrame left, CaptureFrame right)
   {
     foreach (var (key, value) in right)
     {
@@ -81,7 +81,7 @@ public class CaptureSlice : Dictionary<Identifier, double>
   }
 
 
-  public static CaptureSlice ReplaceWithMax(CaptureSlice left, CaptureSlice right)
+  public static CaptureFrame ReplaceWithMax(CaptureFrame left, CaptureFrame right)
   {
     foreach (var (key, value) in right)
     {
@@ -109,7 +109,7 @@ public class CaptureSlice : Dictionary<Identifier, double>
     return left;
   }
 
-  public static CaptureSlice RemoveMatches(CaptureSlice left, CaptureSlice right)
+  public static CaptureFrame RemoveMatches(CaptureFrame left, CaptureFrame right)
   {
     foreach (var (key, value) in right)
     {

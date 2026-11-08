@@ -10,7 +10,7 @@ namespace ShowperfExtensions;
 
 public partial class MeasurementsPage : CUIPage
 {
-  public IntRange SliceCountRange = new IntRange(1, 500);
+  public IntRange FrameCountRange = new IntRange(1, 500);
 
   private CUIComponent CreateControlsBlock()
   {
@@ -49,28 +49,28 @@ public partial class MeasurementsPage : CUIPage
       },
     };
 
-    CUITextBlock sliceCount = null;
-    controls["slice count"] = new CUIDefault.HorizontalBackPanel();
-    controls["slice count"]["label"] = new CUIDefault.SolidTextBlock("Frames:");
-    controls["slice count"]["count"] = sliceCount = new CUITextBlock($"{Capture.Window.SliceCount}")
+    CUITextBlock frameCount = null;
+    controls["frame count"] = new CUIDefault.HorizontalBackPanel();
+    controls["frame count"]["label"] = new CUIDefault.SolidTextBlock("Frames:");
+    controls["frame count"]["count"] = frameCount = new CUITextBlock($"{Capture.Window.FrameCount}")
     {
       Solid = false,
       Absolute = new CUINullRect(w: 40),
     };
-    controls["slice count"]["slider"] = new CUIRangeInput()
+    controls["frame count"]["slider"] = new CUIRangeInput()
     {
       Flex = 1,
-      Lambda = (Capture.Window.SliceCount - SliceCountRange.Start) / (float)SliceCountRange.Length,
+      Lambda = (Capture.Window.FrameCount - FrameCountRange.Start) / (float)FrameCountRange.Length,
       OnHandleDragged = (l) =>
       {
-        int slices = ValueLerpFuncs.Int(SliceCountRange.Start, SliceCountRange.End, l);
-        sliceCount.Text = $"{slices}";
+        int frames = ValueLerpFuncs.Int(FrameCountRange.Start, FrameCountRange.End, l);
+        frameCount.Text = $"{frames}";
       },
       OnChanged = (l) =>
       {
-        int slices = ValueLerpFuncs.Int(SliceCountRange.Start, SliceCountRange.End, l);
-        sliceCount.Text = $"{slices}";
-        Capture.Window.SliceCount = slices;
+        int frames = ValueLerpFuncs.Int(FrameCountRange.Start, FrameCountRange.End, l);
+        frameCount.Text = $"{frames}";
+        Capture.Window.FrameCount = frames;
       },
       Margin = new CUISizes(right: 10),
     };

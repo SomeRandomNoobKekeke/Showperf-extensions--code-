@@ -9,29 +9,29 @@ public class CaptureWindow
 
   public enum CaptureMode { Average, Sum, Spike }
 
-  public static int DefaultSliceCount = 100;
-  public int SliceCount
+  public static int DefaultFrameCount = 100;
+  public int FrameCount
   {
-    get => Slices.Count;
+    get => Frames.Count;
     set
     {
-      TotalSlice.Clear();
-      ResetSliceQueue(value);
+      TotalFrame.Clear();
+      ResetFrameQueue(value);
     }
   }
 
-  private void ResetSliceQueue(int count)
+  private void ResetFrameQueue(int count)
   {
-    Slices = new Queue<CaptureSlice>(count);
+    Frames = new Queue<CaptureFrame>(count);
     for (int i = 0; i < count; i++)
     {
-      Slices.Enqueue(new());
+      Frames.Enqueue(new());
     }
   }
 
-  public CaptureSlice StagingSlice { get; private set; } = new();
-  public Queue<CaptureSlice> Slices { get; private set; } = [];
-  public CaptureSlice TotalSlice { get; private set; } = new();
+  public CaptureFrame StagingFrame { get; private set; } = new();
+  public Queue<CaptureFrame> Frames { get; private set; } = [];
+  public CaptureFrame TotalFrame { get; private set; } = new();
 
 
   public string IncludeFilter { get; set; }
@@ -44,33 +44,33 @@ public class CaptureWindow
     if (!string.IsNullOrEmpty(ExcludeFilter) && id.Value.Contains(ExcludeFilter)) return;
     if (!string.IsNullOrEmpty(IncludeFilter) && !id.Value.Contains(IncludeFilter)) return;
 
-    StagingSlice.AddTicks(id, value);
+    StagingFrame.AddTicks(id, value);
   }
 
-  public double MaxValue => TotalSlice.MaxValue;
+  public double MaxValue => TotalFrame.MaxValue;
 
   public double GetTotal() => Mode switch
   {
-    CaptureMode.Average => TotalSlice.Total / SliceCount,
-    CaptureMode.Sum => TotalSlice.Total,
-    CaptureMode.Spike => TotalSlice.Total,
+    CaptureMode.Average => TotalFrame.Total / FrameCount,
+    CaptureMode.Sum => TotalFrame.Total,
+    CaptureMode.Spike => TotalFrame.Total,
   };
 
   public void Clear()
   {
-    TotalSlice.Clear();
-    ResetSliceQueue(SliceCount);
+    TotalFrame.Clear();
+    ResetFrameQueue(FrameCount);
   }
 
   public IEnumerable<KeyValuePair<Identifier, double>> Values
   {
     get => Mode switch
     {
-      CaptureMode.Average => TotalSlice.Select(kvp => new KeyValuePair<Identifier, double>(
-        kvp.Key, kvp.Value / SliceCount
+      CaptureMode.Average => TotalFrame.Select(kvp => new KeyValuePair<Identifier, double>(
+        kvp.Key, kvp.Value / FrameCount
       )),
-      CaptureMode.Sum => TotalSlice,
-      CaptureMode.Spike => TotalSlice,
+      CaptureMode.Sum => TotalFrame,
+      CaptureMode.Spike => TotalFrame,
     };
   }
 
@@ -82,7 +82,7 @@ public class CaptureWindow
     set
     {
       _Frozen = value;
-      StagingSlice = new();
+      StagingFrame = new();
     }
   }
 
@@ -105,26 +105,26 @@ public class CaptureWindow
     switch (Mode)
     {
       case CaptureMode.Average:
-        TotalSlice += StagingSlice;
+        TotalFrame += StagingFrame;
 
-        Slices.Enqueue(StagingSlice);
-        TotalSlice -= Slices.Dequeue();
+        Frames.Enqueue(StagingFrame);
+        TotalFrame -= Frames.Dequeue();
 
-        StagingSlice = new();
+        StagingFrame = new();
         break;
 
       case CaptureMode.Sum:
-        TotalSlice += StagingSlice;
-        StagingSlice = new();
+        TotalFrame += StagingFrame;
+        StagingFrame = new();
         break;
 
       case CaptureMode.Spike:
-        Slices.Enqueue(StagingSlice);
+        Frames.Enqueue(StagingFrame);
 
-        CaptureSlice.RemoveMatches(TotalSlice, Slices.Dequeue());
-        CaptureSlice.ReplaceWithMax(TotalSlice, StagingSlice);
+        CaptureFrame.RemoveMatches(TotalFrame, Frames.Dequeue());
+        CaptureFrame.ReplaceWithMax(TotalFrame, StagingFrame);
 
-        StagingSlice = new();
+        StagingFrame = new();
         break;
     }
 
@@ -133,7 +133,7 @@ public class CaptureWindow
 
   public CaptureWindow()
   {
-    SliceCount = DefaultSliceCount;
+    FrameCount = DefaultFrameCount;
   }
 
 }
