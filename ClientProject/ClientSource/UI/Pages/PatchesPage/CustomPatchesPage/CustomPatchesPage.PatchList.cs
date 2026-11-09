@@ -76,6 +76,10 @@ public partial class PatchesPage : CUIPage
           if (entry.PatchInfo.Targets.Length == 1)
           {
             block["layout"]["targets"] = new CUIDefault.HorizontalBackPanel();
+            block["layout"]["targets"]["open in call graph"] = new CUIIconButton(CUISprite.ShareIcon)
+            {
+              OnClick = () => Commands.SendUp(ShowperfFrame.OpenMethodInCallGraph_Command, entry.PatchInfo.Targets[0]),
+            };
             block["layout"]["targets"]["caption"] = new CUIDefault.SolidTextBlock($"Target: ");
             block["layout"]["targets"]["id"] = new CUITextBlock(MethodBaseParser.Serialize(entry.PatchInfo.Targets[0]));
           }
@@ -86,7 +90,12 @@ public partial class PatchesPage : CUIPage
             block["layout"]["targets"]["caption"] = new CUIDefault.SolidTextBlock("Targets:");
             foreach (MethodBase mb in entry.PatchInfo.Targets)
             {
-              block["layout"]["targets"].Children.Add(new CUITextBlock(MethodBaseParser.Serialize(mb)));
+              block["layout"]["targets"].Children.Add(new CUIDefault.IconButtonField()
+              {
+                Text = MethodBaseParser.Serialize(mb),
+                Button = { Icon = CUISprite.ShareIcon },
+                OnClick = () => Commands.SendUp(ShowperfFrame.OpenMethodInCallGraph_Command, mb),
+              });
             }
           }
         }
@@ -102,10 +111,21 @@ public partial class PatchesPage : CUIPage
           Borders = new CUISizes(1, 1, 1, 1),
         };
 
-        block["target"] = new CUIDefault.SolidTextBlock(MethodBaseParser.Serialize(target))
+        var targetLine = block["target line"] = new CUIDefault.HorizontalBackPanel()
         {
-          Palette = Plugin.Palettes.Secondary,
           DeepPaletteImmunity = true,
+        };
+
+        targetLine["open in call graph"] = new CUIIconButton(CUISprite.ShareIcon)
+        {
+          OnClick = () => Commands.SendUp(ShowperfFrame.OpenMethodInCallGraph_Command, target),
+          Palette = Plugin.Palettes.Secondary2,
+        };
+
+        targetLine["target"] = new CUIDefault.SolidTextBlock(MethodBaseParser.Serialize(target))
+        {
+          Flex = 1,
+          Palette = Plugin.Palettes.Secondary,
         };
 
         block["entries"] = new CUIDefault.VerticalBackPanel()

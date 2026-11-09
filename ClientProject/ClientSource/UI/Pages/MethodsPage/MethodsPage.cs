@@ -34,6 +34,7 @@ public class MethodsPage : CUIPage
       _Current = value;
 
       CurrentMethodLine.Method = value;
+      CUI.Logger.LogVars(CurrentMethodLine.Method);
 
       TypeExplorerPage.GoToMethod(Current);
       CallGraphBrowserPage.Current = Current;

@@ -9,6 +9,7 @@ namespace ShowperfExtensions;
 public partial class ShowperfFrame : CUIDefault.Frame
 {
   public const string OpenCustomPatch_Command = "OpenCustomPatch";
+  public const string OpenMethodInCallGraph_Command = "OpenMethodInCallGraph";
   // public static ICUIStyle DefaultStyle => new CUIDefaultStyle<ShowperfFrame>((c) =>
   // {
   //   c.Background.Color = c.Palette["back"].To(Color.Transparent, 0.2f);
@@ -42,6 +43,22 @@ public partial class ShowperfFrame : CUIDefault.Frame
     Close();
   }
 
+  private void SetupCommands()
+  {
+    Commands.ListenFor<CustomPatchRepo.Entry>(OpenCustomPatch_Command, (entry) =>
+    {
+      PageButtons.Get<CUIRadioButton>("Patches").Select();
+      PatchesPage.OpenEntry(entry);
+    });
+
+    Commands.ListenFor<MethodBase>(OpenMethodInCallGraph_Command, (mb) =>
+    {
+      PageButtons.Get<CUIRadioButton>("Methods").Select();
+      MethodsPage.PageButtons.Get<CUIRadioButton>("Call Graph").Select();
+      MethodsPage.Current = mb;
+    });
+  }
+
   public ShowperfFrame() : base("Showperf", 500, 600)
   {
     Logger = new(this);
@@ -54,12 +71,8 @@ public partial class ShowperfFrame : CUIDefault.Frame
     OnClose += () => ModStorage.Set("showperf frame was open", false);
 
     ResizableBoth = true;
+    SetupCommands();
 
-    Commands.ListenFor<CustomPatchRepo.Entry>(OpenCustomPatch_Command, (entry) =>
-    {
-      PageButtons.Get<CUIRadioButton>("Patches").Select();
-      PatchesPage.OpenEntry(entry);
-    });
 
     OpenButton = new CUIButton("SHOWPERF")
     {

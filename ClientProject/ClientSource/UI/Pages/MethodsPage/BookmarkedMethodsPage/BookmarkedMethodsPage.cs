@@ -13,6 +13,9 @@ public class BookmarkedMethodsPage : CUIPage
 {
   public static MethodInfo UpdateRoot => typeof(GameScreen).GetMethod("Update")!;
   public static MethodInfo DrawRoot => typeof(GameScreen).GetMethod("Draw")!;
+  public static MethodInfo StartRoundRoot => typeof(GameSession).GetMethod("StartRound", [
+    typeof(LevelData),typeof(bool)
+  ])!;
 
 
   public MethodBookmarksList MethodBookmarksList { get; } = Plugin.Get<MethodBookmarksList>();
@@ -41,7 +44,7 @@ public class BookmarkedMethodsPage : CUIPage
 
     this["layout"]["main"]["list"]["roots"] = RootMethodsBlock = new MethodBlockComponent("Roots")
     {
-      Methods = [UpdateRoot, DrawRoot],
+      Methods = [UpdateRoot, DrawRoot, StartRoundRoot],
     };
 
     this["layout"]["main"]["list"]["bookmarks"] = BookmarksBlock = new MethodBlockComponent("Bookmarks");
