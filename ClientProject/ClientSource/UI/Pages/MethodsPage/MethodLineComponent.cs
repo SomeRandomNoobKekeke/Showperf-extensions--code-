@@ -82,7 +82,14 @@ public class MethodLineComponent : CUIDefault.HorizontalBackPanel,
     Color = Settings.Gradient((float)(ticks / CaptureWindow.TotalFrame.MaxValue));
   }
 
-
+  public bool State
+  {
+    get => ToggleStopwatchButton.State;
+    set
+    {
+      ToggleStopwatchButton.ReactiveState = value;
+    }
+  }
 
   private CUIToggleIconButton ToggleStopwatchButton;
 
@@ -106,13 +113,15 @@ public class MethodLineComponent : CUIDefault.HorizontalBackPanel,
 
     this["toggle stopwatch"] = ToggleStopwatchButton = new CUIToggleIconButton(CUISprite.BurningTimerIcon)
     {
+      State = StopwatchWrapper.IsPatched(Method),
+
       IsAllowedToToggle = () => IsToggling == IsTogglingState.No,
       OnMouseEnter = (e) =>
       {
         if (IsToggling == IsTogglingState.TogglingOn) ToggleStopwatchButton.ReactiveState = true;
         if (IsToggling == IsTogglingState.TogglingOff) ToggleStopwatchButton.ReactiveState = false;
       },
-      State = StopwatchWrapper.IsPatched(Method),
+
       OnToggle = (state) =>
       {
         StopwatchWrapper.TogglePatch(Method);
@@ -123,6 +132,8 @@ public class MethodLineComponent : CUIDefault.HorizontalBackPanel,
           IsToggling = state ? IsTogglingState.TogglingOn : IsTogglingState.TogglingOff;
         }
       },
+
+
       Scale = 0.8f,
       Padding = new CUISizes(1, 1, 1, 1),
       Background = { Sprite = CUISprite.GlowingEdgesSolid },

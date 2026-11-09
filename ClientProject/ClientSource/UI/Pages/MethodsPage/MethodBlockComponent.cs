@@ -42,7 +42,22 @@ public class MethodBlockComponent : CUIDefault.VerticalPanel
   {
     Margin = new CUISizes(4, 4, 4, 4);
 
-    this["caption"] = new CUIDefault.SolidTextBlock(caption);
+    this["caption line"] = new CUIHorizontalList() { FitContent = new CUIBool2(false, true) };
+
+    this["caption line"]["toggle all"] = new CUIToggleIconButton(CUISprite.BurningTimerIcon)
+    {
+      Scale = 0.8f,
+      Padding = new CUISizes(1, 1, 1, 1),
+      OnToggle = (state) =>
+      {
+        foreach (MethodLineComponent c in this["methods"].Children)
+        {
+          c.State = state;
+        }
+      },
+    };
+    this["caption line"]["caption"] = new CUIDefault.SolidTextBlock(caption) { Flex = 1 };
+
     this["methods"] = new CUIDefault.VerticalBackPanel();
   }
 }
