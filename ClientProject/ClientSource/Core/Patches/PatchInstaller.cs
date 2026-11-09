@@ -83,9 +83,19 @@ public partial class PatchInstaller
 
   public void Dispose()
   {
-    Harmony.UnpatchSelf();
-
     InstalledPatches.Clear();
+
+    try
+    {
+      Harmony.UnpatchSelf();
+    }
+    catch (Exception e) when (e.Message == "IL Compile Error (unknown location)")
+    {
+      // it happens when you try to patch a "bad" method and it throws
+      // it then thinks that the method was patches and here it tries to unpatch a "bad" method again
+    }
+
+
   }
 
 }
