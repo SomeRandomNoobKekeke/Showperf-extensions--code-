@@ -2,6 +2,7 @@
 using Barotrauma;
 using CUILibs;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace ShowperfExtensions;
 
@@ -187,4 +188,22 @@ public class MethodBaseParserTest : UTestPack
     ];
   }
 
+
+  public List<UTest> Guh()
+  {
+    return [
+      new UTest(
+        MethodBaseParser.Serialize(typeof(Item).GetMethod("Draw", Pls, [
+          typeof(SpriteBatch),typeof(bool),typeof(bool)
+        ])!),
+        "Barotrauma.Item.Draw(SpriteBatch, Boolean, Boolean)"
+      ),
+      new UTest(
+        MethodBaseParser.Parse("Item.Draw(SpriteBatch, Boolean, Boolean)")!,
+        typeof(Item).GetMethod("Draw", Pls, [
+          typeof(SpriteBatch),typeof(bool),typeof(bool)
+        ])!
+      )
+    ];
+  }
 }

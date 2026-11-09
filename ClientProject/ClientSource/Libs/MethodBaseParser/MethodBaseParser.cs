@@ -90,8 +90,14 @@ public static class MethodBaseParser
       foreach (Assembly assembly in AssembliesToScan)
       {
         T = assembly.GetType(typeName);
-        T ??= assembly.GetType($"{assembly.GetName().Name}.{typeName}");
         if (T is not null) break;
+
+        T = assembly.GetType($"{assembly.GetName().Name}.{typeName}");
+        if (T is not null)
+        {
+          raw = $"{assembly.GetName().Name}.{raw}";
+          break;
+        }
       }
 
       if (T is null) return null;
