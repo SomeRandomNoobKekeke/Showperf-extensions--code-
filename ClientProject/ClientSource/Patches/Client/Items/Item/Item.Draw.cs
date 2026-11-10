@@ -12,7 +12,7 @@ using Microsoft.Xna.Framework.Graphics;
 namespace ShowperfPatches;
 
 [ShowperfPatch("Item draw time")]
-public static partial class WhichItemIsDrawn
+public static partial class ItemDrawTime
 {
 
   public static CUIComponent SettingsPage
@@ -37,7 +37,7 @@ public static partial class WhichItemIsDrawn
   public static bool ById { get; set; }
 
 
-  [PatchMethod("Item.Draw(SpriteBatch, Boolean, Boolean)", "1.15.28.0")]
+  [PatchMethod("Item.Draw(SpriteBatch, Boolean, Boolean)", "")]
   public static bool Item_Draw_Replace(Item __instance, SpriteBatch spriteBatch, bool editing, bool back = true)
   {
     Stopwatch sw = Stopwatch.StartNew();

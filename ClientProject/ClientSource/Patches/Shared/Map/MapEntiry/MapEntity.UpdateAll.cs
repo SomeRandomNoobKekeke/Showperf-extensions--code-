@@ -49,7 +49,7 @@ public class MapEntity_UpdateAll_Deep
 
 
 
-  [PatchMethod("MapEntity.UpdateAll", "1.15.28.0")]
+  [PatchMethod("MapEntity.UpdateAll", "1.15.29.0")]
   public static bool MapEntity_UpdateAll_Replace(float deltaTime, Camera cam)
   {
     Stopwatch sw = new Stopwatch();

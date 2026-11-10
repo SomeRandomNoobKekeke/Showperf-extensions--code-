@@ -12,7 +12,7 @@ using Microsoft.Xna.Framework.Graphics;
 namespace ShowperfPatches;
 
 [ShowperfPatch("Structure draw time")]
-public static partial class WhichStructureIsDrawn
+public static partial class StructureDrawTime
 {
 
   public static CUIComponent SettingsPage
@@ -37,7 +37,7 @@ public static partial class WhichStructureIsDrawn
   public static bool ById { get; set; }
 
 
-  [PatchMethod("Structure.Draw(SpriteBatch, Boolean, Boolean)", "1.15.28.0")]
+  [PatchMethod("Structure.Draw(SpriteBatch, Boolean, Boolean)", "1.15.29.0")]
   public static bool Structure_Draw_Replace(Structure __instance, SpriteBatch spriteBatch, bool editing, bool back = true)
   {
     Structure _ = __instance;

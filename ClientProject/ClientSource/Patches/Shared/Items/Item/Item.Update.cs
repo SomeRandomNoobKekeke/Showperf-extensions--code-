@@ -61,7 +61,7 @@ public static partial class Item_Update_Deep
   public static bool CapturePerItemPrefab { get; set; }
 
 
-  [PatchMethod("Item.Update", "1.15.28.0")]
+  [PatchMethod("Item.Update", "1.15.29.0")]
   public static bool Item_Update_Replace(Item __instance, float deltaTime, Camera cam)
   {
     if (CapturePerItemPrefab)
