@@ -13,6 +13,7 @@ public partial class Mod
   public void Init()
   {
     CustomPatches.AddAllPatchesInThisAssembly();
+    Experiment();
   }
 
   [MethodImpl(MethodImplOptions.NoInlining)]

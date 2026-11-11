@@ -9,10 +9,11 @@ namespace ShowperfExtensions;
 /// <summary>
 /// Classes marked with this are considered custom patches  
 /// They can have one or multiple PatchMethods  
-/// `public static CUIComponent SettingsPage { get; }` prop that returns settings page
+/// public static CUIComponent SettingsPage { get; } prop that returns settings page
+/// public static void Install(Harmony harmony) - custom install method
+/// public static void Remove(Harmony harmony) - custom remove method
 /// </summary>
 public class ShowperfPatchAttribute(string? id = null, string? description = null) : Attribute;
-
 
 /// <summary>
 /// All these methods will be installed when you enable patch  

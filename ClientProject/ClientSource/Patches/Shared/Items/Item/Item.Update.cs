@@ -14,21 +14,7 @@ namespace ShowperfPatches;
 public static partial class Item_Update_Deep
 {
   public enum WhatToCaptureOptions { All, ItemComponents }
-
-  public static string ToText(this WhatToCaptureOptions value) => value switch
-  {
-    WhatToCaptureOptions.All => "All",
-    WhatToCaptureOptions.ItemComponents => "Item Components",
-    _ => "All",
-  };
-
-  public static WhatToCaptureOptions FromText(this string value) => value switch
-  {
-    "All" => WhatToCaptureOptions.All,
-    "Item Components" => WhatToCaptureOptions.ItemComponents,
-    _ => WhatToCaptureOptions.All,
-  };
-
+  public enum ByWhatOptions { ForAllItems, ByPrefab, ByID }
 
 
   public static CUIComponent SettingsPage
@@ -37,19 +23,16 @@ public static partial class Item_Update_Deep
     {
       var settings = new CUIDefault.VerticalBackPanel();
 
-      settings["capture mode"] = new CUIDefault.ButtonGroupField()
+      settings["capture what"] = new EnumButtonGroupField<WhatToCaptureOptions>("What to capture:")
       {
-        Text = "Capture:",
-        GroupName = "item capture mode",
-        Options = Enum.GetValues<WhatToCaptureOptions>().Select(ToText).ToList(),
-        SelectedOption = ToText(WhatToCapture),
-        OnSelected = (name) => WhatToCapture = FromText(name),
+        SelectedOption = WhatToCapture,
+        OnSelected = (option) => WhatToCapture = option,
       };
 
-      settings["per item prefab"] = new CUIDefault.BoolField("Per item prefab")
+      settings["by what"] = new EnumButtonGroupField<ByWhatOptions>("By what:")
       {
-        State = CapturePerItemPrefab,
-        OnToggle = (state) => CapturePerItemPrefab = state,
+        SelectedOption = ByWhat,
+        OnSelected = (option) => ByWhat = option,
       };
 
       return settings;
@@ -58,19 +41,17 @@ public static partial class Item_Update_Deep
 
 
   public static WhatToCaptureOptions WhatToCapture { get; set; } = WhatToCaptureOptions.All;
-  public static bool CapturePerItemPrefab { get; set; }
+  public static ByWhatOptions ByWhat { get; set; } = ByWhatOptions.ForAllItems;
 
 
-  [PatchMethod("Item.Update", "1.15.29.0")]
+  [PatchMethod("Item.Update", "1.15.30.0")]
   public static bool Item_Update_Replace(Item __instance, float deltaTime, Camera cam)
+  => ByWhat switch
   {
-    if (CapturePerItemPrefab)
-    {
-      return Item_Update_Replace_PerItemPrefab(__instance, deltaTime, cam);
-    }
-    else
-    {
-      return Item_Update_Replace_ForAllItems(__instance, deltaTime, cam);
-    }
-  }
+    ByWhatOptions.ForAllItems => Item_Update_Replace_ForAllItems(__instance, deltaTime, cam),
+    ByWhatOptions.ByPrefab => Item_Update_Replace_ByItemPrefab(__instance, deltaTime, cam),
+    ByWhatOptions.ByID => Item_Update_Replace_ByID(__instance, deltaTime, cam),
+    _ => true,
+  };
+
 }

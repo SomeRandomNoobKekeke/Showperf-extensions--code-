@@ -15,7 +15,7 @@ public static partial class Item_Update_Deep
 {
 
 
-  public static bool Item_Update_Replace_PerItemPrefab(Item __instance, float deltaTime, Camera cam)
+  public static bool Item_Update_Replace_ByID(Item __instance, float deltaTime, Camera cam)
   {
     Item _ = __instance;
 
@@ -30,7 +30,7 @@ public static partial class Item_Update_Deep
     };
 
 
-    string itemPrefabName = _.Prefab.Name.ToString();
+    string itemName = _.ToString();
 
 
     if (!_.IsActive || _.IsDisabled || _.IsInRemoveQueue)
@@ -48,7 +48,7 @@ public static partial class Item_Update_Deep
           _.ReceiveImpact(impact, true);
         }
 
-        watch.Stop().Capture($"{itemPrefabName}   -   Update Impacts");
+        watch.Stop().Capture($"{itemName}   -   Update Impacts");
       }
     }
 
@@ -67,7 +67,7 @@ public static partial class Item_Update_Deep
           }
         }
 
-        watch.Stop().Capture($"{itemPrefabName}   -   SetTransformIgnoreContacts on droppedStack");
+        watch.Stop().Capture($"{itemName}   -   SetTransformIgnoreContacts on droppedStack");
       }
     }
 
@@ -77,7 +77,7 @@ public static partial class Item_Update_Deep
       {
         _.aiTarget.Update(deltaTime);
 
-        watch.Stop().Capture($"{itemPrefabName}   -   aiTarget.Update");
+        watch.Stop().Capture($"{itemName}   -   aiTarget.Update");
       }
     }
 
@@ -87,7 +87,7 @@ public static partial class Item_Update_Deep
       CharacterInventory characterInventory = _.parentInventory as CharacterInventory;
       _.ApplyStatusEffects(type, deltaTime, ((characterInventory != null) ? characterInventory.Owner : null) as Character, null, null, false, null);
 
-      watch.Stop().Capture($"{itemPrefabName}   -   ApplyStatusEffects Always");
+      watch.Stop().Capture($"{itemName}   -   ApplyStatusEffects Always");
     }
 
 
@@ -97,7 +97,7 @@ public static partial class Item_Update_Deep
       CharacterInventory characterInventory2 = _.parentInventory as CharacterInventory;
       _.ApplyStatusEffects(type2, deltaTime, ((characterInventory2 != null) ? characterInventory2.Owner : null) as Character, null, null, false, null);
 
-      watch.Stop().Capture($"{itemPrefabName}   -   ApplyStatusEffects OnNotContained / OnContained");
+      watch.Stop().Capture($"{itemName}   -   ApplyStatusEffects OnNotContained / OnContained");
     }
 
 
@@ -174,7 +174,7 @@ public static partial class Item_Update_Deep
             using (icWatch.Restart())
             {
               ic.Update(deltaTime, cam);
-              icWatch.Stop().Capture($"{itemPrefabName}   -   {ic}");
+              icWatch.Stop().Capture($"{itemName}   -   {ic}");
             }
 
             if (ic.IsActive)
@@ -189,7 +189,7 @@ public static partial class Item_Update_Deep
         }
       }
 
-      watch.Stop().Capture($"{itemPrefabName}   -   Update ItemComponents");
+      watch.Stop().Capture($"{itemName}   -   Update ItemComponents");
     }
 
 
@@ -236,7 +236,7 @@ public static partial class Item_Update_Deep
         }
       }
 
-      watch.Stop().Capture($"{itemPrefabName}   -   UpdateTransform");
+      watch.Stop().Capture($"{itemName}   -   UpdateTransform");
     }
 
 
@@ -271,7 +271,7 @@ public static partial class Item_Update_Deep
         _.IsActive = false;
       }
 
-      watch.Stop().Capture($"{itemPrefabName}   -   Update water stuff");
+      watch.Stop().Capture($"{itemName}   -   Update water stuff");
     }
 
     return false;

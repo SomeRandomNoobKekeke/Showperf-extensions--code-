@@ -36,23 +36,28 @@ public static partial class ItemDrawTime
 
   public static bool ById { get; set; }
 
-
-  [PatchMethod("Item.Draw(SpriteBatch, Boolean, Boolean)", "")]
-  public static bool Item_Draw_Replace(Item __instance, SpriteBatch spriteBatch, bool editing, bool back = true)
+  [PatchMethod("Item.Draw(SpriteBatch, Boolean, Boolean, Color?, Single?, Single?)", "",
+    HarmonyLib.HarmonyPatchType.Prefix
+  )]
+  public static void Item_Draw_Prefix(Item __instance, out Stopwatch __state)
   {
-    Stopwatch sw = Stopwatch.StartNew();
-    __instance.Draw(spriteBatch, editing, back, overrideColor: null);
-    sw.Stop();
+    __state = Stopwatch.StartNew();
+  }
+
+  [PatchMethod("Item.Draw(SpriteBatch, Boolean, Boolean, Color?, Single?, Single?)", "",
+  HarmonyLib.HarmonyPatchType.Postfix
+)]
+  public static void Item_Draw_Postfix(Item __instance, Stopwatch __state)
+  {
+    __state.Stop();
 
     if (ById)
     {
-      Capture.Ticks(__instance.ToString(), sw);
+      Capture.Ticks(__instance.ToString(), __state);
     }
     else
     {
-      Capture.Ticks(__instance.Prefab.Identifier, sw);
+      Capture.Ticks(__instance.Prefab.Identifier, __state);
     }
-
-    return false;
   }
 }
