@@ -15,5 +15,7 @@ public partial class CustomPatchRepo
     public string? Description { get; set; }
     public CUIComponent SettingsPage { set => SettingsPageFactory = () => value; }
     public Func<CUIComponent>? SettingsPageFactory { get; set; }
+    public Action<Harmony>? InstallMethod { get; set; }
+    public Action<Harmony>? RemoveMethod { get; set; }
   }
 }

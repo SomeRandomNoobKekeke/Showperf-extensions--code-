@@ -7,7 +7,7 @@ namespace ShowperfExtensions;
 
 public partial class PatchInstaller
 {
-  private Harmony Harmony { get; } = new Harmony("showperf.patches");
+  public Harmony Harmony { get; } = new Harmony("showperf.patches");
   public HashSet<PatchInfoBase> InstalledPatches { get; } = new();
 
   public Dictionary<string, PatchInfoBase> PatchesByID

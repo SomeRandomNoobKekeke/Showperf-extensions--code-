@@ -2,6 +2,7 @@
 using System.Collections.Immutable;
 using CursedUI;
 using Microsoft.Xna.Framework;
+using System.Reflection;
 
 namespace ShowperfExtensions;
 
@@ -9,7 +10,8 @@ public partial class PatchesPage : CUIPage
 {
   public class InstalledPatchesPage : CUIPage
   {
-    public PatchInstaller PatchInstaller { get; } = Plugin.Get<PatchInstaller>();
+    public CustomPatchRepo.EntryInstaller EntryInstaller { get; } = Plugin.Get<CustomPatchRepo.EntryInstaller>();
+    public StopwatchWrapper StopwatchWrapper { get; } = Plugin.Get<StopwatchWrapper>();
 
     private CUIVerticalList PatchList;
 
@@ -18,9 +20,14 @@ public partial class PatchesPage : CUIPage
     {
       PatchList.Clear();
 
-      foreach (PatchInfoBase info in PatchInstaller.InstalledPatches)
+      foreach (CustomPatchRepo.Entry entry in EntryInstaller.Installed)
       {
-        PatchList.Add(CreatePatchBlock(info));
+        PatchList.Add(CreateCustomPatchBlock(entry));
+      }
+
+      foreach (MethodBase patchedMethod in StopwatchWrapper.Installed)
+      {
+        PatchList.Add(CreateStopwatchPatchBlock(patchedMethod));
       }
     }
 
@@ -40,15 +47,17 @@ public partial class PatchesPage : CUIPage
       refreshRequested = false;
     }
 
-    private CUIComponent CreatePatchBlock(PatchInfoBase info)
+    //BRUH
+    private CUIComponent CreateStopwatchPatchBlock(MethodBase method)
     {
       CUIHorizontalList block = new CUIDefault.HorizontalBackPanel();
 
       CUIIconButton btn = new CUIIconButton(CUISprite.CrossIcon)
       {
         Scale = 0.8f,
+        Padding = new CUISizes(1, 1, 1, 1),
         CrossRelative = new CUINullRect(w: 1),
-        OnMouseDown = (e) => PatchInstaller.RemovePatch(info),
+        OnMouseDown = (e) => StopwatchWrapper.Remove(method),
         OnMouseUp = (e) => Refresh(),
         OnMouseLeave = (e) =>
         {
@@ -63,7 +72,54 @@ public partial class PatchesPage : CUIPage
           if (e.Mouse.M1.Pressed)
           {
             block.DeepTransparency = 0.5f;
-            PatchInstaller.RemovePatch(info);
+            StopwatchWrapper.Remove(method);
+            RequestRefresh();
+          }
+        },
+      };
+
+      block["remove button"] = btn;
+
+      block["icon"] = new CUIIconBlock(CUISprite.BurningTimerIcon)
+      {
+        Scale = 0.8f,
+        Padding = new CUISizes(1, 1, 1, 1),
+        Borders = new CUISizes(left: 2),
+      };
+
+      block["id"] = new CUITextBlock(MethodBaseParser.Serialize(method));
+
+      block.DeepPalette = Plugin.Palettes.Tertiary;
+
+      return block;
+    }
+
+    //BRUH x2
+    private CUIComponent CreateCustomPatchBlock(CustomPatchRepo.Entry entry)
+    {
+      CUIHorizontalList block = new CUIDefault.HorizontalBackPanel();
+
+      CUIIconButton btn = new CUIIconButton(CUISprite.CrossIcon)
+      {
+        Scale = 0.8f,
+        Padding = new CUISizes(1, 1, 1, 1),
+        CrossRelative = new CUINullRect(w: 1),
+        OnMouseDown = (e) => EntryInstaller.Remove(entry),
+        OnMouseUp = (e) => Refresh(),
+        OnMouseLeave = (e) =>
+        {
+          if (e.Mouse.M1.Pressed)
+          {
+            block.DeepTransparency = 0.5f;
+            RequestRefresh();
+          }
+        },
+        OnMouseEnter = (e) =>
+        {
+          if (e.Mouse.M1.Pressed)
+          {
+            block.DeepTransparency = 0.5f;
+            EntryInstaller.Remove(entry);
             RequestRefresh();
           }
         },
@@ -72,17 +128,7 @@ public partial class PatchesPage : CUIPage
 
       block["remove button"] = btn;
 
-      if (info is StopwatchWrapper.StopwatchWrapperPatch)
-      {
-        block["icon"] = new CUIIconBlock(CUISprite.BurningTimerIcon)
-        {
-          Scale = 0.8f,
-          Padding = new CUISizes(1, 1, 1, 1),
-          Borders = new CUISizes(left: 2),
-        };
-      }
-
-      block["id"] = new CUITextBlock(info.ID);
+      block["id"] = new CUITextBlock(entry.ID);
 
       block.DeepPalette = Plugin.Palettes.Tertiary;
 
@@ -99,6 +145,7 @@ public partial class PatchesPage : CUIPage
       {
         Flex = 1,
         Padding = new CUISizes(8, 8, 8, 8),
+        Scrollable = true,
       };
 
       this.DeepPalette = Plugin.Palettes.Tertiary;

@@ -39,6 +39,8 @@ public partial class Plugin
   {
     ServiceContainer.RegisterSingleton<Plugin>();
     ServiceContainer.RegisterSingleton<CustomPatchRepo>();
+    ServiceContainer.RegisterSingleton<CustomPatchRepo.EntryInstaller>();
+
     ServiceContainer.RegisterSingleton<PluginSettings>(
       (factory) => new PluginSettings(Path.Combine("Data", "Mods", ModInfo.Name, "Settings.json"))
     );

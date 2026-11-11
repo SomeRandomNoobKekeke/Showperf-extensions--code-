@@ -3,6 +3,7 @@ using CursedUI;
 using CUILibs;
 using Microsoft.Xna.Framework;
 using System.Reflection;
+using HarmonyLib;
 
 namespace ShowperfExtensions;
 
@@ -10,6 +11,8 @@ namespace ShowperfExtensions;
 public static class CustomPatches
 {
   public const string SettingsPagePropName = "SettingsPage";
+  public const string InstallMethodName = "Install";
+  public const string RemoveMethodName = "Remove";
 
   public static void Add(
     string id,
@@ -35,13 +38,16 @@ public static class CustomPatches
   private static BindingFlags StaticAny => BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic;
 
   public const string SettingsPagePropName = "SettingsPage";
-
+  public const string InstallMethodName = "Install";
+  public const string RemoveMethodName = "Remove";
 
   public static void Add(
     string id,
     PatchInfoBase info,
     string desctiption = "",
-    Func<CUIComponent>? settingsPageFactory = null
+    Func<CUIComponent>? settingsPageFactory = null,
+    Action<Harmony>? install = null,
+    Action<Harmony>? remove = null
   )
   {
     Plugin.Instance?.CustomPatchRepo.Add(
@@ -49,6 +55,8 @@ public static class CustomPatches
       {
         Description = desctiption,
         SettingsPageFactory = settingsPageFactory,
+        InstallMethod = install,
+        RemoveMethod = remove,
       }
     );
   }
@@ -96,11 +104,26 @@ public static class CustomPatches
       }
     }
 
+    Action<Harmony>? install = null;
+    if (showperfPatchType.GetMethod(InstallMethodName, StaticAny) != null)
+    {
+      MethodInfo mi = showperfPatchType.GetMethod(InstallMethodName, StaticAny)!;
+      install = (Action<Harmony>)Delegate.CreateDelegate(typeof(Action<Harmony>), mi);
+    }
+
+    Action<Harmony>? remove = null;
+    if (showperfPatchType.GetMethod(RemoveMethodName, StaticAny) != null)
+    {
+      MethodInfo mi = showperfPatchType.GetMethod(RemoveMethodName, StaticAny)!;
+      remove = (Action<Harmony>)Delegate.CreateDelegate(typeof(Action<Harmony>), mi);
+    }
+
     Add(
       entryID,
       new MultiPatchInfo($"{entryID} patches", patches),
       description,
-      settingsPageFactory
+      settingsPageFactory,
+      install, remove
     );
   }
 }

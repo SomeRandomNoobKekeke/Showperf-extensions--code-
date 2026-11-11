@@ -67,7 +67,7 @@ public class MethodLineComponent : CUIDefault.HorizontalBackPanel,
   public void NotifyStopwatchToggled(MethodBase mb, bool state)
   {
     if (ToggleStopwatchButton is null) return;
-    ToggleStopwatchButton.State = StopwatchWrapper.IsPatched(Method);
+    ToggleStopwatchButton.State = StopwatchWrapper.IsInstalled(Method);
     Get<CUIButton>("select method")?.ReapplyStyles();
   }
 
@@ -113,7 +113,7 @@ public class MethodLineComponent : CUIDefault.HorizontalBackPanel,
 
     this["toggle stopwatch"] = ToggleStopwatchButton = new CUIToggleIconButton(CUISprite.BurningTimerIcon)
     {
-      State = StopwatchWrapper.IsPatched(Method),
+      State = StopwatchWrapper.IsInstalled(Method),
 
       IsAllowedToToggle = () => IsToggling == IsTogglingState.No,
       OnMouseEnter = (e) =>
@@ -125,7 +125,7 @@ public class MethodLineComponent : CUIDefault.HorizontalBackPanel,
       OnToggle = (state) =>
       {
         StopwatchWrapper.TogglePatch(Method);
-        ToggleStopwatchButton.State = StopwatchWrapper.IsPatched(Method);
+        ToggleStopwatchButton.State = StopwatchWrapper.IsInstalled(Method);
 
         if (IsToggling == IsTogglingState.No)
         {

@@ -12,7 +12,7 @@ public partial class PatchesPage : CUIPage
   {
     public class SelectedPatchComponent : CUIDefault.Panel
     {
-      public PatchInstaller PatchInstaller { get; } = Plugin.Get<PatchInstaller>();
+      public CustomPatchRepo.EntryInstaller EntryInstaller { get; } = Plugin.Get<CustomPatchRepo.EntryInstaller>();
 
       private CustomPatchRepo.Entry _SelectedEntry; public CustomPatchRepo.Entry SelectedEntry
       {
@@ -58,13 +58,12 @@ public partial class PatchesPage : CUIPage
             AbsoluteMin = new CUINullRect(w:80),
             OnState = { Text = "Remove" },
             OffState = { Text = "Install" },
-            State = PatchInstaller.IsInstalled(SelectedEntry.PatchInfo),
+            State = EntryInstaller.IsInstalled(SelectedEntry),
             Palette = CUIPalette.FromColor(Color.Cyan),
             DeepPaletteImmunity = true,
             OnToggle = (state) =>
             {
-              PatchInstaller.TogglePatch(SelectedEntry.PatchInfo);
-              container["install"].Get<CUIToggleButton>("button").State = PatchInstaller.IsInstalled(SelectedEntry.PatchInfo);
+              EntryInstaller.Toggle(SelectedEntry);
             }
           },
           LabelText = SelectedEntry.ID,

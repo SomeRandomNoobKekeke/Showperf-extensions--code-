@@ -9,37 +9,39 @@ public partial class StopwatchWrapper
 {
   public PatchInstaller PatchInstaller { get; } = Plugin.Get<PatchInstaller>();
 
-  private StopwatchWrapperPatch CreatePatchInfo(MethodBase target)
-    => new StopwatchWrapperPatch(target);
+  public HashSet<MethodBase> Installed { get; } = [];
+
+  public bool IsInstalled(MethodBase target) => Installed.Contains(target);
 
 
+  private StopwatchWrapperPatch CreatePatchInfo(MethodBase target) => new StopwatchWrapperPatch(target);
 
-  public void Patch(MethodBase target)
+  public void Install(MethodBase target)
   {
+    if (IsInstalled(target)) return;
+
     StopwatchWrapperPatch info = CreatePatchInfo(target);
-    PatchInstaller.InstallPatch(info);
+
+    bool ok = PatchInstaller.InstallPatch(info);
+    if (ok) Installed.Add(target);
   }
 
-  public void UnPatch(MethodBase target)
+  public void Remove(MethodBase target)
   {
+    if (!IsInstalled(target)) return;
+
     StopwatchWrapperPatch info = CreatePatchInfo(target);
-    PatchInstaller.RemovePatch(info);
+
+    bool ok = PatchInstaller.RemovePatch(info);
+    if (ok) Installed.Remove(target);
   }
 
-  public void TogglePatch(MethodBase target)
+  public bool TogglePatch(MethodBase target)
   {
-    StopwatchWrapperPatch info = CreatePatchInfo(target);
-    PatchInstaller.TogglePatch(info);
-  }
+    if (IsInstalled(target)) Remove(target); else Install(target);
 
-  public bool IsPatched(MethodBase target)
-  {
-    return PatchInstaller.InstalledPatches.Any(
-      info => info is StopwatchWrapperPatch swp &&
-      swp.TargetMethod == target
-    );
+    return IsInstalled(target);
   }
-
 
 
   public StopwatchWrapper()
