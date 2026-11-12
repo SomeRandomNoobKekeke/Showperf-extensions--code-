@@ -26,6 +26,7 @@ public partial class MeasurementsPage : CUIPage
   protected override void HandleOpen()
   {
     Capture.Window.Clear();
+    ScrollWrapper.List.Scroll = 0;
   }
 
 
