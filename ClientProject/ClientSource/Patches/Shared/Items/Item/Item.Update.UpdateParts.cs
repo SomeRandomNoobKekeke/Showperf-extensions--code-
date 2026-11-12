@@ -15,28 +15,27 @@ public static partial class Item_Update_Deep
 {
 
 
-  public static bool Item_Update_Replace_ByID(Item __instance, float deltaTime, Camera cam)
+  public static bool Item_Update_Replace_UpdateParts(Item __instance, float deltaTime, Camera cam)
   {
     Item _ = __instance;
 
-    DisposableStopwatch watch = new DisposableStopwatch()
+    DisposableStopwatch watch = new DisposableStopwatch();
+
+
+    string itemName = ForWhat switch
     {
-      ShouldCapture = WhatToCapture == WhatToCaptureOptions.All
+      ForWhatOptions.ForAllItems => "",
+      ForWhatOptions.ForPrefab => $"{_.Prefab.Name}   -   ",
+      ForWhatOptions.For1Item => $"{_}   -   ",
     };
-
-    DisposableStopwatch icWatch = new DisposableStopwatch()
-    {
-      ShouldCapture = WhatToCapture == WhatToCaptureOptions.ItemComponents
-    };
-
-
-    string itemName = _.ToString();
 
 
     if (!_.IsActive || _.IsDisabled || _.IsInRemoveQueue)
     {
       return false;
     }
+
+
 
     if (_.impactQueue != null)
     {
@@ -47,12 +46,9 @@ public static partial class Item_Update_Deep
         {
           _.ReceiveImpact(impact, true);
         }
-
-        watch.Stop().Capture($"{itemName}   -   Update Impacts");
       }
+      watch.Capture($"{itemName}Impacts");
     }
-
-
 
     if (_.isDroppedStackOwner && _.body != null)
     {
@@ -66,18 +62,22 @@ public static partial class Item_Update_Deep
             item.body.SetTransformIgnoreContacts(_.SimPosition, _.body.Rotation, true);
           }
         }
-
-        watch.Stop().Capture($"{itemName}   -   SetTransformIgnoreContacts on droppedStack");
       }
+      watch.Capture($"{itemName}Dropped Stack");
     }
+
+
+
 
     if (_.aiTarget != null && _.aiTarget.NeedsUpdate)
     {
-      using (watch.Restart())
+      if (_.isDroppedStackOwner && _.body != null)
       {
-        _.aiTarget.Update(deltaTime);
-
-        watch.Stop().Capture($"{itemName}   -   aiTarget.Update");
+        using (watch.Restart())
+        {
+          _.aiTarget.Update(deltaTime);
+        }
+        watch.Capture($"{itemName}AI Target");
       }
     }
 
@@ -86,9 +86,8 @@ public static partial class Item_Update_Deep
       ActionType type = ActionType.Always;
       CharacterInventory characterInventory = _.parentInventory as CharacterInventory;
       _.ApplyStatusEffects(type, deltaTime, ((characterInventory != null) ? characterInventory.Owner : null) as Character, null, null, false, null);
-
-      watch.Stop().Capture($"{itemName}   -   ApplyStatusEffects Always");
     }
+    watch.Capture($"{itemName}ApplyStatusEffects Always");
 
 
     using (watch.Restart())
@@ -96,11 +95,8 @@ public static partial class Item_Update_Deep
       ActionType type2 = (_.parentInventory == null) ? ActionType.OnNotContained : ActionType.OnContained;
       CharacterInventory characterInventory2 = _.parentInventory as CharacterInventory;
       _.ApplyStatusEffects(type2, deltaTime, ((characterInventory2 != null) ? characterInventory2.Owner : null) as Character, null, null, false, null);
-
-      watch.Stop().Capture($"{itemName}   -   ApplyStatusEffects OnNotContained / OnContained");
     }
-
-
+    watch.Capture($"{itemName}ApplyStatusEffects OnContained");
 
 
     using (watch.Restart())
@@ -171,11 +167,7 @@ public static partial class Item_Update_Deep
           }
           else
           {
-            using (icWatch.Restart())
-            {
-              ic.Update(deltaTime, cam);
-              icWatch.Stop().Capture($"{itemName}   -   {ic}");
-            }
+            ic.Update(deltaTime, cam);
 
             if (ic.IsActive)
             {
@@ -188,9 +180,8 @@ public static partial class Item_Update_Deep
           }
         }
       }
-
-      watch.Stop().Capture($"{itemName}   -   Update ItemComponents");
     }
+    watch.Capture($"{itemName}ItemComponents");
 
 
 
@@ -201,6 +192,7 @@ public static partial class Item_Update_Deep
     }
 
     bool needsWaterCheck = _.hasInWaterStatusEffects || _.hasNotInWaterStatusEffects;
+
 
     using (watch.Restart())
     {
@@ -235,9 +227,8 @@ public static partial class Item_Update_Deep
           }
         }
       }
-
-      watch.Stop().Capture($"{itemName}   -   UpdateTransform");
     }
+    watch.Capture($"{itemName}UpdateTransform");
 
 
     using (watch.Restart())
@@ -270,9 +261,8 @@ public static partial class Item_Update_Deep
         _.positionBuffer.Clear();
         _.IsActive = false;
       }
-
-      watch.Stop().Capture($"{itemName}   -   Update water stuff");
     }
+    watch.Capture($"{itemName}Water Stuff");
 
     return false;
   }
