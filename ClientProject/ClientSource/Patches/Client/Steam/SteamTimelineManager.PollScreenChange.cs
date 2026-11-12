@@ -34,7 +34,7 @@ public static partial class SteamTimelineManager_PollScreenChange
     {
       condition = !SteamManager.IsInitialized;
     }
-    sw.Stop().Capture($"PollScreenChange | !SteamManager.IsInitialized");
+    sw.Capture($"PollScreenChange | !SteamManager.IsInitialized");
     if (condition) { return false; }
 
 

@@ -33,7 +33,7 @@ public static partial class SteamTimelineManager_PollSubmarineChange
     {
       condition = !SteamManager.IsInitialized;
     }
-    sw.Stop().Capture($"PollSubmarineChange | !SteamManager.IsInitialized");
+    sw.Capture($"PollSubmarineChange | !SteamManager.IsInitialized");
     if (condition) { return false; }
 
 
