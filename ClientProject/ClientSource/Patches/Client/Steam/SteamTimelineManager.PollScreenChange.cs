@@ -29,12 +29,20 @@ public static partial class SteamTimelineManager_PollScreenChange
   {
     DisposableStopwatch sw = new();
 
+
+    TimeSpan pausesBefore = GC.GetTotalPauseDuration();
+
     bool condition;
     using (sw.Restart())
     {
       condition = !SteamManager.IsInitialized;
     }
+
+    TimeSpan pausesAfter = GC.GetTotalPauseDuration();
+
     sw.Capture($"PollScreenChange | !SteamManager.IsInitialized");
+    Capture.Ticks($"PollScreenChange | GC pause: ", (pausesAfter - pausesBefore).Ticks);
+
     if (condition) { return false; }
 
 

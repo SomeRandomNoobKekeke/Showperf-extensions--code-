@@ -28,12 +28,19 @@ public static partial class SteamTimelineManager_PollSubmarineChange
     DisposableStopwatch sw = new();
 
 
+    TimeSpan pausesBefore = GC.GetTotalPauseDuration();
+
     bool condition;
     using (sw.Restart())
     {
       condition = !SteamManager.IsInitialized;
     }
+
+    TimeSpan pausesAfter = GC.GetTotalPauseDuration();
+
     sw.Capture($"PollSubmarineChange | !SteamManager.IsInitialized");
+    Capture.Ticks($"PollSubmarineChange | GC pause: ", (pausesAfter - pausesBefore).Ticks);
+
     if (condition) { return false; }
 
 
