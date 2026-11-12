@@ -11,9 +11,12 @@ namespace ShowperfExtensions;
 
 public class BookmarkedMethodsPage : CUIPage
 {
-  public static MethodInfo UpdateRoot => typeof(GameScreen).GetMethod("Update")!;
-  public static MethodInfo DrawRoot => typeof(GameScreen).GetMethod("Draw")!;
-  public static MethodInfo StartRoundRoot => typeof(GameSession).GetMethod("StartRound", [
+  public static BindingFlags Pls => BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static;
+  public static MethodInfo GameMainUpdate => typeof(GameMain).GetMethod("Update", Pls)!;
+  public static MethodInfo GameMainDraw => typeof(GameMain).GetMethod("Draw", Pls)!;
+  public static MethodInfo GameScreenUpdate => typeof(GameScreen).GetMethod("Update")!;
+  public static MethodInfo GameScreenDraw => typeof(GameScreen).GetMethod("Draw")!;
+  public static MethodInfo GameSessionStartRound => typeof(GameSession).GetMethod("StartRound", [
     typeof(LevelData),typeof(bool)
   ])!;
 
@@ -44,7 +47,7 @@ public class BookmarkedMethodsPage : CUIPage
 
     this["layout"]["main"]["list"]["roots"] = RootMethodsBlock = new MethodBlockComponent("Roots")
     {
-      Methods = [UpdateRoot, DrawRoot, StartRoundRoot],
+      Methods = [GameMainUpdate, GameMainDraw, GameScreenUpdate, GameScreenDraw, GameSessionStartRound],
     };
 
     this["layout"]["main"]["list"]["bookmarks"] = BookmarksBlock = new MethodBlockComponent("Bookmarks");
